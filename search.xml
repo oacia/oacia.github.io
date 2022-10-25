@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title>exe加壳实践</title>
+      <link href="/2022/10/25/exe%E5%8A%A0%E5%A3%B3%E5%AE%9E%E8%B7%B5/"/>
+      <url>/2022/10/25/exe%E5%8A%A0%E5%A3%B3%E5%AE%9E%E8%B7%B5/</url>
+      
+        <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>学你逆向到现在，已经见过挺多加壳的程序了，最常见的比如<code>upx</code>(可以直接用官网的程序一键脱掉,但是手脱其实也挺方便的),难一点的就比如<code>VMprotect</code>这些,但是到现在我好像还没有自己尝试写过一个像模像样的简单壳,所以写这篇博客的目的就是想要亲自尝试一下,让我对壳的认识加深一些,也为未来应对加壳的程序做铺垫.</p><span id="more"></span>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>汇编语言学习</title>
       <link href="/2022/10/21/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/"/>
       <url>/2022/10/21/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/</url>
