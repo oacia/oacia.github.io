@@ -8,7 +8,7 @@
         <meta name="author" content="oacia">
         <meta name="description" content="">
         <meta name="keywords" content="re">
-        <link rel="icon" href="picture/head_img.jpg">
+        <link rel="icon" href="head_img.jpg">
         <script src="https://cdn.staticfile.org/instant.page/5.1.0/instantpage.min.js" type="module"></script>
         <script src="https://cdn.staticfile.org/font-awesome/6.2.0/js/all.min.js"></script>
         
@@ -43,11 +43,6 @@
             <span>&ensp;文章</span>
         </a>
         
-        <a href="/picture">
-            <i class="fa-solid fa-picture-assert fa-fw"></i>
-            <span>&ensp;picture</span>
-        </a>
-        
     </div>
     <div :class="'phone-menu ' + menu_show" id="phone-menu">
         <div class="curtain" @click="menu_show = !menu_show" v-show="menu_show"></div>
@@ -73,15 +68,6 @@
                         <i class="fa-solid fa-box-archive fa-fw"></i>
                     </div>
                     <div style="min-width: 100px; max-width: 150%; width: 20%">文章</div>
-                </div>
-            </a>
-            
-            <a href="/picture">
-                <div class="item">
-                    <div style="min-width: 20px; max-width: 50px; width: 10%">
-                        <i class="fa-solid fa-picture-assert fa-fw"></i>
-                    </div>
-                    <div style="min-width: 100px; max-width: 150%; width: 20%">picture</div>
                 </div>
             </a>
             
