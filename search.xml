@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title>手脱VMP1.x壳</title>
+      <link href="/2022/11/15/%E6%89%8B%E8%84%B1VMP1.x%E5%A3%B3/"/>
+      <url>/2022/11/15/%E6%89%8B%E8%84%B1VMP1.x%E5%A3%B3/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>最近心血来潮想要看看LOL脚本的运行逻辑是怎么样的，没想到刚下载后就需要付费卡密才可以使用，查了一下壳是vmProtect这种强壳，索性VMP的版本不是很高，只是VMP1.x这种水平，相信以我的能力可以对于这种早期的商用壳进行简单的脱壳。</p></blockquote><p>[TODO]</p><span id="more"></span>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>用c调用python</title>
       <link href="/2022/11/09/%E7%94%A8c%E8%B0%83%E7%94%A8python/"/>
       <url>/2022/11/09/%E7%94%A8c%E8%B0%83%E7%94%A8python/</url>
