@@ -95,7 +95,7 @@
     <div class="content" v-pre>
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
 <p>为什么要突然学习软件分析这一门课嘞o.O?<br>俗话说白因必有果,那肯定是因为有需求呗</p>
-<img src="/2022/12/20/%E8%BD%AF%E4%BB%B6%E5%88%86%E6%9E%90%20%E5%8D%97%E4%BA%AC%E5%A4%A7%E5%AD%A6%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20221220221847320.png" alt="image-20221220221847320" style="zoom: 67%;">
+<img src="/2022/12/20/%E8%BD%AF%E4%BB%B6%E5%88%86%E6%9E%90%20%E5%8D%97%E4%BA%AC%E5%A4%A7%E5%AD%A6%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20221220221847320.png" alt="123" style="zoom:67%;">
 
 <p>一切为了创新实践!!!一切为了区块链!!!</p>
 </blockquote>
@@ -124,9 +124,32 @@
 </ul>
 <h3 id="What-is-Static-Analysis"><a href="#What-is-Static-Analysis" class="headerlink" title="What is Static Analysis?"></a>What is Static Analysis?</h3><img src="/2022/12/20/%E8%BD%AF%E4%BB%B6%E5%88%86%E6%9E%90%20%E5%8D%97%E4%BA%AC%E5%A4%A7%E5%AD%A6%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20221225192744732.png" alt="image-20221225192744732" style="zoom:67%;">
 
-<p>一个有用的静态分析,最优先需要保证的是它的正确性(soundness),可以允许误报,但不能允许漏报,因为烧包一个bug,程序依旧会崩溃.</p>
+<p>一个有用的静态分析,最优先需要保证的是它的正确性(soundness),可以允许误报,但不能允许漏报,因为漏报一个bug,程序依旧会崩溃.</p>
 <h3 id="conclusion"><a href="#conclusion" class="headerlink" title="conclusion"></a>conclusion</h3><p><strong>Static Analysis:ensure (or get close to) soundness,while making good trade-offs between analysis precision and analysis speed.</strong></p>
+<h2 id="课程02（Intermediate-Representation）12-29"><a href="#课程02（Intermediate-Representation）12-29" class="headerlink" title="课程02（Intermediate Representation）12.29"></a>课程02（Intermediate Representation）12.29</h2><blockquote>
+<p>鸽了四天了,为什么嘞(・∀・(・∀・(・∀・*)<br>我这几天在想我是🐏还是不🐏</p>
+<p>后来事实证明我没🐏哈哈<del>其实我不会说自己这几天确实是摸了</del></p>
+<hr>
+<p>回想前天(12.27)我决定去冲雷神二命歪了迪卢克,那种歪了的痛苦仍然历历在目</p>
+<p>还记得上一次雷神复刻的时候,我抽完一命之后准备冲二命,结果歪了刻晴,没想到这次mhy你还给我歪!真是不当人哇</p>
+<p>我记得原本上一次我有一种强烈的想要去氪648的冲动,幸好被我克制住了</p>
+<p>这一次,下个月,一月一号,我即将迎来雷电将军二命的大保底!</p>
+<p>芜湖!</p>
+<p>一想到可以玩雷九万班了就好激动呀</p>
+<hr>
+<p>在发一下我网易云的年度报告</p>
+<p>猜猜我的年度歌手是谁呢QAQ</p>
+<img src="/2022/12/20/%E8%BD%AF%E4%BB%B6%E5%88%86%E6%9E%90%20%E5%8D%97%E4%BA%AC%E5%A4%A7%E5%AD%A6%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/QQ图片20221229124242.jpg" alt="QQ图片20221229124242" style="zoom:33%;">
 
+<p>没错,就是hanser!</p>
+<p>强烈安利第三首,2022年我听过最好听的歌~~~~《恋爱吧 魔法少女》</p>
+<p>建议没听过的人都去听一听哦，太好听啦</p>
+<hr>
+<p>ok，不摸鱼了，开始今天软件分析课程的学习！</p>
+</blockquote>
+<h3 id="1-Compilers-and-Static-Analyzers"><a href="#1-Compilers-and-Static-Analyzers" class="headerlink" title="1.Compilers and Static Analyzers"></a>1.Compilers and Static Analyzers</h3><p>Lexical Analysis：词法分析</p>
+<p>Syntax Analysis：语法分析</p>
+<h3 id="2-AST-vs-IR"><a href="#2-AST-vs-IR" class="headerlink" title="2.AST vs.IR"></a>2.AST vs.IR</h3><h3 id="3-IR-Three-Address-Code-3AC"><a href="#3-IR-Three-Address-Code-3AC" class="headerlink" title="3.IR:Three-Address Code (3AC)"></a>3.IR:Three-Address Code (3AC)</h3><h3 id="4-3AC-in-Real-Static-Analyzer-Soot"><a href="#4-3AC-in-Real-Static-Analyzer-Soot" class="headerlink" title="4.3AC in Real Static Analyzer:Soot"></a>4.3AC in Real Static Analyzer:Soot</h3><h3 id="5-Static-Single-Assignment-SSA"><a href="#5-Static-Single-Assignment-SSA" class="headerlink" title="5.Static Single Assignment(SSA)"></a>5.Static Single Assignment(SSA)</h3><h3 id="6-Basic-Blocks-BB"><a href="#6-Basic-Blocks-BB" class="headerlink" title="6.Basic Blocks(BB)"></a>6.Basic Blocks(BB)</h3><h3 id="7-Control-Flow-Graphs-CFG"><a href="#7-Control-Flow-Graphs-CFG" class="headerlink" title="7.Control Flow Graphs(CFG)"></a>7.Control Flow Graphs(CFG)</h3>
     </div>
     
     
@@ -135,7 +158,7 @@
 <footer id="footer">
     <div class="footer-wrap">
         <div>
-            © 2022 - 2022 oaciaのBbBlog~
+            © 2022 - 2023 oaciaのBbBlog~
             <span class="footer-icon">
                 <i class="fa-solid fa-font-awesome fa-fw"></i>
             </span>
