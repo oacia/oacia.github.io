@@ -1,0 +1,497 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <style>
+    html{
+      cursor: url('/cusor/normal.png') auto;s
+    }
+  </style>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="google-site-verification" content="qQVmgWozVe7BXoA15J3gAZpEA5dK168admH4U3W6PAk">
+  <meta name="msvalidate.01" content="4902E39C0135E72DE537BCB0FE08B40A">
+  <meta name="baidu-site-verification" content="codeva-CSYjpuVg5v">
+
+
+<link rel="alternate" type="application/rss+xml" title="oaciaのBbBlog~" href="https://oacia.cc/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="oaciaのBbBlog~" href="https://oacia.cc/atom.xml" />
+<link rel="alternate" type="application/json" title="oaciaのBbBlog~" href="https://oacia.cc/feed.json" />
+
+
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+
+<link rel="canonical" href="https://oacia.cc/360-jiagu/">
+
+
+
+  <title>
+(doing)360加固dex解密算法分析 |
+oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="alice">
+      <img src="/images/alice-shake.gif" alt="">
+    </div>
+    <!--
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+    -->
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">(doing)360加固dex解密算法分析
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2023-09-24 15:36:53">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2023-09-24T15:36:53+08:00">2023-09-24</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span class="text">本文字数</span>
+    <span>5.6k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span class="text">阅读时长</span>
+    <span>5 分钟</span>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">oacia</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="/picture/v2-72b0065499c84635f4418dc14ae591cf_r.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_iRbrWmLEDN.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_HRI3doPvTs.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_lSacD0hUjx.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_4r80CQre0O.jpg"></li>
+          <li class="item" data-background-image="/picture/v2-a97583c11f5863b9e1feaaa306c90482_r.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="https://oacia.cc/360-jiagu/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="oacia">
+    <meta itemprop="description" content="DEVIL or SWEET, 这里的文章写给未来的自己 不要忘记现在学习的知识">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="oaciaのBbBlog~">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <blockquote>
+<p>最近想要研究一下 apk 的加固，在网上逛了一圈，感觉 360 加固应该是最方便分析的，所以就先从它开始咯</p>
+<p>这里我用的是 360 加固的免费版 (付费版太贵了没钱买 -,-)</p>
+<p>虽然 360 加固的 apk, 想要拿到解密之后的 dex 是一件相当轻松的事情，但是我更好奇的是 dex 的解密算法是什么样子的</p>
+<p>所以出于研究学习的目的，我自己写了一个测试 apk 丢到 360 加固里面去分析一下～</p>
+</blockquote>
+<h1 id="测试apk说明"><a class="anchor" href="#测试apk说明">#</a> 测试 apk 说明</h1>
+<p>为了知道 apk 经过加固之后是什么样子的，我写了一个小小的 crackme,flag 经过了 java 层和 native 层的两个 RC4 加密，来方便我去研究 360 加固在这两层的加固效果分别是什么样子的.</p>
+<p>加密过程可以用如下 python 代码近似表示</p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">def</span> <span class="token function">RC4</span><span class="token punctuation">(</span>data<span class="token punctuation">,</span> key<span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="2"></td><td><pre>    <span class="token keyword">if</span> <span class="token builtin">type</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token builtin">type</span><span class="token punctuation">(</span><span class="token string">'oacia'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 判断是否为字符串</span></pre></td></tr><tr><td data-num="3"></td><td><pre>        data <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token builtin">ord</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> data<span class="token punctuation">]</span></pre></td></tr><tr><td data-num="4"></td><td><pre>    <span class="token keyword">if</span> <span class="token builtin">type</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token builtin">type</span><span class="token punctuation">(</span><span class="token string">'oacia'</span><span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="5"></td><td><pre>        key <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token builtin">ord</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> key<span class="token punctuation">]</span></pre></td></tr><tr><td data-num="6"></td><td><pre></pre></td></tr><tr><td data-num="7"></td><td><pre>    S <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">(</span><span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">256</span><span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="8"></td><td><pre>    j <span class="token operator">=</span> <span class="token number">0</span></pre></td></tr><tr><td data-num="9"></td><td><pre>    out <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="10"></td><td><pre></pre></td></tr><tr><td data-num="11"></td><td><pre>    <span class="token comment"># KSA Phase</span></pre></td></tr><tr><td data-num="12"></td><td><pre>    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">256</span><span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="13"></td><td><pre>        j <span class="token operator">=</span> <span class="token punctuation">(</span>j <span class="token operator">+</span> S<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span> key<span class="token punctuation">[</span>i <span class="token operator">%</span> <span class="token builtin">len</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">256</span></pre></td></tr><tr><td data-num="14"></td><td><pre>        S<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> S<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">=</span> S<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">,</span> S<span class="token punctuation">[</span>i<span class="token punctuation">]</span></pre></td></tr><tr><td data-num="15"></td><td><pre></pre></td></tr><tr><td data-num="16"></td><td><pre>    <span class="token comment"># PRGA Phase</span></pre></td></tr><tr><td data-num="17"></td><td><pre>    i <span class="token operator">=</span> j <span class="token operator">=</span> <span class="token number">0</span></pre></td></tr><tr><td data-num="18"></td><td><pre>    <span class="token keyword">for</span> ch <span class="token keyword">in</span> data<span class="token punctuation">:</span></pre></td></tr><tr><td data-num="19"></td><td><pre>        i <span class="token operator">=</span> <span class="token punctuation">(</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">256</span></pre></td></tr><tr><td data-num="20"></td><td><pre>        j <span class="token operator">=</span> <span class="token punctuation">(</span>j <span class="token operator">+</span> S<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">256</span></pre></td></tr><tr><td data-num="21"></td><td><pre>        S<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> S<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">=</span> S<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">,</span> S<span class="token punctuation">[</span>i<span class="token punctuation">]</span></pre></td></tr><tr><td data-num="22"></td><td><pre>        out<span class="token punctuation">.</span>append<span class="token punctuation">(</span>ch <span class="token operator">^</span> S<span class="token punctuation">[</span><span class="token punctuation">(</span>S<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span> S<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">256</span><span class="token punctuation">]</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="23"></td><td><pre></pre></td></tr><tr><td data-num="24"></td><td><pre>    <span class="token keyword">return</span> out</pre></td></tr><tr><td data-num="25"></td><td><pre></pre></td></tr><tr><td data-num="26"></td><td><pre></pre></td></tr><tr><td data-num="27"></td><td><pre><span class="token keyword">def</span> <span class="token function">RC4encrypt</span><span class="token punctuation">(</span>plaintext<span class="token punctuation">,</span> key<span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="28"></td><td><pre>    <span class="token keyword">return</span> RC4<span class="token punctuation">(</span>plaintext<span class="token punctuation">,</span> key<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="29"></td><td><pre></pre></td></tr><tr><td data-num="30"></td><td><pre></pre></td></tr><tr><td data-num="31"></td><td><pre><span class="token keyword">def</span> <span class="token function">RC4decrypt</span><span class="token punctuation">(</span>ciphertext<span class="token punctuation">,</span> key<span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="32"></td><td><pre>    <span class="token keyword">return</span> RC4<span class="token punctuation">(</span>ciphertext<span class="token punctuation">,</span> key<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="33"></td><td><pre></pre></td></tr><tr><td data-num="34"></td><td><pre></pre></td></tr><tr><td data-num="35"></td><td><pre><span class="token comment"># flag</span></pre></td></tr><tr><td data-num="36"></td><td><pre>plaintext <span class="token operator">=</span> <span class="token string">"oacia_apk_protect_test"</span></pre></td></tr><tr><td data-num="37"></td><td><pre></pre></td></tr><tr><td data-num="38"></td><td><pre><span class="token comment"># java 层加密</span></pre></td></tr><tr><td data-num="39"></td><td><pre>key1 <span class="token operator">=</span> <span class="token string">"first_enc_in_java"</span></pre></td></tr><tr><td data-num="40"></td><td><pre>ciphertext <span class="token operator">=</span> RC4encrypt<span class="token punctuation">(</span>plaintext<span class="token punctuation">,</span> key1<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="41"></td><td><pre></pre></td></tr><tr><td data-num="42"></td><td><pre><span class="token comment"># native 层加密</span></pre></td></tr><tr><td data-num="43"></td><td><pre>key2 <span class="token operator">=</span> <span class="token string">"second_rc4_enc_in_native"</span></pre></td></tr><tr><td data-num="44"></td><td><pre>ciphertext <span class="token operator">=</span> RC4encrypt<span class="token punctuation">(</span>ciphertext<span class="token punctuation">,</span> key2<span class="token punctuation">)</span></pre></td></tr></table></figure><h1 id="java层初步分析"><a class="anchor" href="#java层初步分析">#</a> java 层初步分析</h1>
+<h2 id="加固的第一个入口函数-attachbasecontext"><a class="anchor" href="#加固的第一个入口函数-attachbasecontext">#</a> 加固的第一个入口函数 attachBaseContext</h2>
+<p>我们从 <code>AndroidManifest.xml</code>  中可以得知，360 加固的入口是 <code>com.stub.StubApp</code> , 所以我们就先进到 apk 的入口进行分析</p>
+<p><img data-src="/360-jiagu/image-20230930183634640.png" alt="image-20230930183634640" style="aspect-ratio:804 / 196;"></p>
+<p>在这个入口类中，不仅有常规的 <code>onCreate()</code>  函数，还有一个函数值得注意，他就是 <code>attachBaseContext(Context context)</code></p>
+<p><img data-src="/360-jiagu/image-20230930183713453.png" alt="image-20230930183713453" style="aspect-ratio:1557 / 449;"></p>
+<details class="info"><summary></summary><div>
+<p>Application 的 <code>onCreate</code>  和 <code>attachBaseContext</code>  是 Application 的两个回调方法，通常我们会在其中做一些初始化操作， <code>attachBaseContext</code>  在 <code>onCreate</code> <strong> 之前执行</strong></p>
+</div></details>
+<p>其中出现的字符串经过了加密混淆操作，加密函数如下，算法是将所有的字符与 <code>16</code>  进行异或</p>
+<p><img data-src="/360-jiagu/image-20230930183731411.png" alt="image-20230930183731411" style="aspect-ratio:604 / 274;"></p>
+<p>我们写个 jeb 脚本把加密字符串解密来方便后续的静态分析</p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment"># coding=utf-8</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token keyword">from</span> com<span class="token punctuation">.</span>pnfsoftware<span class="token punctuation">.</span>jeb<span class="token punctuation">.</span>client<span class="token punctuation">.</span>api <span class="token keyword">import</span> IScript<span class="token punctuation">,</span> IconType<span class="token punctuation">,</span> ButtonGroupType</pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token keyword">from</span> com<span class="token punctuation">.</span>pnfsoftware<span class="token punctuation">.</span>jeb<span class="token punctuation">.</span>core <span class="token keyword">import</span> RuntimeProjectUtil</pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token keyword">from</span> com<span class="token punctuation">.</span>pnfsoftware<span class="token punctuation">.</span>jeb<span class="token punctuation">.</span>core<span class="token punctuation">.</span>units<span class="token punctuation">.</span>code<span class="token punctuation">.</span>java <span class="token keyword">import</span> IJavaSourceUnit</pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token keyword">from</span> com<span class="token punctuation">.</span>pnfsoftware<span class="token punctuation">.</span>jeb<span class="token punctuation">.</span>core<span class="token punctuation">.</span>units<span class="token punctuation">.</span>code <span class="token keyword">import</span> ICodeUnit<span class="token punctuation">,</span> ICodeItem</pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token keyword">from</span> com<span class="token punctuation">.</span>pnfsoftware<span class="token punctuation">.</span>jeb<span class="token punctuation">.</span>core<span class="token punctuation">.</span>output<span class="token punctuation">.</span>text <span class="token keyword">import</span> ITextDocument</pre></td></tr><tr><td data-num="7"></td><td><pre><span class="token keyword">from</span> com<span class="token punctuation">.</span>pnfsoftware<span class="token punctuation">.</span>jeb<span class="token punctuation">.</span>core<span class="token punctuation">.</span>units<span class="token punctuation">.</span>code<span class="token punctuation">.</span>java <span class="token keyword">import</span> IJavaSourceUnit<span class="token punctuation">,</span> IJavaStaticField<span class="token punctuation">,</span> IJavaNewArray<span class="token punctuation">,</span> IJavaConstant<span class="token punctuation">,</span> IJavaCall<span class="token punctuation">,</span> IJavaField<span class="token punctuation">,</span> IJavaMethod<span class="token punctuation">,</span> IJavaClass</pre></td></tr><tr><td data-num="8"></td><td><pre><span class="token keyword">from</span> com<span class="token punctuation">.</span>pnfsoftware<span class="token punctuation">.</span>jeb<span class="token punctuation">.</span>core<span class="token punctuation">.</span>events <span class="token keyword">import</span> JebEvent<span class="token punctuation">,</span> J</pre></td></tr><tr><td data-num="9"></td><td><pre><span class="token keyword">from</span> com<span class="token punctuation">.</span>pnfsoftware<span class="token punctuation">.</span>jeb<span class="token punctuation">.</span>core<span class="token punctuation">.</span>util <span class="token keyword">import</span> DecompilerHelper</pre></td></tr><tr><td data-num="10"></td><td><pre></pre></td></tr><tr><td data-num="11"></td><td><pre><span class="token comment"># 解密字符串函数的类名以及方法名</span></pre></td></tr><tr><td data-num="12"></td><td><pre>methodName <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'Lcom/qihoo/util/a;'</span><span class="token punctuation">,</span> <span class="token string">'a'</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="13"></td><td><pre></pre></td></tr><tr><td data-num="14"></td><td><pre></pre></td></tr><tr><td data-num="15"></td><td><pre><span class="token keyword">class</span> <span class="token class-name">dec_str_360jiagu</span><span class="token punctuation">(</span>IScript<span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="16"></td><td><pre>    <span class="token keyword">def</span> <span class="token function">run</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> ctx<span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="17"></td><td><pre>        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'start deal with strings'</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="18"></td><td><pre>        self<span class="token punctuation">.</span>ctx <span class="token operator">=</span> ctx</pre></td></tr><tr><td data-num="19"></td><td><pre>        engctx <span class="token operator">=</span> ctx<span class="token punctuation">.</span>getEnginesContext<span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="20"></td><td><pre>        <span class="token keyword">if</span> <span class="token keyword">not</span> engctx<span class="token punctuation">:</span></pre></td></tr><tr><td data-num="21"></td><td><pre>            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'Back-end engines not initialized'</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="22"></td><td><pre>            <span class="token keyword">return</span></pre></td></tr><tr><td data-num="23"></td><td><pre></pre></td></tr><tr><td data-num="24"></td><td><pre>        projects <span class="token operator">=</span> engctx<span class="token punctuation">.</span>getProjects<span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="25"></td><td><pre>        <span class="token keyword">if</span> <span class="token keyword">not</span> projects<span class="token punctuation">:</span></pre></td></tr><tr><td data-num="26"></td><td><pre>            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'There is no opened project'</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="27"></td><td><pre>            <span class="token keyword">return</span></pre></td></tr><tr><td data-num="28"></td><td><pre></pre></td></tr><tr><td data-num="29"></td><td><pre>        units <span class="token operator">=</span> RuntimeProjectUtil<span class="token punctuation">.</span>findUnitsByType<span class="token punctuation">(</span>projects<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> IJavaSourceUnit<span class="token punctuation">,</span> <span class="token boolean">False</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="30"></td><td><pre>        <span class="token keyword">for</span> unit <span class="token keyword">in</span> units<span class="token punctuation">:</span></pre></td></tr><tr><td data-num="31"></td><td><pre>            javaClass <span class="token operator">=</span> unit<span class="token punctuation">.</span>getClassElement<span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="32"></td><td><pre>            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'[+] decrypt:'</span> <span class="token operator">+</span> javaClass<span class="token punctuation">.</span>getName<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="33"></td><td><pre>            self<span class="token punctuation">.</span>cstbuilder <span class="token operator">=</span> unit<span class="token punctuation">.</span>getFactories<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>getConstantFactory<span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="34"></td><td><pre>            self<span class="token punctuation">.</span>processClass<span class="token punctuation">(</span>javaClass<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="35"></td><td><pre>            unit<span class="token punctuation">.</span>notifyListeners<span class="token punctuation">(</span>JebEvent<span class="token punctuation">(</span>J<span class="token punctuation">.</span>UnitChange<span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="36"></td><td><pre>        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'Done.'</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="37"></td><td><pre></pre></td></tr><tr><td data-num="38"></td><td><pre>    <span class="token keyword">def</span> <span class="token function">processClass</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> javaClass<span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="39"></td><td><pre>        <span class="token keyword">if</span> javaClass<span class="token punctuation">.</span>getName<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> methodName<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="40"></td><td><pre>            <span class="token keyword">return</span></pre></td></tr><tr><td data-num="41"></td><td><pre>        <span class="token keyword">for</span> method <span class="token keyword">in</span> javaClass<span class="token punctuation">.</span>getMethods<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="42"></td><td><pre>            block <span class="token operator">=</span> method<span class="token punctuation">.</span>getBody<span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="43"></td><td><pre>            i <span class="token operator">=</span> <span class="token number">0</span></pre></td></tr><tr><td data-num="44"></td><td><pre>            <span class="token keyword">while</span> i <span class="token operator">&lt;</span> block<span class="token punctuation">.</span>size<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="45"></td><td><pre>                stm <span class="token operator">=</span> block<span class="token punctuation">.</span>get<span class="token punctuation">(</span>i<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="46"></td><td><pre>                self<span class="token punctuation">.</span>checkElement<span class="token punctuation">(</span>block<span class="token punctuation">,</span> stm<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="47"></td><td><pre>                i <span class="token operator">+=</span> <span class="token number">1</span></pre></td></tr><tr><td data-num="48"></td><td><pre></pre></td></tr><tr><td data-num="49"></td><td><pre>    <span class="token keyword">def</span> <span class="token function">checkElement</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> parent<span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="50"></td><td><pre>        <span class="token keyword">try</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="51"></td><td><pre>            <span class="token keyword">if</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>e<span class="token punctuation">,</span> IJavaCall<span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="52"></td><td><pre>                mmethod <span class="token operator">=</span> e<span class="token punctuation">.</span>getMethod<span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="53"></td><td><pre>                mname <span class="token operator">=</span> mmethod<span class="token punctuation">.</span>getName<span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="54"></td><td><pre>                msig <span class="token operator">=</span> mmethod<span class="token punctuation">.</span>getSignature<span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="55"></td><td><pre>                <span class="token keyword">if</span> mname <span class="token operator">==</span> methodName<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token keyword">and</span> methodName<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token keyword">in</span> msig<span class="token punctuation">:</span></pre></td></tr><tr><td data-num="56"></td><td><pre>                    v <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="57"></td><td><pre>                    <span class="token keyword">for</span> arg <span class="token keyword">in</span> e<span class="token punctuation">.</span>getArguments<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="58"></td><td><pre>                        <span class="token keyword">if</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>arg<span class="token punctuation">,</span> IJavaConstant<span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="59"></td><td><pre>                            v<span class="token punctuation">.</span>append<span class="token punctuation">(</span>arg<span class="token punctuation">.</span>getString<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="60"></td><td><pre>                    <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>v<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="61"></td><td><pre>                        decstr <span class="token operator">=</span> self<span class="token punctuation">.</span>decryptstring<span class="token punctuation">(</span>v<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="62"></td><td><pre>                        parent<span class="token punctuation">.</span>replaceSubElement<span class="token punctuation">(</span>e<span class="token punctuation">,</span> self<span class="token punctuation">.</span>cstbuilder<span class="token punctuation">.</span>createString<span class="token punctuation">(</span>decstr<span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="63"></td><td><pre></pre></td></tr><tr><td data-num="64"></td><td><pre>            <span class="token keyword">for</span> subelt <span class="token keyword">in</span> e<span class="token punctuation">.</span>getSubElements<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="65"></td><td><pre>                <span class="token keyword">if</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>subelt<span class="token punctuation">,</span> IJavaClass<span class="token punctuation">)</span> <span class="token keyword">or</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>subelt<span class="token punctuation">,</span> IJavaField<span class="token punctuation">)</span> <span class="token keyword">or</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>subelt<span class="token punctuation">,</span> IJavaMethod<span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="66"></td><td><pre>                    <span class="token keyword">continue</span></pre></td></tr><tr><td data-num="67"></td><td><pre>                self<span class="token punctuation">.</span>checkElement<span class="token punctuation">(</span>e<span class="token punctuation">,</span> subelt<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="68"></td><td><pre>        <span class="token keyword">except</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="69"></td><td><pre>            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'error'</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="70"></td><td><pre></pre></td></tr><tr><td data-num="71"></td><td><pre>    <span class="token keyword">def</span> <span class="token function">decryptstring</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> string<span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="72"></td><td><pre>        src <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="73"></td><td><pre>        <span class="token keyword">for</span> index<span class="token punctuation">,</span> char <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>string<span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="74"></td><td><pre>            src<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token builtin">ord</span><span class="token punctuation">(</span>char<span class="token punctuation">)</span> <span class="token operator">^</span> <span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="75"></td><td><pre></pre></td></tr><tr><td data-num="76"></td><td><pre>        <span class="token keyword">return</span> <span class="token string">''</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>src<span class="token punctuation">)</span><span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token string">'unicode_escape'</span><span class="token punctuation">)</span></pre></td></tr></table></figure><p>解密后的效果如下</p>
+<p><img data-src="/360-jiagu/image-20230930182440462.png" alt="image-20230930182440462" style="aspect-ratio:1575 / 816;"></p>
+<p>我们往下进行分析，可以知道 <code>attachBaseContext</code>  的第一个作用是根据目标手机的架构加载 <code>libjiagu_xxx.so</code>  如图</p>
+<p><img data-src="/360-jiagu/image-20230930184207278.png" alt="image-20230930184207278" style="aspect-ratio:1304 / 899;"></p>
+<p>这些 so 在 <code>assets</code>  目录下</p>
+<p><img data-src="/360-jiagu/image-20230930184336555.png" alt="image-20230930184336555" style="aspect-ratio:810 / 261;"></p>
+<p>在加载完 <code>libjiagu_xxx.so</code>  之后，还调用了 <code>DtcLoader</code>  类进行初始化，这里使用的 jadx 的反编译结果，因为 jeb 没有反编译出 <code>DtcLoader.init();</code>  方法来</p>
+<p><img data-src="/360-jiagu/image-20230930184605448.png" alt="image-20230930184605448" style="aspect-ratio:765 / 198;"></p>
+<p><code>DtcLoader</code>  类如图所示</p>
+<p><img data-src="/360-jiagu/image-20230930184748578.png" alt="image-20230930184748578" style="aspect-ratio:1344 / 636;"></p>
+<p>当 <code>DtcLoader</code>  类被加载到 JVM 中时，会去加载 <code>libjgdtc.so</code> , 如果加载失败，则会尝试从 <code>/data/app/com.oacia.apk_protect/lib/arm64/libjgdtc.so</code>  或者 <code>/data/data/com.oacia.apk_protect/lib/libjgdtc.so</code>  中去加载这个 so</p>
+<p>但是当我们去进入到这两个目录进行寻找时，却发现没有这个 <code>libjgdtc.so</code>  存在，应该是在壳结束之后被删除了</p>
+<p><img data-src="/360-jiagu/image-20230930190258638.png" alt="image-20230930190258638" style="aspect-ratio:494 / 1023;"></p>
+<p>用 frida 把这个 so 给 dump 下来看看</p>
+<figure class="highlight js"><figcaption data-lang="JavaScript"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">//frida -U -l D:\frida\360jiagu_oacia_test\hook_jgdtc.js -f "com.oacia.apk_protect"</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token keyword">function</span> <span class="token function">dump_so</span><span class="token punctuation">(</span><span class="token parameter">so_name</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="3"></td><td><pre>    Java<span class="token punctuation">.</span><span class="token function">perform</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="4"></td><td><pre>        <span class="token keyword">var</span> currentApplication <span class="token operator">=</span> Java<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"android.app.ActivityThread"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">currentApplication</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="5"></td><td><pre>        <span class="token keyword">var</span> dir <span class="token operator">=</span> currentApplication<span class="token punctuation">.</span><span class="token function">getApplicationContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getFilesDir</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getPath</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="6"></td><td><pre>        <span class="token keyword">var</span> libso <span class="token operator">=</span> Process<span class="token punctuation">.</span><span class="token function">getModuleByName</span><span class="token punctuation">(</span>so_name<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="7"></td><td><pre>        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"[name]:"</span><span class="token punctuation">,</span> libso<span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="8"></td><td><pre>        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"[base]:"</span><span class="token punctuation">,</span> libso<span class="token punctuation">.</span>base<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="9"></td><td><pre>        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"[size]:"</span><span class="token punctuation">,</span> <span class="token function">ptr</span><span class="token punctuation">(</span>libso<span class="token punctuation">.</span>size<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="10"></td><td><pre>        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"[path]:"</span><span class="token punctuation">,</span> libso<span class="token punctuation">.</span>path<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="11"></td><td><pre>        <span class="token keyword">var</span> file_path <span class="token operator">=</span> dir <span class="token operator">+</span> <span class="token string">"/"</span> <span class="token operator">+</span> libso<span class="token punctuation">.</span>name <span class="token operator">+</span> <span class="token string">"_"</span> <span class="token operator">+</span> libso<span class="token punctuation">.</span>base <span class="token operator">+</span> <span class="token string">"_"</span> <span class="token operator">+</span> <span class="token function">ptr</span><span class="token punctuation">(</span>libso<span class="token punctuation">.</span>size<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">".so"</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="12"></td><td><pre>        <span class="token keyword">var</span> file_handle <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>file_path<span class="token punctuation">,</span> <span class="token string">"wb"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="13"></td><td><pre>        </pre></td></tr><tr><td data-num="14"></td><td><pre>        <span class="token keyword">if</span> <span class="token punctuation">(</span>file_handle <span class="token operator">&amp;&amp;</span> file_handle <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="15"></td><td><pre>            Memory<span class="token punctuation">.</span><span class="token function">protect</span><span class="token punctuation">(</span><span class="token function">ptr</span><span class="token punctuation">(</span>libso<span class="token punctuation">.</span>base<span class="token punctuation">)</span><span class="token punctuation">,</span> libso<span class="token punctuation">.</span>size<span class="token punctuation">,</span> <span class="token string">'rwx'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="16"></td><td><pre>            <span class="token keyword">var</span> libso_buffer <span class="token operator">=</span> <span class="token function">ptr</span><span class="token punctuation">(</span>libso<span class="token punctuation">.</span>base<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">readByteArray</span><span class="token punctuation">(</span>libso<span class="token punctuation">.</span>size<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="17"></td><td><pre>            file_handle<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>libso_buffer<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="18"></td><td><pre>            file_handle<span class="token punctuation">.</span><span class="token function">flush</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="19"></td><td><pre>            file_handle<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="20"></td><td><pre>            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"[dump]:"</span><span class="token punctuation">,</span> file_path<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="21"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="22"></td><td><pre>    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="23"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="24"></td><td><pre><span class="token keyword">function</span> <span class="token function">hook_dlopen</span><span class="token punctuation">(</span>soName <span class="token operator">=</span> <span class="token string">''</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="25"></td><td><pre>    Interceptor<span class="token punctuation">.</span><span class="token function">attach</span><span class="token punctuation">(</span>Module<span class="token punctuation">.</span><span class="token function">findExportByName</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token string">"android_dlopen_ext"</span><span class="token punctuation">)</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="26"></td><td><pre>        <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="27"></td><td><pre>            <span class="token function-variable function">onEnter</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">args</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="28"></td><td><pre>                <span class="token keyword">var</span> pathptr <span class="token operator">=</span> args<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="29"></td><td><pre>                <span class="token keyword">if</span> <span class="token punctuation">(</span>pathptr <span class="token operator">!==</span> <span class="token keyword">undefined</span> <span class="token operator">&amp;&amp;</span> pathptr <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="30"></td><td><pre>                    <span class="token keyword">var</span> path <span class="token operator">=</span> <span class="token function">ptr</span><span class="token punctuation">(</span>pathptr<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">readCString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="31"></td><td><pre>                    <span class="token keyword">if</span> <span class="token punctuation">(</span>path<span class="token punctuation">.</span><span class="token function">indexOf</span><span class="token punctuation">(</span>soName<span class="token punctuation">)</span> <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="32"></td><td><pre>                        <span class="token keyword">this</span><span class="token punctuation">.</span>is_can_hook <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="33"></td><td><pre>                    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="34"></td><td><pre>                <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="35"></td><td><pre>            <span class="token punctuation">&#125;</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="36"></td><td><pre>            <span class="token function-variable function">onLeave</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">retval</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="37"></td><td><pre>                <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>is_can_hook<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="38"></td><td><pre>                    <span class="token function">dump_so</span><span class="token punctuation">(</span>soName<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="39"></td><td><pre>                <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="40"></td><td><pre>            <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="41"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="42"></td><td><pre>    <span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="43"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="44"></td><td><pre></pre></td></tr><tr><td data-num="45"></td><td><pre></pre></td></tr><tr><td data-num="46"></td><td><pre><span class="token function">setImmediate</span><span class="token punctuation">(</span>hook_dlopen<span class="token punctuation">,</span> <span class="token string">"libjgdtc.so"</span><span class="token punctuation">)</span></pre></td></tr></table></figure><p>所以我们的分析重点是在 <code>libjiagu.so</code>  中，这里我选取了 arm64 架构的 so 文件 <code>libjiagu_a64.so</code>  进行分析</p>
+<h1 id="libjiagu_a64so分析"><a class="anchor" href="#libjiagu_a64so分析">#</a> libjiagu_a64.so 分析</h1>
+<p>首先我们导入一下 <code>jni.h</code> , 这个头文件的路径是在 ndk 的安装路径下，绝对路径为 <code>D:\Android-sdk\ndk\21.4.7075529\toolchains\llvm\prebuilt\windows-x86_64\sysroot\usr\include\jni.h</code></p>
+<p>我们复制一份新的 <code>jni.h</code>  到别的地方，然后将这两行导入头文件的代码注释掉</p>
+<p><img data-src="/360-jiagu/image-20231102183723562.png" alt="image-20231102183723562" style="aspect-ratio:1920 / 1080;"></p>
+<p>随后来到 IDA, 按下 <code>Ctrl</code> + <code>F9</code>  导入 <code>jni.h</code>  即可</p>
+<p>预备工作做完之后，我们开始正式的分析</p>
+<p>首先打开 segment, 发现没有 initarray 这样的字段</p>
+<p><img data-src="/360-jiagu/image-20231102194307097.png" alt="image-20231102194307097" style="aspect-ratio:1178 / 258;"></p>
+<p>然后我们从 <code>start</code>  开始分析</p>
+<p><img data-src="/360-jiagu/image-20231102194334123.png" alt="image-20231102194334123" style="aspect-ratio:374 / 136;"></p>
+<h1 id="参考资料"><a class="anchor" href="#参考资料">#</a> 参考资料</h1>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cuNzcxNjkubmV0L2h0bWwvMTcwNzI0Lmh0bWw=">360 加固保关键技术浅析</span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9jcnlwdGF4Lm1lZGl1bS5jb20vZGVjcnlwdGluZy1zdHJpbmdzLXdpdGgtYS1qZWItc2NyaXB0LTFhZjUyMmZhNDk3OQ==">Decrypting strings with a JEB script</span></li>
+<li>https://www.cnblogs.com/PikapBai/p/14480881.html</li>
+</ul>
+
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2023-11-02 19:43:35" itemprop="dateModified" datetime="2023-11-02T19:43:35+08:00">2023-11-02</time>
+  </span>
+  <span id="360-jiagu/" class="item leancloud_visitors" data-flag-title="(doing)360加固dex解密算法分析" title="阅读次数">
+      <span class="icon">
+        <i class="ic i-eye"></i>
+      </span>
+      <span class="text">阅读次数</span>
+      <span class="leancloud-visitors-count"></span>
+      <span class="text">次</span>
+  </span>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>oacia <i class="ic i-at"><em>@</em></i>oaciaのBbBlog~
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="https://oacia.cc/360-jiagu/" title="(doing)360加固dex解密算法分析">https://oacia.cc/360-jiagu/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/android-JNI/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_sQY7MqnjkR.jpg" title="安卓JNI学习">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> </span>
+  <h3>安卓JNI学习</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/dexloader/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_v0DQ0rvOfB.jpg" title="Android动态加载dex">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> </span>
+  <h3>Android动态加载dex</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95apk%E8%AF%B4%E6%98%8E"><span class="toc-text"> 测试 apk 说明</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#java%E5%B1%82%E5%88%9D%E6%AD%A5%E5%88%86%E6%9E%90"><span class="toc-text"> java 层初步分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A0%E5%9B%BA%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%85%A5%E5%8F%A3%E5%87%BD%E6%95%B0-attachbasecontext"><span class="toc-text"> 加固的第一个入口函数 attachBaseContext</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#libjiagu_a64so%E5%88%86%E6%9E%90"><span class="toc-text"> libjiagu_a64.so 分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-text"> 参考资料</span></a></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="oacia"
+      data-src="/images/avatar.jpg">
+  <p class="name" itemprop="name">oacia</p>
+  <div class="description" itemprop="description">这里的文章写给未来的自己 不要忘记现在学习的知识</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">37</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">46</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL29hY2lh" title="https:&#x2F;&#x2F;github.com&#x2F;oacia"><i class="ic i-github"></i></span>
+      <span class="exturl item twitter" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9vYWNpYTg2" title="https:&#x2F;&#x2F;twitter.com&#x2F;oacia86"><i class="ic i-twitter"></i></span>
+      <span class="exturl item paper-plane" data-url="aHR0cHM6Ly90Lm1lL29hY2lh" title="https:&#x2F;&#x2F;t.me&#x2F;oacia"><i class="ic i-paper-plane"></i></span>
+      <span class="exturl item email" data-url="bWFpbHRvOm9hY2lhQHFxLmNvbQ==" title="mailto:oacia@qq.com"><i class="ic i-envelope"></i></span>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/about-oacia/" rel="section"><i class="ic i-user"></i>关于oacia</a>
+  </li>
+
+        
+  <li class="item dropdown">
+      <a href="/archives/" rel="section"><i class="ic i-feather"></i>文章</a>
+    <ul class="submenu">
+
+        
+  <li class="item">
+    <a href="/archives/" rel="section"><i class="ic i-list-alt"></i>归档</a>
+  </li>
+
+        
+  <li class="item">
+    <a href="/tags/" rel="section"><i class="ic i-tags"></i>标签</a>
+  </li>
+
+  </ul>
+    
+  <li class="item">
+    <a href="/TODOlist/" rel="section"><i class="ic i-clock"></i>要做的事</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/website_maintenance/" rel="section"><i class="ic i-calendar"></i>更新日志</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/friends/" rel="section"><i class="ic i-heart"></i>小伙伴</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/music/" rel="section"><i class="ic i-music"></i>听会儿歌吧</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/android-JNI/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/dexloader/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">oacia @ oacia</span>
+  </div>
+  <div class="count">
+    <span class="post-meta-item-icon">
+      <i class="ic i-chart-area"></i>
+    </span>
+    <span title="站点总字数">561k 字</span>
+
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="ic i-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:30</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '360-jiagu/',
+    favicon: {
+      show: "柚鳥ナツ",
+      hide: "甘い幸せ"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+<!--尝试不使用polyfill-->
+<!--<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>-->
+
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+</body>
+</html>

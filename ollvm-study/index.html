@@ -1,0 +1,537 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <style>
+    html{
+      cursor: url('/cusor/normal.png') auto;s
+    }
+  </style>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="google-site-verification" content="qQVmgWozVe7BXoA15J3gAZpEA5dK168admH4U3W6PAk">
+  <meta name="msvalidate.01" content="4902E39C0135E72DE537BCB0FE08B40A">
+  <meta name="baidu-site-verification" content="codeva-CSYjpuVg5v">
+
+
+<link rel="alternate" type="application/rss+xml" title="oaciaのBbBlog~" href="https://oacia.cc/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="oaciaのBbBlog~" href="https://oacia.cc/atom.xml" />
+<link rel="alternate" type="application/json" title="oaciaのBbBlog~" href="https://oacia.cc/feed.json" />
+
+
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="ollvm" />
+
+
+<link rel="canonical" href="https://oacia.cc/ollvm-study/">
+
+
+
+  <title>
+(doing)ollvm三种混淆模式的反混淆思路 |
+oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="alice">
+      <img src="/images/alice-shake.gif" alt="">
+    </div>
+    <!--
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+    -->
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">(doing)ollvm三种混淆模式的反混淆思路
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2023-09-26 09:24:52">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2023-09-26T09:24:52+08:00">2023-09-26</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span class="text">本文字数</span>
+    <span>5k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span class="text">阅读时长</span>
+    <span>5 分钟</span>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">oacia</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_Him2elkScV.jpg"></li>
+          <li class="item" data-background-image="/picture/v2-7c25181f3ce1a1c801c1124cff4b2b89_r.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_IEbomErP4M.jpg"></li>
+          <li class="item" data-background-image="/picture/5947FA53E929E7283C6121DF60A529C1.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_WcEL9Nh4Mh.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_4r80CQre0O.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="https://oacia.cc/ollvm-study/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="oacia">
+    <meta itemprop="description" content="DEVIL or SWEET, 这里的文章写给未来的自己 不要忘记现在学习的知识">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="oaciaのBbBlog~">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <blockquote>
+<p>ollvm 算是日常逆向的过程中的一个难点，试想一下当你把程序拖进 ida 后那无穷无尽的 block 出现在面前的感受，这滋味一言难尽呐…</p>
+<p>所以很有必要对 ollvm 的混淆与反混淆进行系统的学习，以便在未来实际生活中遇到时，不必慌忙的去 google 寻找答案.</p>
+</blockquote>
+<h1 id="预备知识"><a class="anchor" href="#预备知识">#</a> 预备知识</h1>
+<p>llvm 是一个完整的编译器架构，作用可以理解为制作一个编译器，llvm 先将源码生成为与目标机器无关的 LLVM IR 代码，然后把 LLVMIR 代码先优化，再向目标机器的汇编语言而努力。经典编译器都可以分为前端、中层优化和后端：</p>
+<p><img data-src="/ollvm-study/image-20230726095250772.png" alt="image-20230726095250772" style="aspect-ratio:976 / 525;"></p>
+<p>从上图中可以看到 clang 是前端的一个套件，但在实际使用时，我们只可以感受到 clang，也只是在使用 clang，因为编译的时候，是调用 clang 或 clang++ 来编译源码。</p>
+<p>而 ollvm 是基于 LLVM 的代码分支的代码混淆，在中间表示 IR 层，通过编写 pass（遍历一遍 IR，可以同时对它做一些操作）来混淆 IR，这样目标机器的汇编语言也就被混淆了</p>
+<h1 id="ollvm环境搭建"><a class="anchor" href="#ollvm环境搭建">#</a> ollvm 环境搭建</h1>
+<p>ollvm 搭建的环境为</p>
+<ul>
+<li>ubuntu22.04</li>
+</ul>
+<h2 id="下载ollvm-40源码"><a class="anchor" href="#下载ollvm-40源码">#</a> 下载 ollvm 4.0 源码</h2>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">git</span> clone <span class="token parameter variable">-b</span> llvm-4.0 <span class="token parameter variable">--depth</span><span class="token operator">=</span><span class="token number">1</span> https://github.com/obfuscator-llvm/obfuscator.git</pre></td></tr></table></figure><h2 id="安装docker"><a class="anchor" href="#安装docker">#</a> 安装 docker</h2>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> docker.io</pre></td></tr></table></figure><h2 id="安装编译ollvm的docker环境"><a class="anchor" href="#安装编译ollvm的docker环境">#</a> 安装编译 ollvm 的 docker 环境</h2>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">sudo</span> <span class="token function">docker</span> pull nickdiego/ollvm-build</pre></td></tr></table></figure><h2 id="编译ollvm"><a class="anchor" href="#编译ollvm">#</a> 编译 ollvm</h2>
+<h3 id="下载编译脚本"><a class="anchor" href="#下载编译脚本">#</a> 下载编译脚本</h3>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">git</span> clone <span class="token parameter variable">--depth</span><span class="token operator">=</span><span class="token number">1</span> https://github.com/oacia/docker-ollvm.git</pre></td></tr></table></figure><h3 id="编译"><a class="anchor" href="#编译">#</a> 编译</h3>
+<p><code>ollvm-build.sh</code>  后面跟的参数是 <code>ollvm的源码目录</code></p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">sudo</span> docker-ollvm/ollvm-build.sh /home/oacia/Desktop/obfuscator/</pre></td></tr></table></figure><h2 id="创建硬链接"><a class="anchor" href="#创建硬链接">#</a> 创建硬链接</h2>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">sudo</span> <span class="token function">ln</span> ./obfuscator/build_release/bin/* /usr/bin/</pre></td></tr></table></figure><p>创建完成硬链接后，使用该命令来检测 <code>clang</code>  是否可用</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>clang <span class="token parameter variable">--version</span></pre></td></tr></table></figure><h2 id="使用测试代码尝试编译"><a class="anchor" href="#使用测试代码尝试编译">#</a> 使用测试代码尝试编译</h2>
+<p>使用一个简单的 RC4 加密来作为测试代码，<strong> 该代码将在后续 ollvm 的三种混淆中继续使用</strong></p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">//test.c</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span><span class="token string">&lt;stdio.h></span></span></pre></td></tr><tr><td data-num="3"></td><td><pre></pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="5"></td><td><pre>RC4 初始化函数</pre></td></tr><tr><td data-num="6"></td><td><pre>*/</pre></td></tr><tr><td data-num="7"></td><td><pre><span class="token keyword">void</span> <span class="token function">rc4_init</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">char</span><span class="token operator">*</span> s<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">char</span><span class="token operator">*</span> key<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> Len_k<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="8"></td><td><pre><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="9"></td><td><pre>	<span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="10"></td><td><pre>	<span class="token keyword">char</span> k<span class="token punctuation">[</span><span class="token number">256</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span> <span class="token number">0</span> <span class="token punctuation">&#125;</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="11"></td><td><pre>	<span class="token keyword">unsigned</span> <span class="token keyword">char</span> tmp <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="12"></td><td><pre>	<span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">256</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="13"></td><td><pre>		s<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> i<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="14"></td><td><pre>		k<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> key<span class="token punctuation">[</span>i <span class="token operator">%</span> Len_k<span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="15"></td><td><pre>	<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="16"></td><td><pre>	<span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">256</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="17"></td><td><pre>		j <span class="token operator">=</span> <span class="token punctuation">(</span>j <span class="token operator">+</span> s<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span> k<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">256</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="18"></td><td><pre>		tmp <span class="token operator">=</span> s<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="19"></td><td><pre>		s<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> s<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="20"></td><td><pre>		s<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">=</span> tmp<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="21"></td><td><pre>	<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="22"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="23"></td><td><pre></pre></td></tr><tr><td data-num="24"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="25"></td><td><pre>RC4 加解密函数</pre></td></tr><tr><td data-num="26"></td><td><pre>unsigned char* Data     加解密的数据</pre></td></tr><tr><td data-num="27"></td><td><pre>unsigned long Len_D     加解密数据的长度</pre></td></tr><tr><td data-num="28"></td><td><pre>unsigned char* key      密钥</pre></td></tr><tr><td data-num="29"></td><td><pre>unsigned long Len_k     密钥长度</pre></td></tr><tr><td data-num="30"></td><td><pre>*/</pre></td></tr><tr><td data-num="31"></td><td><pre><span class="token keyword">void</span> <span class="token function">RC4</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">char</span><span class="token operator">*</span> Data<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> Len_D<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">char</span><span class="token operator">*</span> key<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> Len_k<span class="token punctuation">)</span> <span class="token comment">// 加解密</span></pre></td></tr><tr><td data-num="32"></td><td><pre><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="33"></td><td><pre>	<span class="token keyword">unsigned</span> <span class="token keyword">char</span> s<span class="token punctuation">[</span><span class="token number">256</span><span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="34"></td><td><pre>	<span class="token function">rc4_init</span><span class="token punctuation">(</span>s<span class="token punctuation">,</span> key<span class="token punctuation">,</span> Len_k<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="35"></td><td><pre>	<span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> t <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="36"></td><td><pre>	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> k <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="37"></td><td><pre>	<span class="token keyword">unsigned</span> <span class="token keyword">char</span> tmp<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="38"></td><td><pre>	<span class="token keyword">for</span> <span class="token punctuation">(</span>k <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> k <span class="token operator">&lt;</span> Len_D<span class="token punctuation">;</span> k<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="39"></td><td><pre>		i <span class="token operator">=</span> <span class="token punctuation">(</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">256</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="40"></td><td><pre>		j <span class="token operator">=</span> <span class="token punctuation">(</span>j <span class="token operator">+</span> s<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">256</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="41"></td><td><pre>		tmp <span class="token operator">=</span> s<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="42"></td><td><pre>		s<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> s<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="43"></td><td><pre>		s<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">=</span> tmp<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="44"></td><td><pre>		t <span class="token operator">=</span> <span class="token punctuation">(</span>s<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span> s<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">256</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="45"></td><td><pre>		Data<span class="token punctuation">[</span>k<span class="token punctuation">]</span> <span class="token operator">=</span> Data<span class="token punctuation">[</span>k<span class="token punctuation">]</span> <span class="token operator">^</span> s<span class="token punctuation">[</span>t<span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="46"></td><td><pre>	<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="47"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="48"></td><td><pre></pre></td></tr><tr><td data-num="49"></td><td><pre><span class="token keyword">void</span> <span class="token function">RC4encrypt</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">char</span><span class="token operator">*</span> Data<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> Len_D<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">char</span><span class="token operator">*</span> key<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> Len_k<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="50"></td><td><pre>	<span class="token function">RC4</span><span class="token punctuation">(</span>Data<span class="token punctuation">,</span> Len_D<span class="token punctuation">,</span> key<span class="token punctuation">,</span> Len_k<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="51"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="52"></td><td><pre><span class="token keyword">void</span> <span class="token function">RC4decrypt</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">char</span><span class="token operator">*</span> Data<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> Len_D<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">char</span><span class="token operator">*</span> key<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> Len_k<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="53"></td><td><pre>	<span class="token function">RC4</span><span class="token punctuation">(</span>Data<span class="token punctuation">,</span> Len_D<span class="token punctuation">,</span> key<span class="token punctuation">,</span> Len_k<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="54"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="55"></td><td><pre><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="56"></td><td><pre><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="57"></td><td><pre>	<span class="token comment">// 字符串密钥</span></pre></td></tr><tr><td data-num="58"></td><td><pre>	<span class="token keyword">unsigned</span> <span class="token keyword">char</span> key<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"secret"</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="59"></td><td><pre>	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> key_len <span class="token operator">=</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span><span class="token comment">// 字符串最后还有一个 '/0' 所以需要 - 1</span></pre></td></tr><tr><td data-num="60"></td><td><pre>	<span class="token comment">// 数组密钥</span></pre></td></tr><tr><td data-num="61"></td><td><pre>	<span class="token comment">//unsigned char key[] = &#123;'s','e','c','r','e','t'&#125;;</span></pre></td></tr><tr><td data-num="62"></td><td><pre>	<span class="token comment">//unsigned long key_len = sizeof(key);</span></pre></td></tr><tr><td data-num="63"></td><td><pre></pre></td></tr><tr><td data-num="64"></td><td><pre>	<span class="token keyword">unsigned</span> <span class="token keyword">char</span> data<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span> <span class="token number">116</span><span class="token punctuation">,</span> <span class="token number">104</span><span class="token punctuation">,</span> <span class="token number">105</span><span class="token punctuation">,</span> <span class="token number">115</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">,</span> <span class="token number">105</span><span class="token punctuation">,</span> <span class="token number">115</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">,</span> <span class="token number">82</span><span class="token punctuation">,</span> <span class="token number">67</span><span class="token punctuation">,</span> <span class="token number">52</span><span class="token punctuation">,</span> <span class="token number">44</span><span class="token punctuation">,</span> <span class="token number">111</span><span class="token punctuation">,</span> <span class="token number">97</span><span class="token punctuation">,</span> <span class="token number">99</span><span class="token punctuation">,</span> <span class="token number">105</span><span class="token punctuation">,</span> <span class="token number">97</span> <span class="token punctuation">&#125;</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="65"></td><td><pre>	</pre></td></tr><tr><td data-num="66"></td><td><pre>	<span class="token comment">// 对明文进行加密</span></pre></td></tr><tr><td data-num="67"></td><td><pre>	<span class="token function">RC4encrypt</span><span class="token punctuation">(</span>data<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">,</span> key<span class="token punctuation">,</span> key_len<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="68"></td><td><pre></pre></td></tr><tr><td data-num="69"></td><td><pre>	<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="70"></td><td><pre>	<span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="71"></td><td><pre>		<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d, "</span><span class="token punctuation">,</span> data<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="72"></td><td><pre>	<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="73"></td><td><pre>	<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="74"></td><td><pre>	</pre></td></tr><tr><td data-num="75"></td><td><pre>	<span class="token comment">// 对密文进行解密</span></pre></td></tr><tr><td data-num="76"></td><td><pre>	<span class="token function">RC4encrypt</span><span class="token punctuation">(</span>data<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">,</span> key<span class="token punctuation">,</span> key_len<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="77"></td><td><pre></pre></td></tr><tr><td data-num="78"></td><td><pre>	<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="79"></td><td><pre>	<span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="80"></td><td><pre>		<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%c"</span><span class="token punctuation">,</span> data<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="81"></td><td><pre>	<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="82"></td><td><pre>	<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="83"></td><td><pre>	<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="84"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="85"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="86"></td><td><pre>153, 94, 187, 111, 162, 205, 165, 134, 96, 136, 143, 240, 156, 135, 150, 94, 204,</pre></td></tr><tr><td data-num="87"></td><td><pre>this is RC4,oacia</pre></td></tr><tr><td data-num="88"></td><td><pre>*/</pre></td></tr></table></figure><p>运行如下命令进行编译</p>
+<pre><code>clang test.c -o test
+</code></pre>
+<ul>
+<li><strong>如果提示 fatal error: ‘stdio.h’ file not found</strong></li>
+</ul>
+<p>​	尝试下载 g++ 和 gcc</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> g++</pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> gcc</pre></td></tr></table></figure><ul>
+<li><strong>如果提示 fatal error: 'stddef.h’或者’stdarg.h’等 file not found</strong></li>
+</ul>
+<p>使用该命令复制 clang 所需的头文件到 <code>/usr/include/</code> ,  <code>cp -r -i</code>  后面跟的参数为 <code>ollvm的源码目录/build_release/lib/clang/4.0.1/include/.</code> , 这个文件夹内包含了 <code>clang</code>  编译器所需的头文件</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">cp</span> <span class="token parameter variable">-r</span> <span class="token parameter variable">-i</span> /home/oacia/Desktop/obfuscator/build_release/lib/clang/4.0.1/include/. /usr/include/</pre></td></tr></table></figure><p>如果提示有重名文件的话，最好先对 <code>/usr/include</code>  内的重名文件作好备份，然后去掉 <code>-i</code>  参数重新进行复制头文件操作</p>
+<h1 id="虚假控制流bcfbogus-control-flow"><a class="anchor" href="#虚假控制流bcfbogus-control-flow">#</a> 虚假控制流 BCF (Bogus Control Flow)</h1>
+<h2 id="定义"><a class="anchor" href="#定义">#</a> 定义</h2>
+<p>虚假控制流混淆通过加入包含<strong>不透明谓词</strong>的条件跳转（也就是跳转与否在运行之前就已经确定的跳转，但 IDA 无法分析）和<strong>不可达的基本块</strong>，来干扰 IDA 的控制流分析和 F5 反汇编。</p>
+<p>所谓的不透明谓词，例如</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">if</span><span class="token punctuation">(</span>x<span class="token operator">></span><span class="token number">10</span> <span class="token operator">&amp;&amp;</span> x<span class="token operator">&lt;=</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="2"></td><td><pre>    <span class="token keyword">goto</span> Label1<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr></table></figure><p>对于这类表达式，我们可以很明显的看到， <code>x&gt;10 &amp;&amp; x&lt;=10</code>  是永假式，所以 <code>goto Label1</code>  这个跳转永远不会被执行，但是对于 IDA 来说可不是这个样子，在静态分析的时候，IDA 并不知道 <code>x</code>  的值是多少，所以说这类虚假控制流就会干扰我们的静态分析.</p>
+<h2 id="ollvm的bcf混淆"><a class="anchor" href="#ollvm的bcf混淆">#</a> ollvm 的 BCF 混淆</h2>
+<p>使用下列命令对代码进行 BCF 混淆</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>clang <span class="token parameter variable">-mllvm</span> <span class="token parameter variable">-bcf</span> <span class="token parameter variable">-mllvm</span> <span class="token parameter variable">-bcf_loop</span><span class="token operator">=</span><span class="token number">3</span> <span class="token parameter variable">-mllvm</span> <span class="token parameter variable">-bcf_prob</span><span class="token operator">=</span><span class="token number">40</span> test.c <span class="token parameter variable">-o</span> test-bcf</pre></td></tr></table></figure><p>可用选项：</p>
+<ul>
+<li><code>-mllvm -bcf </code> : 激活虚假控制流</li>
+<li><code>-mllvm -bcf_loop=3</code>  : 混淆次数，这里一个函数会被混淆 3 次，默认为 1</li>
+<li><code>-mllvm -bcf_prob=40</code>  : 每个基本块被混淆的概率，这里每个基本块被混淆的概率为 40%，默认为 30 %</li>
+</ul>
+<hr>
+<p>可以发现在 BCF 混淆之后，函数的控制流明显复杂了许多</p>
+<p><img data-src="/ollvm-study/image-20230727162443249.png" alt="image-20230727162443249" style="aspect-ratio:1488 / 812;"></p>
+<p>打开 BCF 混淆之后 IDA 的伪代码，发现多了许多的 <code>while</code> , <code>if</code>  表达式，伪代码变得十分复杂，也让我们无法一眼就可以看出这是何种加密</p>
+<p><img data-src="/ollvm-study/image-20230727162652645.png" alt="image-20230727162652645" style="aspect-ratio:1286 / 684;"></p>
+<h2 id="ollvm的bcf反混淆"><a class="anchor" href="#ollvm的bcf反混淆">#</a> ollvm 的 BCF 反混淆</h2>
+<p>铺垫了这么长的时间，终于要来到本篇文章的第一个有趣的环节，BCF 的反混淆了，<span class="spoiler" title="唔~被看到了呢"> 装环境真的好无聊呀😔</span></p>
+<p>我们往上看 <code>while</code>  内的表达式 <code>y_4 &gt;= 10 &amp;&amp; (((x_3 - 1) * x_3) &amp; 1) != 0</code> , 在这个式子中， <code>(x_3 - 1) * x_3)</code>  的值永远为偶数，所以 <code>(x_3 - 1) * x_3) &amp; 1</code>  永远返回 <code>0</code> , 不等号左边 <code>y_4 &gt;= 10 &amp;&amp; (((x_3 - 1) * x_3) &amp; 1)</code> , 因为是用逻辑与 <code>&amp;&amp;</code>  作为连接词，所以左侧的表达式其实为永假式， <code>y_4 &gt;= 10 &amp;&amp; (((x_3 - 1) * x_3) &amp; 1) != 0</code>  永远不成立</p>
+<p>对于 BCF, 有 4 种思路可以帮助我们去进行反混淆</p>
+<h3 id="思路一-将全局变量赋值并将segment设为只读"><a class="anchor" href="#思路一-将全局变量赋值并将segment设为只读">#</a> 思路一：将全局变量赋值并将 segment 设为只读</h3>
+<p>IDA 其实是有死代码消除 (DCE, Dead Code Elimination) 的，但是由于 <code>y_4</code> , <code>x_3</code>  被定义为了全局变量，在静态分析时，IDA 不知道这个表达式的值是多少，所以 IDA 也不敢轻易的就把这段代码给消除了 (万一把重要的代码也给消除掉了那逆向人员真的要 *** 了)</p>
+<p>但是如果我们把这个变量的值定下来，并且将变量所在的 <code>segment</code>  设为 <code>只读</code> ，那这个变量值在没运行前也变不了，IDA 不就可以自己算出来这个表达式的值是多少了嘛，这样那些没有用的跳转 IDA 就可以自动优化了</p>
+<p>所以我们先双击 <code>x_3</code>  跳转到 <code>x_3</code>  的地址</p>
+<p><img data-src="/ollvm-study/image-20230727185741834.png" alt="image-20230727185741834" style="aspect-ratio:849 / 81;"></p>
+<p>然后按下<span class="kbd"> Alt</span>+<span class="kbd">S</span> 或者 <code>Edit-&gt;Segments-&gt;Edit segment...</code>  来改变不透明谓词所在的 segment 的读写属性，如图将 <code>Write</code>  复选框取消勾选， <code>.bss段</code> 就设为只读了</p>
+<p><img data-src="/ollvm-study/image-20230727203726728.png" alt="image-20230727203726728" style="aspect-ratio:742 / 427;"></p>
+<p>光是这样还不够，因为 <code>.bss段</code> 中的变量还没有被赋过值，所以我们还需要 patch 这个段来固定 <code>.bss段</code> 内变量的值</p>
+<p>一个变量一个变量去 patch 显然显得有些麻烦，所以我们可以直接编写 IDApython 脚本来实现一步到位的效果，并且对于常规的 ollvm 的 bcf 混淆来说，bcf 的不透明谓词都是处于 <code>.bss段</code> 中。如果不透明谓词定义在其他段中，将 IDApython 中的代码做出相对应的修改即可</p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">import</span> ida_segment</pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token keyword">import</span> ida_bytes</pre></td></tr><tr><td data-num="3"></td><td><pre></pre></td></tr><tr><td data-num="4"></td><td><pre>seg <span class="token operator">=</span> ida_segment<span class="token punctuation">.</span>get_segm_by_name<span class="token punctuation">(</span><span class="token string">'.bss'</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="5"></td><td><pre></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token keyword">for</span> ea <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>seg<span class="token punctuation">.</span>start_ea<span class="token punctuation">,</span> seg<span class="token punctuation">.</span>end_ea<span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="7"></td><td><pre>    ida_bytes<span class="token punctuation">.</span>patch_bytes<span class="token punctuation">(</span>ea<span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">.</span>to_bytes<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token string">'little'</span><span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="8"></td><td><pre></pre></td></tr><tr><td data-num="9"></td><td><pre><span class="token triple-quoted-string string">'''</span></pre></td></tr><tr><td data-num="10"></td><td><pre>seg.perm: 由三位二进制数表示,例如一个segment为可读,不可写,不可执行,则seg.perm = 0b100</pre></td></tr><tr><td data-num="11"></td><td><pre>(seg.perm >> 2)&amp;1: Read</pre></td></tr><tr><td data-num="12"></td><td><pre>(seg.perm >> 1)&amp;1: Write</pre></td></tr><tr><td data-num="13"></td><td><pre>(seg.perm >> 0)&amp;1: Execute</pre></td></tr><tr><td data-num="14"></td><td><pre>'''</pre></td></tr><tr><td data-num="15"></td><td><pre>seg<span class="token punctuation">.</span>perm <span class="token operator">=</span> <span class="token number">0b100</span></pre></td></tr></table></figure><h2 id="思路二-patch不透明谓词的赋值语句汇编"><a class="anchor" href="#思路二-patch不透明谓词的赋值语句汇编">#</a> 思路二: patch 不透明谓词的赋值语句汇编</h2>
+<p>我们可以观察一下这些不透明谓词 (如伪代码为 <code>y_10 &lt; 10 || (((x_9 - 1) * x_9) &amp; 1) == 0</code> ) 的汇编</p>
+<p><img data-src="/ollvm-study/image-20230727230937099.png" alt="image-20230727230937099" style="aspect-ratio:328 / 288;"></p>
+<p>我们重点关注 <code>mov eax, ds:x_9</code>  这行汇编，它的作用是将变量 <code>x_9</code>  的值赋给寄存器 <code>eax</code></p>
+<h1 id="参考资料"><a class="anchor" href="#参考资料">#</a> 参考资料</h1>
+<ul>
+<li>
+<p><span class="exturl" data-url="aHR0cHM6Ly9iYnMua2FueHVlLmNvbS90aHJlYWQtMjI1NzU2Lmh0bQ==">ollvm 快速学习</span></p>
+</li>
+<li>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYmlsaWJpbGkuY29tL3JlYWQvY3YxMzE0ODkwMy8=">跟着铁头干混淆 3 ubuntu 下用 docker 编译 ollvm (保证成功)</span></p>
+</li>
+<li>
+<p><span class="exturl" data-url="aHR0cHM6Ly9qZXYwbi5jb20vMjAyMi8wNy8wNy9vbGx2bS0wLmh0bWw=">OLLVM 混淆学习（0）—— 环境搭建及混淆初体验</span></p>
+</li>
+<li>
+<p><span class="exturl" data-url="aHR0cHM6Ly9iYnMua2FueHVlLmNvbS90aHJlYWQtMjY2MDA1LTEuaHRt">利用 angr 符号执行去除虚假控制流</span></p>
+</li>
+</ul>
+
+      <div class="tags">
+          <a href="/tags/ollvm/" rel="tag"><i class="ic i-tag"></i> ollvm</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2023-09-26 10:05:18" itemprop="dateModified" datetime="2023-09-26T10:05:18+08:00">2023-09-26</time>
+  </span>
+  <span id="ollvm-study/" class="item leancloud_visitors" data-flag-title="(doing)ollvm三种混淆模式的反混淆思路" title="阅读次数">
+      <span class="icon">
+        <i class="ic i-eye"></i>
+      </span>
+      <span class="text">阅读次数</span>
+      <span class="leancloud-visitors-count"></span>
+      <span class="text">次</span>
+  </span>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>oacia <i class="ic i-at"><em>@</em></i>oaciaのBbBlog~
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="https://oacia.cc/ollvm-study/" title="(doing)ollvm三种混淆模式的反混淆思路">https://oacia.cc/ollvm-study/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/dexloader/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;2381000B8F88BB004906DBBEC1C9B89B.jpg" title="Android动态加载dex">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> </span>
+  <h3>Android动态加载dex</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/android-system-architecture/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;4585FEDEEB263A79D1E06BAECBFD5B17.jpg" title="安卓系统架构概览">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> </span>
+  <h3>安卓系统架构概览</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86"><span class="toc-text"> 预备知识</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ollvm%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-text"> ollvm 环境搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BDollvm-40%E6%BA%90%E7%A0%81"><span class="toc-text"> 下载 ollvm 4.0 源码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85docker"><span class="toc-text"> 安装 docker</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E7%BC%96%E8%AF%91ollvm%E7%9A%84docker%E7%8E%AF%E5%A2%83"><span class="toc-text"> 安装编译 ollvm 的 docker 环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E8%AF%91ollvm"><span class="toc-text"> 编译 ollvm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E7%BC%96%E8%AF%91%E8%84%9A%E6%9C%AC"><span class="toc-text"> 下载编译脚本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E8%AF%91"><span class="toc-text"> 编译</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%A1%AC%E9%93%BE%E6%8E%A5"><span class="toc-text"> 创建硬链接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91"><span class="toc-text"> 使用测试代码尝试编译</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%99%9A%E5%81%87%E6%8E%A7%E5%88%B6%E6%B5%81bcfbogus-control-flow"><span class="toc-text"> 虚假控制流 BCF (Bogus Control Flow)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-text"> 定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ollvm%E7%9A%84bcf%E6%B7%B7%E6%B7%86"><span class="toc-text"> ollvm 的 BCF 混淆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ollvm%E7%9A%84bcf%E5%8F%8D%E6%B7%B7%E6%B7%86"><span class="toc-text"> ollvm 的 BCF 反混淆</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%E4%B8%80-%E5%B0%86%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E8%B5%8B%E5%80%BC%E5%B9%B6%E5%B0%86segment%E8%AE%BE%E4%B8%BA%E5%8F%AA%E8%AF%BB"><span class="toc-text"> 思路一：将全局变量赋值并将 segment 设为只读</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%E4%BA%8C-patch%E4%B8%8D%E9%80%8F%E6%98%8E%E8%B0%93%E8%AF%8D%E7%9A%84%E8%B5%8B%E5%80%BC%E8%AF%AD%E5%8F%A5%E6%B1%87%E7%BC%96"><span class="toc-text"> 思路二: patch 不透明谓词的赋值语句汇编</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-text"> 参考资料</span></a></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="oacia"
+      data-src="/images/avatar.jpg">
+  <p class="name" itemprop="name">oacia</p>
+  <div class="description" itemprop="description">这里的文章写给未来的自己 不要忘记现在学习的知识</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">37</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">46</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL29hY2lh" title="https:&#x2F;&#x2F;github.com&#x2F;oacia"><i class="ic i-github"></i></span>
+      <span class="exturl item twitter" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9vYWNpYTg2" title="https:&#x2F;&#x2F;twitter.com&#x2F;oacia86"><i class="ic i-twitter"></i></span>
+      <span class="exturl item paper-plane" data-url="aHR0cHM6Ly90Lm1lL29hY2lh" title="https:&#x2F;&#x2F;t.me&#x2F;oacia"><i class="ic i-paper-plane"></i></span>
+      <span class="exturl item email" data-url="bWFpbHRvOm9hY2lhQHFxLmNvbQ==" title="mailto:oacia@qq.com"><i class="ic i-envelope"></i></span>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/about-oacia/" rel="section"><i class="ic i-user"></i>关于oacia</a>
+  </li>
+
+        
+  <li class="item dropdown">
+      <a href="/archives/" rel="section"><i class="ic i-feather"></i>文章</a>
+    <ul class="submenu">
+
+        
+  <li class="item">
+    <a href="/archives/" rel="section"><i class="ic i-list-alt"></i>归档</a>
+  </li>
+
+        
+  <li class="item">
+    <a href="/tags/" rel="section"><i class="ic i-tags"></i>标签</a>
+  </li>
+
+  </ul>
+    
+  <li class="item">
+    <a href="/TODOlist/" rel="section"><i class="ic i-clock"></i>要做的事</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/website_maintenance/" rel="section"><i class="ic i-calendar"></i>更新日志</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/friends/" rel="section"><i class="ic i-heart"></i>小伙伴</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/music/" rel="section"><i class="ic i-music"></i>听会儿歌吧</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/dexloader/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/android-system-architecture/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">oacia @ oacia</span>
+  </div>
+  <div class="count">
+    <span class="post-meta-item-icon">
+      <i class="ic i-chart-area"></i>
+    </span>
+    <span title="站点总字数">561k 字</span>
+
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="ic i-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:30</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: 'ollvm-study/',
+    favicon: {
+      show: "柚鳥ナツ",
+      hide: "甘い幸せ"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+<!--尝试不使用polyfill-->
+<!--<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>-->
+
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+</body>
+</html>

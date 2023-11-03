@@ -1,0 +1,603 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <style>
+    html{
+      cursor: url('/cusor/normal.png') auto;s
+    }
+  </style>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="google-site-verification" content="qQVmgWozVe7BXoA15J3gAZpEA5dK168admH4U3W6PAk">
+  <meta name="msvalidate.01" content="4902E39C0135E72DE537BCB0FE08B40A">
+  <meta name="baidu-site-verification" content="codeva-CSYjpuVg5v">
+
+
+<link rel="alternate" type="application/rss+xml" title="oaciaのBbBlog~" href="https://oacia.cc/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="oaciaのBbBlog~" href="https://oacia.cc/atom.xml" />
+<link rel="alternate" type="application/json" title="oaciaのBbBlog~" href="https://oacia.cc/feed.json" />
+
+
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="python" />
+
+
+<link rel="canonical" href="https://oacia.cc/%E5%9C%A8python%E4%B8%AD%E9%9A%8F%E5%BF%83%E6%89%80%E6%AC%B2%E7%9A%84%E6%93%8D%E4%BD%9C%E5%8F%98%E9%87%8F/">
+
+
+
+  <title>
+在python中随心所欲的操作变量 |
+oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="alice">
+      <img src="/images/alice-shake.gif" alt="">
+    </div>
+    <!--
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+    -->
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">在python中随心所欲的操作变量
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2023-07-23 19:50:09">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2023-07-23T19:50:09+08:00">2023-07-23</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span class="text">本文字数</span>
+    <span>1.9k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span class="text">阅读时长</span>
+    <span>2 分钟</span>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">oacia</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="/picture/v2-7daf5fd60d53734399086bf9e02077fb_r.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_h9O8kwd8KW.jpg"></li>
+          <li class="item" data-background-image="/picture/v2-9d7125fe041c157541ed861bb99385d1_r.jpg"></li>
+          <li class="item" data-background-image="/picture/FAF9732986A6F0DD89CFEA1767D3754C.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_vT4kMzOk3j.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_a1LZZk88ji.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="https://oacia.cc/%E5%9C%A8python%E4%B8%AD%E9%9A%8F%E5%BF%83%E6%89%80%E6%AC%B2%E7%9A%84%E6%93%8D%E4%BD%9C%E5%8F%98%E9%87%8F/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="oacia">
+    <meta itemprop="description" content="DEVIL or SWEET, 这里的文章写给未来的自己 不要忘记现在学习的知识">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="oaciaのBbBlog~">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <blockquote>
+<p>在日常的逆向过程中，我常常会因为各种数值形式上的转换而相当纠结，比如大端，小端，字节转字符串等等，而且也十分的浪费时间去纠结这些细枝末节上的事情，尤其是每次还得 google 去搜索相关的代码，所以我心想与其碎片化的从浏览器中得到自己想要的答案，不如将这些代码整理到这一篇博客内，供我未来遇到这方面的困扰时，可以直接在这里找到答案.</p>
+</blockquote>
+<h1 id="数据基本类型"><a class="anchor" href="#数据基本类型">#</a> 数据基本类型</h1>
+<ul>
+<li>一个字节 = 8 位</li>
+<li>qword 数据类型仅在 64 位程序中存在</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>字节数</th>
+<th>位数</th>
+<th>ida 中的表示形式</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>byte</td>
+<td>1</td>
+<td>8</td>
+<td>db</td>
+<td>0x12</td>
+</tr>
+<tr>
+<td>word</td>
+<td>2</td>
+<td>16</td>
+<td>dw</td>
+<td>0x1234</td>
+</tr>
+<tr>
+<td>dword</td>
+<td>4</td>
+<td>32</td>
+<td>dd</td>
+<td>0x12345678</td>
+</tr>
+<tr>
+<td>qword</td>
+<td>8</td>
+<td>64</td>
+<td>dq</td>
+<td>0x1234567812345678</td>
+</tr>
+</tbody>
+</table>
+<h1 id="数据的存储形式"><a class="anchor" href="#数据的存储形式">#</a> 数据的存储形式</h1>
+<p>假设有如下 c 代码:  <code>int a = 0x12345678</code></p>
+<h2 id="大端存储big-endian"><a class="anchor" href="#大端存储big-endian">#</a> 大端存储 (Big-Endian)</h2>
+<blockquote>
+<p>数据的高字节存储在低地址中，数据的低字节存储在高地址中，<strong>顺序存储</strong></p>
+</blockquote>
+<p>栈内的数据的表示形式:</p>
+<table>
+<thead>
+<tr>
+<th>地址</th>
+<th>数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x400001</td>
+<td>12h</td>
+</tr>
+<tr>
+<td>0x400002</td>
+<td>34h</td>
+</tr>
+<tr>
+<td>0x400003</td>
+<td>56h</td>
+</tr>
+<tr>
+<td>0x400004</td>
+<td>78h</td>
+</tr>
+</tbody>
+</table>
+<h2 id="小端存储little-endian"><a class="anchor" href="#小端存储little-endian">#</a> 小端存储 (Little-Endian)</h2>
+<blockquote>
+<p>数据的高字节存储在高地址中，数据的低字节存储在低地址中，<strong>逆序存储</strong></p>
+</blockquote>
+<p>栈内的数据的表示形式:</p>
+<table>
+<thead>
+<tr>
+<th>地址</th>
+<th>数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x400001</td>
+<td>78h</td>
+</tr>
+<tr>
+<td>0x400002</td>
+<td>56h</td>
+</tr>
+<tr>
+<td>0x400003</td>
+<td>34h</td>
+</tr>
+<tr>
+<td>0x400004</td>
+<td>12h</td>
+</tr>
+</tbody>
+</table>
+<h1 id="在ida中取出数据的某一位"><a class="anchor" href="#在ida中取出数据的某一位">#</a> 在 IDA 中取出数据的某一位</h1>
+<p>假设有如下数据 <code>a1=0x12345678</code> , 在 IDA 中可能会出现 <code>HIBYTE</code>  ,  <code>BYTE2</code> ,  <code>BYTE1</code> , <code>LOBYTE</code>    来取出一个数据某一位的值，其含义如下</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>取出的值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HIBYTE(a1)</code></td>
+<td>0x12</td>
+</tr>
+<tr>
+<td><code>BYTE2(a1)</code></td>
+<td>0x34</td>
+</tr>
+<tr>
+<td><code>BYTE1(a1)</code></td>
+<td>0x56</td>
+</tr>
+<tr>
+<td><code>LOBYTE(a1)</code></td>
+<td>0x78</td>
+</tr>
+</tbody>
+</table>
+<h1 id="数字字节"><a class="anchor" href="#数字字节">#</a> 数字 &amp;&amp; 字节</h1>
+<h2 id="数字字节-2"><a class="anchor" href="#数字字节-2">#</a> 数字 =&gt; 字节</h2>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment"># to_bytes(length: int,byteorder: str,*,signed: bool = ...) -> bytes</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token comment"># 默认 signed=False, 即无符号数表示</span></pre></td></tr><tr><td data-num="3"></td><td><pre>num <span class="token operator">=</span> <span class="token number">0xef1312cd</span></pre></td></tr><tr><td data-num="4"></td><td><pre>bytes_big <span class="token operator">=</span> num<span class="token punctuation">.</span>to_bytes<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token string">'big'</span><span class="token punctuation">)</span>  <span class="token comment"># 大端模式，顺序存储</span></pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token keyword">print</span><span class="token punctuation">(</span>bytes_big<span class="token punctuation">)</span>  <span class="token comment"># b'\x12\xcd\x13\xef'</span></pre></td></tr><tr><td data-num="6"></td><td><pre>bytes_little <span class="token operator">=</span> num<span class="token punctuation">.</span>to_bytes<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token string">'little'</span><span class="token punctuation">)</span>  <span class="token comment"># 小端模式，逆序存储</span></pre></td></tr><tr><td data-num="7"></td><td><pre><span class="token keyword">print</span><span class="token punctuation">(</span>bytes_little<span class="token punctuation">)</span>  <span class="token comment"># b'\xef\x13\xcd\x12'</span></pre></td></tr></table></figure><h2 id="字节数字"><a class="anchor" href="#字节数字">#</a> 字节 =&gt; 数字</h2>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment"># from_bytes(bytes: Iterable[int] | SupportsBytes,byteorder: str,*,signed: bool = ...) -> int</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token comment"># 默认 signed=False, 即无符号数表示</span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token builtin">bytes</span> <span class="token operator">=</span> <span class="token string">b'\xef\x13\x12\xcd'</span></pre></td></tr><tr><td data-num="4"></td><td><pre>num_big <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">.</span>from_bytes<span class="token punctuation">(</span><span class="token builtin">bytes</span><span class="token punctuation">,</span> <span class="token string">'big'</span><span class="token punctuation">)</span>  <span class="token comment"># 大端模式，顺序存储</span></pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">hex</span><span class="token punctuation">(</span>num_big<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 0xef1312cd</span></pre></td></tr><tr><td data-num="6"></td><td><pre>num_little <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">.</span>from_bytes<span class="token punctuation">(</span><span class="token builtin">bytes</span><span class="token punctuation">,</span> <span class="token string">'little'</span><span class="token punctuation">)</span>  <span class="token comment"># 小端模式，逆序存储</span></pre></td></tr><tr><td data-num="7"></td><td><pre><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">hex</span><span class="token punctuation">(</span>num_little<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 0xcd1213ef</span></pre></td></tr></table></figure><h1 id="字符串字节"><a class="anchor" href="#字符串字节">#</a> 字符串 &amp;&amp; 字节</h1>
+<h2 id="字符串字节-2"><a class="anchor" href="#字符串字节-2">#</a> 字符串 =&gt; 字节</h2>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token builtin">str</span> <span class="token operator">=</span> <span class="token string">"oacia"</span></pre></td></tr><tr><td data-num="2"></td><td><pre>byte <span class="token operator">=</span> <span class="token builtin">str</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token keyword">print</span><span class="token punctuation">(</span>byte<span class="token punctuation">)</span><span class="token comment"># b'oacia'</span></pre></td></tr></table></figure><h2 id="字节字符串"><a class="anchor" href="#字节字符串">#</a> 字节 =&gt; 字符串</h2>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre>byte <span class="token operator">=</span> <span class="token string">b'oacia'</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token builtin">str</span> <span class="token operator">=</span> byte<span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">)</span><span class="token comment"># oacia</span></pre></td></tr></table></figure><h1 id="十六进制字符串字节"><a class="anchor" href="#十六进制字符串字节">#</a> 十六进制字符串 &amp;&amp; 字节</h1>
+<h2 id="十六进制字符串字节-2"><a class="anchor" href="#十六进制字符串字节-2">#</a> 十六进制字符串 =&gt; 字节</h2>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">import</span> binascii</pre></td></tr><tr><td data-num="2"></td><td><pre></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token comment"># a2b_hex(__hexstr: str | bytes) -> bytes</span></pre></td></tr><tr><td data-num="4"></td><td><pre>hex_str <span class="token operator">=</span> <span class="token string">"6f61636961"</span></pre></td></tr><tr><td data-num="5"></td><td><pre>hex_bytes <span class="token operator">=</span> binascii<span class="token punctuation">.</span>a2b_hex<span class="token punctuation">(</span>hex_str<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token keyword">print</span><span class="token punctuation">(</span>hex_bytes<span class="token punctuation">)</span>  <span class="token comment"># b'oacia'</span></pre></td></tr></table></figure><h2 id="字节十六进制字符串"><a class="anchor" href="#字节十六进制字符串">#</a> 字节 =&gt; 十六进制字符串</h2>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">import</span> binascii</pre></td></tr><tr><td data-num="2"></td><td><pre></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token comment"># b2a_hex(__data: bytes) -> bytes</span></pre></td></tr><tr><td data-num="4"></td><td><pre>hex_bytes <span class="token operator">=</span> <span class="token string">b'oacia'</span></pre></td></tr><tr><td data-num="5"></td><td><pre>hex_str <span class="token operator">=</span> binascii<span class="token punctuation">.</span>b2a_hex<span class="token punctuation">(</span>hex_bytes<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token keyword">print</span><span class="token punctuation">(</span>hex_str<span class="token punctuation">)</span>  <span class="token comment"># b'6f61636961'</span></pre></td></tr></table></figure><h1 id="列表字符串"><a class="anchor" href="#列表字符串">#</a> 列表 &amp;&amp; 字符串</h1>
+<h2 id="列表字符串-2"><a class="anchor" href="#列表字符串-2">#</a> 列表 =&gt; 字符串</h2>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre>my_list <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0x6f</span><span class="token punctuation">,</span> <span class="token number">0x61</span><span class="token punctuation">,</span> <span class="token number">0x63</span><span class="token punctuation">,</span> <span class="token number">0x69</span><span class="token punctuation">,</span> <span class="token number">0x61</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token builtin">str</span> <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token builtin">list</span><span class="token punctuation">(</span><span class="token builtin">map</span><span class="token punctuation">(</span><span class="token builtin">chr</span><span class="token punctuation">,</span> my_list<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">)</span><span class="token comment"># oacia</span></pre></td></tr></table></figure><h2 id="字符串列表"><a class="anchor" href="#字符串列表">#</a> 字符串 =&gt; 列表</h2>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token builtin">str</span> <span class="token operator">=</span> <span class="token string">"oacia"</span></pre></td></tr><tr><td data-num="2"></td><td><pre>my_list <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">(</span><span class="token builtin">map</span><span class="token punctuation">(</span><span class="token builtin">ord</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token keyword">print</span><span class="token punctuation">(</span>my_list<span class="token punctuation">)</span>  <span class="token comment"># [111, 97, 99, 105, 97]</span></pre></td></tr></table></figure>
+      <div class="tags">
+          <a href="/tags/python/" rel="tag"><i class="ic i-tag"></i> python</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2023-08-29 15:19:37" itemprop="dateModified" datetime="2023-08-29T15:19:37+08:00">2023-08-29</time>
+  </span>
+  <span id="在python中随心所欲的操作变量/" class="item leancloud_visitors" data-flag-title="在python中随心所欲的操作变量" title="阅读次数">
+      <span class="icon">
+        <i class="ic i-eye"></i>
+      </span>
+      <span class="text">阅读次数</span>
+      <span class="leancloud-visitors-count"></span>
+      <span class="text">次</span>
+  </span>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>oacia <i class="ic i-at"><em>@</em></i>oaciaのBbBlog~
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="https://oacia.cc/%E5%9C%A8python%E4%B8%AD%E9%9A%8F%E5%BF%83%E6%89%80%E6%AC%B2%E7%9A%84%E6%93%8D%E4%BD%9C%E5%8F%98%E9%87%8F/" title="在python中随心所欲的操作变量">https://oacia.cc/在python中随心所欲的操作变量/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/hws-2023/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;534BD430C8430A20C7CC5A09F68A43DA.jpg" title="HWS2023夏令营CTF选拔赛writeup">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> </span>
+  <h3>HWS2023夏令营CTF选拔赛writeup</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/starctf-writeup/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_TX7bgCDyF9.png" title="StarCTF2023 逆向writeup">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> </span>
+  <h3>StarCTF2023 逆向writeup</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B"><span class="toc-text"> 数据基本类型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%9A%84%E5%AD%98%E5%82%A8%E5%BD%A2%E5%BC%8F"><span class="toc-text"> 数据的存储形式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E7%AB%AF%E5%AD%98%E5%82%A8big-endian"><span class="toc-text"> 大端存储 (Big-Endian)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%AB%AF%E5%AD%98%E5%82%A8little-endian"><span class="toc-text"> 小端存储 (Little-Endian)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9C%A8ida%E4%B8%AD%E5%8F%96%E5%87%BA%E6%95%B0%E6%8D%AE%E7%9A%84%E6%9F%90%E4%B8%80%E4%BD%8D"><span class="toc-text"> 在 IDA 中取出数据的某一位</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E5%AD%97%E5%AD%97%E8%8A%82"><span class="toc-text"> 数字 &amp;&amp; 字节</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E5%AD%97%E5%AD%97%E8%8A%82-2"><span class="toc-text"> 数字 &#x3D;&gt; 字节</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E8%8A%82%E6%95%B0%E5%AD%97"><span class="toc-text"> 字节 &#x3D;&gt; 数字</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E8%8A%82"><span class="toc-text"> 字符串 &amp;&amp; 字节</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E8%8A%82-2"><span class="toc-text"> 字符串 &#x3D;&gt; 字节</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E8%8A%82%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text"> 字节 &#x3D;&gt; 字符串</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8D%81%E5%85%AD%E8%BF%9B%E5%88%B6%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E8%8A%82"><span class="toc-text"> 十六进制字符串 &amp;&amp; 字节</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E5%85%AD%E8%BF%9B%E5%88%B6%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E8%8A%82-2"><span class="toc-text"> 十六进制字符串 &#x3D;&gt; 字节</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E8%8A%82%E5%8D%81%E5%85%AD%E8%BF%9B%E5%88%B6%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text"> 字节 &#x3D;&gt; 十六进制字符串</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%97%E8%A1%A8%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text"> 列表 &amp;&amp; 字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%97%E8%A1%A8%E5%AD%97%E7%AC%A6%E4%B8%B2-2"><span class="toc-text"> 列表 &#x3D;&gt; 字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%97%E8%A1%A8"><span class="toc-text"> 字符串 &#x3D;&gt; 列表</span></a></li></ol></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="oacia"
+      data-src="/images/avatar.jpg">
+  <p class="name" itemprop="name">oacia</p>
+  <div class="description" itemprop="description">这里的文章写给未来的自己 不要忘记现在学习的知识</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">37</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">46</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL29hY2lh" title="https:&#x2F;&#x2F;github.com&#x2F;oacia"><i class="ic i-github"></i></span>
+      <span class="exturl item twitter" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9vYWNpYTg2" title="https:&#x2F;&#x2F;twitter.com&#x2F;oacia86"><i class="ic i-twitter"></i></span>
+      <span class="exturl item paper-plane" data-url="aHR0cHM6Ly90Lm1lL29hY2lh" title="https:&#x2F;&#x2F;t.me&#x2F;oacia"><i class="ic i-paper-plane"></i></span>
+      <span class="exturl item email" data-url="bWFpbHRvOm9hY2lhQHFxLmNvbQ==" title="mailto:oacia@qq.com"><i class="ic i-envelope"></i></span>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/about-oacia/" rel="section"><i class="ic i-user"></i>关于oacia</a>
+  </li>
+
+        
+  <li class="item dropdown">
+      <a href="/archives/" rel="section"><i class="ic i-feather"></i>文章</a>
+    <ul class="submenu">
+
+        
+  <li class="item">
+    <a href="/archives/" rel="section"><i class="ic i-list-alt"></i>归档</a>
+  </li>
+
+        
+  <li class="item">
+    <a href="/tags/" rel="section"><i class="ic i-tags"></i>标签</a>
+  </li>
+
+  </ul>
+    
+  <li class="item">
+    <a href="/TODOlist/" rel="section"><i class="ic i-clock"></i>要做的事</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/website_maintenance/" rel="section"><i class="ic i-calendar"></i>更新日志</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/friends/" rel="section"><i class="ic i-heart"></i>小伙伴</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/music/" rel="section"><i class="ic i-music"></i>听会儿歌吧</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/hws-2023/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/starctf-writeup/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">oacia @ oacia</span>
+  </div>
+  <div class="count">
+    <span class="post-meta-item-icon">
+      <i class="ic i-chart-area"></i>
+    </span>
+    <span title="站点总字数">561k 字</span>
+
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="ic i-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:30</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '在python中随心所欲的操作变量/',
+    favicon: {
+      show: "柚鳥ナツ",
+      hide: "甘い幸せ"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+<!--尝试不使用polyfill-->
+<!--<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>-->
+
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+</body>
+</html>

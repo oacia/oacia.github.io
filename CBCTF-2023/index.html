@@ -1,0 +1,488 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <style>
+    html{
+      cursor: url('/cusor/normal.png') auto;s
+    }
+  </style>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="google-site-verification" content="qQVmgWozVe7BXoA15J3gAZpEA5dK168admH4U3W6PAk">
+  <meta name="msvalidate.01" content="4902E39C0135E72DE537BCB0FE08B40A">
+  <meta name="baidu-site-verification" content="codeva-CSYjpuVg5v">
+
+
+<link rel="alternate" type="application/rss+xml" title="oaciaのBbBlog~" href="https://oacia.cc/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="oaciaのBbBlog~" href="https://oacia.cc/atom.xml" />
+<link rel="alternate" type="application/json" title="oaciaのBbBlog~" href="https://oacia.cc/feed.json" />
+
+
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+
+<link rel="canonical" href="https://oacia.cc/CBCTF-2023/">
+
+
+
+  <title>
+CBCTF auuuu3和vm_flutter出题思路及wp |
+oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="alice">
+      <img src="/images/alice-shake.gif" alt="">
+    </div>
+    <!--
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+    -->
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">CBCTF auuuu3和vm_flutter出题思路及wp
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2023-10-23 14:42:47">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2023-10-23T14:42:47+08:00">2023-10-23</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span class="text">本文字数</span>
+    <span>10k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span class="text">阅读时长</span>
+    <span>9 分钟</span>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">oacia</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="/picture/86B509F7B7299F86DCE96564658FB29A.jpg"></li>
+          <li class="item" data-background-image="/picture/1E69772B894845E11142B733101D7BB4.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_4xrpaN9Kyv.jpg"></li>
+          <li class="item" data-background-image="/picture/v2-7daf5fd60d53734399086bf9e02077fb_r.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_v0DQ0rvOfB.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_7tfaMXOyLf.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="https://oacia.cc/CBCTF-2023/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="oacia">
+    <meta itemprop="description" content="DEVIL or SWEET, 这里的文章写给未来的自己 不要忘记现在学习的知识">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="oaciaのBbBlog~">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <p>看到这篇文章的朋友应该都是在 11 月份之后了，而这篇文章是我在十月份写下的，这段时间网站无法访问的主要原因是域名过期了，而我的域名是在阿里云购买的，九月末续费的时候发现一年需要 75 块！然后我就去货比三家，看了看腾讯云要 75 块，但是当我去华为云搜我的域名的时候，我发现只需要 30 块！整整便宜了一半，所以我决定去华为云续费域名，但是由于我第一次碰到域名过期，然后就发现域名在九月末过期了之后，依然无法购买，随后才发现域名过期之后有一个月的域名宽限期和半个月的域名赎回期，在这段时间内域名的所有权都是在阿里云手上的，所以我在别的地方根本无法购买这个域名，所以得等到我的这个域名被域名局彻底删除了之后，我才可以去别的地方购买域名。原本我以为这个小站无人问津，但是令我感到惊喜的是在域名过期之后陆陆续续有人来问我为什么我的博客访问不了了，这段时间造成的不便真的十分抱歉，果咩呐塞！</p>
+<p>去年 CBCTF 的时候，我当时为这个比赛出了一道逆向题叫做 <code>CBNET</code> , 可是直到结束之后才终于有了一解，我那时非常自责，感觉自己把题目出难了导致大家都做不出来，那次比赛结束之后几个师傅找我问这题，我发现原来是我自己设计的自定义算法难住了大家，大家不会写逆向脚本导致的。所以今年的 CBCTF, 我总结了去年出题的经验，给自己今年出题定的目标的就是希望每一个人都可以去尝试着去做一下，并且不在算法的层面去为难大家.</p>
+<p>auuuu3 的出题灵感主要在上半年看到过一篇文章，说是有 hacker 在压缩包里藏了一个无毒的 autoit exe 解释器，然后这个解释器运行恶意的 au3 脚本来实现恶意行为，当时我就在想要是把这个 au3 脚本编译成 exe 之后会不会很有趣呢～所以就开始了尝试，写了一个 demo 自己做了一下，发现直接用 ida 逆向的难度相当的高，需要极强的逆向水平才可以做出来，所以我就去网上寻找可以逆向 autoit 的工具，一开始用官方自带的 exe2aut 是可以成功得到源码的，随后我去翻看了 autoit 官方的文档，发现这个 exe2aut 在 autoitv3.2.5.1 之后就被移除了，为了稍稍增加一些难度，所以我就选用了高版本的 autoit 来编译 exe, 然后就发现不管是官方的 exe2aut, 还是 github 上高 star 的 <code>AutoDec</code> , <code>autoitqds</code> , <code>myAut2Exe</code>  这些工具全部都反编译源码报错了，正当我担心自己又要把中等题出成困难题的时候，我又发现了一个工具，他叫 <code>autoit-ripper</code> , 可以完美的反编译高版本的 autoit, 思路也是解析 autoit 虚拟机，有兴趣的可以去看一看它的源码，还是挺有趣的，至于逆向算法，我仅仅是用 shellcode 加载了一个 dll, 这个 dll 里面也只有一个 xxtea, 应该逆向起来是非常轻松的</p>
+<p>vm_flutter 的出题灵感是我在八月末做完腾讯游戏安全竞赛安卓初赛题之后，对这题中的 vm 有了较深的感悟之后决定设计的，在解那题的 vm 的时候，我对于它的 opcode 指令真的是全然不知，所以我去 hook 了 vm 相关的函数成功的解出了 vm, 要是想看这场比赛题解的可以移步我博客的<a href="https://oacia.cc/sec-2023">这篇文章</a>。回到 vm_flutter, 这题在比赛结束之后只有一解我感觉其实挺意外的，应该可以有更多人可以做出来这题。出 vm_flutter 的时候，我想要设计一个大家不知道 opcode 的环境，我想最好的方法就是用 flutter 框架，然后把 opcode 放在 dart 层中，但是我又希望大家可以很快的找出 vm 的函数比如 <code>push</code> , <code>pop</code> , <code>add</code>  等等函数所在的位置，所以我将这些函数全部都定义在了 java 层中，这样大家用 jadx 或 jeb 反编译之后，就可以很快找到他们了。接下来的需要解决的问题就是如何让 flutter 的 dart 层去调用原生安卓中的 java 层中的函数，这里我用的方法是我上半年在逆向一个 flutter 框架的游戏叫做<em>装扮少女</em>的时候学习到的，这个 app 使用 <code>MethodChannel</code>  管道通信的方式实现 dart 层和原生安卓之间的通信，而通讯的消息我也没有修改，甚至字符串都是 vm 有关的字符串。但是方法名混淆其实是在我的预期之外，这其实是 build apk 的时候 flutter 自动把方法名混淆了的，不是我干的！！(本来我是想让大家一下就可以知道 java 层函数的含义的), 然后我还把最终的 check 函数也放在了 java 层中，而不是在 vm 中去 check,dart 层通过 check 的结果去弹出 right 或 wrong, 所以这样应该能更加降低大家解题的难度了～</p>
+<h1 id="auuuu3"><a class="anchor" href="#auuuu3">#</a> auuuu3</h1>
+<p>本题是由 autoit 编写而成的 exe，本质上也是一个虚拟机，通过解析 autoit 动态脚本语言来执行命令，倘若使用 IDA 或 od 直接逆向，那么是需要花费一段时间在这题上的。并且根据官方的说法，在 v3.2.5.1 之后的 autoit 版本中将不再拥有自带的反编译工具，本题所使用的 autoit 版本在 v3.2.5.1 之上。</p>
+<p><img data-src="/CBCTF-2023/image-20231024100923652.png" alt="image-20231024100923652" style="aspect-ratio:907 / 273;"></p>
+<p>不过好在已经有人帮助我们分析出了虚拟指令对应的含义，我们直接使用工具即可快速得到源码。</p>
+<p>查壳，这是用 autoit 编译而成的 exe，无壳。</p>
+<p><img data-src="/CBCTF-2023/1698113274705-1.png" alt="img" style="aspect-ratio:817 / 494;"></p>
+<p>使用 <code>AutoIt-Ripper</code>  得到该 exe 的源码</p>
+<pre><code class="language-Shell">https://github.com/nazywam/AutoIt-Ripper
+</code></pre>
+<p><img data-src="/CBCTF-2023/image-20231024100948515.png" alt="image-20231024100948515" style="aspect-ratio:747 / 98;"></p>
+<p>通过搜索字符串 <code>wrong</code>  定位到关键函数</p>
+<p><img data-src="/CBCTF-2023/image-20231024101011962.png" alt="image-20231024101011962" style="aspect-ratio:1920 / 1078;"></p>
+<p>分析加密流程，首先判断输入是否满足 38 位，如果满足，则将输入经过 <code>ENC</code>  函数加密， <code>ENC</code>  函数如下</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre>Func <span class="token function">ENC</span> <span class="token punctuation">(</span> $DATA <span class="token punctuation">,</span> $KEY <span class="token punctuation">)</span></pre></td></tr><tr><td data-num="2"></td><td><pre>        $DATA <span class="token operator">=</span> <span class="token function">Binary</span> <span class="token punctuation">(</span> $DATA <span class="token punctuation">)</span></pre></td></tr><tr><td data-num="3"></td><td><pre>        Local $DATALEN <span class="token operator">=</span> <span class="token function">BinaryLen</span> <span class="token punctuation">(</span> $DATA <span class="token punctuation">)</span></pre></td></tr><tr><td data-num="4"></td><td><pre>        If $DATALEN <span class="token operator">=</span> <span class="token number">0</span> Then</pre></td></tr><tr><td data-num="5"></td><td><pre>                Return <span class="token string">""</span></pre></td></tr><tr><td data-num="6"></td><td><pre>        ElseIf $DATALEN <span class="token operator">&lt;</span> <span class="token number">8</span> Then</pre></td></tr><tr><td data-num="7"></td><td><pre>                $DATALEN <span class="token operator">=</span> <span class="token number">8</span></pre></td></tr><tr><td data-num="8"></td><td><pre>        EndIf</pre></td></tr><tr><td data-num="9"></td><td><pre>        Local $OPCODE <span class="token operator">=</span> <span class="token string">"0x83EC14B83400000099538B5C2420558B6C242056578B7C9DFCF7FB89C683C606C74424180000000085F68D76FF0F8EEA000000896C24288D4BFF8D549D00894C2410895424148974242081442418B979379E8B4C2418C1E90281E103000000894C241C31F6397424107E568B5424288BCF8B6CB204C1E9058D14AD0000000033CA8BD58BC7C1EA03C1E00433D003CA8B5424188BDE81E303000000335C241C8B4424308B1C9833D533DF03D333CA8B542428010CB28B0CB2463974241089CF7FAA8B5424288BCF8B2AC1E9058D14AD0000000033CA8BD58BC7C1EA03C1E00433D003CA8B5424188BDE81E303000000335C241C8B4424308B1C9833D533DF03D3FF4C242033CA8B542414014AFC8B4AFC8B54242089CF420F8F2DFFFFFF5F31C05E5D5B83C414C21000"</span></pre></td></tr><tr><td data-num="10"></td><td><pre>        Local $CODEBUFFER <span class="token operator">=</span> <span class="token function">DllStructCreate</span> <span class="token punctuation">(</span> <span class="token string">"byte["</span> <span class="token operator">&amp;</span> <span class="token function">BinaryLen</span> <span class="token punctuation">(</span> $OPCODE <span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token string">"]"</span> <span class="token punctuation">)</span></pre></td></tr><tr><td data-num="11"></td><td><pre>        <span class="token function">DllStructSetData</span> <span class="token punctuation">(</span> $CODEBUFFER <span class="token punctuation">,</span> <span class="token number">1</span> <span class="token punctuation">,</span> $OPCODE <span class="token punctuation">)</span></pre></td></tr><tr><td data-num="12"></td><td><pre>        Local $V <span class="token operator">=</span> <span class="token function">DllStructCreate</span> <span class="token punctuation">(</span> <span class="token string">"byte["</span> <span class="token operator">&amp;</span> <span class="token function">Ceiling</span> <span class="token punctuation">(</span> $DATALEN <span class="token operator">/</span> <span class="token number">4</span> <span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">4</span> <span class="token operator">&amp;</span> <span class="token string">"]"</span> <span class="token punctuation">)</span></pre></td></tr><tr><td data-num="13"></td><td><pre>        <span class="token function">DllStructSetData</span> <span class="token punctuation">(</span> $V <span class="token punctuation">,</span> <span class="token number">1</span> <span class="token punctuation">,</span> $DATA <span class="token punctuation">)</span></pre></td></tr><tr><td data-num="14"></td><td><pre>        Local $K <span class="token operator">=</span> <span class="token function">DllStructCreate</span> <span class="token punctuation">(</span> <span class="token string">"byte[16]"</span> <span class="token punctuation">)</span></pre></td></tr><tr><td data-num="15"></td><td><pre>        <span class="token function">DllStructSetData</span> <span class="token punctuation">(</span> $K <span class="token punctuation">,</span> <span class="token number">1</span> <span class="token punctuation">,</span> $KEY <span class="token punctuation">)</span></pre></td></tr><tr><td data-num="16"></td><td><pre>        <span class="token function">DllCall</span> <span class="token punctuation">(</span> <span class="token string">"user32.dll"</span> <span class="token punctuation">,</span> <span class="token string">"none"</span> <span class="token punctuation">,</span> <span class="token string">"CallWindowProc"</span> <span class="token punctuation">,</span> <span class="token string">"ptr"</span> <span class="token punctuation">,</span> <span class="token function">DllStructGetPtr</span> <span class="token punctuation">(</span> $CODEBUFFER <span class="token punctuation">)</span> <span class="token punctuation">,</span> <span class="token string">"ptr"</span> <span class="token punctuation">,</span> <span class="token function">DllStructGetPtr</span> <span class="token punctuation">(</span> $V <span class="token punctuation">)</span> <span class="token punctuation">,</span> <span class="token string">"int"</span> <span class="token punctuation">,</span> <span class="token function">Ceiling</span> <span class="token punctuation">(</span> $DATALEN <span class="token operator">/</span> <span class="token number">4</span> <span class="token punctuation">)</span> <span class="token punctuation">,</span> <span class="token string">"ptr"</span> <span class="token punctuation">,</span> <span class="token function">DllStructGetPtr</span> <span class="token punctuation">(</span> $K <span class="token punctuation">)</span> <span class="token punctuation">,</span> <span class="token string">"int"</span> <span class="token punctuation">,</span> <span class="token number">0</span> <span class="token punctuation">)</span></pre></td></tr><tr><td data-num="17"></td><td><pre>        Local $RET <span class="token operator">=</span> <span class="token function">DllStructGetData</span> <span class="token punctuation">(</span> $V <span class="token punctuation">,</span> <span class="token number">1</span> <span class="token punctuation">)</span></pre></td></tr><tr><td data-num="18"></td><td><pre>        $CODEBUFFER <span class="token operator">=</span> <span class="token number">0</span></pre></td></tr><tr><td data-num="19"></td><td><pre>        $V <span class="token operator">=</span> <span class="token number">0</span></pre></td></tr><tr><td data-num="20"></td><td><pre>        $K <span class="token operator">=</span> <span class="token number">0</span></pre></td></tr><tr><td data-num="21"></td><td><pre>        Return $RET</pre></td></tr><tr><td data-num="22"></td><td><pre>EndFunc</pre></td></tr></table></figure><p>可以发现函数动态加载了一个 dll, 然后从 dll 调用加密函数进行加密</p>
+<p>使用如下脚本将 <code>OPCODE</code>  以字节的形式写入文件，方便使用 IDA 进行分析</p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">import</span> binascii</pre></td></tr><tr><td data-num="2"></td><td><pre>opcode <span class="token operator">=</span> <span class="token string">"83EC14B83400000099538B5C2420558B6C242056578B7C9DFCF7FB89C683C606C74424180000000085F68D76FF0F8EEA000000896C24288D4BFF8D549D00894C2410895424148974242081442418B979379E8B4C2418C1E90281E103000000894C241C31F6397424107E568B5424288BCF8B6CB204C1E9058D14AD0000000033CA8BD58BC7C1EA03C1E00433D003CA8B5424188BDE81E303000000335C241C8B4424308B1C9833D533DF03D333CA8B542428010CB28B0CB2463974241089CF7FAA8B5424288BCF8B2AC1E9058D14AD0000000033CA8BD58BC7C1EA03C1E00433D003CA8B5424188BDE81E303000000335C241C8B4424308B1C9833D533DF03D3FF4C242033CA8B542414014AFC8B4AFC8B54242089CF420F8F2DFFFFFF5F31C05E5D5B83C414C21000"</span></pre></td></tr><tr><td data-num="3"></td><td><pre>hex_bytes <span class="token operator">=</span> binascii<span class="token punctuation">.</span>a2b_hex<span class="token punctuation">(</span>opcode<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">"enc.dll"</span><span class="token punctuation">,</span><span class="token string">'wb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span></pre></td></tr><tr><td data-num="5"></td><td><pre>    f<span class="token punctuation">.</span>write<span class="token punctuation">(</span>hex_bytes<span class="token punctuation">)</span></pre></td></tr></table></figure><p>伪代码如下，可以发现加密算法为 xxtea</p>
+<p><img data-src="/CBCTF-2023/image-20231024101111920.png" alt="image-20231024101111920" style="aspect-ratio:1920 / 1080;"></p>
+<p>编写 exp 得到 flag</p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">import</span> binascii</pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token keyword">from</span> ctypes <span class="token keyword">import</span> <span class="token operator">*</span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token keyword">import</span> struct</pre></td></tr><tr><td data-num="4"></td><td><pre></pre></td></tr><tr><td data-num="5"></td><td><pre></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token keyword">def</span> <span class="token function">MX</span><span class="token punctuation">(</span>z<span class="token punctuation">,</span> y<span class="token punctuation">,</span> total<span class="token punctuation">,</span> key<span class="token punctuation">,</span> p<span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="7"></td><td><pre>    temp1 <span class="token operator">=</span> <span class="token punctuation">(</span>z<span class="token punctuation">.</span>value <span class="token operator">>></span> <span class="token number">5</span> <span class="token operator">^</span> y<span class="token punctuation">.</span>value <span class="token operator">&lt;&lt;</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token punctuation">(</span>y<span class="token punctuation">.</span>value <span class="token operator">>></span> <span class="token number">3</span> <span class="token operator">^</span> z<span class="token punctuation">.</span>value <span class="token operator">&lt;&lt;</span> <span class="token number">4</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="8"></td><td><pre>    temp2 <span class="token operator">=</span> <span class="token punctuation">(</span>total<span class="token punctuation">.</span>value <span class="token operator">^</span> y<span class="token punctuation">.</span>value<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token punctuation">(</span>key<span class="token punctuation">[</span><span class="token punctuation">(</span>p <span class="token operator">&amp;</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token operator">^</span> e<span class="token punctuation">.</span>value<span class="token punctuation">]</span> <span class="token operator">^</span> z<span class="token punctuation">.</span>value<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="9"></td><td><pre></pre></td></tr><tr><td data-num="10"></td><td><pre>    <span class="token keyword">return</span> c_uint32<span class="token punctuation">(</span>temp1 <span class="token operator">^</span> temp2<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="11"></td><td><pre></pre></td></tr><tr><td data-num="12"></td><td><pre></pre></td></tr><tr><td data-num="13"></td><td><pre><span class="token keyword">def</span> <span class="token function">decrypt</span><span class="token punctuation">(</span>n<span class="token punctuation">,</span> v<span class="token punctuation">,</span> key<span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="14"></td><td><pre>    delta <span class="token operator">=</span> <span class="token number">0x61C88647</span></pre></td></tr><tr><td data-num="15"></td><td><pre>    rounds <span class="token operator">=</span> <span class="token number">6</span> <span class="token operator">+</span> <span class="token number">52</span> <span class="token operator">//</span> n</pre></td></tr><tr><td data-num="16"></td><td><pre></pre></td></tr><tr><td data-num="17"></td><td><pre>    total <span class="token operator">=</span> c_uint32<span class="token punctuation">(</span><span class="token operator">-</span>rounds <span class="token operator">*</span> delta<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="18"></td><td><pre>    y <span class="token operator">=</span> c_uint32<span class="token punctuation">(</span>v<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="19"></td><td><pre>    e <span class="token operator">=</span> c_uint32<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="20"></td><td><pre></pre></td></tr><tr><td data-num="21"></td><td><pre>    <span class="token keyword">while</span> rounds <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="22"></td><td><pre>        e<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token punctuation">(</span>total<span class="token punctuation">.</span>value <span class="token operator">>></span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">3</span></pre></td></tr><tr><td data-num="23"></td><td><pre>        <span class="token keyword">for</span> p <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="24"></td><td><pre>            z <span class="token operator">=</span> c_uint32<span class="token punctuation">(</span>v<span class="token punctuation">[</span>p <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="25"></td><td><pre>            v<span class="token punctuation">[</span>p<span class="token punctuation">]</span> <span class="token operator">=</span> c_uint32<span class="token punctuation">(</span><span class="token punctuation">(</span>v<span class="token punctuation">[</span>p<span class="token punctuation">]</span> <span class="token operator">-</span> MX<span class="token punctuation">(</span>z<span class="token punctuation">,</span> y<span class="token punctuation">,</span> total<span class="token punctuation">,</span> key<span class="token punctuation">,</span> p<span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">.</span>value<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>value</pre></td></tr><tr><td data-num="26"></td><td><pre>            y<span class="token punctuation">.</span>value <span class="token operator">=</span> v<span class="token punctuation">[</span>p<span class="token punctuation">]</span></pre></td></tr><tr><td data-num="27"></td><td><pre>        z <span class="token operator">=</span> c_uint32<span class="token punctuation">(</span>v<span class="token punctuation">[</span>n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="28"></td><td><pre>        v<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> c_uint32<span class="token punctuation">(</span>v<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">-</span> MX<span class="token punctuation">(</span>z<span class="token punctuation">,</span> y<span class="token punctuation">,</span> total<span class="token punctuation">,</span> key<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">.</span>value<span class="token punctuation">)</span><span class="token punctuation">.</span>value</pre></td></tr><tr><td data-num="29"></td><td><pre>        y<span class="token punctuation">.</span>value <span class="token operator">=</span> v<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="30"></td><td><pre>        total<span class="token punctuation">.</span>value <span class="token operator">+=</span> delta</pre></td></tr><tr><td data-num="31"></td><td><pre>        rounds <span class="token operator">-=</span> <span class="token number">1</span></pre></td></tr><tr><td data-num="32"></td><td><pre></pre></td></tr><tr><td data-num="33"></td><td><pre>    <span class="token keyword">return</span> v</pre></td></tr><tr><td data-num="34"></td><td><pre></pre></td></tr><tr><td data-num="35"></td><td><pre></pre></td></tr><tr><td data-num="36"></td><td><pre><span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="37"></td><td><pre>    ct <span class="token operator">=</span> <span class="token string">"7218181A02F79F4B5773E8FFE83FE732DF96259FF2B86AAB945468A132A83D83CF9D750E316C8675"</span></pre></td></tr><tr><td data-num="38"></td><td><pre>    ct <span class="token operator">=</span> binascii<span class="token punctuation">.</span>a2b_hex<span class="token punctuation">(</span>ct<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="39"></td><td><pre>    flag <span class="token operator">=</span> <span class="token string">""</span></pre></td></tr><tr><td data-num="40"></td><td><pre>    key <span class="token operator">=</span> <span class="token string">"Wowww111auUu3"</span></pre></td></tr><tr><td data-num="41"></td><td><pre>    v <span class="token operator">=</span> struct<span class="token punctuation">.</span>unpack<span class="token punctuation">(</span><span class="token string">'&lt;10I'</span><span class="token punctuation">,</span> ct<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="42"></td><td><pre>    k <span class="token operator">=</span> struct<span class="token punctuation">.</span>unpack<span class="token punctuation">(</span><span class="token string">'&lt;4I'</span><span class="token punctuation">,</span> key<span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">b'\x00'</span> <span class="token operator">*</span> <span class="token number">3</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="43"></td><td><pre>    v <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">(</span>v<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="44"></td><td><pre>    k <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">(</span>k<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="45"></td><td><pre>    n <span class="token operator">=</span> <span class="token number">10</span></pre></td></tr><tr><td data-num="46"></td><td><pre>    res <span class="token operator">=</span> decrypt<span class="token punctuation">(</span>n<span class="token punctuation">,</span> v<span class="token punctuation">,</span> k<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="47"></td><td><pre>    <span class="token keyword">for</span> r <span class="token keyword">in</span> res<span class="token punctuation">:</span></pre></td></tr><tr><td data-num="48"></td><td><pre>        <span class="token keyword">print</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span>to_bytes<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token string">'little'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> end<span class="token operator">=</span><span class="token string">''</span><span class="token punctuation">)</span></pre></td></tr></table></figure><h1 id="vm_flutter"><a class="anchor" href="#vm_flutter">#</a> vm_flutter</h1>
+<p>虽然这个 apk 是使用 flutter 编写的，但是其实在本题中 flutter 仅仅是纸老虎般的存在。</p>
+<p>在本题的题目描述中给出了两个提示，第一是对 flag 的加密算法有且只有一个 vm，第二是全部 vm 相关的函数都定义在 Java 层中，dart 层仅仅只是调用 java 层中定义的函数。所以根据这两个提示，就可以联想到使用 frida 等 hook 框架去 hook java 层中 vm 相关的函数，打印出虚拟指令来进行分析，如果可以想到这一点，那么这题就迎刃而解了。倘若使用 reflutter 等 flutter 逆向工具，那么将会在 dart 虚拟机中越陷越深：(</p>
+<p>在本题中，opcode 是在 dart 层被定义的，但是这其实无关紧要，因为 vm 相关的函数是在 java 层中定义的，我们对 vm 函数 hook 的过程其实就是对 opcode 的 “解读” 过程，通过 hook 的操作，我们就可以将 vm 对内部栈或内存的操作映射为可读的、可以理解的虚拟指令来进行分析。</p>
+<p>所以设计本题也是基于这种思想，使用目前安卓层面逆向难度非常高的 flutter 框架，来模拟类似 vmprotect 这类强壳 opcode 未知的场景，甚至在 vmprotect 中 opcode 会在间隔不定时间后随机变换。虽然我们不知道 opcode，但是万变不离其宗，vm 解析 opcode 之后最终要执行的操作是不会变的。</p>
+<p>获取 flag 的过程如下</p>
+<p>使用 jadx 反编译，发现方法名被混淆，但是进入 <code>com.dasctf.vm_flutter.vm_flutter.MainActivity</code>  可以看到 vm 相关的字符串</p>
+<p><img data-src="/CBCTF-2023/image-20231024101207340.png" alt="image-20231024101207340" style="aspect-ratio:747 / 958;"></p>
+<p>通过给 <code>c2</code>  赋不同的值来调用 vm 中的函数</p>
+<p><img data-src="/CBCTF-2023/image-20231024101214972.png" alt="image-20231024101214972" style="aspect-ratio:672 / 748;"></p>
+<p>根据字符串的提示，我们便知道了被混淆的 vm 的函数都是什么含义</p>
+<p><img data-src="/CBCTF-2023/image-20231024101220002.png" alt="image-20231024101220002" style="aspect-ratio:813 / 848;"></p>
+<p>同时我们还在这里发现了最终的校验函数，可以推测最终的 flag 应该有 33 位</p>
+<p><img data-src="/CBCTF-2023/image-20231024101225270.png" alt="image-20231024101225270" style="aspect-ratio:1707 / 277;"></p>
+<p>使用 frida hook vm 函数来获取 vm 指令</p>
+<figure class="highlight js"><figcaption data-lang="JavaScript"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">function</span> <span class="token function">hook</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="2"></td><td><pre>    Java<span class="token punctuation">.</span><span class="token function">perform</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="3"></td><td><pre>        <span class="token keyword">const</span> activity <span class="token operator">=</span> Java<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"k.b"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="4"></td><td><pre>        activity<span class="token punctuation">.</span>a<span class="token punctuation">.</span><span class="token function-variable function">implementation</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="5"></td><td><pre>            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"Lshift"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="6"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="7"></td><td><pre>        activity<span class="token punctuation">.</span>b<span class="token punctuation">.</span><span class="token function-variable function">implementation</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="8"></td><td><pre>            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"Rshift"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="9"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="10"></td><td><pre>        activity<span class="token punctuation">.</span>c<span class="token punctuation">.</span><span class="token function-variable function">implementation</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="11"></td><td><pre>            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"add"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="12"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="13"></td><td><pre>        activity<span class="token punctuation">.</span>d<span class="token punctuation">.</span><span class="token function-variable function">implementation</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="14"></td><td><pre>            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"and"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="15"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="16"></td><td><pre>        activity<span class="token punctuation">.</span>e<span class="token punctuation">.</span><span class="token function-variable function">implementation</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="17"></td><td><pre>            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"load "</span><span class="token operator">+</span>x<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="18"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="19"></td><td><pre>        activity<span class="token punctuation">.</span>f<span class="token punctuation">.</span><span class="token function-variable function">implementation</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="20"></td><td><pre>            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"mul"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="21"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="22"></td><td><pre>        activity<span class="token punctuation">.</span>g<span class="token punctuation">.</span><span class="token function-variable function">implementation</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="23"></td><td><pre>            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"or"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="24"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="25"></td><td><pre>        activity<span class="token punctuation">.</span>h<span class="token punctuation">.</span><span class="token function-variable function">implementation</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="26"></td><td><pre>            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"pop"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="27"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="28"></td><td><pre>        activity<span class="token punctuation">.</span>i<span class="token punctuation">.</span><span class="token function-variable function">implementation</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="29"></td><td><pre>            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"push "</span><span class="token operator">+</span>x<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="30"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="31"></td><td><pre>        activity<span class="token punctuation">.</span>j<span class="token punctuation">.</span><span class="token function-variable function">implementation</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="32"></td><td><pre>            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"store "</span><span class="token operator">+</span>x<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="33"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="34"></td><td><pre>        activity<span class="token punctuation">.</span>k<span class="token punctuation">.</span><span class="token function-variable function">implementation</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="35"></td><td><pre>            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"sub"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="36"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="37"></td><td><pre>        activity<span class="token punctuation">.</span>l<span class="token punctuation">.</span><span class="token function-variable function">implementation</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="38"></td><td><pre>            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"xor"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="39"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="40"></td><td><pre>    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="41"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="42"></td><td><pre></pre></td></tr><tr><td data-num="43"></td><td><pre><span class="token function">setImmediate</span><span class="token punctuation">(</span>hook<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><p>使用下列命令注入脚本</p>
+<pre><code class="language-Shell">frida -U -l .\hook.js -f &quot;com.dasctf.vm_flutter.vm_flutter&quot;
+</code></pre>
+<p>我们输入 33 位的数字，例如 <code>000000000000000000000000000000000</code> ,frida 打印的内容如下</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="2"></td><td><pre>store <span class="token number">0</span></pre></td></tr><tr><td data-num="3"></td><td><pre>push <span class="token number">176</span></pre></td></tr><tr><td data-num="4"></td><td><pre>push <span class="token number">11</span></pre></td></tr><tr><td data-num="5"></td><td><pre>load <span class="token number">0</span></pre></td></tr><tr><td data-num="6"></td><td><pre>add</pre></td></tr><tr><td data-num="7"></td><td><pre>xor</pre></td></tr><tr><td data-num="8"></td><td><pre>store <span class="token number">0</span></pre></td></tr><tr><td data-num="9"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="10"></td><td><pre>store <span class="token number">1</span></pre></td></tr><tr><td data-num="11"></td><td><pre>push <span class="token number">198</span></pre></td></tr><tr><td data-num="12"></td><td><pre>push <span class="token number">18</span></pre></td></tr><tr><td data-num="13"></td><td><pre>load <span class="token number">1</span></pre></td></tr><tr><td data-num="14"></td><td><pre>add</pre></td></tr><tr><td data-num="15"></td><td><pre>xor</pre></td></tr><tr><td data-num="16"></td><td><pre>store <span class="token number">1</span></pre></td></tr><tr><td data-num="17"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="18"></td><td><pre>store <span class="token number">2</span></pre></td></tr><tr><td data-num="19"></td><td><pre>push <span class="token number">66</span></pre></td></tr><tr><td data-num="20"></td><td><pre>push <span class="token number">5</span></pre></td></tr><tr><td data-num="21"></td><td><pre>load <span class="token number">2</span></pre></td></tr><tr><td data-num="22"></td><td><pre>add</pre></td></tr><tr><td data-num="23"></td><td><pre>xor</pre></td></tr><tr><td data-num="24"></td><td><pre>store <span class="token number">2</span></pre></td></tr><tr><td data-num="25"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="26"></td><td><pre>store <span class="token number">3</span></pre></td></tr><tr><td data-num="27"></td><td><pre>push <span class="token number">199</span></pre></td></tr><tr><td data-num="28"></td><td><pre>push <span class="token number">18</span></pre></td></tr><tr><td data-num="29"></td><td><pre>load <span class="token number">3</span></pre></td></tr><tr><td data-num="30"></td><td><pre>add</pre></td></tr><tr><td data-num="31"></td><td><pre>xor</pre></td></tr><tr><td data-num="32"></td><td><pre>store <span class="token number">3</span></pre></td></tr><tr><td data-num="33"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="34"></td><td><pre>store <span class="token number">4</span></pre></td></tr><tr><td data-num="35"></td><td><pre>push <span class="token number">170</span></pre></td></tr><tr><td data-num="36"></td><td><pre>push <span class="token number">14</span></pre></td></tr><tr><td data-num="37"></td><td><pre>load <span class="token number">4</span></pre></td></tr><tr><td data-num="38"></td><td><pre>add</pre></td></tr><tr><td data-num="39"></td><td><pre>xor</pre></td></tr><tr><td data-num="40"></td><td><pre>store <span class="token number">4</span></pre></td></tr><tr><td data-num="41"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="42"></td><td><pre>store <span class="token number">5</span></pre></td></tr><tr><td data-num="43"></td><td><pre>push <span class="token number">32</span></pre></td></tr><tr><td data-num="44"></td><td><pre>push <span class="token number">13</span></pre></td></tr><tr><td data-num="45"></td><td><pre>load <span class="token number">5</span></pre></td></tr><tr><td data-num="46"></td><td><pre>add</pre></td></tr><tr><td data-num="47"></td><td><pre>xor</pre></td></tr><tr><td data-num="48"></td><td><pre>store <span class="token number">5</span></pre></td></tr><tr><td data-num="49"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="50"></td><td><pre>store <span class="token number">6</span></pre></td></tr><tr><td data-num="51"></td><td><pre>push <span class="token number">31</span></pre></td></tr><tr><td data-num="52"></td><td><pre>push <span class="token number">14</span></pre></td></tr><tr><td data-num="53"></td><td><pre>load <span class="token number">6</span></pre></td></tr><tr><td data-num="54"></td><td><pre>add</pre></td></tr><tr><td data-num="55"></td><td><pre>xor</pre></td></tr><tr><td data-num="56"></td><td><pre>store <span class="token number">6</span></pre></td></tr><tr><td data-num="57"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="58"></td><td><pre>store <span class="token number">7</span></pre></td></tr><tr><td data-num="59"></td><td><pre>push <span class="token number">60</span></pre></td></tr><tr><td data-num="60"></td><td><pre>push <span class="token number">18</span></pre></td></tr><tr><td data-num="61"></td><td><pre>load <span class="token number">7</span></pre></td></tr><tr><td data-num="62"></td><td><pre>add</pre></td></tr><tr><td data-num="63"></td><td><pre>xor</pre></td></tr><tr><td data-num="64"></td><td><pre>store <span class="token number">7</span></pre></td></tr><tr><td data-num="65"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="66"></td><td><pre>store <span class="token number">8</span></pre></td></tr><tr><td data-num="67"></td><td><pre>push <span class="token number">26</span></pre></td></tr><tr><td data-num="68"></td><td><pre>push <span class="token number">13</span></pre></td></tr><tr><td data-num="69"></td><td><pre>load <span class="token number">8</span></pre></td></tr><tr><td data-num="70"></td><td><pre>add</pre></td></tr><tr><td data-num="71"></td><td><pre>xor</pre></td></tr><tr><td data-num="72"></td><td><pre>store <span class="token number">8</span></pre></td></tr><tr><td data-num="73"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="74"></td><td><pre>store <span class="token number">9</span></pre></td></tr><tr><td data-num="75"></td><td><pre>push <span class="token number">89</span></pre></td></tr><tr><td data-num="76"></td><td><pre>push <span class="token number">18</span></pre></td></tr><tr><td data-num="77"></td><td><pre>load <span class="token number">9</span></pre></td></tr><tr><td data-num="78"></td><td><pre>add</pre></td></tr><tr><td data-num="79"></td><td><pre>xor</pre></td></tr><tr><td data-num="80"></td><td><pre>store <span class="token number">9</span></pre></td></tr><tr><td data-num="81"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="82"></td><td><pre>store <span class="token number">10</span></pre></td></tr><tr><td data-num="83"></td><td><pre>push <span class="token number">60</span></pre></td></tr><tr><td data-num="84"></td><td><pre>push <span class="token number">17</span></pre></td></tr><tr><td data-num="85"></td><td><pre>load <span class="token number">10</span></pre></td></tr><tr><td data-num="86"></td><td><pre>add</pre></td></tr><tr><td data-num="87"></td><td><pre>xor</pre></td></tr><tr><td data-num="88"></td><td><pre>store <span class="token number">10</span></pre></td></tr><tr><td data-num="89"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="90"></td><td><pre>store <span class="token number">11</span></pre></td></tr><tr><td data-num="91"></td><td><pre>push <span class="token number">119</span></pre></td></tr><tr><td data-num="92"></td><td><pre>push <span class="token number">19</span></pre></td></tr><tr><td data-num="93"></td><td><pre>load <span class="token number">11</span></pre></td></tr><tr><td data-num="94"></td><td><pre>add</pre></td></tr><tr><td data-num="95"></td><td><pre>xor</pre></td></tr><tr><td data-num="96"></td><td><pre>store <span class="token number">11</span></pre></td></tr><tr><td data-num="97"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="98"></td><td><pre>store <span class="token number">12</span></pre></td></tr><tr><td data-num="99"></td><td><pre>push <span class="token number">60</span></pre></td></tr><tr><td data-num="100"></td><td><pre>push <span class="token number">17</span></pre></td></tr><tr><td data-num="101"></td><td><pre>load <span class="token number">12</span></pre></td></tr><tr><td data-num="102"></td><td><pre>add</pre></td></tr><tr><td data-num="103"></td><td><pre>xor</pre></td></tr><tr><td data-num="104"></td><td><pre>store <span class="token number">12</span></pre></td></tr><tr><td data-num="105"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="106"></td><td><pre>store <span class="token number">13</span></pre></td></tr><tr><td data-num="107"></td><td><pre>push <span class="token number">90</span></pre></td></tr><tr><td data-num="108"></td><td><pre>push <span class="token number">5</span></pre></td></tr><tr><td data-num="109"></td><td><pre>load <span class="token number">13</span></pre></td></tr><tr><td data-num="110"></td><td><pre>add</pre></td></tr><tr><td data-num="111"></td><td><pre>xor</pre></td></tr><tr><td data-num="112"></td><td><pre>store <span class="token number">13</span></pre></td></tr><tr><td data-num="113"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="114"></td><td><pre>store <span class="token number">14</span></pre></td></tr><tr><td data-num="115"></td><td><pre>push <span class="token number">104</span></pre></td></tr><tr><td data-num="116"></td><td><pre>push <span class="token number">13</span></pre></td></tr><tr><td data-num="117"></td><td><pre>load <span class="token number">14</span></pre></td></tr><tr><td data-num="118"></td><td><pre>add</pre></td></tr><tr><td data-num="119"></td><td><pre>xor</pre></td></tr><tr><td data-num="120"></td><td><pre>store <span class="token number">14</span></pre></td></tr><tr><td data-num="121"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="122"></td><td><pre>store <span class="token number">15</span></pre></td></tr><tr><td data-num="123"></td><td><pre>push <span class="token number">174</span></pre></td></tr><tr><td data-num="124"></td><td><pre>push <span class="token number">19</span></pre></td></tr><tr><td data-num="125"></td><td><pre>load <span class="token number">15</span></pre></td></tr><tr><td data-num="126"></td><td><pre>add</pre></td></tr><tr><td data-num="127"></td><td><pre>xor</pre></td></tr><tr><td data-num="128"></td><td><pre>store <span class="token number">15</span></pre></td></tr><tr><td data-num="129"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="130"></td><td><pre>store <span class="token number">16</span></pre></td></tr><tr><td data-num="131"></td><td><pre>push <span class="token number">146</span></pre></td></tr><tr><td data-num="132"></td><td><pre>push <span class="token number">11</span></pre></td></tr><tr><td data-num="133"></td><td><pre>load <span class="token number">16</span></pre></td></tr><tr><td data-num="134"></td><td><pre>add</pre></td></tr><tr><td data-num="135"></td><td><pre>xor</pre></td></tr><tr><td data-num="136"></td><td><pre>store <span class="token number">16</span></pre></td></tr><tr><td data-num="137"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="138"></td><td><pre>store <span class="token number">17</span></pre></td></tr><tr><td data-num="139"></td><td><pre>push <span class="token number">179</span></pre></td></tr><tr><td data-num="140"></td><td><pre>push <span class="token number">5</span></pre></td></tr><tr><td data-num="141"></td><td><pre>load <span class="token number">17</span></pre></td></tr><tr><td data-num="142"></td><td><pre>add</pre></td></tr><tr><td data-num="143"></td><td><pre>xor</pre></td></tr><tr><td data-num="144"></td><td><pre>store <span class="token number">17</span></pre></td></tr><tr><td data-num="145"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="146"></td><td><pre>store <span class="token number">18</span></pre></td></tr><tr><td data-num="147"></td><td><pre>push <span class="token number">67</span></pre></td></tr><tr><td data-num="148"></td><td><pre>push <span class="token number">15</span></pre></td></tr><tr><td data-num="149"></td><td><pre>load <span class="token number">18</span></pre></td></tr><tr><td data-num="150"></td><td><pre>add</pre></td></tr><tr><td data-num="151"></td><td><pre>xor</pre></td></tr><tr><td data-num="152"></td><td><pre>store <span class="token number">18</span></pre></td></tr><tr><td data-num="153"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="154"></td><td><pre>store <span class="token number">19</span></pre></td></tr><tr><td data-num="155"></td><td><pre>push <span class="token number">73</span></pre></td></tr><tr><td data-num="156"></td><td><pre>push <span class="token number">11</span></pre></td></tr><tr><td data-num="157"></td><td><pre>load <span class="token number">19</span></pre></td></tr><tr><td data-num="158"></td><td><pre>add</pre></td></tr><tr><td data-num="159"></td><td><pre>xor</pre></td></tr><tr><td data-num="160"></td><td><pre>store <span class="token number">19</span></pre></td></tr><tr><td data-num="161"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="162"></td><td><pre>store <span class="token number">20</span></pre></td></tr><tr><td data-num="163"></td><td><pre>push <span class="token number">50</span></pre></td></tr><tr><td data-num="164"></td><td><pre>push <span class="token number">12</span></pre></td></tr><tr><td data-num="165"></td><td><pre>load <span class="token number">20</span></pre></td></tr><tr><td data-num="166"></td><td><pre>add</pre></td></tr><tr><td data-num="167"></td><td><pre>xor</pre></td></tr><tr><td data-num="168"></td><td><pre>store <span class="token number">20</span></pre></td></tr><tr><td data-num="169"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="170"></td><td><pre>store <span class="token number">21</span></pre></td></tr><tr><td data-num="171"></td><td><pre>push <span class="token number">92</span></pre></td></tr><tr><td data-num="172"></td><td><pre>push <span class="token number">19</span></pre></td></tr><tr><td data-num="173"></td><td><pre>load <span class="token number">21</span></pre></td></tr><tr><td data-num="174"></td><td><pre>add</pre></td></tr><tr><td data-num="175"></td><td><pre>xor</pre></td></tr><tr><td data-num="176"></td><td><pre>store <span class="token number">21</span></pre></td></tr><tr><td data-num="177"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="178"></td><td><pre>store <span class="token number">22</span></pre></td></tr><tr><td data-num="179"></td><td><pre>push <span class="token number">170</span></pre></td></tr><tr><td data-num="180"></td><td><pre>push <span class="token number">19</span></pre></td></tr><tr><td data-num="181"></td><td><pre>load <span class="token number">22</span></pre></td></tr><tr><td data-num="182"></td><td><pre>add</pre></td></tr><tr><td data-num="183"></td><td><pre>xor</pre></td></tr><tr><td data-num="184"></td><td><pre>store <span class="token number">22</span></pre></td></tr><tr><td data-num="185"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="186"></td><td><pre>store <span class="token number">23</span></pre></td></tr><tr><td data-num="187"></td><td><pre>push <span class="token number">160</span></pre></td></tr><tr><td data-num="188"></td><td><pre>push <span class="token number">9</span></pre></td></tr><tr><td data-num="189"></td><td><pre>load <span class="token number">23</span></pre></td></tr><tr><td data-num="190"></td><td><pre>add</pre></td></tr><tr><td data-num="191"></td><td><pre>xor</pre></td></tr><tr><td data-num="192"></td><td><pre>store <span class="token number">23</span></pre></td></tr><tr><td data-num="193"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="194"></td><td><pre>store <span class="token number">24</span></pre></td></tr><tr><td data-num="195"></td><td><pre>push <span class="token number">166</span></pre></td></tr><tr><td data-num="196"></td><td><pre>push <span class="token number">15</span></pre></td></tr><tr><td data-num="197"></td><td><pre>load <span class="token number">24</span></pre></td></tr><tr><td data-num="198"></td><td><pre>add</pre></td></tr><tr><td data-num="199"></td><td><pre>xor</pre></td></tr><tr><td data-num="200"></td><td><pre>store <span class="token number">24</span></pre></td></tr><tr><td data-num="201"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="202"></td><td><pre>store <span class="token number">25</span></pre></td></tr><tr><td data-num="203"></td><td><pre>push <span class="token number">47</span></pre></td></tr><tr><td data-num="204"></td><td><pre>push <span class="token number">8</span></pre></td></tr><tr><td data-num="205"></td><td><pre>load <span class="token number">25</span></pre></td></tr><tr><td data-num="206"></td><td><pre>add</pre></td></tr><tr><td data-num="207"></td><td><pre>xor</pre></td></tr><tr><td data-num="208"></td><td><pre>store <span class="token number">25</span></pre></td></tr><tr><td data-num="209"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="210"></td><td><pre>store <span class="token number">26</span></pre></td></tr><tr><td data-num="211"></td><td><pre>push <span class="token number">155</span></pre></td></tr><tr><td data-num="212"></td><td><pre>push <span class="token number">19</span></pre></td></tr><tr><td data-num="213"></td><td><pre>load <span class="token number">26</span></pre></td></tr><tr><td data-num="214"></td><td><pre>add</pre></td></tr><tr><td data-num="215"></td><td><pre>xor</pre></td></tr><tr><td data-num="216"></td><td><pre>store <span class="token number">26</span></pre></td></tr><tr><td data-num="217"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="218"></td><td><pre>store <span class="token number">27</span></pre></td></tr><tr><td data-num="219"></td><td><pre>push <span class="token number">115</span></pre></td></tr><tr><td data-num="220"></td><td><pre>push <span class="token number">9</span></pre></td></tr><tr><td data-num="221"></td><td><pre>load <span class="token number">27</span></pre></td></tr><tr><td data-num="222"></td><td><pre>add</pre></td></tr><tr><td data-num="223"></td><td><pre>xor</pre></td></tr><tr><td data-num="224"></td><td><pre>store <span class="token number">27</span></pre></td></tr><tr><td data-num="225"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="226"></td><td><pre>store <span class="token number">28</span></pre></td></tr><tr><td data-num="227"></td><td><pre>push <span class="token number">60</span></pre></td></tr><tr><td data-num="228"></td><td><pre>push <span class="token number">13</span></pre></td></tr><tr><td data-num="229"></td><td><pre>load <span class="token number">28</span></pre></td></tr><tr><td data-num="230"></td><td><pre>add</pre></td></tr><tr><td data-num="231"></td><td><pre>xor</pre></td></tr><tr><td data-num="232"></td><td><pre>store <span class="token number">28</span></pre></td></tr><tr><td data-num="233"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="234"></td><td><pre>store <span class="token number">29</span></pre></td></tr><tr><td data-num="235"></td><td><pre>push <span class="token number">52</span></pre></td></tr><tr><td data-num="236"></td><td><pre>push <span class="token number">12</span></pre></td></tr><tr><td data-num="237"></td><td><pre>load <span class="token number">29</span></pre></td></tr><tr><td data-num="238"></td><td><pre>add</pre></td></tr><tr><td data-num="239"></td><td><pre>xor</pre></td></tr><tr><td data-num="240"></td><td><pre>store <span class="token number">29</span></pre></td></tr><tr><td data-num="241"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="242"></td><td><pre>store <span class="token number">30</span></pre></td></tr><tr><td data-num="243"></td><td><pre>push <span class="token number">42</span></pre></td></tr><tr><td data-num="244"></td><td><pre>push <span class="token number">5</span></pre></td></tr><tr><td data-num="245"></td><td><pre>load <span class="token number">30</span></pre></td></tr><tr><td data-num="246"></td><td><pre>add</pre></td></tr><tr><td data-num="247"></td><td><pre>xor</pre></td></tr><tr><td data-num="248"></td><td><pre>store <span class="token number">30</span></pre></td></tr><tr><td data-num="249"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="250"></td><td><pre>store <span class="token number">31</span></pre></td></tr><tr><td data-num="251"></td><td><pre>push <span class="token number">96</span></pre></td></tr><tr><td data-num="252"></td><td><pre>push <span class="token number">19</span></pre></td></tr><tr><td data-num="253"></td><td><pre>load <span class="token number">31</span></pre></td></tr><tr><td data-num="254"></td><td><pre>add</pre></td></tr><tr><td data-num="255"></td><td><pre>xor</pre></td></tr><tr><td data-num="256"></td><td><pre>store <span class="token number">31</span></pre></td></tr><tr><td data-num="257"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="258"></td><td><pre>store <span class="token number">32</span></pre></td></tr><tr><td data-num="259"></td><td><pre>push <span class="token number">72</span></pre></td></tr><tr><td data-num="260"></td><td><pre>push <span class="token number">7</span></pre></td></tr><tr><td data-num="261"></td><td><pre>load <span class="token number">32</span></pre></td></tr><tr><td data-num="262"></td><td><pre>add</pre></td></tr><tr><td data-num="263"></td><td><pre>xor</pre></td></tr><tr><td data-num="264"></td><td><pre>store <span class="token number">32</span></pre></td></tr></table></figure><p>分析一下 vm 指令，这里有个相同的结构，经过分析后可以发现这是标准的栈式虚拟机，先将操作数压入栈中，然后进行运算时从栈顶取回，所以此处的 vm 加密是对输入加上一个数，再去异或一个数</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre>push <span class="token number">48</span></pre></td></tr><tr><td data-num="2"></td><td><pre>store <span class="token number">0</span></pre></td></tr><tr><td data-num="3"></td><td><pre>push <span class="token number">176</span></pre></td></tr><tr><td data-num="4"></td><td><pre>push <span class="token number">11</span></pre></td></tr><tr><td data-num="5"></td><td><pre>load <span class="token number">0</span></pre></td></tr><tr><td data-num="6"></td><td><pre>add</pre></td></tr><tr><td data-num="7"></td><td><pre>xor</pre></td></tr><tr><td data-num="8"></td><td><pre>store <span class="token number">0</span></pre></td></tr></table></figure><p>编写 exp 得到 flag</p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">import</span> re</pre></td></tr><tr><td data-num="2"></td><td><pre></pre></td></tr><tr><td data-num="3"></td><td><pre>output <span class="token operator">=</span> <span class="token triple-quoted-string string">'''push 48</span></pre></td></tr><tr><td data-num="4"></td><td><pre>store 0</pre></td></tr><tr><td data-num="5"></td><td><pre>push 176</pre></td></tr><tr><td data-num="6"></td><td><pre>push 11</pre></td></tr><tr><td data-num="7"></td><td><pre>load 0</pre></td></tr><tr><td data-num="8"></td><td><pre>add</pre></td></tr><tr><td data-num="9"></td><td><pre>xor</pre></td></tr><tr><td data-num="10"></td><td><pre>store 0</pre></td></tr><tr><td data-num="11"></td><td><pre>push 48</pre></td></tr><tr><td data-num="12"></td><td><pre>store 1</pre></td></tr><tr><td data-num="13"></td><td><pre>push 198</pre></td></tr><tr><td data-num="14"></td><td><pre>push 18</pre></td></tr><tr><td data-num="15"></td><td><pre>load 1</pre></td></tr><tr><td data-num="16"></td><td><pre>add</pre></td></tr><tr><td data-num="17"></td><td><pre>xor</pre></td></tr><tr><td data-num="18"></td><td><pre>store 1</pre></td></tr><tr><td data-num="19"></td><td><pre>push 48</pre></td></tr><tr><td data-num="20"></td><td><pre>store 2</pre></td></tr><tr><td data-num="21"></td><td><pre>push 66</pre></td></tr><tr><td data-num="22"></td><td><pre>push 5</pre></td></tr><tr><td data-num="23"></td><td><pre>load 2</pre></td></tr><tr><td data-num="24"></td><td><pre>add</pre></td></tr><tr><td data-num="25"></td><td><pre>xor</pre></td></tr><tr><td data-num="26"></td><td><pre>store 2</pre></td></tr><tr><td data-num="27"></td><td><pre>push 48</pre></td></tr><tr><td data-num="28"></td><td><pre>store 3</pre></td></tr><tr><td data-num="29"></td><td><pre>push 199</pre></td></tr><tr><td data-num="30"></td><td><pre>push 18</pre></td></tr><tr><td data-num="31"></td><td><pre>load 3</pre></td></tr><tr><td data-num="32"></td><td><pre>add</pre></td></tr><tr><td data-num="33"></td><td><pre>xor</pre></td></tr><tr><td data-num="34"></td><td><pre>store 3</pre></td></tr><tr><td data-num="35"></td><td><pre>push 48</pre></td></tr><tr><td data-num="36"></td><td><pre>store 4</pre></td></tr><tr><td data-num="37"></td><td><pre>push 170</pre></td></tr><tr><td data-num="38"></td><td><pre>push 14</pre></td></tr><tr><td data-num="39"></td><td><pre>load 4</pre></td></tr><tr><td data-num="40"></td><td><pre>add</pre></td></tr><tr><td data-num="41"></td><td><pre>xor</pre></td></tr><tr><td data-num="42"></td><td><pre>store 4</pre></td></tr><tr><td data-num="43"></td><td><pre>push 48</pre></td></tr><tr><td data-num="44"></td><td><pre>store 5</pre></td></tr><tr><td data-num="45"></td><td><pre>push 32</pre></td></tr><tr><td data-num="46"></td><td><pre>push 13</pre></td></tr><tr><td data-num="47"></td><td><pre>load 5</pre></td></tr><tr><td data-num="48"></td><td><pre>add</pre></td></tr><tr><td data-num="49"></td><td><pre>xor</pre></td></tr><tr><td data-num="50"></td><td><pre>store 5</pre></td></tr><tr><td data-num="51"></td><td><pre>push 48</pre></td></tr><tr><td data-num="52"></td><td><pre>store 6</pre></td></tr><tr><td data-num="53"></td><td><pre>push 31</pre></td></tr><tr><td data-num="54"></td><td><pre>push 14</pre></td></tr><tr><td data-num="55"></td><td><pre>load 6</pre></td></tr><tr><td data-num="56"></td><td><pre>add</pre></td></tr><tr><td data-num="57"></td><td><pre>xor</pre></td></tr><tr><td data-num="58"></td><td><pre>store 6</pre></td></tr><tr><td data-num="59"></td><td><pre>push 48</pre></td></tr><tr><td data-num="60"></td><td><pre>store 7</pre></td></tr><tr><td data-num="61"></td><td><pre>push 60</pre></td></tr><tr><td data-num="62"></td><td><pre>push 18</pre></td></tr><tr><td data-num="63"></td><td><pre>load 7</pre></td></tr><tr><td data-num="64"></td><td><pre>add</pre></td></tr><tr><td data-num="65"></td><td><pre>xor</pre></td></tr><tr><td data-num="66"></td><td><pre>store 7</pre></td></tr><tr><td data-num="67"></td><td><pre>push 48</pre></td></tr><tr><td data-num="68"></td><td><pre>store 8</pre></td></tr><tr><td data-num="69"></td><td><pre>push 26</pre></td></tr><tr><td data-num="70"></td><td><pre>push 13</pre></td></tr><tr><td data-num="71"></td><td><pre>load 8</pre></td></tr><tr><td data-num="72"></td><td><pre>add</pre></td></tr><tr><td data-num="73"></td><td><pre>xor</pre></td></tr><tr><td data-num="74"></td><td><pre>store 8</pre></td></tr><tr><td data-num="75"></td><td><pre>push 48</pre></td></tr><tr><td data-num="76"></td><td><pre>store 9</pre></td></tr><tr><td data-num="77"></td><td><pre>push 89</pre></td></tr><tr><td data-num="78"></td><td><pre>push 18</pre></td></tr><tr><td data-num="79"></td><td><pre>load 9</pre></td></tr><tr><td data-num="80"></td><td><pre>add</pre></td></tr><tr><td data-num="81"></td><td><pre>xor</pre></td></tr><tr><td data-num="82"></td><td><pre>store 9</pre></td></tr><tr><td data-num="83"></td><td><pre>push 48</pre></td></tr><tr><td data-num="84"></td><td><pre>store 10</pre></td></tr><tr><td data-num="85"></td><td><pre>push 60</pre></td></tr><tr><td data-num="86"></td><td><pre>push 17</pre></td></tr><tr><td data-num="87"></td><td><pre>load 10</pre></td></tr><tr><td data-num="88"></td><td><pre>add</pre></td></tr><tr><td data-num="89"></td><td><pre>xor</pre></td></tr><tr><td data-num="90"></td><td><pre>store 10</pre></td></tr><tr><td data-num="91"></td><td><pre>push 48</pre></td></tr><tr><td data-num="92"></td><td><pre>store 11</pre></td></tr><tr><td data-num="93"></td><td><pre>push 119</pre></td></tr><tr><td data-num="94"></td><td><pre>push 19</pre></td></tr><tr><td data-num="95"></td><td><pre>load 11</pre></td></tr><tr><td data-num="96"></td><td><pre>add</pre></td></tr><tr><td data-num="97"></td><td><pre>xor</pre></td></tr><tr><td data-num="98"></td><td><pre>store 11</pre></td></tr><tr><td data-num="99"></td><td><pre>push 48</pre></td></tr><tr><td data-num="100"></td><td><pre>store 12</pre></td></tr><tr><td data-num="101"></td><td><pre>push 60</pre></td></tr><tr><td data-num="102"></td><td><pre>push 17</pre></td></tr><tr><td data-num="103"></td><td><pre>load 12</pre></td></tr><tr><td data-num="104"></td><td><pre>add</pre></td></tr><tr><td data-num="105"></td><td><pre>xor</pre></td></tr><tr><td data-num="106"></td><td><pre>store 12</pre></td></tr><tr><td data-num="107"></td><td><pre>push 48</pre></td></tr><tr><td data-num="108"></td><td><pre>store 13</pre></td></tr><tr><td data-num="109"></td><td><pre>push 90</pre></td></tr><tr><td data-num="110"></td><td><pre>push 5</pre></td></tr><tr><td data-num="111"></td><td><pre>load 13</pre></td></tr><tr><td data-num="112"></td><td><pre>add</pre></td></tr><tr><td data-num="113"></td><td><pre>xor</pre></td></tr><tr><td data-num="114"></td><td><pre>store 13</pre></td></tr><tr><td data-num="115"></td><td><pre>push 48</pre></td></tr><tr><td data-num="116"></td><td><pre>store 14</pre></td></tr><tr><td data-num="117"></td><td><pre>push 104</pre></td></tr><tr><td data-num="118"></td><td><pre>push 13</pre></td></tr><tr><td data-num="119"></td><td><pre>load 14</pre></td></tr><tr><td data-num="120"></td><td><pre>add</pre></td></tr><tr><td data-num="121"></td><td><pre>xor</pre></td></tr><tr><td data-num="122"></td><td><pre>store 14</pre></td></tr><tr><td data-num="123"></td><td><pre>push 48</pre></td></tr><tr><td data-num="124"></td><td><pre>store 15</pre></td></tr><tr><td data-num="125"></td><td><pre>push 174</pre></td></tr><tr><td data-num="126"></td><td><pre>push 19</pre></td></tr><tr><td data-num="127"></td><td><pre>load 15</pre></td></tr><tr><td data-num="128"></td><td><pre>add</pre></td></tr><tr><td data-num="129"></td><td><pre>xor</pre></td></tr><tr><td data-num="130"></td><td><pre>store 15</pre></td></tr><tr><td data-num="131"></td><td><pre>push 48</pre></td></tr><tr><td data-num="132"></td><td><pre>store 16</pre></td></tr><tr><td data-num="133"></td><td><pre>push 146</pre></td></tr><tr><td data-num="134"></td><td><pre>push 11</pre></td></tr><tr><td data-num="135"></td><td><pre>load 16</pre></td></tr><tr><td data-num="136"></td><td><pre>add</pre></td></tr><tr><td data-num="137"></td><td><pre>xor</pre></td></tr><tr><td data-num="138"></td><td><pre>store 16</pre></td></tr><tr><td data-num="139"></td><td><pre>push 48</pre></td></tr><tr><td data-num="140"></td><td><pre>store 17</pre></td></tr><tr><td data-num="141"></td><td><pre>push 179</pre></td></tr><tr><td data-num="142"></td><td><pre>push 5</pre></td></tr><tr><td data-num="143"></td><td><pre>load 17</pre></td></tr><tr><td data-num="144"></td><td><pre>add</pre></td></tr><tr><td data-num="145"></td><td><pre>xor</pre></td></tr><tr><td data-num="146"></td><td><pre>store 17</pre></td></tr><tr><td data-num="147"></td><td><pre>push 48</pre></td></tr><tr><td data-num="148"></td><td><pre>store 18</pre></td></tr><tr><td data-num="149"></td><td><pre>push 67</pre></td></tr><tr><td data-num="150"></td><td><pre>push 15</pre></td></tr><tr><td data-num="151"></td><td><pre>load 18</pre></td></tr><tr><td data-num="152"></td><td><pre>add</pre></td></tr><tr><td data-num="153"></td><td><pre>xor</pre></td></tr><tr><td data-num="154"></td><td><pre>store 18</pre></td></tr><tr><td data-num="155"></td><td><pre>push 48</pre></td></tr><tr><td data-num="156"></td><td><pre>store 19</pre></td></tr><tr><td data-num="157"></td><td><pre>push 73</pre></td></tr><tr><td data-num="158"></td><td><pre>push 11</pre></td></tr><tr><td data-num="159"></td><td><pre>load 19</pre></td></tr><tr><td data-num="160"></td><td><pre>add</pre></td></tr><tr><td data-num="161"></td><td><pre>xor</pre></td></tr><tr><td data-num="162"></td><td><pre>store 19</pre></td></tr><tr><td data-num="163"></td><td><pre>push 48</pre></td></tr><tr><td data-num="164"></td><td><pre>store 20</pre></td></tr><tr><td data-num="165"></td><td><pre>push 50</pre></td></tr><tr><td data-num="166"></td><td><pre>push 12</pre></td></tr><tr><td data-num="167"></td><td><pre>load 20</pre></td></tr><tr><td data-num="168"></td><td><pre>add</pre></td></tr><tr><td data-num="169"></td><td><pre>xor</pre></td></tr><tr><td data-num="170"></td><td><pre>store 20</pre></td></tr><tr><td data-num="171"></td><td><pre>push 48</pre></td></tr><tr><td data-num="172"></td><td><pre>store 21</pre></td></tr><tr><td data-num="173"></td><td><pre>push 92</pre></td></tr><tr><td data-num="174"></td><td><pre>push 19</pre></td></tr><tr><td data-num="175"></td><td><pre>load 21</pre></td></tr><tr><td data-num="176"></td><td><pre>add</pre></td></tr><tr><td data-num="177"></td><td><pre>xor</pre></td></tr><tr><td data-num="178"></td><td><pre>store 21</pre></td></tr><tr><td data-num="179"></td><td><pre>push 48</pre></td></tr><tr><td data-num="180"></td><td><pre>store 22</pre></td></tr><tr><td data-num="181"></td><td><pre>push 170</pre></td></tr><tr><td data-num="182"></td><td><pre>push 19</pre></td></tr><tr><td data-num="183"></td><td><pre>load 22</pre></td></tr><tr><td data-num="184"></td><td><pre>add</pre></td></tr><tr><td data-num="185"></td><td><pre>xor</pre></td></tr><tr><td data-num="186"></td><td><pre>store 22</pre></td></tr><tr><td data-num="187"></td><td><pre>push 48</pre></td></tr><tr><td data-num="188"></td><td><pre>store 23</pre></td></tr><tr><td data-num="189"></td><td><pre>push 160</pre></td></tr><tr><td data-num="190"></td><td><pre>push 9</pre></td></tr><tr><td data-num="191"></td><td><pre>load 23</pre></td></tr><tr><td data-num="192"></td><td><pre>add</pre></td></tr><tr><td data-num="193"></td><td><pre>xor</pre></td></tr><tr><td data-num="194"></td><td><pre>store 23</pre></td></tr><tr><td data-num="195"></td><td><pre>push 48</pre></td></tr><tr><td data-num="196"></td><td><pre>store 24</pre></td></tr><tr><td data-num="197"></td><td><pre>push 166</pre></td></tr><tr><td data-num="198"></td><td><pre>push 15</pre></td></tr><tr><td data-num="199"></td><td><pre>load 24</pre></td></tr><tr><td data-num="200"></td><td><pre>add</pre></td></tr><tr><td data-num="201"></td><td><pre>xor</pre></td></tr><tr><td data-num="202"></td><td><pre>store 24</pre></td></tr><tr><td data-num="203"></td><td><pre>push 48</pre></td></tr><tr><td data-num="204"></td><td><pre>store 25</pre></td></tr><tr><td data-num="205"></td><td><pre>push 47</pre></td></tr><tr><td data-num="206"></td><td><pre>push 8</pre></td></tr><tr><td data-num="207"></td><td><pre>load 25</pre></td></tr><tr><td data-num="208"></td><td><pre>add</pre></td></tr><tr><td data-num="209"></td><td><pre>xor</pre></td></tr><tr><td data-num="210"></td><td><pre>store 25</pre></td></tr><tr><td data-num="211"></td><td><pre>push 48</pre></td></tr><tr><td data-num="212"></td><td><pre>store 26</pre></td></tr><tr><td data-num="213"></td><td><pre>push 155</pre></td></tr><tr><td data-num="214"></td><td><pre>push 19</pre></td></tr><tr><td data-num="215"></td><td><pre>load 26</pre></td></tr><tr><td data-num="216"></td><td><pre>add</pre></td></tr><tr><td data-num="217"></td><td><pre>xor</pre></td></tr><tr><td data-num="218"></td><td><pre>store 26</pre></td></tr><tr><td data-num="219"></td><td><pre>push 48</pre></td></tr><tr><td data-num="220"></td><td><pre>store 27</pre></td></tr><tr><td data-num="221"></td><td><pre>push 115</pre></td></tr><tr><td data-num="222"></td><td><pre>push 9</pre></td></tr><tr><td data-num="223"></td><td><pre>load 27</pre></td></tr><tr><td data-num="224"></td><td><pre>add</pre></td></tr><tr><td data-num="225"></td><td><pre>xor</pre></td></tr><tr><td data-num="226"></td><td><pre>store 27</pre></td></tr><tr><td data-num="227"></td><td><pre>push 48</pre></td></tr><tr><td data-num="228"></td><td><pre>store 28</pre></td></tr><tr><td data-num="229"></td><td><pre>push 60</pre></td></tr><tr><td data-num="230"></td><td><pre>push 13</pre></td></tr><tr><td data-num="231"></td><td><pre>load 28</pre></td></tr><tr><td data-num="232"></td><td><pre>add</pre></td></tr><tr><td data-num="233"></td><td><pre>xor</pre></td></tr><tr><td data-num="234"></td><td><pre>store 28</pre></td></tr><tr><td data-num="235"></td><td><pre>push 48</pre></td></tr><tr><td data-num="236"></td><td><pre>store 29</pre></td></tr><tr><td data-num="237"></td><td><pre>push 52</pre></td></tr><tr><td data-num="238"></td><td><pre>push 12</pre></td></tr><tr><td data-num="239"></td><td><pre>load 29</pre></td></tr><tr><td data-num="240"></td><td><pre>add</pre></td></tr><tr><td data-num="241"></td><td><pre>xor</pre></td></tr><tr><td data-num="242"></td><td><pre>store 29</pre></td></tr><tr><td data-num="243"></td><td><pre>push 48</pre></td></tr><tr><td data-num="244"></td><td><pre>store 30</pre></td></tr><tr><td data-num="245"></td><td><pre>push 42</pre></td></tr><tr><td data-num="246"></td><td><pre>push 5</pre></td></tr><tr><td data-num="247"></td><td><pre>load 30</pre></td></tr><tr><td data-num="248"></td><td><pre>add</pre></td></tr><tr><td data-num="249"></td><td><pre>xor</pre></td></tr><tr><td data-num="250"></td><td><pre>store 30</pre></td></tr><tr><td data-num="251"></td><td><pre>push 48</pre></td></tr><tr><td data-num="252"></td><td><pre>store 31</pre></td></tr><tr><td data-num="253"></td><td><pre>push 96</pre></td></tr><tr><td data-num="254"></td><td><pre>push 19</pre></td></tr><tr><td data-num="255"></td><td><pre>load 31</pre></td></tr><tr><td data-num="256"></td><td><pre>add</pre></td></tr><tr><td data-num="257"></td><td><pre>xor</pre></td></tr><tr><td data-num="258"></td><td><pre>store 31</pre></td></tr><tr><td data-num="259"></td><td><pre>push 48</pre></td></tr><tr><td data-num="260"></td><td><pre>store 32</pre></td></tr><tr><td data-num="261"></td><td><pre>push 72</pre></td></tr><tr><td data-num="262"></td><td><pre>push 7</pre></td></tr><tr><td data-num="263"></td><td><pre>load 32</pre></td></tr><tr><td data-num="264"></td><td><pre>add</pre></td></tr><tr><td data-num="265"></td><td><pre>xor</pre></td></tr><tr><td data-num="266"></td><td><pre>store 32'''</pre></td></tr><tr><td data-num="267"></td><td><pre>pattern <span class="token operator">=</span> <span class="token string">r'push\s+(\d+)'</span></pre></td></tr><tr><td data-num="268"></td><td><pre>final <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">255</span><span class="token punctuation">,</span> <span class="token number">149</span><span class="token punctuation">,</span> <span class="token number">26</span><span class="token punctuation">,</span> <span class="token number">146</span><span class="token punctuation">,</span> <span class="token number">200</span><span class="token punctuation">,</span> <span class="token number">115</span><span class="token punctuation">,</span> <span class="token number">150</span><span class="token punctuation">,</span> <span class="token number">68</span><span class="token punctuation">,</span> <span class="token number">36</span><span class="token punctuation">,</span> <span class="token number">222</span><span class="token punctuation">,</span> <span class="token number">185</span><span class="token punctuation">,</span> <span class="token number">240</span><span class="token punctuation">,</span> <span class="token number">74</span><span class="token punctuation">,</span> <span class="token number">45</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">234</span><span class="token punctuation">,</span> <span class="token number">236</span><span class="token punctuation">,</span> <span class="token number">215</span><span class="token punctuation">,</span> <span class="token number">62</span><span class="token punctuation">,</span> <span class="token number">114</span><span class="token punctuation">,</span> <span class="token number">178</span><span class="token punctuation">,</span> <span class="token number">46</span><span class="token punctuation">,</span> <span class="token number">205</span><span class="token punctuation">,</span> <span class="token number">209</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="269"></td><td><pre>         <span class="token number">214</span><span class="token punctuation">,</span> <span class="token number">83</span><span class="token punctuation">,</span> <span class="token number">233</span><span class="token punctuation">,</span> <span class="token number">34</span><span class="token punctuation">,</span> <span class="token number">82</span><span class="token punctuation">,</span> <span class="token number">74</span><span class="token punctuation">,</span> <span class="token number">67</span><span class="token punctuation">,</span> <span class="token number">36</span><span class="token punctuation">,</span> <span class="token number">204</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="270"></td><td><pre>matches <span class="token operator">=</span> re<span class="token punctuation">.</span>findall<span class="token punctuation">(</span>pattern<span class="token punctuation">,</span> output<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="271"></td><td><pre><span class="token comment">#print(matches)</span></pre></td></tr><tr><td data-num="272"></td><td><pre><span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>final<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="273"></td><td><pre>    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token punctuation">(</span>final<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">^</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">(</span>matches<span class="token punctuation">[</span>i <span class="token operator">*</span> <span class="token number">3</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token builtin">int</span><span class="token punctuation">(</span>matches<span class="token punctuation">[</span>i <span class="token operator">*</span> <span class="token number">3</span> <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> end<span class="token operator">=</span><span class="token string">''</span><span class="token punctuation">)</span></pre></td></tr></table></figure>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2023-10-24 21:19:00" itemprop="dateModified" datetime="2023-10-24T21:19:00+08:00">2023-10-24</time>
+  </span>
+  <span id="CBCTF-2023/" class="item leancloud_visitors" data-flag-title="CBCTF auuuu3和vm_flutter出题思路及wp" title="阅读次数">
+      <span class="icon">
+        <i class="ic i-eye"></i>
+      </span>
+      <span class="text">阅读次数</span>
+      <span class="leancloud-visitors-count"></span>
+      <span class="text">次</span>
+  </span>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>oacia <i class="ic i-at"><em>@</em></i>oaciaのBbBlog~
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="https://oacia.cc/CBCTF-2023/" title="CBCTF auuuu3和vm_flutter出题思路及wp">https://oacia.cc/CBCTF-2023/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/lowmemorykiller/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_G4BwDwlCFh.jpg" title="lowmemorykiller原理分析">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> </span>
+  <h3>lowmemorykiller原理分析</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/unidbg-usage/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_Him2elkScV.jpg" title="unidbg usage">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> </span>
+  <h3>unidbg usage</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#auuuu3"><span class="toc-text"> auuuu3</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#vm_flutter"><span class="toc-text"> vm_flutter</span></a></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="oacia"
+      data-src="/images/avatar.jpg">
+  <p class="name" itemprop="name">oacia</p>
+  <div class="description" itemprop="description">这里的文章写给未来的自己 不要忘记现在学习的知识</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">37</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">46</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL29hY2lh" title="https:&#x2F;&#x2F;github.com&#x2F;oacia"><i class="ic i-github"></i></span>
+      <span class="exturl item twitter" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9vYWNpYTg2" title="https:&#x2F;&#x2F;twitter.com&#x2F;oacia86"><i class="ic i-twitter"></i></span>
+      <span class="exturl item paper-plane" data-url="aHR0cHM6Ly90Lm1lL29hY2lh" title="https:&#x2F;&#x2F;t.me&#x2F;oacia"><i class="ic i-paper-plane"></i></span>
+      <span class="exturl item email" data-url="bWFpbHRvOm9hY2lhQHFxLmNvbQ==" title="mailto:oacia@qq.com"><i class="ic i-envelope"></i></span>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/about-oacia/" rel="section"><i class="ic i-user"></i>关于oacia</a>
+  </li>
+
+        
+  <li class="item dropdown">
+      <a href="/archives/" rel="section"><i class="ic i-feather"></i>文章</a>
+    <ul class="submenu">
+
+        
+  <li class="item">
+    <a href="/archives/" rel="section"><i class="ic i-list-alt"></i>归档</a>
+  </li>
+
+        
+  <li class="item">
+    <a href="/tags/" rel="section"><i class="ic i-tags"></i>标签</a>
+  </li>
+
+  </ul>
+    
+  <li class="item">
+    <a href="/TODOlist/" rel="section"><i class="ic i-clock"></i>要做的事</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/website_maintenance/" rel="section"><i class="ic i-calendar"></i>更新日志</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/friends/" rel="section"><i class="ic i-heart"></i>小伙伴</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/music/" rel="section"><i class="ic i-music"></i>听会儿歌吧</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/lowmemorykiller/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/unidbg-usage/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">oacia @ oacia</span>
+  </div>
+  <div class="count">
+    <span class="post-meta-item-icon">
+      <i class="ic i-chart-area"></i>
+    </span>
+    <span title="站点总字数">561k 字</span>
+
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="ic i-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:30</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: 'CBCTF-2023/',
+    favicon: {
+      show: "柚鳥ナツ",
+      hide: "甘い幸せ"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+<!--尝试不使用polyfill-->
+<!--<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>-->
+
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+</body>
+</html>

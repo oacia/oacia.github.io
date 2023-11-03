@@ -1,0 +1,493 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <style>
+    html{
+      cursor: url('/cusor/normal.png') auto;s
+    }
+  </style>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="google-site-verification" content="qQVmgWozVe7BXoA15J3gAZpEA5dK168admH4U3W6PAk">
+  <meta name="msvalidate.01" content="4902E39C0135E72DE537BCB0FE08B40A">
+  <meta name="baidu-site-verification" content="codeva-CSYjpuVg5v">
+
+
+<link rel="alternate" type="application/rss+xml" title="oaciaのBbBlog~" href="https://oacia.cc/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="oaciaのBbBlog~" href="https://oacia.cc/atom.xml" />
+<link rel="alternate" type="application/json" title="oaciaのBbBlog~" href="https://oacia.cc/feed.json" />
+
+
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+
+<link rel="canonical" href="https://oacia.cc/lowmemorykiller/">
+
+
+
+  <title>
+lowmemorykiller原理分析 |
+oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="alice">
+      <img src="/images/alice-shake.gif" alt="">
+    </div>
+    <!--
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+    -->
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">lowmemorykiller原理分析
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2023-10-10 15:40:53">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2023-10-10T15:40:53+08:00">2023-10-10</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span class="text">本文字数</span>
+    <span>9.3k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span class="text">阅读时长</span>
+    <span>8 分钟</span>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">oacia</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_Lz9cxOf3qT.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_Nw3x0u57Jg.jpg"></li>
+          <li class="item" data-background-image="/picture/FAF9732986A6F0DD89CFEA1767D3754C.jpg"></li>
+          <li class="item" data-background-image="/picture/5947FA53E929E7283C6121DF60A529C1.jpg"></li>
+          <li class="item" data-background-image="/picture/A4EF293026318257E34F7EA3B35C74DB.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_a1LZZk88ji.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="https://oacia.cc/lowmemorykiller/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="oacia">
+    <meta itemprop="description" content="DEVIL or SWEET, 这里的文章写给未来的自己 不要忘记现在学习的知识">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="oaciaのBbBlog~">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <h1 id="lowmemorykiller概述"><a class="anchor" href="#lowmemorykiller概述">#</a> lowmemorykiller 概述</h1>
+<p>Android 的设计理念之一，便是应用程序退出，但进程还会继续存在系统以便再次启动时提高响应时间。这样的设计会带来一个问题，每个进程都有自己独立的内存地址空间，随着应用打开数量的增多，系统已使用的内存越来越大，就很有可能导致系统内存不足，那么需要一个能管理所有进程，根据一定策略来释放进程的策略，这便有了 <code>lmk</code> ，全称为 LowMemoryKiller (低内存杀手)，它使用 <code>lmkd</code>  来决定什么时机杀掉什么进程.</p>
+<p>Android 基于 Linux 的系统，其实 Linux 有类似的内存管理策略 ——OOM killer (Out Of Memory Killer), OOM 的策略更多的是用于分配内存不足时触发，将得分最高的进程杀掉。而 <code>LowMemoryKiller</code>  则会每隔一段时间检查一次，当系统剩余可用内存较低时，便会触发杀进程的策略，根据不同的剩余内存档位来来选择杀不同优先级的进程，而不是等到 OOM 时再来杀进程，真正 OOM 时系统可能已经处于异常状态，系统更希望的是未雨绸缪，在内存很低时来杀掉一些优先级较低的进程来保障后续操作的顺利进行。</p>
+<p>与 <code>lowmemorykiller</code>  相关的源码路径</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>msm-google<span class="token punctuation">\</span>drivers<span class="token punctuation">\</span>staging<span class="token punctuation">\</span>android<span class="token punctuation">\</span>lowmemorykiller.c</pre></td></tr></table></figure><h1 id="lowmemorykiller基本原理"><a class="anchor" href="#lowmemorykiller基本原理">#</a> lowmemorykiller 基本原理</h1>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">/* drivers/misc/lowmemorykiller.c</span></pre></td></tr><tr><td data-num="2"></td><td><pre> *</pre></td></tr><tr><td data-num="3"></td><td><pre> * The lowmemorykiller driver lets user-space specify (指定) a set of memory thresholds (阈值)</pre></td></tr><tr><td data-num="4"></td><td><pre> * where processes with a range of oom_score_adj values will get killed. Specify</pre></td></tr><tr><td data-num="5"></td><td><pre> * the minimum oom_score_adj values in</pre></td></tr><tr><td data-num="6"></td><td><pre> * /sys/module/lowmemorykiller/parameters/adj and the number of free pages in</pre></td></tr><tr><td data-num="7"></td><td><pre> * /sys/module/lowmemorykiller/parameters/minfree. Both files take a comma</pre></td></tr><tr><td data-num="8"></td><td><pre> * separated list of numbers in ascending order (按升序序列).</pre></td></tr><tr><td data-num="9"></td><td><pre> *</pre></td></tr><tr><td data-num="10"></td><td><pre> * For example, write "0,8" to /sys/module/lowmemorykiller/parameters/adj and</pre></td></tr><tr><td data-num="11"></td><td><pre> * "1024,4096" to /sys/module/lowmemorykiller/parameters/minfree to kill</pre></td></tr><tr><td data-num="12"></td><td><pre> * processes with a oom_score_adj value of 8 or higher when the free memory</pre></td></tr><tr><td data-num="13"></td><td><pre> * drops below 4096 pages and kill processes with a oom_score_adj value of 0 or</pre></td></tr><tr><td data-num="14"></td><td><pre> * higher when the free memory drops below 1024 pages.</pre></td></tr><tr><td data-num="15"></td><td><pre> *</pre></td></tr><tr><td data-num="16"></td><td><pre> * The driver considers memory used for caches to be free, but if a large</pre></td></tr><tr><td data-num="17"></td><td><pre> * percentage of the cached memory is locked this can be very inaccurate (不准确)</pre></td></tr><tr><td data-num="18"></td><td><pre> * and processes may not get killed until the normal oom killer is triggered.</pre></td></tr><tr><td data-num="19"></td><td><pre> */</pre></td></tr></table></figure><p>所有应用进程都是从 zygote 孵化出来的，记录在 AMS 中 mLruProcesses 列表中，由 AMS 进行统一管理，AMS 中会根据进程的状态更新进程对应的 oom_adj 值，这个值会通过文件传递到 kernel 中去，kernel 有个低内存回收机制，在内存达到一定阀值时会触发清理 oom_adj 值高的进程腾出更多的内存空间，这就是 Lowmemorykiller 工作原理。</p>
+<p>这一张图很好的表示了 lmk 的原理</p>
+<p><img data-src="/lowmemorykiller/1836169-15d36c6cfee0a381.webp" alt="img" style="aspect-ratio:844 / 622;"></p>
+<p>但对于我的 pixel3, 内核版本 <code>Linux4.9</code>  来说没有 <code>lowmemorykiller</code>  这个模块</p>
+<p><img data-src="/lowmemorykiller/image-20231011090236210.png" alt="image-20231011090236210" style="aspect-ratio:783 / 52;"></p>
+<p>往下翻了翻源码，才发现原来 <code>lowmemorykiller</code>  已经不是一个模块了</p>
+<p><img data-src="/lowmemorykiller/image-20231011090349845.png" alt="image-20231011090349845" style="aspect-ratio:1920 / 1079;"></p>
+<p>(存疑)<span class="spoiler" title="唔~被看到了呢"> 并且这些阈值被硬编码在源码中，也就是说无法通过修改 /sys/module/lowmemorykiller/parameters/adj 和 /sys/module/lowmemorykiller/parameters/minfree 来改变 lowmemorykiller 的杀进程策略</span></p>
+<p><img data-src="/lowmemorykiller/image-20231011090514060.png" alt="image-20231011090514060" style="aspect-ratio:604 / 606;"></p>
+<p>解释一下这里各个值的含义：当内存低于 64MB 时，系统会杀死 <code>adj&gt;=12</code>  级别的进程；当内存低于 16MB 时，系统会杀死 <code>adj&gt;=6</code>  级别的进程… 以此类推</p>
+<p>对于应用进程来说，需要有自身的 adj，由 AMS 负责更新。定义在 oom_adj 和 oom_score_adj 文件中：</p>
+<ul>
+<li><code>/proc/pid/oom_adj</code> ：代表当前进程的优先级，这个优先级是 kernel 中的优先级，值越小优先级越高</li>
+<li><code>/proc/pid/oom_score_adj</code> ：这个是 AMS 上层的优先级，与 ProcessList 中的优先级对应，值越小优先级越高</li>
+</ul>
+<p>前台进程的 <code>oom_adj</code>  为 0, <code>oom_score_adj</code>  也为 0, 表示不可被杀死</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>blueline:/ <span class="token comment"># ps -A | grep ez</span></pre></td></tr><tr><td data-num="2"></td><td><pre>u0_a243      <span class="token number">16722</span>   <span class="token number">994</span> <span class="token number">14961560</span> <span class="token number">221328</span> SyS_epoll_wait     <span class="token number">0</span> S com.example.ezandroid</pre></td></tr><tr><td data-num="3"></td><td><pre>blueline:/ <span class="token comment"># cat /proc/16722/oom_adj</span></pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token number">0</span></pre></td></tr><tr><td data-num="5"></td><td><pre>blueline:/ <span class="token comment"># cat /proc/16722/oom_score_adj</span></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token number">0</span></pre></td></tr></table></figure><p><code>oom_adj</code>  和 <code>oom_score_adj</code>  的转换关系为</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">//msm-google\drivers\staging\android\lowmemorykiller.c</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="3"></td><td><pre> * /proc/&lt;pid>/oom_score_adj set to OOM_SCORE_ADJ_MIN disables oom killing for</pre></td></tr><tr><td data-num="4"></td><td><pre> * pid.</pre></td></tr><tr><td data-num="5"></td><td><pre> */</pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">OOM_SCORE_ADJ_MIN</span>	<span class="token expression"><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1000</span><span class="token punctuation">)</span></span></span></pre></td></tr><tr><td data-num="7"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">OOM_SCORE_ADJ_MAX</span>	<span class="token expression"><span class="token number">1000</span></span></span></pre></td></tr><tr><td data-num="8"></td><td><pre></pre></td></tr><tr><td data-num="9"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="10"></td><td><pre> * /proc/&lt;pid>/oom_adj set to -17 protects from the oom killer for legacy</pre></td></tr><tr><td data-num="11"></td><td><pre> * purposes.</pre></td></tr><tr><td data-num="12"></td><td><pre> */</pre></td></tr><tr><td data-num="13"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">OOM_DISABLE</span> <span class="token expression"><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">17</span><span class="token punctuation">)</span></span></span></pre></td></tr><tr><td data-num="14"></td><td><pre><span class="token comment">/* inclusive */</span></pre></td></tr><tr><td data-num="15"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">OOM_ADJUST_MIN</span> <span class="token expression"><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">16</span><span class="token punctuation">)</span></span></span></pre></td></tr><tr><td data-num="16"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">OOM_ADJUST_MAX</span> <span class="token expression"><span class="token number">15</span></span></span></pre></td></tr><tr><td data-num="17"></td><td><pre><span class="token keyword">static</span> <span class="token keyword">short</span> <span class="token function">lowmem_oom_adj_to_oom_score_adj</span><span class="token punctuation">(</span><span class="token keyword">short</span> oom_adj<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="18"></td><td><pre><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="19"></td><td><pre>	<span class="token keyword">if</span> <span class="token punctuation">(</span>oom_adj <span class="token operator">==</span> OOM_ADJUST_MAX<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="20"></td><td><pre>		<span class="token keyword">return</span> OOM_SCORE_ADJ_MAX<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="21"></td><td><pre>	<span class="token keyword">else</span></pre></td></tr><tr><td data-num="22"></td><td><pre>		<span class="token keyword">return</span> <span class="token punctuation">(</span>oom_adj <span class="token operator">*</span> OOM_SCORE_ADJ_MAX<span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token operator">-</span>OOM_DISABLE<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="23"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr></table></figure><h1 id="lowmemorykiller机制剖析"><a class="anchor" href="#lowmemorykiller机制剖析">#</a> LowmemoryKiller 机制剖析</h1>
+<p>总的来说，<strong>Framework 层通过调整 adj 的值和阈值数组，输送给 kernel 中的 lmk，为 lmk 提供杀进程的依据</strong>，因为用户空间和内核空间相互隔离，就采用了文件节点进行通讯，用 <code>socket</code>  将 adj 的值与阈值数组传给 lmkd (5.0 之后不在由 AMS 直接与 lmk 通信，引入 lmkd 守护进程)，lmkd 将这些值写到内核节点中。lmk 通过读取这些节点，实现进程的 kill，所以整个 lmk 机制大概可分成三层。</p>
+<p><img data-src="/lowmemorykiller/1836169-1c2fcdb2bd0a6664.webp" alt="img" style="aspect-ratio:975 / 474;"></p>
+<h1 id="shrinker机制简介"><a class="anchor" href="#shrinker机制简介">#</a> shrinker 机制简介</h1>
+<p>LMK 驱动通过注册 shrinker 来实现的，shrinker 是 linux kernel 标准的回收内存 page 的机制，由内核线程 kswapd 负责监控。</p>
+<p>当内存不足时 kswapd 线程会遍历一张 shrinker 链表，并回调已注册的 shrinker 函数来回收内存 page，kswapd 还会周期性唤醒来执行内存操作。每个 zone 维护 active_list 和 inactive_list 链表，内核根据页面活动状态将 page 在这两个链表之间移动，最终通过 shrink_slab 和 shrink_zone 来回收内存页</p>
+<h1 id="lowmemorykiller初始化"><a class="anchor" href="#lowmemorykiller初始化">#</a> lowmemorykiller 初始化</h1>
+<p><strong>注册 shrinker</strong></p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">//msm-google\drivers\staging\android\lowmemorykiller.c</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">shrinker</span> lowmem_shrinker <span class="token operator">=</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="3"></td><td><pre>	<span class="token punctuation">.</span>scan_objects <span class="token operator">=</span> lowmem_scan<span class="token punctuation">,</span></pre></td></tr><tr><td data-num="4"></td><td><pre>	<span class="token punctuation">.</span>count_objects <span class="token operator">=</span> lowmem_count<span class="token punctuation">,</span></pre></td></tr><tr><td data-num="5"></td><td><pre>	<span class="token punctuation">.</span>seeks <span class="token operator">=</span> DEFAULT_SEEKS <span class="token operator">*</span> <span class="token number">16</span></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token punctuation">&#125;</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="7"></td><td><pre></pre></td></tr><tr><td data-num="8"></td><td><pre><span class="token keyword">static</span> <span class="token keyword">int</span> __init <span class="token function">lowmem_init</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="9"></td><td><pre><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="10"></td><td><pre>	<span class="token function">register_shrinker</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>lowmem_shrinker<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="11"></td><td><pre>	<span class="token function">lmk_event_init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="12"></td><td><pre>	<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="13"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr></table></figure><p>其中 shrinker 结构体的参数如下，当 count_objects 返回非 0 值时会触发 scan_objects 回调函数</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">//msm-google\include\linux\shrinker.h</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="3"></td><td><pre> * A callback you can register to apply pressure to ageable caches.</pre></td></tr><tr><td data-num="4"></td><td><pre> *</pre></td></tr><tr><td data-num="5"></td><td><pre> * @count_objects should return the number of freeable items in the cache. If</pre></td></tr><tr><td data-num="6"></td><td><pre> * there are no objects to free or the number of freeable items cannot be</pre></td></tr><tr><td data-num="7"></td><td><pre> * determined, it should return 0. No deadlock checks should be done during the</pre></td></tr><tr><td data-num="8"></td><td><pre> * count callback - the shrinker relies on aggregating scan counts that couldn't</pre></td></tr><tr><td data-num="9"></td><td><pre> * be executed due to potential deadlocks to be run at a later call when the</pre></td></tr><tr><td data-num="10"></td><td><pre> * deadlock condition is no longer pending.</pre></td></tr><tr><td data-num="11"></td><td><pre> *</pre></td></tr><tr><td data-num="12"></td><td><pre> * @scan_objects will only be called if @count_objects returned a non-zero</pre></td></tr><tr><td data-num="13"></td><td><pre> * value for the number of freeable objects. The callout should scan the cache</pre></td></tr><tr><td data-num="14"></td><td><pre> * and attempt to free items from the cache. It should then return the number</pre></td></tr><tr><td data-num="15"></td><td><pre> * of objects freed during the scan, or SHRINK_STOP if progress cannot be made</pre></td></tr><tr><td data-num="16"></td><td><pre> * due to potential deadlocks. If SHRINK_STOP is returned, then no further</pre></td></tr><tr><td data-num="17"></td><td><pre> * attempts to call the @scan_objects will be made from the current reclaim</pre></td></tr><tr><td data-num="18"></td><td><pre> * context.</pre></td></tr><tr><td data-num="19"></td><td><pre> *</pre></td></tr><tr><td data-num="20"></td><td><pre> * @flags determine the shrinker abilities, like numa awareness</pre></td></tr><tr><td data-num="21"></td><td><pre> */</pre></td></tr><tr><td data-num="22"></td><td><pre><span class="token keyword">struct</span> <span class="token class-name">shrinker</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="23"></td><td><pre>	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token punctuation">(</span><span class="token operator">*</span>count_objects<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">shrinker</span> <span class="token operator">*</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="24"></td><td><pre>				       <span class="token keyword">struct</span> <span class="token class-name">shrink_control</span> <span class="token operator">*</span>sc<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="25"></td><td><pre>	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token punctuation">(</span><span class="token operator">*</span>scan_objects<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">shrinker</span> <span class="token operator">*</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="26"></td><td><pre>				      <span class="token keyword">struct</span> <span class="token class-name">shrink_control</span> <span class="token operator">*</span>sc<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="27"></td><td><pre></pre></td></tr><tr><td data-num="28"></td><td><pre>	<span class="token keyword">int</span> seeks<span class="token punctuation">;</span>	<span class="token comment">/* seeks to recreate an obj */</span></pre></td></tr><tr><td data-num="29"></td><td><pre>	<span class="token keyword">long</span> batch<span class="token punctuation">;</span>	<span class="token comment">/* reclaim batch size, 0 = default */</span></pre></td></tr><tr><td data-num="30"></td><td><pre>	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> flags<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="31"></td><td><pre></pre></td></tr><tr><td data-num="32"></td><td><pre>	<span class="token comment">/* These are for internal use */</span></pre></td></tr><tr><td data-num="33"></td><td><pre>	<span class="token keyword">struct</span> <span class="token class-name">list_head</span> list<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="34"></td><td><pre>	<span class="token comment">/* objs pending delete, per node */</span></pre></td></tr><tr><td data-num="35"></td><td><pre>	<span class="token class-name">atomic_long_t</span> <span class="token operator">*</span>nr_deferred<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="36"></td><td><pre><span class="token punctuation">&#125;</span><span class="token punctuation">;</span></pre></td></tr></table></figure><h1 id="lowmem_count"><a class="anchor" href="#lowmem_count">#</a> lowmem_count</h1>
+<p><strong>统计缓存</strong></p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">//msm-google\drivers\staging\android\lowmemorykiller.c</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token keyword">static</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token function">lowmem_count</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">shrinker</span> <span class="token operator">*</span>s<span class="token punctuation">,</span></pre></td></tr><tr><td data-num="3"></td><td><pre>				  <span class="token keyword">struct</span> <span class="token class-name">shrink_control</span> <span class="token operator">*</span>sc<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="5"></td><td><pre>	<span class="token keyword">return</span> <span class="token function">global_node_page_state</span><span class="token punctuation">(</span>NR_ACTIVE_ANON<span class="token punctuation">)</span> <span class="token operator">+</span></pre></td></tr><tr><td data-num="6"></td><td><pre>		<span class="token function">global_node_page_state</span><span class="token punctuation">(</span>NR_ACTIVE_FILE<span class="token punctuation">)</span> <span class="token operator">+</span></pre></td></tr><tr><td data-num="7"></td><td><pre>		<span class="token function">global_node_page_state</span><span class="token punctuation">(</span>NR_INACTIVE_ANON<span class="token punctuation">)</span> <span class="token operator">+</span></pre></td></tr><tr><td data-num="8"></td><td><pre>		<span class="token function">global_node_page_state</span><span class="token punctuation">(</span>NR_INACTIVE_FILE<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="9"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr></table></figure><ul>
+<li>ANON：匿名页，匿名代表没有后备存储，这种内存如果想回收，需要换出到硬盘上的 swap 分区；</li>
+<li>FILE：文件页，文件代表有文件对应，这种内存如果想回收，只需将有数据更新的脏页（dirty page）写回到磁盘的文件中即可。</li>
+</ul>
+<p>内存的计算 = 活跃匿名页 + 活跃文件页 + 非活跃匿名页 + 非活跃文件页。</p>
+<h1 id="lowmem_scan"><a class="anchor" href="#lowmem_scan">#</a> lowmem_scan</h1>
+<p><strong>释放缓存</strong></p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">//msm-google\drivers\staging\android\lowmemorykiller.c</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token keyword">static</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token function">lowmem_scan</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">shrinker</span> <span class="token operator">*</span>s<span class="token punctuation">,</span> <span class="token keyword">struct</span> <span class="token class-name">shrink_control</span> <span class="token operator">*</span>sc<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="4"></td><td><pre>	<span class="token keyword">struct</span> <span class="token class-name">task_struct</span> <span class="token operator">*</span>tsk<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="5"></td><td><pre>	<span class="token keyword">struct</span> <span class="token class-name">task_struct</span> <span class="token operator">*</span>selected <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="6"></td><td><pre>	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> rem <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="7"></td><td><pre>	<span class="token keyword">int</span> tasksize<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="8"></td><td><pre>	<span class="token keyword">int</span> i<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="9"></td><td><pre>	<span class="token keyword">short</span> min_score_adj <span class="token operator">=</span> OOM_SCORE_ADJ_MAX <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="10"></td><td><pre>	<span class="token keyword">int</span> minfree <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="11"></td><td><pre>	<span class="token keyword">int</span> selected_tasksize <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="12"></td><td><pre>	<span class="token keyword">short</span> selected_oom_score_adj<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="13"></td><td><pre>	<span class="token keyword">int</span> array_size <span class="token operator">=</span> <span class="token function">ARRAY_SIZE</span><span class="token punctuation">(</span>lowmem_adj<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="14"></td><td><pre>	<span class="token comment">// 当前系统剩余内存大小，算法为：基于 free 总量去除其中作为 reserve 管理结构的部分</span></pre></td></tr><tr><td data-num="15"></td><td><pre>	<span class="token keyword">int</span> other_free <span class="token operator">=</span> <span class="token function">global_page_state</span><span class="token punctuation">(</span>NR_FREE_PAGES<span class="token punctuation">)</span> <span class="token operator">-</span> totalreserve_pages<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="16"></td><td><pre>	<span class="token comment">// 当前系统 page cache 的大小</span></pre></td></tr><tr><td data-num="17"></td><td><pre>	<span class="token keyword">int</span> other_file <span class="token operator">=</span> <span class="token function">global_node_page_state</span><span class="token punctuation">(</span>NR_FILE_PAGES<span class="token punctuation">)</span> <span class="token operator">-</span></pre></td></tr><tr><td data-num="18"></td><td><pre>				<span class="token function">global_node_page_state</span><span class="token punctuation">(</span>NR_SHMEM<span class="token punctuation">)</span> <span class="token operator">-</span></pre></td></tr><tr><td data-num="19"></td><td><pre>				<span class="token function">global_node_page_state</span><span class="token punctuation">(</span>NR_UNEVICTABLE<span class="token punctuation">)</span> <span class="token operator">-</span></pre></td></tr><tr><td data-num="20"></td><td><pre>				<span class="token function">total_swapcache_pages</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="21"></td><td><pre></pre></td></tr><tr><td data-num="22"></td><td><pre>	<span class="token keyword">if</span> <span class="token punctuation">(</span>lowmem_adj_size <span class="token operator">&lt;</span> array_size<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="23"></td><td><pre>		array_size <span class="token operator">=</span> lowmem_adj_size<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="24"></td><td><pre>	<span class="token keyword">if</span> <span class="token punctuation">(</span>lowmem_minfree_size <span class="token operator">&lt;</span> array_size<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="25"></td><td><pre>		array_size <span class="token operator">=</span> lowmem_minfree_size<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="26"></td><td><pre></pre></td></tr><tr><td data-num="27"></td><td><pre>	<span class="token comment">// 遍历最小内存阈值，如果当前内存低于阈值，同时当前 page cache 也低于阈值，</span></pre></td></tr><tr><td data-num="28"></td><td><pre>	<span class="token comment">//(内存充裕时会有大量内存充当 page cache 以提高系统 IO 性能)</span></pre></td></tr><tr><td data-num="29"></td><td><pre>	<span class="token comment">// 则为 min_score_adj 赋值后退出 for 循环</span></pre></td></tr><tr><td data-num="30"></td><td><pre>	<span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> array_size<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="31"></td><td><pre>		minfree <span class="token operator">=</span> lowmem_minfree<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="32"></td><td><pre>		<span class="token keyword">if</span> <span class="token punctuation">(</span>other_free <span class="token operator">&lt;</span> minfree <span class="token operator">&amp;&amp;</span> other_file <span class="token operator">&lt;</span> minfree<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="33"></td><td><pre>			min_score_adj <span class="token operator">=</span> lowmem_adj<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="34"></td><td><pre>			<span class="token keyword">break</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="35"></td><td><pre>		<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="36"></td><td><pre>	<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="37"></td><td><pre></pre></td></tr><tr><td data-num="38"></td><td><pre>	<span class="token function">lowmem_print</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token string">"lowmem_scan %lu, %x, ofree %d %d, ma %hd\n"</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="39"></td><td><pre>		     sc<span class="token operator">-></span>nr_to_scan<span class="token punctuation">,</span> sc<span class="token operator">-></span>gfp_mask<span class="token punctuation">,</span> other_free<span class="token punctuation">,</span></pre></td></tr><tr><td data-num="40"></td><td><pre>		     other_file<span class="token punctuation">,</span> min_score_adj<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="41"></td><td><pre></pre></td></tr><tr><td data-num="42"></td><td><pre>	<span class="token comment">// 如果 min_score_adj 等于初值，则表示内存充足，退出函数</span></pre></td></tr><tr><td data-num="43"></td><td><pre>	<span class="token keyword">if</span> <span class="token punctuation">(</span>min_score_adj <span class="token operator">==</span> OOM_SCORE_ADJ_MAX <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="44"></td><td><pre>		<span class="token function">lowmem_print</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token string">"lowmem_scan %lu, %x, return 0\n"</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="45"></td><td><pre>			     sc<span class="token operator">-></span>nr_to_scan<span class="token punctuation">,</span> sc<span class="token operator">-></span>gfp_mask<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="46"></td><td><pre>		<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="47"></td><td><pre>	<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="48"></td><td><pre></pre></td></tr><tr><td data-num="49"></td><td><pre>	selected_oom_score_adj <span class="token operator">=</span> min_score_adj<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="50"></td><td><pre></pre></td></tr><tr><td data-num="51"></td><td><pre>	<span class="token comment">// 内核 RCU (Read-Copy Update) 同步机制</span></pre></td></tr><tr><td data-num="52"></td><td><pre>	<span class="token comment">// 随意读，但更新数据的时候，需要先复制一份副本，在副本上完成修改，再一次性地替换旧数据</span></pre></td></tr><tr><td data-num="53"></td><td><pre>	<span class="token function">rcu_read_lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="54"></td><td><pre>	<span class="token comment">// 遍历系统进程，要开始杀进程了</span></pre></td></tr><tr><td data-num="55"></td><td><pre>	<span class="token function">for_each_process</span><span class="token punctuation">(</span>tsk<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="56"></td><td><pre>		<span class="token keyword">struct</span> <span class="token class-name">task_struct</span> <span class="token operator">*</span>p<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="57"></td><td><pre>		<span class="token keyword">short</span> oom_score_adj<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="58"></td><td><pre></pre></td></tr><tr><td data-num="59"></td><td><pre>		<span class="token comment">// 内核进程，跳过</span></pre></td></tr><tr><td data-num="60"></td><td><pre>		<span class="token keyword">if</span> <span class="token punctuation">(</span>tsk<span class="token operator">-></span>flags <span class="token operator">&amp;</span> PF_KTHREAD<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="61"></td><td><pre>			<span class="token keyword">continue</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="62"></td><td><pre></pre></td></tr><tr><td data-num="63"></td><td><pre>		<span class="token comment">// 对于普通用户进程来说，mm 指向虚拟地址空间的用户空间部分，而对于内核线程，mm 为 NULL。</span></pre></td></tr><tr><td data-num="64"></td><td><pre>		<span class="token comment">// 内核线程和普通的进程间的区别在于内核线程没有独立的地址空间，mm 指针被设置为 NULL；</span></pre></td></tr><tr><td data-num="65"></td><td><pre>		<span class="token comment">// 它只在内核空间运行，从来不切换到用户空间去；并且和普通进程一样，可以被调度，也可以被抢占。</span></pre></td></tr><tr><td data-num="66"></td><td><pre></pre></td></tr><tr><td data-num="67"></td><td><pre>		<span class="token comment">// 如果是内核线程，直接跳过</span></pre></td></tr><tr><td data-num="68"></td><td><pre>		p <span class="token operator">=</span> <span class="token function">find_lock_task_mm</span><span class="token punctuation">(</span>tsk<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="69"></td><td><pre>		<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>p<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="70"></td><td><pre>			<span class="token keyword">continue</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="71"></td><td><pre></pre></td></tr><tr><td data-num="72"></td><td><pre>		<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">task_lmk_waiting</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span></pre></td></tr><tr><td data-num="73"></td><td><pre>		    <span class="token function">time_before_eq</span><span class="token punctuation">(</span>jiffies<span class="token punctuation">,</span> lowmem_deathpending_timeout<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="74"></td><td><pre>			<span class="token function">task_unlock</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="75"></td><td><pre>			<span class="token function">rcu_read_unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="76"></td><td><pre>			<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="77"></td><td><pre>		<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="78"></td><td><pre></pre></td></tr><tr><td data-num="79"></td><td><pre>		<span class="token comment">// 如果当前找到的进程的 oom_score_adj 比当前需要杀的最小优先级还低，不杀</span></pre></td></tr><tr><td data-num="80"></td><td><pre>		oom_score_adj <span class="token operator">=</span> p<span class="token operator">-></span>signal<span class="token operator">-></span>oom_score_adj<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="81"></td><td><pre>		<span class="token keyword">if</span> <span class="token punctuation">(</span>oom_score_adj <span class="token operator">&lt;</span> min_score_adj<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="82"></td><td><pre>			<span class="token function">task_unlock</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="83"></td><td><pre>			<span class="token keyword">continue</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="84"></td><td><pre>		<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="85"></td><td><pre>		<span class="token comment">// 获取进程的占用内存大小 (rss 值)</span></pre></td></tr><tr><td data-num="86"></td><td><pre>		<span class="token comment">//rss: resident set size, the non-swappend physical memory that a task has used in.</span></pre></td></tr><tr><td data-num="87"></td><td><pre>		tasksize <span class="token operator">=</span> <span class="token function">get_mm_rss</span><span class="token punctuation">(</span>p<span class="token operator">-></span>mm<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="88"></td><td><pre>		<span class="token function">task_unlock</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="89"></td><td><pre>		<span class="token keyword">if</span> <span class="token punctuation">(</span>tasksize <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="90"></td><td><pre>			<span class="token keyword">continue</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="91"></td><td><pre>		</pre></td></tr><tr><td data-num="92"></td><td><pre>		<span class="token comment">// 首个进程，selected 值必为 NULL</span></pre></td></tr><tr><td data-num="93"></td><td><pre>		<span class="token keyword">if</span> <span class="token punctuation">(</span>selected<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="94"></td><td><pre>			<span class="token comment">// 高优先级进程，不杀</span></pre></td></tr><tr><td data-num="95"></td><td><pre>			<span class="token keyword">if</span> <span class="token punctuation">(</span>oom_score_adj <span class="token operator">&lt;</span> selected_oom_score_adj<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="96"></td><td><pre>				<span class="token keyword">continue</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="97"></td><td><pre>			<span class="token comment">// 同优先级进程，如果该进程占用内存小于阈值，同样不杀</span></pre></td></tr><tr><td data-num="98"></td><td><pre>			<span class="token keyword">if</span> <span class="token punctuation">(</span>oom_score_adj <span class="token operator">==</span> selected_oom_score_adj <span class="token operator">&amp;&amp;</span></pre></td></tr><tr><td data-num="99"></td><td><pre>			    tasksize <span class="token operator">&lt;=</span> selected_tasksize<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="100"></td><td><pre>				<span class="token keyword">continue</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="101"></td><td><pre>		<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="102"></td><td><pre>		<span class="token comment">// 已经找到了需要 kill 的进程，更新它的 tasksize 与 oom_score_adj</span></pre></td></tr><tr><td data-num="103"></td><td><pre>		selected <span class="token operator">=</span> p<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="104"></td><td><pre>		selected_tasksize <span class="token operator">=</span> tasksize<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="105"></td><td><pre>		selected_oom_score_adj <span class="token operator">=</span> oom_score_adj<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="106"></td><td><pre>		<span class="token function">lowmem_print</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">"select '%s' (%d), adj %hd, size %d, to kill\n"</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="107"></td><td><pre>			     p<span class="token operator">-></span>comm<span class="token punctuation">,</span> p<span class="token operator">-></span>pid<span class="token punctuation">,</span> oom_score_adj<span class="token punctuation">,</span> tasksize<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="108"></td><td><pre>	<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="109"></td><td><pre>	<span class="token keyword">if</span> <span class="token punctuation">(</span>selected<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="110"></td><td><pre>		<span class="token keyword">long</span> cache_size <span class="token operator">=</span> other_file <span class="token operator">*</span> <span class="token punctuation">(</span><span class="token keyword">long</span><span class="token punctuation">)</span><span class="token punctuation">(</span>PAGE_SIZE <span class="token operator">/</span> <span class="token number">1024</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="111"></td><td><pre>		<span class="token keyword">long</span> cache_limit <span class="token operator">=</span> minfree <span class="token operator">*</span> <span class="token punctuation">(</span><span class="token keyword">long</span><span class="token punctuation">)</span><span class="token punctuation">(</span>PAGE_SIZE <span class="token operator">/</span> <span class="token number">1024</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="112"></td><td><pre>		<span class="token keyword">long</span> free <span class="token operator">=</span> other_free <span class="token operator">*</span> <span class="token punctuation">(</span><span class="token keyword">long</span><span class="token punctuation">)</span><span class="token punctuation">(</span>PAGE_SIZE <span class="token operator">/</span> <span class="token number">1024</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="113"></td><td><pre></pre></td></tr><tr><td data-num="114"></td><td><pre>		<span class="token function">task_lock</span><span class="token punctuation">(</span>selected<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="115"></td><td><pre>		<span class="token comment">// 发送 SIGKILL 信号，杀死这个进程</span></pre></td></tr><tr><td data-num="116"></td><td><pre>		<span class="token function">send_sig</span><span class="token punctuation">(</span>SIGKILL<span class="token punctuation">,</span> selected<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="117"></td><td><pre>		<span class="token keyword">if</span> <span class="token punctuation">(</span>selected<span class="token operator">-></span>mm<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="118"></td><td><pre>			<span class="token function">task_set_lmk_waiting</span><span class="token punctuation">(</span>selected<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="119"></td><td><pre>		<span class="token function">task_unlock</span><span class="token punctuation">(</span>selected<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="120"></td><td><pre>		<span class="token function">trace_lowmemory_kill</span><span class="token punctuation">(</span>selected<span class="token punctuation">,</span> cache_size<span class="token punctuation">,</span> cache_limit<span class="token punctuation">,</span> free<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="121"></td><td><pre>		<span class="token function">lowmem_print</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">"Killing '%s' (%d) (tgid %d), adj %hd,\n"</span></pre></td></tr><tr><td data-num="122"></td><td><pre>				 <span class="token string">"   to free %ldkB on behalf of '%s' (%d) because\n"</span></pre></td></tr><tr><td data-num="123"></td><td><pre>				 <span class="token string">"   cache %ldkB is below limit %ldkB for oom_score_adj %hd\n"</span></pre></td></tr><tr><td data-num="124"></td><td><pre>				 <span class="token string">"   Free memory is %ldkB above reserved\n"</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="125"></td><td><pre>			     selected<span class="token operator">-></span>comm<span class="token punctuation">,</span> selected<span class="token operator">-></span>pid<span class="token punctuation">,</span> selected<span class="token operator">-></span>tgid<span class="token punctuation">,</span></pre></td></tr><tr><td data-num="126"></td><td><pre>			     selected_oom_score_adj<span class="token punctuation">,</span></pre></td></tr><tr><td data-num="127"></td><td><pre>			     selected_tasksize <span class="token operator">*</span> <span class="token punctuation">(</span><span class="token keyword">long</span><span class="token punctuation">)</span><span class="token punctuation">(</span>PAGE_SIZE <span class="token operator">/</span> <span class="token number">1024</span><span class="token punctuation">)</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="128"></td><td><pre>			     current<span class="token operator">-></span>comm<span class="token punctuation">,</span> current<span class="token operator">-></span>pid<span class="token punctuation">,</span></pre></td></tr><tr><td data-num="129"></td><td><pre>			     cache_size<span class="token punctuation">,</span> cache_limit<span class="token punctuation">,</span></pre></td></tr><tr><td data-num="130"></td><td><pre>			     min_score_adj<span class="token punctuation">,</span></pre></td></tr><tr><td data-num="131"></td><td><pre>			     free<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="132"></td><td><pre>		lowmem_deathpending_timeout <span class="token operator">=</span> jiffies <span class="token operator">+</span> HZ<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="133"></td><td><pre>		rem <span class="token operator">+=</span> selected_tasksize<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="134"></td><td><pre>		<span class="token function">get_task_struct</span><span class="token punctuation">(</span>selected<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="135"></td><td><pre>	<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="136"></td><td><pre></pre></td></tr><tr><td data-num="137"></td><td><pre>	<span class="token function">lowmem_print</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token string">"lowmem_scan %lu, %x, return %lu\n"</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="138"></td><td><pre>		     sc<span class="token operator">-></span>nr_to_scan<span class="token punctuation">,</span> sc<span class="token operator">-></span>gfp_mask<span class="token punctuation">,</span> rem<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="139"></td><td><pre>	<span class="token function">rcu_read_unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="140"></td><td><pre></pre></td></tr><tr><td data-num="141"></td><td><pre>	<span class="token keyword">if</span> <span class="token punctuation">(</span>selected<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="142"></td><td><pre>		<span class="token function">handle_lmk_event</span><span class="token punctuation">(</span>selected<span class="token punctuation">,</span> selected_tasksize<span class="token punctuation">,</span> min_score_adj<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="143"></td><td><pre>		<span class="token function">put_task_struct</span><span class="token punctuation">(</span>selected<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="144"></td><td><pre>	<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="145"></td><td><pre>	<span class="token keyword">return</span> rem<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="146"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr></table></figure><h1 id="参考资料"><a class="anchor" href="#参考资料">#</a> 参考资料</h1>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXR5dWFuLmNvbS8yMDE2LzA5LzE3L2FuZHJvaWQtbG93bWVtb3J5a2lsbGVyLw==">Android LowMemoryKiller 原理分析</span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC8yMjFmNGEyNDZiNDU=">Android 进程系列第六篇 —LowmemoryKiller 机制分析 (上)</span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC85ODBiNmNlNGUwNTE=">Android 进程系列第七篇 —LowmemoryKiller 机制分析 (中)</span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC83YmQzZDBlZThhNTY=">Android 进程系列第八篇 —LowmemoryKiller 机制分析 (下)</span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC81MDAyNTk2ODQ=">linux 内核：一文读懂 lowmemorykiller 机制</span></li>
+</ul>
+
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2023-10-18 10:59:02" itemprop="dateModified" datetime="2023-10-18T10:59:02+08:00">2023-10-18</time>
+  </span>
+  <span id="lowmemorykiller/" class="item leancloud_visitors" data-flag-title="lowmemorykiller原理分析" title="阅读次数">
+      <span class="icon">
+        <i class="ic i-eye"></i>
+      </span>
+      <span class="text">阅读次数</span>
+      <span class="leancloud-visitors-count"></span>
+      <span class="text">次</span>
+  </span>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>oacia <i class="ic i-at"><em>@</em></i>oaciaのBbBlog~
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="https://oacia.cc/lowmemorykiller/" title="lowmemorykiller原理分析">https://oacia.cc/lowmemorykiller/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/android-binder/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_z3haaNrwuR.jpg" title="android-binder">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> </span>
+  <h3>android-binder</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/CBCTF-2023/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;73B076F1F7D70E42AE74D9F4EFA2BD36.jpg" title="CBCTF auuuu3和vm_flutter出题思路及wp">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> </span>
+  <h3>CBCTF auuuu3和vm_flutter出题思路及wp</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#lowmemorykiller%E6%A6%82%E8%BF%B0"><span class="toc-text"> lowmemorykiller 概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#lowmemorykiller%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-text"> lowmemorykiller 基本原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#lowmemorykiller%E6%9C%BA%E5%88%B6%E5%89%96%E6%9E%90"><span class="toc-text"> LowmemoryKiller 机制剖析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#shrinker%E6%9C%BA%E5%88%B6%E7%AE%80%E4%BB%8B"><span class="toc-text"> shrinker 机制简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#lowmemorykiller%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-text"> lowmemorykiller 初始化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#lowmem_count"><span class="toc-text"> lowmem_count</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#lowmem_scan"><span class="toc-text"> lowmem_scan</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-text"> 参考资料</span></a></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="oacia"
+      data-src="/images/avatar.jpg">
+  <p class="name" itemprop="name">oacia</p>
+  <div class="description" itemprop="description">这里的文章写给未来的自己 不要忘记现在学习的知识</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">37</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">46</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL29hY2lh" title="https:&#x2F;&#x2F;github.com&#x2F;oacia"><i class="ic i-github"></i></span>
+      <span class="exturl item twitter" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9vYWNpYTg2" title="https:&#x2F;&#x2F;twitter.com&#x2F;oacia86"><i class="ic i-twitter"></i></span>
+      <span class="exturl item paper-plane" data-url="aHR0cHM6Ly90Lm1lL29hY2lh" title="https:&#x2F;&#x2F;t.me&#x2F;oacia"><i class="ic i-paper-plane"></i></span>
+      <span class="exturl item email" data-url="bWFpbHRvOm9hY2lhQHFxLmNvbQ==" title="mailto:oacia@qq.com"><i class="ic i-envelope"></i></span>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/about-oacia/" rel="section"><i class="ic i-user"></i>关于oacia</a>
+  </li>
+
+        
+  <li class="item dropdown">
+      <a href="/archives/" rel="section"><i class="ic i-feather"></i>文章</a>
+    <ul class="submenu">
+
+        
+  <li class="item">
+    <a href="/archives/" rel="section"><i class="ic i-list-alt"></i>归档</a>
+  </li>
+
+        
+  <li class="item">
+    <a href="/tags/" rel="section"><i class="ic i-tags"></i>标签</a>
+  </li>
+
+  </ul>
+    
+  <li class="item">
+    <a href="/TODOlist/" rel="section"><i class="ic i-clock"></i>要做的事</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/website_maintenance/" rel="section"><i class="ic i-calendar"></i>更新日志</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/friends/" rel="section"><i class="ic i-heart"></i>小伙伴</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/music/" rel="section"><i class="ic i-music"></i>听会儿歌吧</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/android-binder/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/CBCTF-2023/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">oacia @ oacia</span>
+  </div>
+  <div class="count">
+    <span class="post-meta-item-icon">
+      <i class="ic i-chart-area"></i>
+    </span>
+    <span title="站点总字数">561k 字</span>
+
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="ic i-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:30</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: 'lowmemorykiller/',
+    favicon: {
+      show: "柚鳥ナツ",
+      hide: "甘い幸せ"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+<!--尝试不使用polyfill-->
+<!--<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>-->
+
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+</body>
+</html>

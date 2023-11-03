@@ -1,0 +1,536 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <style>
+    html{
+      cursor: url('/cusor/normal.png') auto;s
+    }
+  </style>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="google-site-verification" content="qQVmgWozVe7BXoA15J3gAZpEA5dK168admH4U3W6PAk">
+  <meta name="msvalidate.01" content="4902E39C0135E72DE537BCB0FE08B40A">
+  <meta name="baidu-site-verification" content="codeva-CSYjpuVg5v">
+
+
+<link rel="alternate" type="application/rss+xml" title="oaciaのBbBlog~" href="https://oacia.cc/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="oaciaのBbBlog~" href="https://oacia.cc/atom.xml" />
+<link rel="alternate" type="application/json" title="oaciaのBbBlog~" href="https://oacia.cc/feed.json" />
+
+
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="CTF,inline hook,IsDebuggerPresent,sleep反调试,python逆向,go逆向" />
+
+
+<link rel="canonical" href="https://oacia.cc/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/">
+
+
+
+  <title>
+DASCTF 2023六月挑战赛 二进制专项 RE writeup |
+oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="alice">
+      <img src="/images/alice-shake.gif" alt="">
+    </div>
+    <!--
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+    -->
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">DASCTF 2023六月挑战赛 二进制专项 RE writeup
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2023-06-04 18:24:07">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2023-06-04T18:24:07+08:00">2023-06-04</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span class="text">本文字数</span>
+    <span>6.3k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span class="text">阅读时长</span>
+    <span>6 分钟</span>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">oacia</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="/picture/7DD6FD0CED6AEC37828A8046882B2DAC.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_o9eT6CmIL9.jpg"></li>
+          <li class="item" data-background-image="/picture/2381000B8F88BB004906DBBEC1C9B89B.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_UBRfpbi8Bw.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_5SktlkwIGN.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_HWsdLby1zC.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="https://oacia.cc/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="oacia">
+    <meta itemprop="description" content="DEVIL or SWEET, 这里的文章写给未来的自己 不要忘记现在学习的知识">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="oaciaのBbBlog~">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <blockquote>
+<p>常年不去上早八课的人，今天居然在八点前就醒了，要问为什么？这比赛从早上八点打到晚上八点 &gt;…&lt;(悲)</p>
+<p>不过，咱们队伍在下午就把逆向题 ak 了～居然没有坐牢到晚上 (●’◡’●)</p>
+</blockquote>
+<p>题目附件: <span class="exturl" data-url="aHR0cHM6Ly9vYWNpYS5naXRodWIuaW8vREFTQ1RGLTIwMjMlRTUlODUlQUQlRTYlOUMlODglRTYlOEMlOTElRTYlODglOTglRTglQjUlOUItJUU0JUJBJThDJUU4JUJGJTlCJUU1JTg4JUI2JUU0JUI4JTkzJUU5JUExJUI5LVJFLXdyaXRldXAvJUU5JTk5JTg0JUU0JUJCJUI2LnppcA==">点击下载</span></p>
+<h2 id="careful"><a class="anchor" href="#careful">#</a> careful</h2>
+<p>动态调试，题目里有个 inline hook, 在这里打个断点</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604155520790-1685874703531-7.png" alt="image-20230604155520790"></p>
+<p>那么网址就是 <code>Just_An_APIH00k11.com</code></p>
+<h2 id="babyre"><a class="anchor" href="#babyre">#</a> babyre</h2>
+<p>die 查一下壳</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604155708500-1685874703531-8.png" alt="image-20230604155708500"></p>
+<p>有 sleep 反调试，把 sleep nop 掉</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604160528205-1685874703531-9.png" alt="image-20230604160528205"></p>
+<p>这里读取了名称为 cod 的资源，用 <code>resource hacker</code>  把资源复制下来</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604170253987-1685874703531-10.png" alt="image-20230604170253987"></p>
+<p>然后向下执行，这里是一个对 cod 资源进行解密的地方</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604170321641-1685874703531-11.png" alt="image-20230604170321641"></p>
+<p>这里要注意的是如果检测到调试器，那么 <code>byte_7FF6DA64F000[3]</code>  将会被赋值为 36</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604170357225-1685874703531-12.png" alt="image-20230604170357225"></p>
+<p>所以要把这个 if 语句通过修改 ZF 标志位的方式来绕过反调试</p>
+<p>cod 资源解密脚本如下</p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre>arr <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0x18</span><span class="token punctuation">,</span> <span class="token number">0x57</span><span class="token punctuation">,</span> <span class="token number">0x68</span><span class="token punctuation">,</span> <span class="token number">0x64</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'COD101.bin'</span><span class="token punctuation">,</span> <span class="token string">'rb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span></pre></td></tr><tr><td data-num="3"></td><td><pre>    b <span class="token operator">=</span> f<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="4"></td><td><pre>b <span class="token operator">=</span> <span class="token builtin">bytearray</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="6"></td><td><pre>    b<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> b<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">^</span> arr<span class="token punctuation">[</span>i <span class="token operator">%</span> <span class="token number">4</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="7"></td><td><pre><span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'COD_de.bin'</span><span class="token punctuation">,</span> <span class="token string">'wb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span></pre></td></tr><tr><td data-num="8"></td><td><pre>    f<span class="token punctuation">.</span>write<span class="token punctuation">(</span>b<span class="token punctuation">)</span></pre></td></tr></table></figure><p>用 ida 打开，看到有花指令</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604170448531-1685874703531-13.png" alt="image-20230604170448531"></p>
+<p>nop 一下，主要的改动有这几处</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604170942267-1685874703531-14.png" alt="image-20230604170942267"></p>
+<p>​	<img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604172257775-1685874703531-15.png" alt="image-20230604172257775"></p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604172306573-1685874703531-16.png" alt="image-20230604172306573"></p>
+<p>于是得到如下的伪代码</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604172324746-1685874703531-17.png" alt="image-20230604172324746"></p>
+<p>看算法是魔改的 RC4,exp 如下</p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">class</span> <span class="token class-name">RC4</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="2"></td><td><pre>    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> key<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token boolean">None</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="3"></td><td><pre>        self<span class="token punctuation">.</span>key <span class="token operator">=</span> key</pre></td></tr><tr><td data-num="4"></td><td><pre>        self<span class="token punctuation">.</span>S <span class="token operator">=</span> <span class="token number">0</span></pre></td></tr><tr><td data-num="5"></td><td><pre></pre></td></tr><tr><td data-num="6"></td><td><pre>        self<span class="token punctuation">.</span>__rc4_init__<span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="7"></td><td><pre></pre></td></tr><tr><td data-num="8"></td><td><pre>    <span class="token keyword">def</span> <span class="token function">__rc4_init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="9"></td><td><pre>        S <span class="token operator">=</span> <span class="token punctuation">[</span>i <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">256</span><span class="token punctuation">)</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="10"></td><td><pre>        j <span class="token operator">=</span> <span class="token number">0</span></pre></td></tr><tr><td data-num="11"></td><td><pre>        <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">256</span><span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="12"></td><td><pre>            j <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">2</span> <span class="token operator">*</span> j <span class="token operator">+</span> S<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span> key<span class="token punctuation">[</span>i <span class="token operator">%</span> <span class="token builtin">len</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">256</span></pre></td></tr><tr><td data-num="13"></td><td><pre>            S<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> S<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">=</span> S<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">,</span> S<span class="token punctuation">[</span>i<span class="token punctuation">]</span></pre></td></tr><tr><td data-num="14"></td><td><pre>        self<span class="token punctuation">.</span>S <span class="token operator">=</span> S</pre></td></tr><tr><td data-num="15"></td><td><pre></pre></td></tr><tr><td data-num="16"></td><td><pre>    <span class="token keyword">def</span> <span class="token function">rc4_encrypt</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> plain<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token builtin">list</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="17"></td><td><pre>        i <span class="token operator">=</span> <span class="token number">0</span></pre></td></tr><tr><td data-num="18"></td><td><pre>        j <span class="token operator">=</span> <span class="token number">0</span></pre></td></tr><tr><td data-num="19"></td><td><pre>        cipher <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="20"></td><td><pre>        cnt <span class="token operator">=</span> <span class="token number">0</span></pre></td></tr><tr><td data-num="21"></td><td><pre>        <span class="token keyword">for</span> p <span class="token keyword">in</span> plain<span class="token punctuation">:</span></pre></td></tr><tr><td data-num="22"></td><td><pre>            p <span class="token operator">=</span> <span class="token punctuation">(</span>p <span class="token operator">+</span> <span class="token number">256</span> <span class="token operator">-</span> cnt <span class="token operator">%</span> <span class="token number">0xd</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">256</span></pre></td></tr><tr><td data-num="23"></td><td><pre>            cnt <span class="token operator">+=</span> <span class="token number">1</span></pre></td></tr><tr><td data-num="24"></td><td><pre>            i <span class="token operator">=</span> <span class="token punctuation">(</span>i <span class="token operator">+</span> j<span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">256</span></pre></td></tr><tr><td data-num="25"></td><td><pre>            j <span class="token operator">=</span> <span class="token punctuation">(</span>j <span class="token operator">+</span> self<span class="token punctuation">.</span>S<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">256</span></pre></td></tr><tr><td data-num="26"></td><td><pre>            self<span class="token punctuation">.</span>S<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>S<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">=</span> self<span class="token punctuation">.</span>S<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>S<span class="token punctuation">[</span>i<span class="token punctuation">]</span></pre></td></tr><tr><td data-num="27"></td><td><pre>            tmp <span class="token operator">=</span> self<span class="token punctuation">.</span>S<span class="token punctuation">[</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>S<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span> self<span class="token punctuation">.</span>S<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">+</span> j<span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">256</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="28"></td><td><pre>            k <span class="token operator">=</span> p <span class="token operator">^</span> tmp</pre></td></tr><tr><td data-num="29"></td><td><pre>            cipher<span class="token punctuation">.</span>append<span class="token punctuation">(</span>k<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="30"></td><td><pre>        <span class="token keyword">return</span> cipher</pre></td></tr><tr><td data-num="31"></td><td><pre></pre></td></tr><tr><td data-num="32"></td><td><pre>key <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0x5D</span> <span class="token punctuation">,</span> <span class="token number">0x42</span> <span class="token punctuation">,</span> <span class="token number">0x62</span> <span class="token punctuation">,</span> <span class="token number">0x29</span> <span class="token punctuation">,</span> <span class="token number">0x3</span><span class="token punctuation">,</span> <span class="token number">0x36</span> <span class="token punctuation">,</span> <span class="token number">0x47</span> <span class="token punctuation">,</span> <span class="token number">0x41</span> <span class="token punctuation">,</span> <span class="token number">0x15</span><span class="token punctuation">,</span> <span class="token number">0x36</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="33"></td><td><pre>data <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0xF7</span><span class="token punctuation">,</span> <span class="token number">0x2E</span><span class="token punctuation">,</span> <span class="token number">0x34</span><span class="token punctuation">,</span> <span class="token number">0xF0</span><span class="token punctuation">,</span> <span class="token number">0x72</span><span class="token punctuation">,</span> <span class="token number">0xCF</span><span class="token punctuation">,</span> <span class="token number">0x5E</span><span class="token punctuation">,</span> <span class="token number">0x0A</span><span class="token punctuation">,</span> <span class="token number">0xBB</span><span class="token punctuation">,</span> <span class="token number">0xEC</span><span class="token punctuation">,</span> <span class="token number">0xB1</span><span class="token punctuation">,</span> <span class="token number">0x2B</span><span class="token punctuation">,</span> <span class="token number">0x70</span><span class="token punctuation">,</span> <span class="token number">0x88</span><span class="token punctuation">,</span> <span class="token number">0x88</span><span class="token punctuation">,</span> <span class="token number">0xED</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="34"></td><td><pre><span class="token number">0x46</span><span class="token punctuation">,</span> <span class="token number">0x38</span><span class="token punctuation">,</span> <span class="token number">0xDB</span><span class="token punctuation">,</span> <span class="token number">0xDA</span><span class="token punctuation">,</span> <span class="token number">0x6C</span><span class="token punctuation">,</span> <span class="token number">0xBD</span><span class="token punctuation">,</span> <span class="token number">0xD4</span><span class="token punctuation">,</span> <span class="token number">0x06</span><span class="token punctuation">,</span> <span class="token number">0x77</span><span class="token punctuation">,</span> <span class="token number">0xF2</span><span class="token punctuation">,</span> <span class="token number">0xCF</span><span class="token punctuation">,</span> <span class="token number">0x56</span><span class="token punctuation">,</span> <span class="token number">0x88</span><span class="token punctuation">,</span> <span class="token number">0xC6</span><span class="token punctuation">,</span> <span class="token number">0x31</span><span class="token punctuation">,</span> <span class="token number">0xD2</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="35"></td><td><pre><span class="token number">0xB7</span><span class="token punctuation">,</span> <span class="token number">0x5A</span><span class="token punctuation">,</span> <span class="token number">0xC1</span><span class="token punctuation">,</span> <span class="token number">0x42</span><span class="token punctuation">,</span> <span class="token number">0xB0</span><span class="token punctuation">,</span> <span class="token number">0xF4</span><span class="token punctuation">,</span> <span class="token number">0x48</span><span class="token punctuation">,</span> <span class="token number">0x37</span><span class="token punctuation">,</span> <span class="token number">0xF5</span><span class="token punctuation">,</span> <span class="token number">0x2C</span><span class="token punctuation">,</span> <span class="token number">0xF5</span><span class="token punctuation">,</span> <span class="token number">0x58</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="36"></td><td><pre></pre></td></tr><tr><td data-num="37"></td><td><pre>rc4 <span class="token operator">=</span> RC4<span class="token punctuation">(</span>key<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="38"></td><td><pre>plain <span class="token operator">=</span> rc4<span class="token punctuation">.</span>rc4_encrypt<span class="token punctuation">(</span>data<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="39"></td><td><pre><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token builtin">map</span><span class="token punctuation">(</span><span class="token builtin">chr</span><span class="token punctuation">,</span>plain<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr></table></figure><h2 id="ez_exe"><a class="anchor" href="#ez_exe">#</a> ez_exe</h2>
+<p>查个壳，是 python 逆向</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604080525484-1685874703531-18.png" alt="image-20230604080525484"></p>
+<p>用 <code>pyinstxtractor</code>  脱一下</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604080836146-1685874703532-19.png" alt="image-20230604080836146"></p>
+<p>用<span class="exturl" data-url="aHR0cHM6Ly90b29sLmx1L3B5Yy8=">在线网站</span>看一下 ez_py.pyc 的源代码</p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">#!/usr/bin/env python</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token comment"># visit https://tool.lu/pyc/ for more information</span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token comment"># Version: Python 3.11</span></pre></td></tr><tr><td data-num="4"></td><td><pre></pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token keyword">import</span> ctypes</pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token keyword">from</span> time <span class="token keyword">import</span> <span class="token operator">*</span></pre></td></tr><tr><td data-num="7"></td><td><pre><span class="token keyword">from</span> ctypes <span class="token keyword">import</span> <span class="token operator">*</span></pre></td></tr><tr><td data-num="8"></td><td><pre><span class="token keyword">from</span> ctypes <span class="token keyword">import</span> wintypes</pre></td></tr><tr><td data-num="9"></td><td><pre><span class="token keyword">from</span> hashlib <span class="token keyword">import</span> md5</pre></td></tr><tr><td data-num="10"></td><td><pre></pre></td></tr><tr><td data-num="11"></td><td><pre><span class="token keyword">class</span> <span class="token class-name">_STARTUPINFO</span><span class="token punctuation">(</span>Structure<span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="12"></td><td><pre>    _fields_ <span class="token operator">=</span> <span class="token punctuation">[</span></pre></td></tr><tr><td data-num="13"></td><td><pre>        <span class="token punctuation">(</span><span class="token string">'cb'</span><span class="token punctuation">,</span> c_ulong<span class="token punctuation">)</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="14"></td><td><pre>        <span class="token punctuation">(</span><span class="token string">'lpReserved'</span><span class="token punctuation">,</span> c_char_p<span class="token punctuation">)</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="15"></td><td><pre>        <span class="token punctuation">(</span><span class="token string">'lpDesktop'</span><span class="token punctuation">,</span> c_char_p<span class="token punctuation">)</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="16"></td><td><pre>        <span class="token punctuation">(</span><span class="token string">'lpTitle'</span><span class="token punctuation">,</span> c_char_p<span class="token punctuation">)</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="17"></td><td><pre>        <span class="token punctuation">(</span><span class="token string">'dwX'</span><span class="token punctuation">,</span> c_ulong<span class="token punctuation">)</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="18"></td><td><pre>        <span class="token punctuation">(</span><span class="token string">'dwY'</span><span class="token punctuation">,</span> c_ulong<span class="token punctuation">)</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="19"></td><td><pre>        <span class="token punctuation">(</span><span class="token string">'dwXSize'</span><span class="token punctuation">,</span> c_ulong<span class="token punctuation">)</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="20"></td><td><pre>        <span class="token punctuation">(</span><span class="token string">'dwYSize'</span><span class="token punctuation">,</span> c_ulong<span class="token punctuation">)</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="21"></td><td><pre>        <span class="token punctuation">(</span><span class="token string">'dwXCountChars'</span><span class="token punctuation">,</span> c_ulong<span class="token punctuation">)</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="22"></td><td><pre>        <span class="token punctuation">(</span><span class="token string">'dwYCountChars'</span><span class="token punctuation">,</span> c_ulong<span class="token punctuation">)</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="23"></td><td><pre>        <span class="token punctuation">(</span><span class="token string">'dwFillAttribute'</span><span class="token punctuation">,</span> c_ulong<span class="token punctuation">)</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="24"></td><td><pre>        <span class="token punctuation">(</span><span class="token string">'dwFlags'</span><span class="token punctuation">,</span> c_ulong<span class="token punctuation">)</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="25"></td><td><pre>        <span class="token punctuation">(</span><span class="token string">'wShowWindow'</span><span class="token punctuation">,</span> c_ushort<span class="token punctuation">)</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="26"></td><td><pre>        <span class="token punctuation">(</span><span class="token string">'cbReserved2'</span><span class="token punctuation">,</span> c_ushort<span class="token punctuation">)</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="27"></td><td><pre>        <span class="token punctuation">(</span><span class="token string">'lpReserved2'</span><span class="token punctuation">,</span> c_char_p<span class="token punctuation">)</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="28"></td><td><pre>        <span class="token punctuation">(</span><span class="token string">'hStdInput'</span><span class="token punctuation">,</span> c_ulong<span class="token punctuation">)</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="29"></td><td><pre>        <span class="token punctuation">(</span><span class="token string">'hStdOutput'</span><span class="token punctuation">,</span> c_ulong<span class="token punctuation">)</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="30"></td><td><pre>        <span class="token punctuation">(</span><span class="token string">'hStdError'</span><span class="token punctuation">,</span> c_ulong<span class="token punctuation">)</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="31"></td><td><pre></pre></td></tr><tr><td data-num="32"></td><td><pre></pre></td></tr><tr><td data-num="33"></td><td><pre><span class="token keyword">class</span> <span class="token class-name">_PROCESS_INFORMATION</span><span class="token punctuation">(</span>Structure<span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="34"></td><td><pre>    _fields_ <span class="token operator">=</span> <span class="token punctuation">[</span></pre></td></tr><tr><td data-num="35"></td><td><pre>        <span class="token punctuation">(</span><span class="token string">'hProcess'</span><span class="token punctuation">,</span> c_void_p<span class="token punctuation">)</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="36"></td><td><pre>        <span class="token punctuation">(</span><span class="token string">'hThread'</span><span class="token punctuation">,</span> c_void_p<span class="token punctuation">)</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="37"></td><td><pre>        <span class="token punctuation">(</span><span class="token string">'dwProcessId'</span><span class="token punctuation">,</span> c_ulong<span class="token punctuation">)</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="38"></td><td><pre>        <span class="token punctuation">(</span><span class="token string">'dwThreadId'</span><span class="token punctuation">,</span> c_ulong<span class="token punctuation">)</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="39"></td><td><pre></pre></td></tr><tr><td data-num="40"></td><td><pre>StartupInfo <span class="token operator">=</span> _STARTUPINFO<span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="41"></td><td><pre>ProcessInfo <span class="token operator">=</span> _PROCESS_INFORMATION<span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="42"></td><td><pre>key1 <span class="token operator">=</span> <span class="token builtin">bytes</span><span class="token punctuation">(</span>md5<span class="token punctuation">(</span><span class="token string">b'bin1bin1bin1'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>hexdigest<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="43"></td><td><pre><span class="token builtin">file</span> <span class="token operator">=</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'bin1'</span><span class="token punctuation">,</span> <span class="token string">'rb'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="44"></td><td><pre>arr <span class="token operator">=</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="45"></td><td><pre><span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'bin1'</span><span class="token punctuation">,</span> <span class="token string">'wb'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token builtin">bytes</span><span class="token punctuation">(</span>arr<span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="46"></td><td><pre>sleep<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="47"></td><td><pre>bet <span class="token operator">=</span> ctypes<span class="token punctuation">.</span>windll<span class="token punctuation">.</span>kernel32<span class="token punctuation">.</span>CreateProcessA<span class="token punctuation">(</span><span class="token string">b'bin1'</span><span class="token punctuation">,</span> ctypes<span class="token punctuation">.</span>c_int<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> ctypes<span class="token punctuation">.</span>c_int<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> ctypes<span class="token punctuation">.</span>c_int<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> ctypes<span class="token punctuation">.</span>c_int<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> ctypes<span class="token punctuation">.</span>c_int<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> ctypes<span class="token punctuation">.</span>c_int<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> ctypes<span class="token punctuation">.</span>c_int<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> byref<span class="token punctuation">(</span>StartupInfo<span class="token punctuation">)</span><span class="token punctuation">,</span> byref<span class="token punctuation">(</span>ProcessInfo<span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="48"></td><td><pre>ctypes<span class="token punctuation">.</span>windll<span class="token punctuation">.</span>kernel32<span class="token punctuation">.</span>WaitForSingleObject<span class="token punctuation">(</span>ctypes<span class="token punctuation">.</span>c_int<span class="token punctuation">(</span>ProcessInfo<span class="token punctuation">.</span>hProcess<span class="token punctuation">)</span><span class="token punctuation">,</span> ctypes<span class="token punctuation">.</span>c_int<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="49"></td><td><pre><span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'bin1'</span><span class="token punctuation">,</span> <span class="token string">'wb'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">)</span></pre></td></tr></table></figure><p>用 ida 反编译 bin1 失败，看来是被加密了</p>
+<p>用这个代码看一下字节码</p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">import</span> marshal<span class="token punctuation">,</span> dis</pre></td></tr><tr><td data-num="2"></td><td><pre></pre></td></tr><tr><td data-num="3"></td><td><pre>f <span class="token operator">=</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">"ez_py.pyc"</span><span class="token punctuation">,</span> <span class="token string">"rb"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="4"></td><td><pre></pre></td></tr><tr><td data-num="5"></td><td><pre>code <span class="token operator">=</span> marshal<span class="token punctuation">.</span>loads<span class="token punctuation">(</span>f<span class="token punctuation">[</span><span class="token number">16</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">)</span>			<span class="token comment">#这边从 16 位开始取因为是 python3 python2 从 8 位开始取</span></pre></td></tr><tr><td data-num="6"></td><td><pre></pre></td></tr><tr><td data-num="7"></td><td><pre>dis<span class="token punctuation">.</span>dis<span class="token punctuation">(</span>code<span class="token punctuation">)</span></pre></td></tr></table></figure><p>在最后面得到了这个</p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre>Disassembly of <span class="token operator">&lt;</span>code <span class="token builtin">object</span> <span class="token operator">&lt;</span>listcomp<span class="token operator">></span> at <span class="token number">0x00000297CC7F8E70</span><span class="token punctuation">,</span> <span class="token builtin">file</span> <span class="token string">"ez_py.py"</span><span class="token punctuation">,</span> line <span class="token number">59</span><span class="token operator">></span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="2"></td><td><pre> <span class="token number">59</span>           <span class="token number">0</span> RESUME                   <span class="token number">0</span></pre></td></tr><tr><td data-num="3"></td><td><pre>              <span class="token number">2</span> BUILD_LIST               <span class="token number">0</span></pre></td></tr><tr><td data-num="4"></td><td><pre>              <span class="token number">4</span> LOAD_FAST                <span class="token number">0</span> <span class="token punctuation">(</span><span class="token number">.0</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="5"></td><td><pre>        <span class="token operator">>></span>    <span class="token number">6</span> FOR_ITER                <span class="token number">50</span> <span class="token punctuation">(</span>to <span class="token number">108</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="6"></td><td><pre>              <span class="token number">8</span> STORE_FAST               <span class="token number">1</span> <span class="token punctuation">(</span>i<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="7"></td><td><pre>             <span class="token number">10</span> LOAD_GLOBAL              <span class="token number">0</span> <span class="token punctuation">(</span>key1<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="8"></td><td><pre>             <span class="token number">22</span> LOAD_FAST                <span class="token number">1</span> <span class="token punctuation">(</span>i<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="9"></td><td><pre>             <span class="token number">24</span> LOAD_GLOBAL              <span class="token number">3</span> <span class="token punctuation">(</span>NULL <span class="token operator">+</span> <span class="token builtin">len</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="10"></td><td><pre>             <span class="token number">36</span> LOAD_GLOBAL              <span class="token number">0</span> <span class="token punctuation">(</span>key1<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="11"></td><td><pre>             <span class="token number">48</span> PRECALL                  <span class="token number">1</span></pre></td></tr><tr><td data-num="12"></td><td><pre>             <span class="token number">52</span> CALL                     <span class="token number">1</span></pre></td></tr><tr><td data-num="13"></td><td><pre>             <span class="token number">62</span> BINARY_OP                <span class="token number">6</span> <span class="token punctuation">(</span><span class="token operator">%</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="14"></td><td><pre>             <span class="token number">66</span> BINARY_SUBSCR</pre></td></tr><tr><td data-num="15"></td><td><pre>             <span class="token number">76</span> LOAD_GLOBAL              <span class="token number">4</span> <span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="16"></td><td><pre>             <span class="token number">88</span> LOAD_FAST                <span class="token number">1</span> <span class="token punctuation">(</span>i<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="17"></td><td><pre>             <span class="token number">90</span> BINARY_SUBSCR</pre></td></tr><tr><td data-num="18"></td><td><pre>            <span class="token number">100</span> BINARY_OP               <span class="token number">12</span> <span class="token punctuation">(</span><span class="token operator">^</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="19"></td><td><pre>            <span class="token number">104</span> LIST_APPEND              <span class="token number">2</span></pre></td></tr><tr><td data-num="20"></td><td><pre>            <span class="token number">106</span> JUMP_BACKWARD           <span class="token number">51</span> <span class="token punctuation">(</span>to <span class="token number">6</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="21"></td><td><pre>        <span class="token operator">>></span>  <span class="token number">108</span> RETURN_VALUE</pre></td></tr></table></figure><p>那么解密代码如下</p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">from</span> hashlib <span class="token keyword">import</span> md5</pre></td></tr><tr><td data-num="2"></td><td><pre></pre></td></tr><tr><td data-num="3"></td><td><pre>key1 <span class="token operator">=</span> <span class="token builtin">bytes</span><span class="token punctuation">(</span>md5<span class="token punctuation">(</span><span class="token string">b'bin1bin1bin1'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>hexdigest<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token comment"># print(key1)</span></pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token builtin">file</span> <span class="token operator">=</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'bin1'</span><span class="token punctuation">,</span> <span class="token string">'rb'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="6"></td><td><pre></pre></td></tr><tr><td data-num="7"></td><td><pre>arr <span class="token operator">=</span> <span class="token punctuation">[</span>key1<span class="token punctuation">[</span>i <span class="token operator">%</span> <span class="token builtin">len</span><span class="token punctuation">(</span>key1<span class="token punctuation">)</span><span class="token punctuation">]</span> <span class="token operator">^</span> <span class="token builtin">file</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="8"></td><td><pre></pre></td></tr><tr><td data-num="9"></td><td><pre><span class="token comment"># open('bin1', 'wb').write(bytes(arr))</span></pre></td></tr><tr><td data-num="10"></td><td><pre><span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'bin1__'</span><span class="token punctuation">,</span><span class="token string">'wb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span></pre></td></tr><tr><td data-num="11"></td><td><pre>    f<span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token builtin">bytes</span><span class="token punctuation">(</span>arr<span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr></table></figure><p>反编译出来是这个</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604091113130-1685874703532-20.png" alt="image-20230604091113130"></p>
+<p>那根据提示我们把上面的解密脚本稍作修改</p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">from</span> hashlib <span class="token keyword">import</span> md5</pre></td></tr><tr><td data-num="2"></td><td><pre></pre></td></tr><tr><td data-num="3"></td><td><pre>key1 <span class="token operator">=</span> <span class="token builtin">bytes</span><span class="token punctuation">(</span>md5<span class="token punctuation">(</span><span class="token string">b'bin2bin2bin2'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>hexdigest<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token comment"># print(key1)</span></pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token builtin">file</span> <span class="token operator">=</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'bin2'</span><span class="token punctuation">,</span> <span class="token string">'rb'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="6"></td><td><pre></pre></td></tr><tr><td data-num="7"></td><td><pre>arr <span class="token operator">=</span> <span class="token punctuation">[</span>key1<span class="token punctuation">[</span>i <span class="token operator">%</span> <span class="token builtin">len</span><span class="token punctuation">(</span>key1<span class="token punctuation">)</span><span class="token punctuation">]</span> <span class="token operator">^</span> <span class="token builtin">file</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="8"></td><td><pre></pre></td></tr><tr><td data-num="9"></td><td><pre><span class="token comment"># open('bin1', 'wb').write(bytes(arr))</span></pre></td></tr><tr><td data-num="10"></td><td><pre><span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'bin2__'</span><span class="token punctuation">,</span><span class="token string">'wb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span></pre></td></tr><tr><td data-num="11"></td><td><pre>    f<span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token builtin">bytes</span><span class="token punctuation">(</span>arr<span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr></table></figure><p>然后用 ida 反编译 <code>bin2__</code></p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604091158113-1685874703532-21.png" alt="image-20230604091158113"></p>
+<p>那么这就是正常的逆向题了</p>
+<p><code>btea</code>  函数里面是这个，这是一个 xxtea 算法</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604091222886-1685874703532-22.png" alt="image-20230604091222886"></p>
+<p>写一下 exp</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span></pre></td></tr><tr><td data-num="3"></td><td><pre></pre></td></tr><tr><td data-num="4"></td><td><pre>using namespace std<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="5"></td><td><pre></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdint.h></span></span></pre></td></tr><tr><td data-num="7"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">DELTA</span> <span class="token expression"><span class="token number">0x7937B99E</span></span></span></pre></td></tr><tr><td data-num="8"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">MX</span> <span class="token expression"><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">(</span>z<span class="token operator">>></span><span class="token number">5</span><span class="token operator">^</span>y<span class="token operator">&lt;&lt;</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token punctuation">(</span>y<span class="token operator">>></span><span class="token number">3</span><span class="token operator">^</span>z<span class="token operator">&lt;&lt;</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">^</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>sum<span class="token operator">^</span>y<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token punctuation">(</span>key<span class="token punctuation">[</span><span class="token punctuation">(</span>p<span class="token operator">&amp;</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token operator">^</span>e<span class="token punctuation">]</span> <span class="token operator">^</span> z<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span></span></span></pre></td></tr><tr><td data-num="9"></td><td><pre></pre></td></tr><tr><td data-num="10"></td><td><pre><span class="token keyword">void</span> <span class="token function">btea</span><span class="token punctuation">(</span><span class="token class-name">uint32_t</span><span class="token operator">*</span> v<span class="token punctuation">,</span> <span class="token keyword">int</span> n<span class="token punctuation">,</span> <span class="token class-name">uint32_t</span> <span class="token keyword">const</span> key<span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="11"></td><td><pre>    <span class="token class-name">uint32_t</span> y<span class="token punctuation">,</span> z<span class="token punctuation">,</span> sum<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="12"></td><td><pre>    <span class="token keyword">unsigned</span> p<span class="token punctuation">,</span> rounds<span class="token punctuation">,</span> e<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="13"></td><td><pre>    <span class="token keyword">if</span> <span class="token punctuation">(</span>n <span class="token operator">></span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>          <span class="token comment">/* Coding Part */</span></pre></td></tr><tr><td data-num="14"></td><td><pre>        rounds <span class="token operator">=</span> <span class="token comment">/*6 + */</span><span class="token number">52</span> <span class="token operator">/</span> n<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="15"></td><td><pre>        sum <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="16"></td><td><pre>        z <span class="token operator">=</span> v<span class="token punctuation">[</span>n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="17"></td><td><pre>        <span class="token keyword">do</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="18"></td><td><pre>            sum <span class="token operator">+=</span> DELTA<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="19"></td><td><pre>            e <span class="token operator">=</span> <span class="token punctuation">(</span>sum <span class="token operator">>></span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">3</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="20"></td><td><pre>            <span class="token keyword">for</span> <span class="token punctuation">(</span>p <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> p <span class="token operator">&lt;</span> n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span> p<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="21"></td><td><pre>                y <span class="token operator">=</span> v<span class="token punctuation">[</span>p <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="22"></td><td><pre>                z <span class="token operator">=</span> v<span class="token punctuation">[</span>p<span class="token punctuation">]</span> <span class="token operator">+=</span> MX<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="23"></td><td><pre>            <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="24"></td><td><pre>            y <span class="token operator">=</span> v<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="25"></td><td><pre>            z <span class="token operator">=</span> v<span class="token punctuation">[</span>n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">+=</span> MX<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="26"></td><td><pre>        <span class="token punctuation">&#125;</span> <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator">--</span>rounds<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="27"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="28"></td><td><pre>    <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>n <span class="token operator">&lt;</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>  <span class="token comment">/* Decoding Part */</span></pre></td></tr><tr><td data-num="29"></td><td><pre>        n <span class="token operator">=</span> <span class="token operator">-</span>n<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="30"></td><td><pre>        rounds <span class="token operator">=</span> <span class="token comment">/*6 + */</span><span class="token number">52</span> <span class="token operator">/</span> n<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="31"></td><td><pre>        sum <span class="token operator">=</span> rounds <span class="token operator">*</span> DELTA<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="32"></td><td><pre>        y <span class="token operator">=</span> v<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="33"></td><td><pre>        <span class="token keyword">do</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="34"></td><td><pre>            e <span class="token operator">=</span> <span class="token punctuation">(</span>sum <span class="token operator">>></span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">3</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="35"></td><td><pre>            <span class="token keyword">for</span> <span class="token punctuation">(</span>p <span class="token operator">=</span> n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span> p <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">;</span> p<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="36"></td><td><pre>                z <span class="token operator">=</span> v<span class="token punctuation">[</span>p <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="37"></td><td><pre>                y <span class="token operator">=</span> v<span class="token punctuation">[</span>p<span class="token punctuation">]</span> <span class="token operator">-=</span> MX<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="38"></td><td><pre>            <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="39"></td><td><pre>            z <span class="token operator">=</span> v<span class="token punctuation">[</span>n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="40"></td><td><pre>            y <span class="token operator">=</span> v<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">-=</span> MX<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="41"></td><td><pre>        <span class="token punctuation">&#125;</span> <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>sum <span class="token operator">-=</span> DELTA<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="42"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="43"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="44"></td><td><pre></pre></td></tr><tr><td data-num="45"></td><td><pre><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="46"></td><td><pre><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="47"></td><td><pre>    <span class="token class-name">uint32_t</span> <span class="token keyword">const</span> key<span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span> <span class="token number">0x4B5F</span><span class="token punctuation">,</span> <span class="token number">0xDEAD</span><span class="token punctuation">,</span> <span class="token number">0x11ED</span><span class="token punctuation">,</span> <span class="token number">0xB3CC</span> <span class="token punctuation">&#125;</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="48"></td><td><pre>    <span class="token class-name">uint32_t</span> data<span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span> <span class="token number">0xCC45699D</span><span class="token punctuation">,</span> <span class="token number">0x683D5352</span><span class="token punctuation">,</span><span class="token number">0xB8BB71A0</span><span class="token punctuation">,</span><span class="token number">0xD3817AD</span><span class="token punctuation">,</span><span class="token number">0x7547E79E</span><span class="token punctuation">,</span><span class="token number">0x4BDD8C7C</span><span class="token punctuation">,</span><span class="token number">0x95E25A81</span><span class="token punctuation">,</span><span class="token number">0xC4525103</span><span class="token punctuation">,</span><span class="token number">0x7049B46F</span><span class="token punctuation">,</span><span class="token number">0x5417F77C</span><span class="token punctuation">,</span><span class="token number">0x65567138</span> <span class="token punctuation">&#125;</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="49"></td><td><pre>    <span class="token class-name">uint32_t</span><span class="token operator">*</span> sent <span class="token operator">=</span> data<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="50"></td><td><pre>    <span class="token comment">//btea(sent, 11, key);</span></pre></td></tr><tr><td data-num="51"></td><td><pre>    <span class="token comment">//printf("coded:%x  %x\n", sent[0], sent[1]);</span></pre></td></tr><tr><td data-num="52"></td><td><pre>    <span class="token function">btea</span><span class="token punctuation">(</span>sent<span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">11</span><span class="token punctuation">,</span> key<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="53"></td><td><pre>    <span class="token comment">//printf("decoded:%x  %x\n", sent[0], sent[1]);</span></pre></td></tr><tr><td data-num="54"></td><td><pre>    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">11</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="55"></td><td><pre>        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> j <span class="token operator">&lt;</span> <span class="token number">4</span><span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="56"></td><td><pre>        <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="57"></td><td><pre>            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%c"</span><span class="token punctuation">,</span> sent<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">&amp;</span> <span class="token number">0xff</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="58"></td><td><pre>            sent<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">>>=</span> <span class="token number">8</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="59"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="60"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="61"></td><td><pre>    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="62"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="63"></td><td><pre><span class="token comment">//DASCTF&#123;7eb20cb2-deac-11ed-ae42-94085339ce84&#125;</span></pre></td></tr></table></figure><h2 id="cap"><a class="anchor" href="#cap">#</a> cap</h2>
+<p>在这个地方动调</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604175543351-1685874703532-23.png" alt="image-20230604175543351"></p>
+<p>可以发现数组的下标在 0~12 之间循环</p>
+<p>我们随便打开一个 BMP 类型的文件，用 010 看看</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604181159971-1685874703532-24.png" alt="image-20230604181159971"></p>
+<p>对于 BMP 类型的文件前两个字节必定是 <code>43 4D</code></p>
+<p>既然这个加密的 bmp 的每一个字节进行的都是异或，那我们可以将前两个字节异或看看</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604181040985-1685874703532-25.png" alt="image-20230604181040985"></p>
+<p>n 和 c 是密钥 <code>enc_by_dasctf</code>  的第 2 个和第 3 个字符，按照这个序列，我们向后将密钥向后延申看看后面的情况如何</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604181917246-1685874703532-26.png" alt="image-20230604181917246"></p>
+<p>所以我们写个脚本，从密钥的第二位开始，循环异或</p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre>key <span class="token operator">=</span> <span class="token string">"enc_by_dasctf"</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'cap.bin'</span><span class="token punctuation">,</span> <span class="token string">'rb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span></pre></td></tr><tr><td data-num="3"></td><td><pre>    s <span class="token operator">=</span> <span class="token builtin">bytearray</span><span class="token punctuation">(</span>f<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="5"></td><td><pre>    s<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">^</span><span class="token operator">=</span> <span class="token builtin">ord</span><span class="token punctuation">(</span>key<span class="token punctuation">[</span><span class="token punctuation">(</span>i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token builtin">len</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'flag.bmp'</span><span class="token punctuation">,</span> <span class="token string">'wb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span></pre></td></tr><tr><td data-num="7"></td><td><pre>    f<span class="token punctuation">.</span>write<span class="token punctuation">(</span>s<span class="token punctuation">)</span></pre></td></tr></table></figure><p>得到 flag</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604182002579-1685874657948-3-1685874703533-31.png" alt="image-20230604182002579"></p>
+<h2 id="unsym"><a class="anchor" href="#unsym">#</a> unsym</h2>
+<p>查一下壳，是 go 逆向</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604093542315-1685874703532-27.png" alt="image-20230604093542315"></p>
+<p>用这个脚本恢复一下 go 符号 https://github.com/renshareck/IDAGolangHelper_SupportGo1.20</p>
+<p>依次点击如下按钮</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604185203790.png" alt="image-20230604185203790"></p>
+<p>首先判断 key 正确与否，看来这是个 rsa</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604135543069-1685874703532-28.png" alt="image-20230604135543069"></p>
+<p>用 yafu 解一下 p 和 q</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604151321851-1685874703532-29.png" alt="image-20230604151321851"></p>
+<p>然后解出密钥</p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">import</span> gmpy2</pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token keyword">from</span> Crypto<span class="token punctuation">.</span>Util<span class="token punctuation">.</span>number <span class="token keyword">import</span> long_to_bytes</pre></td></tr><tr><td data-num="3"></td><td><pre></pre></td></tr><tr><td data-num="4"></td><td><pre>n <span class="token operator">=</span> <span class="token number">0x1d884d54d21694ccd120f145c8344b729b301e782c69a8f3073325b9c5</span></pre></td></tr><tr><td data-num="5"></td><td><pre>p <span class="token operator">=</span> <span class="token number">37636318457745167234140808130156739</span></pre></td></tr><tr><td data-num="6"></td><td><pre>q <span class="token operator">=</span> <span class="token number">21154904887215748949280410616478423</span></pre></td></tr><tr><td data-num="7"></td><td><pre>c <span class="token operator">=</span> <span class="token number">0xfad53ce897d2c26f8cad910417fbdd1f0f9a18f6c1748faca10299dc8</span></pre></td></tr><tr><td data-num="8"></td><td><pre>e <span class="token operator">=</span> <span class="token number">0x10001</span></pre></td></tr><tr><td data-num="9"></td><td><pre>phi <span class="token operator">=</span> <span class="token punctuation">(</span>p <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token punctuation">(</span>q <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="10"></td><td><pre>d <span class="token operator">=</span> gmpy2<span class="token punctuation">.</span>invert<span class="token punctuation">(</span>e<span class="token punctuation">,</span> phi<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="11"></td><td><pre>m <span class="token operator">=</span> <span class="token builtin">pow</span><span class="token punctuation">(</span>c<span class="token punctuation">,</span> d<span class="token punctuation">,</span> n<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="12"></td><td><pre><span class="token keyword">print</span><span class="token punctuation">(</span>long_to_bytes<span class="token punctuation">(</span>m<span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="13"></td><td><pre><span class="token comment"># E@sy_RSA_enc7ypt</span></pre></td></tr></table></figure><p>再往后看，</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604150237185-1685874703532-30.png" alt="image-20230604150237185"></p>
+<p>动调了一下看到 iv 和 key 都是一样的</p>
+<p>所以直接写个 exp 把加密的文件解密</p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">from</span> Crypto<span class="token punctuation">.</span>Cipher <span class="token keyword">import</span> AES</pre></td></tr><tr><td data-num="2"></td><td><pre></pre></td></tr><tr><td data-num="3"></td><td><pre>password <span class="token operator">=</span> <span class="token string">b'E@sy_RSA_enc7ypt'</span>  <span class="token comment"># 秘钥必须为 16 字节或者 16 字节的倍数的字节型数据</span></pre></td></tr><tr><td data-num="4"></td><td><pre>iv <span class="token operator">=</span> <span class="token string">b'E@sy_RSA_enc7ypt'</span>  <span class="token comment"># iv 偏移量，bytes 类型</span></pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'encrypted.bin'</span><span class="token punctuation">,</span><span class="token string">'rb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span></pre></td></tr><tr><td data-num="6"></td><td><pre>    en_text <span class="token operator">=</span> f<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="7"></td><td><pre>aes <span class="token operator">=</span> AES<span class="token punctuation">.</span>new<span class="token punctuation">(</span>password<span class="token punctuation">,</span> AES<span class="token punctuation">.</span>MODE_CBC<span class="token punctuation">,</span> iv<span class="token punctuation">)</span>  <span class="token comment"># CBC 模式下解密需要重新创建一个 aes 对象</span></pre></td></tr><tr><td data-num="8"></td><td><pre>de_text <span class="token operator">=</span> aes<span class="token punctuation">.</span>decrypt<span class="token punctuation">(</span>en_text<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="9"></td><td><pre><span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'decrypt.exe'</span><span class="token punctuation">,</span><span class="token string">'wb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span></pre></td></tr><tr><td data-num="10"></td><td><pre>    f<span class="token punctuation">.</span>write<span class="token punctuation">(</span>de_text<span class="token punctuation">)</span></pre></td></tr></table></figure><p>运行一下解密出的 exe, 就得到 flag 了</p>
+<p><img data-src="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604152619966-1685874677566-5-1685874703534-32.png" alt="image-20230604152619966"></p>
+
+      <div class="tags">
+          <a href="/tags/CTF/" rel="tag"><i class="ic i-tag"></i> CTF</a>
+          <a href="/tags/inline-hook/" rel="tag"><i class="ic i-tag"></i> inline hook</a>
+          <a href="/tags/IsDebuggerPresent/" rel="tag"><i class="ic i-tag"></i> IsDebuggerPresent</a>
+          <a href="/tags/sleep%E5%8F%8D%E8%B0%83%E8%AF%95/" rel="tag"><i class="ic i-tag"></i> sleep反调试</a>
+          <a href="/tags/python%E9%80%86%E5%90%91/" rel="tag"><i class="ic i-tag"></i> python逆向</a>
+          <a href="/tags/go%E9%80%86%E5%90%91/" rel="tag"><i class="ic i-tag"></i> go逆向</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2023-09-04 00:43:42" itemprop="dateModified" datetime="2023-09-04T00:43:42+08:00">2023-09-04</time>
+  </span>
+  <span id="DASCTF-2023六月挑战赛-二进制专项-RE-writeup/" class="item leancloud_visitors" data-flag-title="DASCTF 2023六月挑战赛 二进制专项 RE writeup" title="阅读次数">
+      <span class="icon">
+        <i class="ic i-eye"></i>
+      </span>
+      <span class="text">阅读次数</span>
+      <span class="leancloud-visitors-count"></span>
+      <span class="text">次</span>
+  </span>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>oacia <i class="ic i-at"><em>@</em></i>oaciaのBbBlog~
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="https://oacia.cc/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/" title="DASCTF 2023六月挑战赛 二进制专项 RE writeup">https://oacia.cc/DASCTF-2023六月挑战赛-二进制专项-RE-writeup/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_Nqos9x2JFc.jpg" title="Linux进程通信">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> </span>
+  <h3>Linux进程通信</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/hws-2023/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_XHu7XU4qXu.jpg" title="HWS2023夏令营CTF选拔赛writeup">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> </span>
+  <h3>HWS2023夏令营CTF选拔赛writeup</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#careful"><span class="toc-text"> careful</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#babyre"><span class="toc-text"> babyre</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ez_exe"><span class="toc-text"> ez_exe</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cap"><span class="toc-text"> cap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#unsym"><span class="toc-text"> unsym</span></a></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="oacia"
+      data-src="/images/avatar.jpg">
+  <p class="name" itemprop="name">oacia</p>
+  <div class="description" itemprop="description">这里的文章写给未来的自己 不要忘记现在学习的知识</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">37</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">46</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL29hY2lh" title="https:&#x2F;&#x2F;github.com&#x2F;oacia"><i class="ic i-github"></i></span>
+      <span class="exturl item twitter" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9vYWNpYTg2" title="https:&#x2F;&#x2F;twitter.com&#x2F;oacia86"><i class="ic i-twitter"></i></span>
+      <span class="exturl item paper-plane" data-url="aHR0cHM6Ly90Lm1lL29hY2lh" title="https:&#x2F;&#x2F;t.me&#x2F;oacia"><i class="ic i-paper-plane"></i></span>
+      <span class="exturl item email" data-url="bWFpbHRvOm9hY2lhQHFxLmNvbQ==" title="mailto:oacia@qq.com"><i class="ic i-envelope"></i></span>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/about-oacia/" rel="section"><i class="ic i-user"></i>关于oacia</a>
+  </li>
+
+        
+  <li class="item dropdown">
+      <a href="/archives/" rel="section"><i class="ic i-feather"></i>文章</a>
+    <ul class="submenu">
+
+        
+  <li class="item">
+    <a href="/archives/" rel="section"><i class="ic i-list-alt"></i>归档</a>
+  </li>
+
+        
+  <li class="item">
+    <a href="/tags/" rel="section"><i class="ic i-tags"></i>标签</a>
+  </li>
+
+  </ul>
+    
+  <li class="item">
+    <a href="/TODOlist/" rel="section"><i class="ic i-clock"></i>要做的事</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/website_maintenance/" rel="section"><i class="ic i-calendar"></i>更新日志</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/friends/" rel="section"><i class="ic i-heart"></i>小伙伴</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/music/" rel="section"><i class="ic i-music"></i>听会儿歌吧</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/hws-2023/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">oacia @ oacia</span>
+  </div>
+  <div class="count">
+    <span class="post-meta-item-icon">
+      <i class="ic i-chart-area"></i>
+    </span>
+    <span title="站点总字数">561k 字</span>
+
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="ic i-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:30</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: 'DASCTF-2023六月挑战赛-二进制专项-RE-writeup/',
+    favicon: {
+      show: "柚鳥ナツ",
+      hide: "甘い幸せ"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+<!--尝试不使用polyfill-->
+<!--<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>-->
+
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+</body>
+</html>

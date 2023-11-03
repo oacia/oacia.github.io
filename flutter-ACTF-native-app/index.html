@@ -1,0 +1,502 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <style>
+    html{
+      cursor: url('/cusor/normal.png') auto;s
+    }
+  </style>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="google-site-verification" content="qQVmgWozVe7BXoA15J3gAZpEA5dK168admH4U3W6PAk">
+  <meta name="msvalidate.01" content="4902E39C0135E72DE537BCB0FE08B40A">
+  <meta name="baidu-site-verification" content="codeva-CSYjpuVg5v">
+
+
+<link rel="alternate" type="application/rss+xml" title="oaciaのBbBlog~" href="https://oacia.cc/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="oaciaのBbBlog~" href="https://oacia.cc/atom.xml" />
+<link rel="alternate" type="application/json" title="oaciaのBbBlog~" href="https://oacia.cc/feed.json" />
+
+
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+
+<link rel="canonical" href="https://oacia.cc/flutter-ACTF-native-app/">
+
+
+
+  <title>
+flutter逆向 ACTF native app |
+oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="alice">
+      <img src="/images/alice-shake.gif" alt="">
+    </div>
+    <!--
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+    -->
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">flutter逆向 ACTF native app
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2023-10-31 18:04:59">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2023-10-31T18:04:59+08:00">2023-10-31</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span class="text">本文字数</span>
+    <span>2.8k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span class="text">阅读时长</span>
+    <span>3 分钟</span>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">oacia</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_TX7bgCDyF9.png"></li>
+          <li class="item" data-background-image="/picture/D82C577B8C0CB1E005C22FFD274A7EB1.jpg"></li>
+          <li class="item" data-background-image="/picture/v2-38577fbfa8359e9325ae9c4f5e299ed9_r.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_yR5ppRgEgl.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_PfTN8PdFT1.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_i9jbNsAjrH.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="https://oacia.cc/flutter-ACTF-native-app/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="oacia">
+    <meta itemprop="description" content="DEVIL or SWEET, 这里的文章写给未来的自己 不要忘记现在学习的知识">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="oaciaのBbBlog~">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <h1 id="前言"><a class="anchor" href="#前言">#</a> 前言</h1>
+<p>算了一下好长时间没打过 CTF 了，前两天看到 ACTF 逆向有道 flutter 逆向题就过来玩玩啦，花了一个下午做完了。说来也巧，我给 DASCTF 十月赛出的逆向题其中一道也是 flutter, 不过那题我难度降的相当之低啦，不知道有多少人做出来了呢～</p>
+<h1 id="还原函数名"><a class="anchor" href="#还原函数名">#</a> 还原函数名</h1>
+<p>flutter 逆向的一大难点就是不知道 <code>libapp.so</code>  的函数名，虽然有工具 <code>reflutter</code>  可以帮助我们得到其中的符号，但是我个人认为基于对 <code>libflutter.so</code>  源码插桩后重编译再重打包 apk 的方式具有极大的不可预料性，极有可能导致 apk 闪退，这一题便出现了这种情况，所以接下来我将介绍的工具 <code>blutter</code>  是纯静态分析来还原函数名，更令人惊喜的是它提供了 <code>IDApython</code>  脚本来让我们可以在 IDA 中对函数进行重命名，而这个项目中提供的其他文件也相当好用</p>
+<h2 id="blutter的编译及使用"><a class="anchor" href="#blutter的编译及使用">#</a> blutter 的编译及使用</h2>
+<p>blutter 项目地址</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre>https<span class="token operator">:</span><span class="token comment">//github.com/worawit/blutter</span></pre></td></tr></table></figure><p>在各个平台如何编译在这个项目的 README.md 中写的已经相当详细了，这里我就简单介绍一下 Windows 上的编译过程吧，注意一下这些命令需要全程运行在代理环境否则会导致无法下载</p>
+<p>首先 clone 项目</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">git</span> clone https://github.com/worawit/blutter <span class="token parameter variable">--depth</span><span class="token operator">=</span><span class="token number">1</span></pre></td></tr></table></figure><p>随后运行初始化脚本</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token builtin class-name">cd</span> .<span class="token punctuation">\</span>blutter<span class="token punctuation">\</span></pre></td></tr><tr><td data-num="2"></td><td><pre>python .<span class="token punctuation">\</span>scripts<span class="token punctuation">\</span>init_env_win.py</pre></td></tr></table></figure><p>请注意，接下来我们需要打开 <code>x64 Native Tools Command Prompt</code> , 它可以在 <code>Visual Studio</code>  文件夹中找到</p>
+<p><img data-src="/flutter-ACTF-native-app/image-20231031182720564.png" alt="image-20231031182720564" style="aspect-ratio:349 / 588;"></p>
+<p>然后运行 <code>blutter.py</code>  并提供 <code>libapp.so</code>  和 <code>libflutter.so</code>  的文件夹路径以及输出文件夹路径</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>python .<span class="token punctuation">\</span>blutter.py <span class="token punctuation">..</span><span class="token punctuation">\</span>chall<span class="token punctuation">\</span>lib<span class="token punctuation">\</span>arm64-v8a<span class="token punctuation">\</span> .<span class="token punctuation">\</span>output</pre></td></tr></table></figure><p><img data-src="/flutter-ACTF-native-app/image-20231031183050383.png" alt="image-20231031183050383" style="aspect-ratio:1223 / 639;"></p>
+<p>输出文件夹目录如下</p>
+<p><img data-src="/flutter-ACTF-native-app/image-20231031183135453.png" alt="image-20231031183135453" style="aspect-ratio:264 / 482;"></p>
+<p>随后我们用 ida 反编译 <code>libapp.so</code> , 并运行输出文件夹中的 IDApython 脚本 <code>ida_script/addNames.py</code> , 符号就被全部恢复出来啦</p>
+<p><img data-src="/flutter-ACTF-native-app/image-20231031183441477.png" alt="image-20231031183441477" style="aspect-ratio:899 / 857;"></p>
+<h1 id="hook关键函数-获取函数参数"><a class="anchor" href="#hook关键函数-获取函数参数">#</a> hook 关键函数 获取函数参数</h1>
+<p>这里我们需要关注的函数是 <code>flutter_application_1_main__LongPressDemoState::_onTap</code> , 因为在 flutter 的开发中，onTap 函数是按钮点击之后的响应函数</p>
+<p><img data-src="/flutter-ACTF-native-app/image-20231031183702090.png" alt="image-20231031183702090" style="aspect-ratio:864 / 431;"></p>
+<p>随后我们进入 <code>sub_1DE500</code> , 在该函数中双击 <code>sub_1DE59C</code>  进入</p>
+<p><img data-src="/flutter-ACTF-native-app/image-20231031183814522.png" alt="image-20231031183814522" style="aspect-ratio:1264 / 860;"></p>
+<p>在这个函数中我们发现了 <code>256</code> , <code>%</code> , <code>^</code>  这些特征，合理猜测一下算法可能是 RC4<img data-src="/flutter-ACTF-native-app/image-20231031185252569.png" alt="image-20231031185252569" style="aspect-ratio:786 / 294;"></p>
+<p><img data-src="/flutter-ACTF-native-app/image-20231031185414233.png" alt="image-20231031185414233" style="aspect-ratio:592 / 244;"></p>
+<p><img data-src="/flutter-ACTF-native-app/image-20231031185438467.png" alt="image-20231031185438467" style="aspect-ratio:568 / 141;"></p>
+<p>接下来我们使用输出文件夹中的 <code>blutter_frida.js</code> hook 一下 <code>sub_1DE59C</code>  看看情况</p>
+<p><img data-src="/flutter-ACTF-native-app/image-20231031185604019.png" alt="image-20231031185604019" style="aspect-ratio:1920 / 1078;"></p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>PS D:<span class="token punctuation">\</span>hgame<span class="token punctuation">\</span>ACTF<span class="token punctuation">\</span>native app<span class="token punctuation">\</span>work<span class="token punctuation">\</span>blutter<span class="token operator">></span> frida <span class="token parameter variable">-U</span> <span class="token parameter variable">-f</span> <span class="token string">"com.example.flutter_application_1"</span> <span class="token parameter variable">-l</span> .<span class="token punctuation">\</span>output<span class="token punctuation">\</span>blutter_frida.js</pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token punctuation">[</span>Pixel <span class="token number">3</span>::com.example.flutter_application_1 <span class="token punctuation">]</span>-<span class="token operator">></span> </pre></td></tr><tr><td data-num="3"></td><td><pre>Unhandle class id: <span class="token number">46</span>, TypeArguments</pre></td></tr><tr><td data-num="4"></td><td><pre>GrowableList@6d00488c29 <span class="token operator">=</span> <span class="token punctuation">[</span></pre></td></tr><tr><td data-num="5"></td><td><pre>  <span class="token number">188676</span>,</pre></td></tr><tr><td data-num="6"></td><td><pre>  <span class="token number">0</span>,</pre></td></tr><tr><td data-num="7"></td><td><pre>  <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="8"></td><td><pre>    <span class="token string">"key"</span><span class="token builtin class-name">:</span> <span class="token string">"Unhandle class id: 46, TypeArguments"</span></pre></td></tr><tr><td data-num="9"></td><td><pre>  <span class="token punctuation">&#125;</span>,</pre></td></tr><tr><td data-num="10"></td><td><pre>  <span class="token number">34</span>,</pre></td></tr><tr><td data-num="11"></td><td><pre>  <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="12"></td><td><pre>    <span class="token string">"key"</span><span class="token builtin class-name">:</span> <span class="token punctuation">[</span></pre></td></tr><tr><td data-num="13"></td><td><pre>      <span class="token number">184</span>,</pre></td></tr><tr><td data-num="14"></td><td><pre>      <span class="token number">132</span>,</pre></td></tr><tr><td data-num="15"></td><td><pre>      <span class="token number">137</span>,</pre></td></tr><tr><td data-num="16"></td><td><pre>      <span class="token number">215</span>,</pre></td></tr><tr><td data-num="17"></td><td><pre>      <span class="token number">146</span>,</pre></td></tr><tr><td data-num="18"></td><td><pre>      <span class="token number">65</span>,</pre></td></tr><tr><td data-num="19"></td><td><pre>      <span class="token number">86</span>,</pre></td></tr><tr><td data-num="20"></td><td><pre>      <span class="token number">157</span>,</pre></td></tr><tr><td data-num="21"></td><td><pre>      <span class="token number">123</span>,</pre></td></tr><tr><td data-num="22"></td><td><pre>      <span class="token number">100</span>,</pre></td></tr><tr><td data-num="23"></td><td><pre>      <span class="token number">179</span>,</pre></td></tr><tr><td data-num="24"></td><td><pre>      <span class="token number">131</span>,</pre></td></tr><tr><td data-num="25"></td><td><pre>      <span class="token number">112</span>,</pre></td></tr><tr><td data-num="26"></td><td><pre>      <span class="token number">170</span>,</pre></td></tr><tr><td data-num="27"></td><td><pre>      <span class="token number">97</span>,</pre></td></tr><tr><td data-num="28"></td><td><pre>      <span class="token number">210</span>,</pre></td></tr><tr><td data-num="29"></td><td><pre>      <span class="token number">163</span>,</pre></td></tr><tr><td data-num="30"></td><td><pre>      <span class="token number">179</span>,</pre></td></tr><tr><td data-num="31"></td><td><pre>      <span class="token number">17</span>,</pre></td></tr><tr><td data-num="32"></td><td><pre>      <span class="token number">171</span>,</pre></td></tr><tr><td data-num="33"></td><td><pre>      <span class="token number">245</span>,</pre></td></tr><tr><td data-num="34"></td><td><pre>      <span class="token number">30</span>,</pre></td></tr><tr><td data-num="35"></td><td><pre>      <span class="token number">194</span>,</pre></td></tr><tr><td data-num="36"></td><td><pre>      <span class="token number">144</span>,</pre></td></tr><tr><td data-num="37"></td><td><pre>      <span class="token number">37</span>,</pre></td></tr><tr><td data-num="38"></td><td><pre>      <span class="token number">41</span>,</pre></td></tr><tr><td data-num="39"></td><td><pre>      <span class="token number">235</span>,</pre></td></tr><tr><td data-num="40"></td><td><pre>      <span class="token number">121</span>,</pre></td></tr><tr><td data-num="41"></td><td><pre>      <span class="token number">146</span>,</pre></td></tr><tr><td data-num="42"></td><td><pre>      <span class="token number">210</span>,</pre></td></tr><tr><td data-num="43"></td><td><pre>      <span class="token number">174</span>,</pre></td></tr><tr><td data-num="44"></td><td><pre>      <span class="token number">92</span>,</pre></td></tr><tr><td data-num="45"></td><td><pre>      <span class="token number">204</span>,</pre></td></tr><tr><td data-num="46"></td><td><pre>      <span class="token number">22</span></pre></td></tr><tr><td data-num="47"></td><td><pre>    <span class="token punctuation">]</span></pre></td></tr><tr><td data-num="48"></td><td><pre>  <span class="token punctuation">&#125;</span>,</pre></td></tr><tr><td data-num="49"></td><td><pre>  <span class="token number">0</span>,</pre></td></tr><tr><td data-num="50"></td><td><pre>  <span class="token number">0</span>,</pre></td></tr><tr><td data-num="51"></td><td><pre>  <span class="token number">0</span></pre></td></tr><tr><td data-num="52"></td><td><pre><span class="token punctuation">]</span></pre></td></tr></table></figure><p>这里我们只 hook 到一个数组的值，另一个数组的类型是 <code>TypeArguments</code> , 研究了一下 <code>blutter_frida.js</code>  后发现作者还没有对这种数据类型格式提供 hook 支持</p>
+<p><img data-src="/flutter-ACTF-native-app/image-20231031185952753.png" alt="image-20231031185952753" style="aspect-ratio:1401 / 667;"></p>
+<h1 id="ida动态调试libappso"><a class="anchor" href="#ida动态调试libappso">#</a> IDA 动态调试 libapp.so</h1>
+<p>现在我们得到了一个数组，我们就暂时认为它就是 flag 经过加密之后得到的结果，接下来我们在 IDA 中对 <code>sub_1DE59C</code>  下断点动态调试来更加深入的研究一下</p>
+<p>首先我们需要将 IDA 文件夹中的 <code>dbgsrv/android_server64</code>  push 到手机上面，然后运行一下并且指定端口</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>blueline:/data/local/tmp <span class="token comment"># ./as64 -p 11112</span></pre></td></tr><tr><td data-num="2"></td><td><pre>IDA Android <span class="token number">64</span>-bit remote debug server<span class="token punctuation">(</span>ST<span class="token punctuation">)</span> v7.7.27. Hex-Rays <span class="token punctuation">(</span>c<span class="token punctuation">)</span> <span class="token number">2004</span>-2022</pre></td></tr><tr><td data-num="3"></td><td><pre>Listening on <span class="token number">0.0</span>.0.0:11112<span class="token punctuation">..</span>.</pre></td></tr></table></figure><p>随后端口转发一下</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>PS C:<span class="token punctuation">\</span>Users<span class="token punctuation">\</span>oacia<span class="token operator">></span> adb forward tcp:11112 tcp:11112</pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token number">11112</span></pre></td></tr></table></figure><p>在 IDA 中选择调试器为 <code>Android debugger</code></p>
+<p><img data-src="/flutter-ACTF-native-app/image-20231031190502580.png" alt="image-20231031190502580" style="aspect-ratio:436 / 371;"></p>
+<p>随后点击 <code>Debugger-&gt;Debugger options...</code>  选择如下配置</p>
+<p><img data-src="/flutter-ACTF-native-app/image-20231031190621711.png" alt="image-20231031190621711" style="aspect-ratio:594 / 578;"></p>
+<p>点击 <code>Debugger-&gt;Process options...</code> , <code>Hostname</code>  修改为 <code>127.0.0.1</code> , <code>Port</code>  修改为 <code>11112</code></p>
+<p><img data-src="/flutter-ACTF-native-app/image-20231031190653343.png" alt="image-20231031190653343" style="aspect-ratio:699 / 363;"></p>
+<p>然后点击 <code>Debugger-&gt;Attach to process...</code> , 附加到我们目标包名的进程上面</p>
+<p><img data-src="/flutter-ACTF-native-app/image-20231031190932527.png" alt="image-20231031190932527" style="aspect-ratio:600 / 639;"></p>
+<p>弹出该弹窗选择 Same 即可</p>
+<p><img data-src="/flutter-ACTF-native-app/image-20231031191001330.png" alt="image-20231031191001330" style="aspect-ratio:1045 / 302;"></p>
+<p>在手机上点击按钮，然后在 IDA 中点击这个绿色的剪头，就可以动态调试啦</p>
+<p><img data-src="/flutter-ACTF-native-app/image-20231031191049306.png" alt="image-20231031191049306" style="aspect-ratio:561 / 136;"></p>
+<p><img data-src="/flutter-ACTF-native-app/image-20231031191123141.png" alt="image-20231031191123141" style="aspect-ratio:1920 / 1080;"></p>
+<p>在动态调试之后，未知的变量也逐渐浮现了出来，这里我们发现了 <code>v28&gt;=256</code> , 那么很有可能就是 RC4 了哦</p>
+<p><img data-src="/flutter-ACTF-native-app/image-20231031191544680.png" alt="image-20231031191544680" style="aspect-ratio:956 / 565;"></p>
+<p>既然这样，那么直接在这里唯一的异或的地方用 IDA 去 trace 一下，把异或的数组 dump 下来不就行了：)</p>
+<p><img data-src="/flutter-ACTF-native-app/image-20231031192301154.png" alt="image-20231031192301154" style="aspect-ratio:1920 / 1080;"></p>
+<p>于是我们得到了被异或的数组了</p>
+<p><img data-src="/flutter-ACTF-native-app/image-20231031193001825.png" alt="image-20231031193001825" style="aspect-ratio:1548 / 176;"></p>
+<p>但是在异或运算的地方下断点之后，我输入的数全都是 <code>1</code> , 这里被异或的数也全是 <code>0xce</code></p>
+<p><img data-src="/flutter-ACTF-native-app/image-20231031194118997.png" alt="image-20231031194118997" style="aspect-ratio:955 / 293;"></p>
+<p>所以莫非不是 RC4? 让 0xce 和 <code>0x31</code>  异或一下看看，竟然是 <code>0xff</code>  这么有意义的数字</p>
+<p><img data-src="/flutter-ACTF-native-app/image-20231031194218233.png" alt="image-20231031194218233" style="aspect-ratio:250 / 70;"></p>
+<p>所以 exp 也就能写出来啦～</p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre>final <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">184</span><span class="token punctuation">,</span> <span class="token number">132</span><span class="token punctuation">,</span> <span class="token number">137</span><span class="token punctuation">,</span> <span class="token number">215</span><span class="token punctuation">,</span> <span class="token number">146</span><span class="token punctuation">,</span> <span class="token number">65</span><span class="token punctuation">,</span> <span class="token number">86</span><span class="token punctuation">,</span> <span class="token number">157</span><span class="token punctuation">,</span> <span class="token number">123</span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">,</span> <span class="token number">179</span><span class="token punctuation">,</span> <span class="token number">131</span><span class="token punctuation">,</span> <span class="token number">112</span><span class="token punctuation">,</span> <span class="token number">170</span><span class="token punctuation">,</span> <span class="token number">97</span><span class="token punctuation">,</span> <span class="token number">210</span><span class="token punctuation">,</span> <span class="token number">163</span><span class="token punctuation">,</span> <span class="token number">179</span><span class="token punctuation">,</span> <span class="token number">17</span><span class="token punctuation">,</span> <span class="token number">171</span><span class="token punctuation">,</span> <span class="token number">245</span><span class="token punctuation">,</span> <span class="token number">30</span><span class="token punctuation">,</span> <span class="token number">194</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="2"></td><td><pre>         <span class="token number">144</span><span class="token punctuation">,</span> <span class="token number">37</span><span class="token punctuation">,</span> <span class="token number">41</span><span class="token punctuation">,</span> <span class="token number">235</span><span class="token punctuation">,</span> <span class="token number">121</span><span class="token punctuation">,</span> <span class="token number">146</span><span class="token punctuation">,</span> <span class="token number">210</span><span class="token punctuation">,</span> <span class="token number">174</span><span class="token punctuation">,</span> <span class="token number">92</span><span class="token punctuation">,</span> <span class="token number">204</span><span class="token punctuation">,</span> <span class="token number">22</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="3"></td><td><pre>xor <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">14</span><span class="token punctuation">,</span> <span class="token number">14</span><span class="token punctuation">,</span> <span class="token number">68</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token number">29</span><span class="token punctuation">,</span> <span class="token number">201</span><span class="token punctuation">,</span> <span class="token number">241</span><span class="token punctuation">,</span> <span class="token number">46</span><span class="token punctuation">,</span> <span class="token number">197</span><span class="token punctuation">,</span> <span class="token number">208</span><span class="token punctuation">,</span> <span class="token number">123</span><span class="token punctuation">,</span> <span class="token number">79</span><span class="token punctuation">,</span> <span class="token number">187</span><span class="token punctuation">,</span> <span class="token number">55</span><span class="token punctuation">,</span> <span class="token number">234</span><span class="token punctuation">,</span> <span class="token number">104</span><span class="token punctuation">,</span> <span class="token number">40</span><span class="token punctuation">,</span> <span class="token number">117</span><span class="token punctuation">,</span> <span class="token number">133</span><span class="token punctuation">,</span> <span class="token number">12</span><span class="token punctuation">,</span> <span class="token number">67</span><span class="token punctuation">,</span> <span class="token number">137</span><span class="token punctuation">,</span> <span class="token number">91</span><span class="token punctuation">,</span> <span class="token number">31</span><span class="token punctuation">,</span> <span class="token number">136</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="4"></td><td><pre>       <span class="token number">177</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">,</span> <span class="token number">234</span><span class="token punctuation">,</span> <span class="token number">24</span><span class="token punctuation">,</span> <span class="token number">27</span><span class="token punctuation">,</span> <span class="token number">26</span><span class="token punctuation">,</span> <span class="token number">214</span><span class="token punctuation">,</span> <span class="token number">122</span><span class="token punctuation">,</span> <span class="token number">217</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="5"></td><td><pre></pre></td></tr><tr><td data-num="6"></td><td><pre>flag <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token builtin">chr</span><span class="token punctuation">(</span>xor<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">^</span>final<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">^</span><span class="token number">0xff</span><span class="token punctuation">)</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>final<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="7"></td><td><pre><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>flag<span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="8"></td><td><pre><span class="token comment"># Iu2xpwXLAK734btEt9kXIhfpRgTlu6KuI0</span></pre></td></tr></table></figure>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2023-10-31 19:59:11" itemprop="dateModified" datetime="2023-10-31T19:59:11+08:00">2023-10-31</time>
+  </span>
+  <span id="flutter-ACTF-native-app/" class="item leancloud_visitors" data-flag-title="flutter逆向 ACTF native app" title="阅读次数">
+      <span class="icon">
+        <i class="ic i-eye"></i>
+      </span>
+      <span class="text">阅读次数</span>
+      <span class="leancloud-visitors-count"></span>
+      <span class="text">次</span>
+  </span>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>oacia <i class="ic i-at"><em>@</em></i>oaciaのBbBlog~
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="https://oacia.cc/flutter-ACTF-native-app/" title="flutter逆向 ACTF native app">https://oacia.cc/flutter-ACTF-native-app/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/unidbg-usage/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;v2-c576b26089eaa8f87ff1a0c6125ea8da_r.jpg" title="unidbg usage">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> </span>
+  <h3>unidbg usage</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/vue-learn/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_7tfaMXOyLf.jpg" title="vue-learn">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> </span>
+  <h3>vue-learn</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-text"> 前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%98%E5%8E%9F%E5%87%BD%E6%95%B0%E5%90%8D"><span class="toc-text"> 还原函数名</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#blutter%E7%9A%84%E7%BC%96%E8%AF%91%E5%8F%8A%E4%BD%BF%E7%94%A8"><span class="toc-text"> blutter 的编译及使用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#hook%E5%85%B3%E9%94%AE%E5%87%BD%E6%95%B0-%E8%8E%B7%E5%8F%96%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0"><span class="toc-text"> hook 关键函数 获取函数参数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ida%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95libappso"><span class="toc-text"> IDA 动态调试 libapp.so</span></a></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="oacia"
+      data-src="/images/avatar.jpg">
+  <p class="name" itemprop="name">oacia</p>
+  <div class="description" itemprop="description">这里的文章写给未来的自己 不要忘记现在学习的知识</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">37</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">46</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL29hY2lh" title="https:&#x2F;&#x2F;github.com&#x2F;oacia"><i class="ic i-github"></i></span>
+      <span class="exturl item twitter" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9vYWNpYTg2" title="https:&#x2F;&#x2F;twitter.com&#x2F;oacia86"><i class="ic i-twitter"></i></span>
+      <span class="exturl item paper-plane" data-url="aHR0cHM6Ly90Lm1lL29hY2lh" title="https:&#x2F;&#x2F;t.me&#x2F;oacia"><i class="ic i-paper-plane"></i></span>
+      <span class="exturl item email" data-url="bWFpbHRvOm9hY2lhQHFxLmNvbQ==" title="mailto:oacia@qq.com"><i class="ic i-envelope"></i></span>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/about-oacia/" rel="section"><i class="ic i-user"></i>关于oacia</a>
+  </li>
+
+        
+  <li class="item dropdown">
+      <a href="/archives/" rel="section"><i class="ic i-feather"></i>文章</a>
+    <ul class="submenu">
+
+        
+  <li class="item">
+    <a href="/archives/" rel="section"><i class="ic i-list-alt"></i>归档</a>
+  </li>
+
+        
+  <li class="item">
+    <a href="/tags/" rel="section"><i class="ic i-tags"></i>标签</a>
+  </li>
+
+  </ul>
+    
+  <li class="item">
+    <a href="/TODOlist/" rel="section"><i class="ic i-clock"></i>要做的事</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/website_maintenance/" rel="section"><i class="ic i-calendar"></i>更新日志</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/friends/" rel="section"><i class="ic i-heart"></i>小伙伴</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/music/" rel="section"><i class="ic i-music"></i>听会儿歌吧</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/unidbg-usage/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/vue-learn/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">oacia @ oacia</span>
+  </div>
+  <div class="count">
+    <span class="post-meta-item-icon">
+      <i class="ic i-chart-area"></i>
+    </span>
+    <span title="站点总字数">561k 字</span>
+
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="ic i-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:30</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: 'flutter-ACTF-native-app/',
+    favicon: {
+      show: "柚鳥ナツ",
+      hide: "甘い幸せ"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+<!--尝试不使用polyfill-->
+<!--<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>-->
+
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+</body>
+</html>
