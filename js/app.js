@@ -406,13 +406,13 @@ const mediaPlayer = function(t, config) {
     load: function(newList) {
       var d = ""
       var that = this
-
       if(newList && newList.length > 0) {
         if(this.options.rawList !== newList) {
           this.options.rawList = newList;
           playlist.clear()
           // 获取新列表
-          //this.fetch()
+          this.fetch()
+          console.log(playlist);
         }
       } else {
         // 没有列表时，隐藏按钮
