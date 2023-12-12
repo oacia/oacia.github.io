@@ -8,5 +8,5 @@ Allow: /website_maintenance/
 Allow: /friends/
 Allow: /music/
 
-Sitemap: https://oacia.cc/sitemap.xml
-Sitemap: https://oacia.cc/baidusitemap.xml
+Sitemap: https://oacia.dev/sitemap.xml
+Sitemap: https://oacia.dev/baidusitemap.xml
