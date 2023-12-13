@@ -101,12 +101,12 @@
       </div>
       <div id="imgs" class="pjax">
         <ul>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_08009V9JRY.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_IX30VL32eD.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_nag6QdIrd6.jpg"></li>
           <li class="item" data-background-image="/picture/v2-f3847ed8dbd35b5eae1fb0069fac2727_r.png"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_QjFslpLcPs.jpg"></li>
-          <li class="item" data-background-image="/picture/AF1392CA77D9D867A0C9738D569A7EFC.jpg"></li>
-          <li class="item" data-background-image="/picture/F7927C427D30ABF23365F3C596F96BB4.jpg"></li>
-          <li class="item" data-background-image="/picture/534BD430C8430A20C7CC5A09F68A43DA.jpg"></li>
-          <li class="item" data-background-image="/picture/v2-e95f37a39026430fba530e40ef1b98dd_r.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_OGPdi5oLPM.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_Pnwwwfj74o.jpg"></li>
         </ul>
       </div>
     </header>
@@ -310,6 +310,94 @@
 <script data-config type="text/javascript">
   var LOCAL = {
     path: 'tags/ctf/',
+    favicon: {
+      show: "柚鳥ナツ",
+      hide: "甘い幸せ"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+<!--尝试不使用polyfill-->
+<!--<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>-->
+
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+</body>
+</html>
+ow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">oacia @ oacia</span>
+  </div>
+  <div class="count">
+    <span class="post-meta-item-icon">
+      <i class="ic i-chart-area"></i>
+    </span>
+    <span title="站点总字数">593k 字</span>
+
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="ic i-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:59</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: 'tags/CTF/',
     favicon: {
       show: "柚鳥ナツ",
       hide: "甘い幸せ"
