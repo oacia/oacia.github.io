@@ -33,7 +33,7 @@
     </entry>
     <entry>
         <id>https://oacia.dev/two-way-SSL/</id>
-        <title>two way SSL</title>
+        <title>https双向认证及绕过方法</title>
         <link rel="alternate" href="https://oacia.dev/two-way-SSL/"/>
         <content type="html">&lt;p&gt;日常的 APP 为了不被别人通过抓包软件抓取与服务器通信的流量，所以会在流量的安全传输上做文章，最安全的做法当然是使用私有协议 (即协议格式不公开的协议), 例如抖音的 quick 协议，咸鱼的 spdy 协议等等，利用这些私有协议包装流量，从而使抓包工具无法识别出这串流量的实际内容是什么，所以就只能放行这段流量，面对私有协议倘若利用 &lt;code&gt;reqable&lt;/code&gt; , &lt;code&gt;fiddler&lt;/code&gt; , &lt;code&gt;charles&lt;/code&gt;  等去抓包是抓不到的，而唯一能够抓到这段流量的就是 &lt;code&gt;wireshark&lt;/code&gt; , 并且还需要对这段流量编写特定的脚本解析才可以知道这段流量所携带的实际数据&lt;/p&gt;
 &lt;p&gt;除了私有协议之外，想让流量上的安全还可以使用 &lt;code&gt;SSL pinning&lt;/code&gt;  的方法来阻止中间人抓包的发生，如何进行 HTTPS 双向认证以及使用 frida 对 &lt;code&gt;SSL pinning&lt;/code&gt;  进行绕过是本文所要讨论的重点&lt;/p&gt;
