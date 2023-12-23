@@ -143,7 +143,27 @@
 &lt;figure class=&#34;highlight shell&#34;&gt;&lt;figcaption data-lang=&#34;Bash&#34;&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td data-num=&#34;1&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;openssl x509 &lt;span class=&#34;token parameter variable&#34;&gt;-req&lt;/span&gt; &lt;span class=&#34;token parameter variable&#34;&gt;-in&lt;/span&gt; client.csr &lt;span class=&#34;token parameter variable&#34;&gt;-out&lt;/span&gt; client.crt &lt;span class=&#34;token parameter variable&#34;&gt;-CA&lt;/span&gt; root.crt &lt;span class=&#34;token parameter variable&#34;&gt;-CAkey&lt;/span&gt; root.key &lt;span class=&#34;token parameter variable&#34;&gt;-CAcreateserial&lt;/span&gt; &lt;span class=&#34;token parameter variable&#34;&gt;-days&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;3650&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;ol start=&#34;4&#34;&gt;
 &lt;li&gt;生客户端 bks 格式证书&lt;/li&gt;
 &lt;/ol&gt;
-&lt;figure class=&#34;highlight shell&#34;&gt;&lt;figcaption data-lang=&#34;Bash&#34;&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td data-num=&#34;1&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;openssl pkcs12 &lt;span class=&#34;token parameter variable&#34;&gt;-export&lt;/span&gt; &lt;span class=&#34;token parameter variable&#34;&gt;-clcerts&lt;/span&gt; &lt;span class=&#34;token parameter variable&#34;&gt;-in&lt;/span&gt; client.crt &lt;span class=&#34;token parameter variable&#34;&gt;-inkey&lt;/span&gt; client.key &lt;span class=&#34;token parameter variable&#34;&gt;-out&lt;/span&gt; client.p12&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;p&gt;使用根证书和客户端私钥一起生成 client.p12，这个证书文件包含客户端的公钥和私钥，主要用来给浏览器访问使用&lt;/p&gt;
+&lt;p&gt;我们首先查看自己的 java 版本，例如我现在的 java 版本是 jdk1.7&lt;/p&gt;
+&lt;figure class=&#34;highlight shell&#34;&gt;&lt;figcaption data-lang=&#34;Bash&#34;&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td data-num=&#34;1&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;PS C:&lt;span class=&#34;token punctuation&#34;&gt;\&lt;/span&gt;Users&lt;span class=&#34;token punctuation&#34;&gt;\&lt;/span&gt;oacia&lt;span class=&#34;token operator&#34;&gt;&gt;&lt;/span&gt; &lt;span class=&#34;token function&#34;&gt;java&lt;/span&gt; &lt;span class=&#34;token parameter variable&#34;&gt;--version&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;2&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token function&#34;&gt;java&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;17.0&lt;/span&gt;.8 &lt;span class=&#34;token number&#34;&gt;2023&lt;/span&gt;-07-18 LTS&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;p&gt;然后前往 [https://www.bouncycastle.org/latest_releases.html) 下载对应版本的 &lt;code&gt;bcprov&lt;/code&gt; , 我的 jdk1.7 应该下载的 jar 包是&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuYm91bmN5Y2FzdGxlLm9yZy9kb3dubG9hZC9iY3Byb3YtamRrMTV0bzE4LTE3Ny5qYXI=&#34;&gt; bcprov-jdk15to18-177.jar&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;随后输入下列命令即可将 crt 格式的证书转换为 bks 格式的证书&lt;/p&gt;
+&lt;figure class=&#34;highlight shell&#34;&gt;&lt;figcaption data-lang=&#34;Bash&#34;&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td data-num=&#34;1&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;keytool &lt;span class=&#34;token parameter variable&#34;&gt;-import&lt;/span&gt; &lt;span class=&#34;token parameter variable&#34;&gt;-alias&lt;/span&gt; client &lt;span class=&#34;token parameter variable&#34;&gt;-file&lt;/span&gt; .&lt;span class=&#34;token punctuation&#34;&gt;\&lt;/span&gt;client.crt &lt;span class=&#34;token parameter variable&#34;&gt;-keystore&lt;/span&gt; .&lt;span class=&#34;token punctuation&#34;&gt;\&lt;/span&gt;client.bks &lt;span class=&#34;token parameter variable&#34;&gt;-storetype&lt;/span&gt; BKS &lt;span class=&#34;token parameter variable&#34;&gt;-provider&lt;/span&gt; org.bouncycastle.jce.provider.BouncyCastleProvider &lt;span class=&#34;token parameter variable&#34;&gt;-providerpath&lt;/span&gt; .&lt;span class=&#34;token punctuation&#34;&gt;\&lt;/span&gt;bcprov-jdk15to18-177.jar &lt;span class=&#34;token parameter variable&#34;&gt;-storepass&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;123456&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;p&gt;同理，我们可以将将根证书 &lt;code&gt;root.crt&lt;/code&gt;  也转换为 &lt;code&gt;root.bks&lt;/code&gt; , 因为在 Android 中智能识别 bks 格式的证书&lt;/p&gt;
+&lt;p&gt;##　总结&lt;/p&gt;
+&lt;p&gt;通过上述过程自定义证书的制作，我们已经得到了所需要的证书&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;android 客户端
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;client.bks&lt;/code&gt; : 这是客户端证书，需要发送给服务端进行校验&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;root.bks&lt;/code&gt; : 这是根证书，用来校验服务端证书的合法性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;python 服务端
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;server.crt&lt;/code&gt;  和 &lt;code&gt;server.key&lt;/code&gt; : 这是服务端证书，需要发送给客户端进行校验&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;root.crt&lt;/code&gt; : 这是根证书，用来校验客户端证书的合法性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;android客户端&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#android客户端&#34;&gt;#&lt;/a&gt; Android 客户端&lt;/h1&gt;
 &lt;h1 id=&#34;参考资料&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#参考资料&#34;&gt;#&lt;/a&gt; 参考资料&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuY25ibG9ncy5jb20venBjaGNiZC9wLzEzNzA5NjkwLmh0bWw=&#34;&gt;关于单向认证与双向认证 &lt;/span&gt;&lt;/li&gt;

@@ -89,7 +89,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       <i class="ic i-pen"></i>
     </span>
     <span class="text">本文字数</span>
-    <span>3.6k</span>
+    <span>4.4k</span>
     <span class="text">字</span>
   </span>
   <span class="item" title="阅读时长">
@@ -97,7 +97,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       <i class="ic i-clock"></i>
     </span>
     <span class="text">阅读时长</span>
-    <span>3 分钟</span>
+    <span>4 分钟</span>
   </span>
 </div>
 
@@ -130,12 +130,12 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       </div>
       <div id="imgs" class="pjax">
         <ul>
-          <li class="item" data-background-image="/picture/v2-5384567ea117baa376b3e46217ca9c4d_r.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_PfTN8PdFT1.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_HWsdLby1zC.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_E46Gbhbdvq.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_yR5ppRgEgl.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_kUiG8csvrW.jpg"></li>
+          <li class="item" data-background-image="/picture/A33123B783AF2D6D3AEA808BC949EE3D.jpg"></li>
+          <li class="item" data-background-image="/picture/v2-c576b26089eaa8f87ff1a0c6125ea8da_r.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_4eEqpKncFz.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_IX30VL32eD.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_FEMKHYoIxa.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_XABTvOZXKW.jpg"></li>
         </ul>
       </div>
     </header>
@@ -530,7 +530,130 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 <p>假设我们从内存中 dump 下来了如下数据，已知该变量是以无符号 Int 类型存储到内存中的，因为在操作系统中数据都是小端存储，所以可以写出如下代码处理字节流规得到正确的变量的值</p>
 <figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">import</span> struct</pre></td></tr><tr><td data-num="2"></td><td><pre></pre></td></tr><tr><td data-num="3"></td><td><pre>data <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0x6f</span><span class="token punctuation">,</span><span class="token number">0x4e</span><span class="token punctuation">,</span><span class="token number">0x5f</span><span class="token punctuation">,</span><span class="token number">0x59</span><span class="token punctuation">,</span><span class="token number">0x30</span><span class="token punctuation">,</span><span class="token number">0x55</span><span class="token punctuation">,</span><span class="token number">0x5f</span><span class="token punctuation">,</span><span class="token number">0x46</span><span class="token punctuation">,</span><span class="token number">0x89</span><span class="token punctuation">,</span><span class="token number">0x7b</span><span class="token punctuation">,</span><span class="token number">0xa4</span><span class="token punctuation">,</span><span class="token number">0xc3</span><span class="token punctuation">,</span><span class="token number">0xc5</span><span class="token punctuation">,</span><span class="token number">0xe3</span><span class="token punctuation">,</span><span class="token number">0x78</span><span class="token punctuation">,</span><span class="token number">0xb3</span><span class="token punctuation">,</span><span class="token number">0xc3</span><span class="token punctuation">,</span><span class="token number">0x92</span><span class="token punctuation">,</span><span class="token number">0x87</span><span class="token punctuation">,</span><span class="token number">0xb0</span><span class="token punctuation">,</span><span class="token number">0x92</span><span class="token punctuation">,</span><span class="token number">0x94</span><span class="token punctuation">,</span><span class="token number">0xa4</span><span class="token punctuation">,</span><span class="token number">0xd3</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="4"></td><td><pre>data <span class="token operator">=</span> struct<span class="token punctuation">.</span>unpack<span class="token punctuation">(</span><span class="token string">'&lt;6I'</span><span class="token punctuation">,</span><span class="token builtin">bytes</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">','</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token builtin">map</span><span class="token punctuation">(</span><span class="token builtin">hex</span><span class="token punctuation">,</span><span class="token builtin">list</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token comment"># 0x595f4e6f,0x465f5530,0xc3a47b89,0xb378e3c5,0xb08792c3,0xd3a49492</span></pre></td></tr></table></figure><p>当我们在 IDA 中遇到浮点数时，同样可以使用 struct 库来查看十六进制浮点数对应的十进制值</p>
 <figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">import</span> struct</pre></td></tr><tr><td data-num="2"></td><td><pre></pre></td></tr><tr><td data-num="3"></td><td><pre>hex_float <span class="token operator">=</span> <span class="token string">b'\x1f\x85\xebQ\xb8\x1e\t@'</span></pre></td></tr><tr><td data-num="4"></td><td><pre>float_num <span class="token operator">=</span> struct<span class="token punctuation">.</span>unpack<span class="token punctuation">(</span><span class="token string">'d'</span><span class="token punctuation">,</span>hex_float<span class="token punctuation">)</span><span class="token comment">#表示 double 类型</span></pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token keyword">print</span><span class="token punctuation">(</span>float_num<span class="token punctuation">)</span><span class="token comment">#(3.14,)</span></pre></td></tr></table></figure><h1 id="ctypes定义变量数值类型"><a class="anchor" href="#ctypes定义变量数值类型">#</a> ctypes 定义变量数值类型</h1>
-<p>我们知道在 python 中是没有所谓的 <code>int</code> , <code>char</code>  的概念的，但是在逆向的过程中，免不了要和这些 c 语言数据类型打交道，这个时候就需要我们使用 ctypes 库来对变量的数值类型进行定义，这样才不会导致移位右移的时候变量溢出，减法的时候变量的值被取到了负数等等我们不希望看到的情况发生</p>
+<p>我们知道在 python 中是没有所谓的 <code>int</code> , <code>char</code>  的概念的，但是在逆向的过程中，免不了要和这些 c 语言数据类型打交道，这个时候就需要我们使用 ctypes 库来作为 Python 和 C 之间的桥梁，来再 python 中对变量的数值类型进行定义，这样才不会导致移位右移的时候变量溢出，减法的时候变量的值被取到了负数等等我们不希望看到的情况发生</p>
+<p>这是一个使用 <code>ctypes</code>  进行循环右移 16 位的简单示例，可以发现即使右移 16 位，变量的范围依然没有超出 <code>uint</code></p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">import</span> ctypes</pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token comment"># 使用 c_uint 方法将 a 变量定义为 c 语言中的 uint (无符号整型), 并赋值 0x12345678</span></pre></td></tr><tr><td data-num="3"></td><td><pre>a <span class="token operator">=</span> ctypes<span class="token punctuation">.</span>c_uint<span class="token punctuation">(</span><span class="token number">0x12345678</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token comment"># 使用 value 方法读取 a 变量的值 循环向右移动 16 位</span></pre></td></tr><tr><td data-num="5"></td><td><pre>a <span class="token operator">=</span> ctypes<span class="token punctuation">.</span>c_uint<span class="token punctuation">(</span><span class="token punctuation">(</span>a<span class="token punctuation">.</span>value<span class="token operator">&lt;&lt;</span><span class="token number">16</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span>a<span class="token punctuation">.</span>value<span class="token operator">>></span><span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">hex</span><span class="token punctuation">(</span>a<span class="token punctuation">.</span>value<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment"># 0x56781234</span></pre></td></tr></table></figure><p>ctypes 中间类型，C 类型和 python 类型对应关系如下表：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">ctypes 类型</th>
+<th style="text-align:left">C 类型</th>
+<th style="text-align:left">Python 类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/ctypes.html#ctypes.c_bool"> <code>c_bool</code> </a></td>
+<td style="text-align:left">_Bool</td>
+<td style="text-align:left">bool</td>
+</tr>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/ctypes.html#ctypes.c_char"> <code>c_char</code> </a></td>
+<td style="text-align:left">char</td>
+<td style="text-align:left">单字符字节串对象</td>
+</tr>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/ctypes.html#ctypes.c_wchar"> <code>c_wchar</code> </a></td>
+<td style="text-align:left"><code>wchar_t</code></td>
+<td style="text-align:left">单字符字符串</td>
+</tr>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/ctypes.html#ctypes.c_byte"> <code>c_byte</code> </a></td>
+<td style="text-align:left">char</td>
+<td style="text-align:left">int</td>
+</tr>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/ctypes.html#ctypes.c_ubyte"> <code>c_ubyte</code> </a></td>
+<td style="text-align:left">unsigned char</td>
+<td style="text-align:left">int</td>
+</tr>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/ctypes.html#ctypes.c_short"> <code>c_short</code> </a></td>
+<td style="text-align:left">short</td>
+<td style="text-align:left">int</td>
+</tr>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/ctypes.html#ctypes.c_ushort"> <code>c_ushort</code> </a></td>
+<td style="text-align:left">unsigned short</td>
+<td style="text-align:left">int</td>
+</tr>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/ctypes.html#ctypes.c_int"> <code>c_int</code> </a></td>
+<td style="text-align:left">int</td>
+<td style="text-align:left">int</td>
+</tr>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/ctypes.html#ctypes.c_uint"> <code>c_uint</code> </a></td>
+<td style="text-align:left">unsigned int</td>
+<td style="text-align:left">int</td>
+</tr>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/ctypes.html#ctypes.c_long"> <code>c_long</code> </a></td>
+<td style="text-align:left">long</td>
+<td style="text-align:left">int</td>
+</tr>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/ctypes.html#ctypes.c_ulong"> <code>c_ulong</code> </a></td>
+<td style="text-align:left">unsigned long</td>
+<td style="text-align:left">int</td>
+</tr>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/ctypes.html#ctypes.c_longlong"> <code>c_longlong</code> </a></td>
+<td style="text-align:left">__int64 或 long long</td>
+<td style="text-align:left">int</td>
+</tr>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/ctypes.html#ctypes.c_ulonglong"> <code>c_ulonglong</code> </a></td>
+<td style="text-align:left">unsigned __int64 或 unsigned long long</td>
+<td style="text-align:left">int</td>
+</tr>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/ctypes.html#ctypes.c_size_t"> <code>c_size_t</code> </a></td>
+<td style="text-align:left"><code>size_t</code></td>
+<td style="text-align:left">int</td>
+</tr>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/ctypes.html#ctypes.c_ssize_t"> <code>c_ssize_t</code> </a></td>
+<td style="text-align:left"><code>ssize_t</code>  或 <span class="exturl" data-url="aHR0cHM6Ly9kb2NzLnB5dGhvbi5vcmcvemgtY24vMy9jLWFwaS9pbnRyby5odG1sI2MuUHlfc3NpemVfdA==">Py_ssize_t</span></td>
+<td style="text-align:left">int</td>
+</tr>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/ctypes.html#ctypes.c_time_t"> <code>c_time_t</code> </a></td>
+<td style="text-align:left"><code>time_t</code></td>
+<td style="text-align:left">int</td>
+</tr>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/ctypes.html#ctypes.c_float"> <code>c_float</code> </a></td>
+<td style="text-align:left">float</td>
+<td style="text-align:left">float</td>
+</tr>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/ctypes.html#ctypes.c_double"> <code>c_double</code> </a></td>
+<td style="text-align:left">double</td>
+<td style="text-align:left">float</td>
+</tr>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/ctypes.html#ctypes.c_longdouble"> <code>c_longdouble</code> </a></td>
+<td style="text-align:left">long double</td>
+<td style="text-align:left">float</td>
+</tr>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/ctypes.html#ctypes.c_char_p"> <code>c_char_p</code> </a></td>
+<td style="text-align:left">char* (以 NUL 结尾)</td>
+<td style="text-align:left">字节串对象或  <code>None</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/ctypes.html#ctypes.c_wchar_p"> <code>c_wchar_p</code> </a></td>
+<td style="text-align:left">wchar_t* (以 NUL 结尾)</td>
+<td style="text-align:left">字符串或  <code>None</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/ctypes.html#ctypes.c_void_p"> <code>c_void_p</code> </a></td>
+<td style="text-align:left">void*</td>
+<td style="text-align:left">int 或  <code>None</code></td>
+</tr>
+</tbody>
+</table>
 
       <div class="tags">
           <a href="/tags/python/" rel="tag"><i class="ic i-tag"></i> python</a>
@@ -545,7 +668,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       <i class="ic i-calendar-check"></i>
     </span>
     <span class="text">更新于</span>
-    <time title="修改时间：2023-12-19 14:54:23" itemprop="dateModified" datetime="2023-12-19T14:54:23+08:00">2023-12-19</time>
+    <time title="修改时间：2023-12-21 19:03:27" itemprop="dateModified" datetime="2023-12-21T19:03:27+08:00">2023-12-21</time>
   </span>
   <span id="在python中随心所欲的操作变量/" class="item leancloud_visitors" data-flag-title="在python中随心所欲的操作变量" title="阅读次数">
       <span class="icon">
@@ -585,7 +708,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item left">
       
 
-  <a href="/hws-2023/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_YkZY4FkGkc.jpg" title="HWS2023夏令营CTF选拔赛writeup">
+  <a href="/hws-2023/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;v2-38577fbfa8359e9325ae9c4f5e299ed9_r.jpg" title="HWS2023夏令营CTF选拔赛writeup">
   <span class="type">上一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>HWS2023夏令营CTF选拔赛writeup</h3>
@@ -595,7 +718,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item right">
       
 
-  <a href="/starctf-writeup/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_6C8IVcXpiw.jpg" title="StarCTF2023 逆向writeup">
+  <a href="/starctf-writeup/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_PfTN8PdFT1.jpg" title="StarCTF2023 逆向writeup">
   <span class="type">下一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>StarCTF2023 逆向writeup</h3>
@@ -748,13 +871,13 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <span class="post-meta-item-icon">
       <i class="ic i-chart-area"></i>
     </span>
-    <span title="站点总字数">598k 字</span>
+    <span title="站点总字数">599k 字</span>
 
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="ic i-coffee"></i>
     </span>
-    <span title="站点阅读时长">9:04</span>
+    <span title="站点阅读时长">9:05</span>
   </div>
   <div class="powered-by">
     基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
