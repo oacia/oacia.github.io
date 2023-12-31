@@ -1,0 +1,528 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <style>
+    html{
+      cursor: url('/cusor/normal.png') auto;s
+    }
+  </style>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="google-site-verification" content="qQVmgWozVe7BXoA15J3gAZpEA5dK168admH4U3W6PAk">
+  <meta name="msvalidate.01" content="4902E39C0135E72DE537BCB0FE08B40A">
+  <meta name="baidu-site-verification" content="codeva-CSYjpuVg5v">
+
+
+<link rel="alternate" type="application/rss+xml" title="oaciaのBbBlog~" href="https://oacia.dev/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="oaciaのBbBlog~" href="https://oacia.dev/atom.xml" />
+<link rel="alternate" type="application/json" title="oaciaのBbBlog~" href="https://oacia.dev/feed.json" />
+
+
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+
+<link rel="canonical" href="https://oacia.dev/telegram-bot-develop/">
+
+
+
+  <title>
+telegram bot 初体验 |
+oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="alice">
+      <img src="/images/alice-shake.gif" alt="">
+    </div>
+    <!--
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+    -->
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">telegram bot 初体验
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2023-12-31 21:08:18">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2023-12-31T21:08:18+08:00">2023-12-31</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span class="text">本文字数</span>
+    <span>5.1k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span class="text">阅读时长</span>
+    <span>5 分钟</span>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">oacia</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_n1WYGI3MDh.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_jUMSfwnRM5.jpg"></li>
+          <li class="item" data-background-image="/picture/73B076F1F7D70E42AE74D9F4EFA2BD36.jpg"></li>
+          <li class="item" data-background-image="/picture/v2-a91d2b5cdb7e5a596bc068cb85077a13_r.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_kUmczCXYmc.jpg"></li>
+          <li class="item" data-background-image="/picture/ApplicationFrameHost_Nqos9x2JFc.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="https://oacia.dev/telegram-bot-develop/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="oacia">
+    <meta itemprop="description" content="DEVIL or SWEET, 这里的文章写给未来的自己 不要忘记现在学习的知识">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="oaciaのBbBlog~">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <h1 id="前言"><a class="anchor" href="#前言">#</a> 前言</h1>
+<p>为什么突然想要去做一个 <code>telegram bot</code>  了呢？</p>
+<p>这就要说到困扰我很久的一个小问题了，我在刷抖音的过程中，看到有意思的视频或者好看的图片，就很想要把它们给保存下来，作为壁纸或者和别人分享，但是有的时候 <code>保存本地</code> 这个选项是灰色的不让我去保存</p>
+<p><img data-src="/telegram-bot-develop/image-20231231221356758.png" alt="image-20231231221356758" style="aspect-ratio:1080 / 381;"></p>
+<p>而且抖音在图片保存的过程中总是会打上水印，就像下面这个样子，倘若用作壁纸或者日常打开来看的时候就感觉十分的… 别扭</p>
+<p><img data-src="/telegram-bot-develop/image-20231231221840810.png" alt="image-20231231221840810" style="aspect-ratio:530 / 702;"></p>
+<p>这个时候，我就会把抖音的视频或图文分享链接复制下来，打开微信小程序，找到一个可以抖音无水印下载的小程序，忍受几十秒广告的煎熬之后，终于可以成功的把图片保存到本地，听起来相当的不便吧，然而我已经进行上面的操作不知多少次了，所以亟需一个更加方便的方式来帮助我减少无意义时间的消耗</p>
+<p>而在<a href="https://oacia.dev/douyin-favorites-pic/">抖音收藏夹图文批量获取</a>这篇 blog 中，我已经利用 python 代码下载到了抖音上的无水印的视频和图片，那么现在要做的就是如何便捷的运行这段 python 代码并返回视频或图片，这个时候我想到了 <code>telegram bot</code> , 因为 tg 我日常也是在用的，打开速度快，界面简洁都是我选择它的原因，而 telegram bot 算是 telegram 的特色吧，之前总是觉得 bot 是个神秘的存在，但是这两天的 bot 做下来，发现其实是相当的简单的，阅读纯英文文档，自我探索的过程也同样充满的乐趣！而且我认为之后我还可以向这个 bot 中加入更多的有创造力的，提高生活效率的功能，敬请期待～</p>
+<p>可以来玩玩这个 bot 噢～<span class="exturl" data-url="aHR0cHM6Ly90Lm1lL29hY2lhX2JvdA==">https://t.me/oacia_bot</span></p>
+<p>bot 的源代码发布在 github 上面<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29hY2lhL29hY2lhX2JvdA=="> https://github.com/oacia/oacia_bot</span></p>
+<p><img data-src="/telegram-bot-develop/image-20231231230233851.png" alt="image-20231231230233851" style="aspect-ratio:568 / 390;"></p>
+<h1 id="tg-bot-python库选择"><a class="anchor" href="#tg-bot-python库选择">#</a> tg bot python 库选择</h1>
+<p>既然我们选定了核心代码是用 python 编写的，那么选择一个简单易上手的 telegram bot 集成库就显得非常有必要啦，他们封装了 telegram 官方的<span class="exturl" data-url="aHR0cHM6Ly9jb3JlLnRlbGVncmFtLm9yZy9ib3RzL2FwaQ=="> bot api</span>, 我们只需要调用 python 库作者集成的函数就可以方便的使用 bot api 的各种功能，现在主流的 tg bot python 库分别是</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0xvbmFtaVdlYnMvVGVsZXRob24=">telethon</span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2V0ZXJubm9pci9weVRlbGVncmFtQm90QVBJ">telebot</span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3B5dGhvbi10ZWxlZ3JhbS1ib3QvcHl0aG9uLXRlbGVncmFtLWJvdA==">python-telegram-bot</span></li>
+</ul>
+<p>我最终选择的库是<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0xvbmFtaVdlYnMvVGVsZXRob24="> telethon</span>, 原因很简单，<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLnRlbGV0aG9uLmRldi9lbi9zdGFibGUv"> 官方文档</span>写的实在是太详细了！而<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2V0ZXJubm9pci9weVRlbGVncmFtQm90QVBJ"> telebot</span> 我也尝试了，然而 API 的变化实在是太大了，网上使用旧版本的 telebot 所展示的代码完全没有参考价值，<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3B5dGhvbi10ZWxlZ3JhbS1ib3QvcHl0aG9uLXRlbGVncmFtLWJvdA==">python-telegram-bot</span> 用法很复杂，官方文档写的也不是很详细导致我用起来相当痛苦…</p>
+<h1 id="telegram-bot"><a class="anchor" href="#telegram-bot">#</a> telegram bot</h1>
+<p>什么是 telegram bot? 这是<span class="exturl" data-url="aHR0cHM6Ly9jb3JlLnRlbGVncmFtLm9yZy9ib3Rz">官方文档</span>中的介绍</p>
+<blockquote>
+<p>Bots are <strong>small applications</strong> that run entirely within the Telegram app. Users interact with bots through <strong>flexible interfaces</strong> that can support <strong>any kind of task or service</strong>.</p>
+</blockquote>
+<p>它其实本质上是基于 Telegram 客户端的第三方程序，我们给机器人发送消息，机器人通过代码处理我们发送的消息之后，再发送回消息给我们，类似于下面我和我的 bot 的简单交互</p>
+<p><img data-src="/telegram-bot-develop/image-20231231223732245.png" alt="image-20231231223732245" style="aspect-ratio:641 / 1280;"></p>
+<h1 id="bot实现简单的交互"><a class="anchor" href="#bot实现简单的交互">#</a> bot 实现简单的交互</h1>
+<p>大家可以看到上方我们刚刚实现了一个简单的交互，接下来我们用 telethon 来实现一下吧～</p>
+<p>首先安装 telethon</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>pip <span class="token function">install</span> telethon</pre></td></tr></table></figure><p>代码长这个样子的，一眼看上去是不是很简单呢～</p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">from</span> telethon <span class="token keyword">import</span> TelegramClient<span class="token punctuation">,</span> events</pre></td></tr><tr><td data-num="2"></td><td><pre></pre></td></tr><tr><td data-num="3"></td><td><pre>api_id <span class="token operator">=</span> <span class="token number">12345678</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="4"></td><td><pre>api_hash <span class="token operator">=</span> <span class="token string">"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="5"></td><td><pre>bot_token<span class="token punctuation">:</span> <span class="token string">"1234567890:aaaaaaaaaaaaaaaaa-bbbbbbbbbbbbbbbbbb"</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="6"></td><td><pre>session<span class="token punctuation">:</span> <span class="token string">"oacia_bot"</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="7"></td><td><pre>proxy <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token string">"HTTP"</span><span class="token punctuation">,</span> <span class="token string">"127.0.0.1"</span><span class="token punctuation">,</span> <span class="token number">7890</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="8"></td><td><pre></pre></td></tr><tr><td data-num="9"></td><td><pre>client <span class="token operator">=</span> TelegramClient<span class="token punctuation">(</span>session<span class="token punctuation">,</span> api_id<span class="token punctuation">,</span> api_hash<span class="token punctuation">,</span> proxy<span class="token operator">=</span>proxy<span class="token punctuation">)</span><span class="token punctuation">.</span>start<span class="token punctuation">(</span>bot_token<span class="token operator">=</span>bot_token<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="10"></td><td><pre></pre></td></tr><tr><td data-num="11"></td><td><pre><span class="token decorator annotation punctuation">@client<span class="token punctuation">.</span>on</span><span class="token punctuation">(</span>events<span class="token punctuation">.</span>NewMessage<span class="token punctuation">(</span>pattern<span class="token operator">=</span><span class="token string">'(.*)'</span><span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="12"></td><td><pre><span class="token keyword">async</span> <span class="token keyword">def</span> <span class="token function">hello</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="13"></td><td><pre>    user <span class="token operator">=</span> <span class="token keyword">await</span> client<span class="token punctuation">.</span>get_entity<span class="token punctuation">(</span>event<span class="token punctuation">.</span>peer_id<span class="token punctuation">.</span>user_id<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="14"></td><td><pre>    <span class="token keyword">await</span> event<span class="token punctuation">.</span>reply<span class="token punctuation">(</span><span class="token string">"bot has received your message!"</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="15"></td><td><pre>    <span class="token keyword">await</span> client<span class="token punctuation">.</span>send_message<span class="token punctuation">(</span>user<span class="token punctuation">,</span><span class="token string-interpolation"><span class="token string">f"wow!</span><span class="token interpolation"><span class="token punctuation">&#123;</span>user<span class="token punctuation">.</span>username<span class="token punctuation">&#125;</span></span><span class="token string">, you say </span><span class="token interpolation"><span class="token punctuation">&#123;</span>event<span class="token punctuation">.</span>text<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="16"></td><td><pre>    </pre></td></tr><tr><td data-num="17"></td><td><pre>client<span class="token punctuation">.</span>run_until_disconnected<span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr></table></figure><p>这里的 <code>api_id</code> , <code>api_hash</code>  和 <code>bot_token</code>  我将会介绍获取的方法</p>
+<div class="note warning">
+<p><code>api_id</code> , <code>api_hash</code>  和 <code>bot_token</code> <strong> 千万不要泄漏给其他人，千万不要！！</strong></p>
+</div>
+<h2 id="api_id-api_hash"><a class="anchor" href="#api_id-api_hash">#</a> api_id api_hash</h2>
+<p>首先前往<span class="exturl" data-url="aHR0cHM6Ly9teS50ZWxlZ3JhbS5vcmcv"> https://my.telegram.org/</span>, 输入手机号，在 telegram 上接收到 <code>login code</code>  后进入</p>
+<p><img data-src="/telegram-bot-develop/image-20231231224259408.png" alt="image-20231231224259408" style="aspect-ratio:1380 / 619;"></p>
+<p>随后点击这里的 <code>API development tools</code>  去创建一个 app, 这里的数据随便填也是没问题的，如果网页一直报错 <code>ERROR</code> , 那么百分之九十是代理的问题，一直换代理直到成功创建 app</p>
+<p><img data-src="/telegram-bot-develop/image-20231231224449272.png" alt="image-20231231224449272" style="aspect-ratio:743 / 293;"></p>
+<p>在 <code>App configuration</code>  的位置就可以得到<strong> api_id</strong> 和<strong> api_hash</strong></p>
+<p><img data-src="/telegram-bot-develop/image-20231231224749993.png" alt="image-20231231224749993" style="aspect-ratio:932 / 316;"></p>
+<h2 id="bot_token"><a class="anchor" href="#bot_token">#</a> bot_token</h2>
+<p>想要创建 telegram bot, 我们需要发送消息给<span class="exturl" data-url="aHR0cHM6Ly90Lm1lL0JvdEZhdGhlcg=="> botfather</span>, 通过 <code>/newbot</code>  命令，输入 bot 的 <code>name</code>  和 <code>username</code>  之后，我们的 bot 就被创建好啦～红框框里面的 token 就是我们的 <code>bot_token</code></p>
+<p><img data-src="/telegram-bot-develop/image-20231231225759299.png" alt="image-20231231225759299" style="aspect-ratio:454 / 912;"></p>
+<p>之后将上面获取到的三个参数填入代码，运行 python 脚本，访问 <code>t.me/[username]</code> , 就可以和我们创建的机器人交互啦</p>
+<h1 id="bot云端部署"><a class="anchor" href="#bot云端部署">#</a> bot 云端部署</h1>
+<p>因为本人从未拥有过一台属于自己的服务器 (二进制根本不需要服务器滴！😄), 所以就将目光转向了网上免费的云服务部署上，经过下面那么多云服务的尝试，我最终选择将服务部署在<span class="exturl" data-url="aHR0cHM6Ly9yZW5kZXIuY29tLw=="> render</span> 上面了</p>
+<h2 id="google-colab"><a class="anchor" href="#google-colab">#</a> google colab</h2>
+<p>一开始我是在 google 的 colab 上面执行 bot 代码的，直接在 google 云端硬盘里面创建一个 ipynb 文件并点击就可以进入 colab 了，但是 colab 只能连续运行 12 个小时，pass</p>
+<p><img data-src="/telegram-bot-develop/image-20231231230811161.png" alt="image-20231231230811161" style="aspect-ratio:389 / 738;"></p>
+<h2 id="github-codespace"><a class="anchor" href="#github-codespace">#</a> github codespace</h2>
+<p>后来我把 bot 代码放到 github 的 codespace 里面运行，没想到只能运行几十分钟就断开了 qaq</p>
+<p><img data-src="/telegram-bot-develop/image-20231231230904330.png" alt="image-20231231230904330" style="aspect-ratio:1337 / 774;"></p>
+<h2 id="vercel"><a class="anchor" href="#vercel">#</a> vercel</h2>
+<p>之后我又想到了<span class="exturl" data-url="aHR0cHM6Ly92ZXJjZWwuY29tLw=="> vercel</span>, 毕竟之前就有过 vercel 部署静态网站的经验，并且去看了 vercel 的官方文档，是可以支持 python 的运行时的，<span class="exturl" data-url="aHR0cHM6Ly92ZXJjZWwuY29tL2RvY3MvZnVuY3Rpb25zL3NlcnZlcmxlc3MtZnVuY3Rpb25zL3J1bnRpbWVzL3B5dGhvbiM=">Using the Python Runtime with Serverless Functions</span></p>
+<p>但是它只能通过访问相应的 api 路由来触发函数的执行，而 telethon 使用的是 MTProto 协议直接和 telegram 服务器建立连接，并不需要对外开放一个路由，这就意味着 telethon 在 vercel 上将无法使用</p>
+<blockquote>
+<p><span class="exturl" data-url="aHR0cHM6Ly9jb3JlLnRlbGVncmFtLm9yZy9tdHByb3Rv">MTProto</span> is Telegram’s own protocol to communicate with their API when you connect to their servers.</p>
+<p>Telethon is an alternative MTProto-based backend written entirely in Python and much easier to setup and use.</p>
+</blockquote>
+<p>因此我又去阅读了 telebot 的官方文档，照着<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3B5ZmJzZGs1OS9GbGFzay1DaGF0R1BULVRlbGVncmFtQm90LVZlcmNlbA=="> Flask-ChatGPT-TelegramBot-Vercel</span> 里面的代码重构了原本的脚本</p>
+<p>这里我们就需要使用 telegram 的 webhook 功能</p>
+<blockquote>
+<p>什么是 webhook?</p>
+<p>简单的说就是将 telegram 服务器发送给 bot 的 message 同时也转发到设定的一个 url 上，消息的 json 格式如下方所示，我们可以处理这个消息并返回给发送消息方相应的消息</p>
+<figure class="highlight json"><figcaption data-lang="JSON"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="2"></td><td><pre>ok<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="3"></td><td><pre>result<span class="token operator">:</span> <span class="token punctuation">[</span></pre></td></tr><tr><td data-num="4"></td><td><pre>        <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="5"></td><td><pre>             update_id<span class="token operator">:</span> <span class="token number">11223344</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="6"></td><td><pre>             message<span class="token operator">:</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="7"></td><td><pre>                  message_id<span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="8"></td><td><pre>             from<span class="token operator">:</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="9"></td><td><pre>                  id<span class="token operator">:</span> <span class="token number">123456789</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="10"></td><td><pre>                  is_bot<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="11"></td><td><pre>                  first_name<span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="12"></td><td><pre>                  username<span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="13"></td><td><pre>                  language_code<span class="token operator">:</span> <span class="token string">"en"</span></pre></td></tr><tr><td data-num="14"></td><td><pre>             <span class="token punctuation">&#125;</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="15"></td><td><pre>             chat<span class="token operator">:</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="16"></td><td><pre>                  id<span class="token operator">:</span> <span class="token number">123456789</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="17"></td><td><pre>                  first_name<span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="18"></td><td><pre>                  username<span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="19"></td><td><pre>                  type<span class="token operator">:</span> <span class="token string">"private"</span></pre></td></tr><tr><td data-num="20"></td><td><pre>             <span class="token punctuation">&#125;</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="21"></td><td><pre>             date<span class="token operator">:</span> <span class="token number">1558784616</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="22"></td><td><pre>             text<span class="token operator">:</span> <span class="token string">"My first message to this bot"</span></pre></td></tr><tr><td data-num="23"></td><td><pre>             <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="24"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="25"></td><td><pre>        <span class="token punctuation">]</span></pre></td></tr><tr><td data-num="26"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr></table></figure></blockquote>
+<p>设置 webhook 方法很简单，浏览器访问这个网站就可以了 <code>https://api.telegram.org/bot&#123;$token&#125;/setWebhook?url=&#123;$webhook_url&#125;</code></p>
+<p>这样做了之后确实是可以进行简单的交互的，但是当我让 bot 执行下载抖音图片这种耗时任务的时候，vercel 免费版的弊端就体现出来了，<strong> 一个函数最长只能执行 10 秒，10 秒后这个函数将会被强制停止</strong>，太艰难了，只能重新找找其他方法咯</p>
+<h2 id="render"><a class="anchor" href="#render">#</a> render</h2>
+<p>最终我的 bot 代码是部署在 render 上面的，免费版每个月 750 小时完全够用了 (要知道一个月最长也就 744 小时呢)</p>
+<p>首先我们去<span class="exturl" data-url="aHR0cHM6Ly9yZW5kZXIuY29tLw=="> render</span> 上注册一个账号</p>
+<p>然后在右上角点击 <code>New</code> , 并创建一个 Web Service</p>
+<p><img data-src="/telegram-bot-develop/image-20231231234329521.png" alt="image-20231231234329521" style="aspect-ratio:751 / 548;"></p>
+<p>选择 <code>Build and deploy from a Git repository</code>  并点击 <code>Next</code></p>
+<p><img data-src="/telegram-bot-develop/image-20231231234639194.png" alt="image-20231231234639194" style="aspect-ratio:1024 / 647;"></p>
+<p>你可以将<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29hY2lhL29hY2lhX2JvdA=="> oacia_bot</span> fork 到你的仓库里面，或者直接用 bot 仓库的 git 链接来创建 <code>https://github.com/oacia/oacia_bot</code></p>
+<p><img data-src="/telegram-bot-develop/image-20231231234712486.png" alt="image-20231231234712486" style="aspect-ratio:1117 / 291;"></p>
+<p>之后就是设定运行的环境了，名称不重复就可以了，region 表示服务器，哪个服务器离你近就选哪个</p>
+<p><img data-src="/telegram-bot-develop/image-20231231234819187.png" alt="image-20231231234819187" style="aspect-ratio:1646 / 572;"></p>
+<p>接下来这个 Start Command 需要填入 <code>python main.py</code> , 服务器示例选择免费就够用了</p>
+<p><img data-src="/telegram-bot-develop/image-20231231234859286.png" alt="image-20231231234859286" style="aspect-ratio:1604 / 836;"></p>
+<p>再往下看，我们要设定这四个环境变量，前面三个我们之前就获取过了，填入即可，这个 <code>RENDER_NAME</code>  是我们刚刚创建的 <code>Web Service</code>  的名称</p>
+<p><img data-src="/telegram-bot-develop/image-20231231235238966.png" alt="image-20231231235238966" style="aspect-ratio:1624 / 590;"></p>
+<p>这个 <code>RENDER_NAME</code>  的作用是给 bot 设置 webhook 用的，为什么要这样做呢？</p>
+<p>因为 render 的免费云服务同样有一个限制，就是如果 15 分钟内没有流量访问我们创建的 web 服务，那么这个服务示例将会被暂停，直到有流量经过 web 服务时，这个服务才会被重新启动，而我所使用的是 telethon, 要直到服务关了可就是真关了，telethon 创建的 client 也因此无法和 telegram 服务器通信了</p>
+<p>所以我的做法是给 bot 设置了一个 webhook</p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre>render_name <span class="token operator">=</span> os<span class="token punctuation">.</span>getenv<span class="token punctuation">(</span><span class="token string">"RENDER_NAME"</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token keyword">if</span> render_name<span class="token punctuation">:</span></pre></td></tr><tr><td data-num="3"></td><td><pre>    requests<span class="token punctuation">.</span>post<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"https://api.telegram.org/bot</span><span class="token interpolation"><span class="token punctuation">&#123;</span>bot_token<span class="token punctuation">&#125;</span></span><span class="token string">/setWebhook?url=https://</span><span class="token interpolation"><span class="token punctuation">&#123;</span>render_name<span class="token punctuation">&#125;</span></span><span class="token string">.onrender.com/webhook"</span></span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="4"></td><td><pre>    <span class="token keyword">if</span> requests<span class="token punctuation">.</span>status_codes <span class="token operator">==</span> <span class="token number">200</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="5"></td><td><pre>        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"set webhook successful"</span><span class="token punctuation">)</span></pre></td></tr></table></figure><p>并用 flask 开放了一个 webhook 的路由</p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment"># render 必须得起一个 http 服务，否则就会断开连接....</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token keyword">from</span> flask <span class="token keyword">import</span> Flask</pre></td></tr><tr><td data-num="3"></td><td><pre>app <span class="token operator">=</span> Flask<span class="token punctuation">(</span>__name__<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="4"></td><td><pre></pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token keyword">def</span> <span class="token function">home</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="7"></td><td><pre>    <span class="token keyword">return</span> <span class="token string">"hello world"</span></pre></td></tr><tr><td data-num="8"></td><td><pre></pre></td></tr><tr><td data-num="9"></td><td><pre><span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">'/webhook'</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="10"></td><td><pre><span class="token keyword">def</span> <span class="token function">webhook</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="11"></td><td><pre>    <span class="token keyword">return</span> <span class="token string">'ok'</span></pre></td></tr><tr><td data-num="12"></td><td><pre></pre></td></tr><tr><td data-num="13"></td><td><pre><span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="14"></td><td><pre>    app<span class="token punctuation">.</span>run<span class="token punctuation">(</span>host<span class="token operator">=</span><span class="token string">'0.0.0.0'</span><span class="token punctuation">,</span> port<span class="token operator">=</span><span class="token number">10000</span><span class="token punctuation">)</span></pre></td></tr></table></figure><p>当有人给 bot 发消息时，telegram 服务器同时也会给我们设置的 webhook 网址发送一个 post 的 http 请求，这样我们的 render 服务即使因为 15 分钟没有流量经过而被暂停了，也会因为 telegram 服务器的流量经过而被重启，telethon 就可以再次成功的和 telegram 服务器通讯啦，这也就意味着 bot 可以一直在 render 上面运行 <code>~♪(^∇^*)</code></p>
+
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2024-01-01 00:17:19" itemprop="dateModified" datetime="2024-01-01T00:17:19+08:00">2024-01-01</time>
+  </span>
+  <span id="telegram-bot-develop/" class="item leancloud_visitors" data-flag-title="telegram bot 初体验" title="阅读次数">
+      <span class="icon">
+        <i class="ic i-eye"></i>
+      </span>
+      <span class="text">阅读次数</span>
+      <span class="leancloud-visitors-count"></span>
+      <span class="text">次</span>
+  </span>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>oacia <i class="ic i-at"><em>@</em></i>oaciaのBbBlog~
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="https://oacia.dev/telegram-bot-develop/" title="telegram bot 初体验">https://oacia.dev/telegram-bot-develop/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/two-way-SSL/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;91670507ECE64E853865E2123657C8C6.jpg" title="https双向认证及绕过方法">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> </span>
+  <h3>https双向认证及绕过方法</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-text"> 前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tg-bot-python%E5%BA%93%E9%80%89%E6%8B%A9"><span class="toc-text"> tg bot python 库选择</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#telegram-bot"><span class="toc-text"> telegram bot</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#bot%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E4%BA%A4%E4%BA%92"><span class="toc-text"> bot 实现简单的交互</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#api_id-api_hash"><span class="toc-text"> api_id api_hash</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bot_token"><span class="toc-text"> bot_token</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#bot%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2"><span class="toc-text"> bot 云端部署</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#google-colab"><span class="toc-text"> google colab</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#github-codespace"><span class="toc-text"> github codespace</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vercel"><span class="toc-text"> vercel</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#render"><span class="toc-text"> render</span></a></li></ol></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="oacia"
+      data-src="/images/avatar.jpg">
+  <p class="name" itemprop="name">oacia</p>
+  <div class="description" itemprop="description">这里的文章写给未来的自己 不要忘记现在学习的知识</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">41</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">46</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL29hY2lh" title="https:&#x2F;&#x2F;github.com&#x2F;oacia"><i class="ic i-github"></i></span>
+      <a target="_blank" rel="noopener" href="https://twitter.com/oacia86" title="https:&#x2F;&#x2F;twitter.com&#x2F;oacia86" class="item twitter"><i class="ic i-twitter"></i></a>
+      <span class="exturl item paper-plane" data-url="aHR0cHM6Ly90Lm1lL29hY2lh" title="https:&#x2F;&#x2F;t.me&#x2F;oacia"><i class="ic i-paper-plane"></i></span>
+      <span class="exturl item email" data-url="bWFpbHRvOm9hY2lhODZAZ21haWwuY29t" title="mailto:oacia86@gmail.com"><i class="ic i-envelope"></i></span>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/about-oacia/" rel="section"><i class="ic i-user"></i>关于oacia</a>
+  </li>
+
+        
+  <li class="item dropdown">
+      <a href="/archives/" rel="section"><i class="ic i-feather"></i>文章</a>
+    <ul class="submenu">
+
+        
+  <li class="item">
+    <a href="/archives/" rel="section"><i class="ic i-list-alt"></i>归档</a>
+  </li>
+
+        
+  <li class="item">
+    <a href="/tags/" rel="section"><i class="ic i-tags"></i>标签</a>
+  </li>
+
+  </ul>
+    
+  <li class="item">
+    <a href="/TODOlist/" rel="section"><i class="ic i-clock"></i>要做的事</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/website_maintenance/" rel="section"><i class="ic i-calendar"></i>更新日志</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/friends/" rel="section"><i class="ic i-heart"></i>小伙伴</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/music/" rel="section"><i class="ic i-music"></i>听会儿歌吧</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/tweets/" rel="section"><i class="ic i-coffee"></i>日常</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">oacia @ oacia</span>
+  </div>
+  <div class="count">
+    <span class="post-meta-item-icon">
+      <i class="ic i-chart-area"></i>
+    </span>
+    <span title="站点总字数">604k 字</span>
+
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="ic i-coffee"></i>
+    </span>
+    <span title="站点阅读时长">9:09</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: 'telegram-bot-develop/',
+    favicon: {
+      show: "柚鳥ナツ",
+      hide: "甘い幸せ"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+<!--尝试不使用polyfill-->
+<!--<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>-->
+
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+</body>
+</html>
