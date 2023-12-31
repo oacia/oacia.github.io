@@ -2158,7 +2158,7 @@ main >.inner {
 }
 .panels .inner {
   overflow-x: visible;
-  overflow-y: visible;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   width: auto;
   height: 100%;
@@ -2233,6 +2233,11 @@ main >.inner {
   padding: 1.25rem;
   margin: 0;
   background-color: transparent;
+}
+@media (min-width: 992px) {
+  .overview .menu {
+    display: none;
+  }
 }
 .overview .menu .item {
   border-radius: 0.9375rem;
