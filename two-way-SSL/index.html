@@ -36,6 +36,25 @@
 <link rel="canonical" href="https://oacia.dev/two-way-SSL/">
 
 
+<meta name="description" content="日常的 APP 为了不被别人通过抓包软件抓取与服务器通信的流量，所以会在流量的安全传输上做文章，最安全的做法当然是使用私有协议 (即协议格式不公开的协议), 例如抖音的 quick 协议，咸鱼的 spdy 协议等等，利用这些私有协议包装流量，从而使抓包工具无法识别出这串流量的实际内容是什么，所以就只能放行这段流量，面对私有协议倘若利用 reqable , fiddler , charles  等去">
+<meta property="og:type" content="article">
+<meta property="og:title" content="https双向认证及绕过方法">
+<meta property="og:url" content="https://oacia.dev/two-way-SSL/">
+<meta property="og:site_name" content="oaciaのBbBlog~">
+<meta property="og:description" content="日常的 APP 为了不被别人通过抓包软件抓取与服务器通信的流量，所以会在流量的安全传输上做文章，最安全的做法当然是使用私有协议 (即协议格式不公开的协议), 例如抖音的 quick 协议，咸鱼的 spdy 协议等等，利用这些私有协议包装流量，从而使抓包工具无法识别出这串流量的实际内容是什么，所以就只能放行这段流量，面对私有协议倘若利用 reqable , fiddler , charles  等去">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oacia.dev/two-way-SSL/640.png">
+<meta property="og:image" content="https://oacia.dev/two-way-SSL/ca-2way-auth-2.png">
+<meta property="og:image" content="https://oacia.dev/two-way-SSL/p620909.png">
+<meta property="og:image" content="https://oacia.dev/two-way-SSL/p620908.png">
+<meta property="article:published_time" content="2023-12-14T10:00:32.000Z">
+<meta property="article:modified_time" content="2023-12-22T10:18:13.508Z">
+<meta property="article:author" content="oacia">
+<meta property="article:tag" content="reverse,安卓逆向,区块链,学习笔记,破解实战">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oacia.dev/two-way-SSL/640.png">
+<meta name="twitter:creator" content="@oacia86">
+
 
   <title>
 https双向认证及绕过方法 |
@@ -128,12 +147,12 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       </div>
       <div id="imgs" class="pjax">
         <ul>
-          <li class="item" data-background-image="/picture/86B509F7B7299F86DCE96564658FB29A.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_v0DQ0rvOfB.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_XABTvOZXKW.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_E46Gbhbdvq.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_4T3XpHtE02.jpg"></li>
-          <li class="item" data-background-image="/picture/1E69772B894845E11142B733101D7BB4.jpg"></li>
+          <li class="item" data-background-image="/picture/63.jpg"></li>
+          <li class="item" data-background-image="/picture/21.jpg"></li>
+          <li class="item" data-background-image="/picture/20.jpg"></li>
+          <li class="item" data-background-image="/picture/10.jpg"></li>
+          <li class="item" data-background-image="/picture/1.jpg"></li>
+          <li class="item" data-background-image="/picture/60.jpg"></li>
         </ul>
       </div>
     </header>
@@ -358,7 +377,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item left">
       
 
-  <a href="/blog-domain/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_6C8IVcXpiw.jpg" title="这两个月关于域名的二三事">
+  <a href="/blog-domain/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;41.jpg" title="这两个月关于域名的二三事">
   <span class="type">上一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>这两个月关于域名的二三事</h3>
@@ -368,7 +387,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item right">
       
 
-  <a href="/telegram-bot-develop/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;925FE6FD1FAB7BD99344771B50CE1210.jpg" title="telegram bot 初体验及云端部署">
+  <a href="/telegram-bot-develop/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;43.jpg" title="telegram bot 初体验及云端部署">
   <span class="type">下一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>telegram bot 初体验及云端部署</h3>

@@ -36,6 +36,26 @@
 <link rel="canonical" href="https://oacia.dev/lowmemorykiller/">
 
 
+<meta name="description" content="# lowmemorykiller 概述 Android 的设计理念之一，便是应用程序退出，但进程还会继续存在系统以便再次启动时提高响应时间。这样的设计会带来一个问题，每个进程都有自己独立的内存地址空间，随着应用打开数量的增多，系统已使用的内存越来越大，就很有可能导致系统内存不足，那么需要一个能管理所有进程，根据一定策略来释放进程的策略，这便有了 lmk ，全称为 LowMemoryKiller">
+<meta property="og:type" content="article">
+<meta property="og:title" content="lowmemorykiller原理分析">
+<meta property="og:url" content="https://oacia.dev/lowmemorykiller/">
+<meta property="og:site_name" content="oaciaのBbBlog~">
+<meta property="og:description" content="# lowmemorykiller 概述 Android 的设计理念之一，便是应用程序退出，但进程还会继续存在系统以便再次启动时提高响应时间。这样的设计会带来一个问题，每个进程都有自己独立的内存地址空间，随着应用打开数量的增多，系统已使用的内存越来越大，就很有可能导致系统内存不足，那么需要一个能管理所有进程，根据一定策略来释放进程的策略，这便有了 lmk ，全称为 LowMemoryKiller">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oacia.dev/lowmemorykiller/1836169-15d36c6cfee0a381.webp">
+<meta property="og:image" content="https://oacia.dev/lowmemorykiller/image-20231011090236210.png">
+<meta property="og:image" content="https://oacia.dev/lowmemorykiller/image-20231011090349845.png">
+<meta property="og:image" content="https://oacia.dev/lowmemorykiller/image-20231011090514060.png">
+<meta property="og:image" content="https://oacia.dev/lowmemorykiller/1836169-1c2fcdb2bd0a6664.webp">
+<meta property="article:published_time" content="2023-10-10T07:40:53.000Z">
+<meta property="article:modified_time" content="2023-10-18T02:59:02.213Z">
+<meta property="article:author" content="oacia">
+<meta property="article:tag" content="reverse,安卓逆向,区块链,学习笔记,破解实战">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oacia.dev/lowmemorykiller/1836169-15d36c6cfee0a381.webp">
+<meta name="twitter:creator" content="@oacia86">
+
 
   <title>
 lowmemorykiller原理分析 |
@@ -128,12 +148,12 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       </div>
       <div id="imgs" class="pjax">
         <ul>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_sQY7MqnjkR.jpg"></li>
-          <li class="item" data-background-image="/picture/1BDE0313945CB87E5C30778A8FDE90F2.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_T25dGVhx6H.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_Ieb91y72fY.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_z3haaNrwuR.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_yR5ppRgEgl.jpg"></li>
+          <li class="item" data-background-image="/picture/31.jpg"></li>
+          <li class="item" data-background-image="/picture/48.jpg"></li>
+          <li class="item" data-background-image="/picture/30.jpg"></li>
+          <li class="item" data-background-image="/picture/10.jpg"></li>
+          <li class="item" data-background-image="/picture/98.jpg"></li>
+          <li class="item" data-background-image="/picture/100.jpg"></li>
         </ul>
       </div>
     </header>
@@ -276,7 +296,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item left">
       
 
-  <a href="/android-binder/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_Lz9cxOf3qT.jpg" title="android-binder">
+  <a href="/android-binder/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;51.jpg" title="android-binder">
   <span class="type">上一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>android-binder</h3>
@@ -286,7 +306,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item right">
       
 
-  <a href="/CBCTF-2023/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_HRI3doPvTs.jpg" title="CBCTF auuuu3和vm_flutter出题思路及wp">
+  <a href="/CBCTF-2023/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;39.jpg" title="CBCTF auuuu3和vm_flutter出题思路及wp">
   <span class="type">下一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>CBCTF auuuu3和vm_flutter出题思路及wp</h3>

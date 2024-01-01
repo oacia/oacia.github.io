@@ -38,6 +38,53 @@
 <link rel="canonical" href="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/">
 
 
+<meta name="description" content="常年不去上早八课的人，今天居然在八点前就醒了，要问为什么？这比赛从早上八点打到晚上八点 &gt;…&lt;(悲) 不过，咱们队伍在下午就把逆向题 ak 了～居然没有坐牢到晚上 (●’◡’●)  题目附件: 点击下载 # careful 动态调试，题目里有个 inline hook, 在这里打个断点  那么网址就是 Just_An_APIH00k11.com # babyre die 查一下壳">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DASCTF 2023六月挑战赛 二进制专项 RE writeup">
+<meta property="og:url" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/">
+<meta property="og:site_name" content="oaciaのBbBlog~">
+<meta property="og:description" content="常年不去上早八课的人，今天居然在八点前就醒了，要问为什么？这比赛从早上八点打到晚上八点 &gt;…&lt;(悲) 不过，咱们队伍在下午就把逆向题 ak 了～居然没有坐牢到晚上 (●’◡’●)  题目附件: 点击下载 # careful 动态调试，题目里有个 inline hook, 在这里打个断点  那么网址就是 Just_An_APIH00k11.com # babyre die 查一下壳">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604155520790-1685874703531-7.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604155708500-1685874703531-8.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604160528205-1685874703531-9.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604170253987-1685874703531-10.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604170321641-1685874703531-11.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604170357225-1685874703531-12.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604170448531-1685874703531-13.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604170942267-1685874703531-14.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604172257775-1685874703531-15.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604172306573-1685874703531-16.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604172324746-1685874703531-17.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604080525484-1685874703531-18.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604080836146-1685874703532-19.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604091113130-1685874703532-20.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604091158113-1685874703532-21.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604091222886-1685874703532-22.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604175543351-1685874703532-23.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604181159971-1685874703532-24.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604181040985-1685874703532-25.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604181917246-1685874703532-26.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604182002579-1685874657948-3-1685874703533-31.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604093542315-1685874703532-27.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604185203790.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604135543069-1685874703532-28.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604151321851-1685874703532-29.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604150237185-1685874703532-30.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604152619966-1685874677566-5-1685874703534-32.png">
+<meta property="article:published_time" content="2023-06-04T10:24:07.000Z">
+<meta property="article:modified_time" content="2023-09-03T16:43:42.968Z">
+<meta property="article:author" content="oacia">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="inline hook">
+<meta property="article:tag" content="IsDebuggerPresent">
+<meta property="article:tag" content="sleep反调试">
+<meta property="article:tag" content="python逆向">
+<meta property="article:tag" content="go逆向">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oacia.dev/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/image-20230604155520790-1685874703531-7.png">
+<meta name="twitter:creator" content="@oacia86">
+
 
   <title>
 DASCTF 2023六月挑战赛 二进制专项 RE writeup |
@@ -130,12 +177,12 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       </div>
       <div id="imgs" class="pjax">
         <ul>
-          <li class="item" data-background-image="/picture/v2-85ed8bed82356bc42302df4685eb4667_r.jpg"></li>
-          <li class="item" data-background-image="/picture/2381000B8F88BB004906DBBEC1C9B89B.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_n1WYGI3MDh.jpg"></li>
-          <li class="item" data-background-image="/picture/v2-ce51d65803598f6b519d1eb87f75f375_r.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_o9eT6CmIL9.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_Ieb91y72fY.jpg"></li>
+          <li class="item" data-background-image="/picture/13.jpg"></li>
+          <li class="item" data-background-image="/picture/3.jpg"></li>
+          <li class="item" data-background-image="/picture/33.jpg"></li>
+          <li class="item" data-background-image="/picture/27.jpg"></li>
+          <li class="item" data-background-image="/picture/51.jpg"></li>
+          <li class="item" data-background-image="/picture/28.jpg"></li>
         </ul>
       </div>
     </header>
@@ -319,7 +366,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item left">
       
 
-  <a href="/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_XHu7XU4qXu.jpg" title="Linux进程通信">
+  <a href="/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;43.jpg" title="Linux进程通信">
   <span class="type">上一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>Linux进程通信</h3>
@@ -329,7 +376,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item right">
       
 
-  <a href="/hws-2023/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;v2-d55db9ae09c3dda1199c6b7743f72756_r.jpg" title="HWS2023夏令营CTF选拔赛writeup">
+  <a href="/hws-2023/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;35.jpg" title="HWS2023夏令营CTF选拔赛writeup">
   <span class="type">下一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>HWS2023夏令营CTF选拔赛writeup</h3>

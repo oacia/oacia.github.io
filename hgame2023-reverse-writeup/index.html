@@ -38,6 +38,32 @@
 <link rel="canonical" href="https://oacia.dev/hgame2023-reverse-writeup/">
 
 
+<meta name="description" content="把今年 hgame 四周的逆向题 ak 啦，还拿了个逆向单方向奖呢～(●’◡’●), 顺手做了两道区块链的题：)  题目附件: 点击下载 # week1 # a_cup_of_tea tea 算法 from ctypes import *def decrypt(v, k):    v0, v1 &#x3D; c_uint32(v[0]), c_uint32(v[1])    delta &#x3D; 0x54321">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hgame2023 逆向 writeup">
+<meta property="og:url" content="https://oacia.dev/hgame2023-reverse-writeup/">
+<meta property="og:site_name" content="oaciaのBbBlog~">
+<meta property="og:description" content="把今年 hgame 四周的逆向题 ak 啦，还拿了个逆向单方向奖呢～(●’◡’●), 顺手做了两道区块链的题：)  题目附件: 点击下载 # week1 # a_cup_of_tea tea 算法 from ctypes import *def decrypt(v, k):    v0, v1 &#x3D; c_uint32(v[0]), c_uint32(v[1])    delta &#x3D; 0x54321">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oacia.dev/hgame2023-reverse-writeup/image-20230503025405956.png">
+<meta property="og:image" content="https://oacia.dev/hgame2023-reverse-writeup/image-20230503025722115.png">
+<meta property="og:image" content="https://oacia.dev/hgame2023-reverse-writeup/image-20230503025717892.png">
+<meta property="og:image" content="https://oacia.dev/hgame2023-reverse-writeup/image-20230503025712252.png">
+<meta property="og:image" content="https://oacia.dev/hgame2023-reverse-writeup/image-20230503025709293.png">
+<meta property="og:image" content="https://oacia.dev/hgame2023-reverse-writeup/image-20230503025704176.png">
+<meta property="og:image" content="https://oacia.dev/hgame2023-reverse-writeup/image-20230503025701451.png">
+<meta property="og:image" content="https://oacia.dev/hgame2023-reverse-writeup/image-20230503025658554.png">
+<meta property="og:image" content="https://oacia.dev/hgame2023-reverse-writeup/image-20230503025655832.png">
+<meta property="og:image" content="https://oacia.dev/hgame2023-reverse-writeup/image-20230503025652537.png">
+<meta property="article:published_time" content="2023-02-06T18:51:22.000Z">
+<meta property="article:modified_time" content="2023-09-03T16:46:22.906Z">
+<meta property="article:author" content="oacia">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="逆向">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oacia.dev/hgame2023-reverse-writeup/image-20230503025405956.png">
+<meta name="twitter:creator" content="@oacia86">
+
 
   <title>
 Hgame2023 逆向 writeup |
@@ -130,12 +156,12 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       </div>
       <div id="imgs" class="pjax">
         <ul>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_z3haaNrwuR.jpg"></li>
-          <li class="item" data-background-image="/picture/v2-ce51d65803598f6b519d1eb87f75f375_r.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_7tfaMXOyLf.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_Nw3x0u57Jg.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_HWsdLby1zC.jpg"></li>
-          <li class="item" data-background-image="/picture/7DD6FD0CED6AEC37828A8046882B2DAC.jpg"></li>
+          <li class="item" data-background-image="/picture/78.jpg"></li>
+          <li class="item" data-background-image="/picture/20.jpg"></li>
+          <li class="item" data-background-image="/picture/89.jpg"></li>
+          <li class="item" data-background-image="/picture/36.jpg"></li>
+          <li class="item" data-background-image="/picture/67.jpg"></li>
+          <li class="item" data-background-image="/picture/23.jpg"></li>
         </ul>
       </div>
     </header>
@@ -302,7 +328,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item left">
       
 
-  <a href="/python%E9%80%86%E5%90%91/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_h9O8kwd8KW.jpg" title="python逆向">
+  <a href="/python%E9%80%86%E5%90%91/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;99.jpg" title="python逆向">
   <span class="type">上一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>python逆向</h3>
@@ -312,7 +338,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item right">
       
 
-  <a href="/%E6%89%B9%E9%87%8F%E7%BC%96%E8%AF%91%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E8%BF%87%E7%A8%8B%E8%AE%B0%E5%BD%95/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_n1WYGI3MDh.jpg" title="批量编译智能合约过程记录">
+  <a href="/%E6%89%B9%E9%87%8F%E7%BC%96%E8%AF%91%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E8%BF%87%E7%A8%8B%E8%AE%B0%E5%BD%95/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;61.jpg" title="批量编译智能合约过程记录">
   <span class="type">下一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>批量编译智能合约过程记录</h3>

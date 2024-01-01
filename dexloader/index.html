@@ -36,6 +36,28 @@
 <link rel="canonical" href="https://oacia.dev/dexloader/">
 
 
+<meta name="description" content="在安卓中可以动态加载 dex 来进行类的调用，而对于市面上常见的 dex 加固来说，也同样采取了加密 dex, 并且在解密之后动态调用的方式来进行 dex 的保护，所以我觉得我有必要去学习一下 dex 的动态加载过程，从而对 apk 的加固有更加深刻的了解和体会.  # Android studio 生成 dex 既然我们想要让我们的程序动态加载 dex, 那么我们肯定需要先生成一个 dex 才">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android动态加载dex">
+<meta property="og:url" content="https://oacia.dev/dexloader/">
+<meta property="og:site_name" content="oaciaのBbBlog~">
+<meta property="og:description" content="在安卓中可以动态加载 dex 来进行类的调用，而对于市面上常见的 dex 加固来说，也同样采取了加密 dex, 并且在解密之后动态调用的方式来进行 dex 的保护，所以我觉得我有必要去学习一下 dex 的动态加载过程，从而对 apk 的加固有更加深刻的了解和体会.  # Android studio 生成 dex 既然我们想要让我们的程序动态加载 dex, 那么我们肯定需要先生成一个 dex 才">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oacia.dev/dexloader/image-20230925143653687.png">
+<meta property="og:image" content="https://oacia.dev/dexloader/image-20230925143750405.png">
+<meta property="og:image" content="https://oacia.dev/dexloader/image-20230925143945822.png">
+<meta property="og:image" content="https://oacia.dev/dexloader/image-20230925144009844.png">
+<meta property="og:image" content="https://oacia.dev/dexloader/image-20230925150407568.png">
+<meta property="og:image" content="https://oacia.dev/dexloader/image-20230925175843816.png">
+<meta property="og:image" content="https://oacia.dev/dexloader/image-20230925183351444.png">
+<meta property="article:published_time" content="2023-09-25T06:01:45.000Z">
+<meta property="article:modified_time" content="2023-09-25T10:34:56.391Z">
+<meta property="article:author" content="oacia">
+<meta property="article:tag" content="reverse,安卓逆向,区块链,学习笔记,破解实战">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oacia.dev/dexloader/image-20230925143653687.png">
+<meta name="twitter:creator" content="@oacia86">
+
 
   <title>
 Android动态加载dex |
@@ -128,12 +150,12 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       </div>
       <div id="imgs" class="pjax">
         <ul>
-          <li class="item" data-background-image="/picture/AF1392CA77D9D867A0C9738D569A7EFC.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_e2kVCwu9IT.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_Lz9cxOf3qT.jpg"></li>
-          <li class="item" data-background-image="/picture/v2-ce51d65803598f6b519d1eb87f75f375_r.jpg"></li>
-          <li class="item" data-background-image="/picture/v2-2bb831c8a9b71d8d258b36fe5150e05d_r.jpg"></li>
-          <li class="item" data-background-image="/picture/v2-b1a8baf326cd03196853f118986b1476_r.jpg"></li>
+          <li class="item" data-background-image="/picture/36.jpg"></li>
+          <li class="item" data-background-image="/picture/3.jpg"></li>
+          <li class="item" data-background-image="/picture/23.jpg"></li>
+          <li class="item" data-background-image="/picture/45.jpg"></li>
+          <li class="item" data-background-image="/picture/53.jpg"></li>
+          <li class="item" data-background-image="/picture/77.jpg"></li>
         </ul>
       </div>
     </header>
@@ -254,7 +276,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item left">
       
 
-  <a href="/360-jiagu/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_a1LZZk88ji.jpg" title="(doing)360加固dex解密算法分析">
+  <a href="/360-jiagu/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;41.jpg" title="(doing)360加固dex解密算法分析">
   <span class="type">上一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>(doing)360加固dex解密算法分析</h3>
@@ -264,7 +286,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item right">
       
 
-  <a href="/ollvm-study/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_nTQVBGo8B0.jpg" title="(doing)ollvm三种混淆模式的反混淆思路">
+  <a href="/ollvm-study/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;12.jpg" title="(doing)ollvm三种混淆模式的反混淆思路">
   <span class="type">下一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>(doing)ollvm三种混淆模式的反混淆思路</h3>

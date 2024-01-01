@@ -38,6 +38,34 @@
 <link rel="canonical" href="https://oacia.dev/%E7%94%A8c%E8%B0%83%E7%94%A8python/">
 
 
+<meta name="description" content="# 0x0 start 首先导入 Python.h, 并添加 python37_d.lib 依赖 # 0x1 遇到的问题 刚开始跟着教程走，结果总是提示缺少 python37_d.lib 依赖，后来根据下面的找到的教程才发现库目录才是有依赖搜索的目录  ~~ 看教程里是从上往下数第四个改成了 C:\environment\Python37\libs 结果被骗了…~~QAQ  https:&#x2F;&#x2F;blo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在C语言中调用Python">
+<meta property="og:url" content="https://oacia.dev/%E7%94%A8c%E8%B0%83%E7%94%A8python/">
+<meta property="og:site_name" content="oaciaのBbBlog~">
+<meta property="og:description" content="# 0x0 start 首先导入 Python.h, 并添加 python37_d.lib 依赖 # 0x1 遇到的问题 刚开始跟着教程走，结果总是提示缺少 python37_d.lib 依赖，后来根据下面的找到的教程才发现库目录才是有依赖搜索的目录  ~~ 看教程里是从上往下数第四个改成了 C:\environment\Python37\libs 结果被骗了…~~QAQ  https:&#x2F;&#x2F;blo">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oacia.dev/%E7%94%A8c%E8%B0%83%E7%94%A8python/image-20220920190610497.png">
+<meta property="og:image" content="https://oacia.dev/%E7%94%A8c%E8%B0%83%E7%94%A8python/image-20220920185252138.png">
+<meta property="og:image" content="https://oacia.dev/%E7%94%A8c%E8%B0%83%E7%94%A8python/image-20220920185347392.png">
+<meta property="og:image" content="https://oacia.dev/%E7%94%A8c%E8%B0%83%E7%94%A8python/image-20220920185516666.png">
+<meta property="og:image" content="https://oacia.dev/%E7%94%A8c%E8%B0%83%E7%94%A8python/image-20220920191141530.png">
+<meta property="og:image" content="https://oacia.dev/%E7%94%A8c%E8%B0%83%E7%94%A8python/image-20230904005044622.png">
+<meta property="og:image" content="https://oacia.dev/%E7%94%A8c%E8%B0%83%E7%94%A8python/image-20220920191757251.png">
+<meta property="og:image" content="https://oacia.dev/%E7%94%A8c%E8%B0%83%E7%94%A8python/image-20220920194206019.png">
+<meta property="og:image" content="https://oacia.dev/%E7%94%A8c%E8%B0%83%E7%94%A8python/image-20220920194510930.png">
+<meta property="og:image" content="https://oacia.dev/%E7%94%A8c%E8%B0%83%E7%94%A8python/image-20220920194925163.png">
+<meta property="og:image" content="https://oacia.dev/%E7%94%A8c%E8%B0%83%E7%94%A8python/image-20220920195303159.png">
+<meta property="article:published_time" content="2022-11-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-09-03T16:51:44.737Z">
+<meta property="article:author" content="oacia">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="C语言">
+<meta property="article:tag" content="交叉编译">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oacia.dev/%E7%94%A8c%E8%B0%83%E7%94%A8python/image-20220920190610497.png">
+<meta name="twitter:creator" content="@oacia86">
+
 
   <title>
 在C语言中调用Python |
@@ -130,12 +158,12 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       </div>
       <div id="imgs" class="pjax">
         <ul>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_iRbrWmLEDN.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_T25dGVhx6H.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_yR5ppRgEgl.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_V1DjaQlETG.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_e2kVCwu9IT.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_Ieb91y72fY.jpg"></li>
+          <li class="item" data-background-image="/picture/90.jpg"></li>
+          <li class="item" data-background-image="/picture/48.jpg"></li>
+          <li class="item" data-background-image="/picture/82.jpg"></li>
+          <li class="item" data-background-image="/picture/57.jpg"></li>
+          <li class="item" data-background-image="/picture/89.jpg"></li>
+          <li class="item" data-background-image="/picture/99.jpg"></li>
         </ul>
       </div>
     </header>
@@ -280,7 +308,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item left">
       
 
-  <a href="/2022%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9_1024%E7%A8%8B%E5%BA%8F%E5%91%98%E8%8A%82_T4_%E5%8C%BA%E5%9D%97%E9%93%BE%E8%AF%A6%E8%A7%A3/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_4eEqpKncFz.jpg" title="2022哔哩哔哩 1024程序员节 T4 区块链详解">
+  <a href="/2022%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9_1024%E7%A8%8B%E5%BA%8F%E5%91%98%E8%8A%82_T4_%E5%8C%BA%E5%9D%97%E9%93%BE%E8%AF%A6%E8%A7%A3/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;36.jpg" title="2022哔哩哔哩 1024程序员节 T4 区块链详解">
   <span class="type">上一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>2022哔哩哔哩 1024程序员节 T4 区块链详解</h3>
@@ -290,7 +318,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item right">
       
 
-  <a href="/%E7%A5%9D%E5%B0%8F%E5%A4%8F%E7%94%9F%E6%97%A5%E5%BF%AB%E4%B9%90%EF%BC%81%CC%8B(%E0%B9%91%CB%83%CC%81%EA%87%B4%CB%82%CC%80%E0%B9%91)/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_N2lQD5HgH2.jpg" title="祝小夏生日快乐(๑˃́ꇴ˂̀๑)">
+  <a href="/%E7%A5%9D%E5%B0%8F%E5%A4%8F%E7%94%9F%E6%97%A5%E5%BF%AB%E4%B9%90%EF%BC%81%CC%8B(%E0%B9%91%CB%83%CC%81%EA%87%B4%CB%82%CC%80%E0%B9%91)/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;34.jpg" title="祝小夏生日快乐(๑˃́ꇴ˂̀๑)">
   <span class="type">下一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>祝小夏生日快乐(๑˃́ꇴ˂̀๑)</h3>

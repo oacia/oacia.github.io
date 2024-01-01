@@ -36,6 +36,44 @@
 <link rel="canonical" href="https://oacia.dev/flutter-ACTF-native-app/">
 
 
+<meta name="description" content="# 前言 算了一下好长时间没打过 CTF 了，前两天看到 ACTF 逆向有道 flutter 逆向题就过来玩玩啦，花了一个下午做完了。说来也巧，我给 DASCTF 十月赛出的逆向题其中一道也是 flutter, 不过那题我难度降的相当之低啦，不知道有多少人做出来了呢～ # 还原函数名 flutter 逆向的一大难点就是不知道 libapp.so  的函数名，虽然有工具 reflutter  可以帮">
+<meta property="og:type" content="article">
+<meta property="og:title" content="flutter逆向 ACTF native app">
+<meta property="og:url" content="https://oacia.dev/flutter-ACTF-native-app/">
+<meta property="og:site_name" content="oaciaのBbBlog~">
+<meta property="og:description" content="# 前言 算了一下好长时间没打过 CTF 了，前两天看到 ACTF 逆向有道 flutter 逆向题就过来玩玩啦，花了一个下午做完了。说来也巧，我给 DASCTF 十月赛出的逆向题其中一道也是 flutter, 不过那题我难度降的相当之低啦，不知道有多少人做出来了呢～ # 还原函数名 flutter 逆向的一大难点就是不知道 libapp.so  的函数名，虽然有工具 reflutter  可以帮">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031182720564.png">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031183050383.png">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031183135453.png">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031183441477.png">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031183702090.png">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031183814522.png">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031185252569.png">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031185414233.png">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031185438467.png">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031185604019.png">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031185952753.png">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031190502580.png">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031190621711.png">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031190653343.png">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031190932527.png">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031191001330.png">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031191049306.png">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031191123141.png">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031191544680.png">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031192301154.png">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031193001825.png">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031194118997.png">
+<meta property="og:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031194218233.png">
+<meta property="article:published_time" content="2023-10-31T10:04:59.000Z">
+<meta property="article:modified_time" content="2023-10-31T11:59:11.391Z">
+<meta property="article:author" content="oacia">
+<meta property="article:tag" content="reverse,安卓逆向,区块链,学习笔记,破解实战">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oacia.dev/flutter-ACTF-native-app/image-20231031182720564.png">
+<meta name="twitter:creator" content="@oacia86">
+
 
   <title>
 flutter逆向 ACTF native app |
@@ -128,12 +166,12 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       </div>
       <div id="imgs" class="pjax">
         <ul>
-          <li class="item" data-background-image="/picture/v2-72b0065499c84635f4418dc14ae591cf_r.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_HWsdLby1zC.jpg"></li>
-          <li class="item" data-background-image="/picture/v2-74f2b88f82ff7254d350718e5770cc1b_r.jpg"></li>
-          <li class="item" data-background-image="/picture/AF1392CA77D9D867A0C9738D569A7EFC.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_oa4CVLdZg4.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_yR5ppRgEgl.jpg"></li>
+          <li class="item" data-background-image="/picture/6.jpg"></li>
+          <li class="item" data-background-image="/picture/94.jpg"></li>
+          <li class="item" data-background-image="/picture/58.jpg"></li>
+          <li class="item" data-background-image="/picture/0.png"></li>
+          <li class="item" data-background-image="/picture/68.jpg"></li>
+          <li class="item" data-background-image="/picture/81.jpg"></li>
         </ul>
       </div>
     </header>
@@ -285,7 +323,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item left">
       
 
-  <a href="/unidbg-usage/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_vT4kMzOk3j.jpg" title="unidbg usage">
+  <a href="/unidbg-usage/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;70.jpg" title="unidbg usage">
   <span class="type">上一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>unidbg usage</h3>
@@ -295,7 +333,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item right">
       
 
-  <a href="/hina-AI-voice/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_zUk194FAVo.jpg" title="I wanna to hear your voice, hina">
+  <a href="/hina-AI-voice/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;96.jpg" title="I wanna to hear your voice, hina">
   <span class="type">下一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>I wanna to hear your voice, hina</h3>

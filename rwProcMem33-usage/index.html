@@ -38,6 +38,47 @@
 <link rel="canonical" href="https://oacia.dev/rwProcMem33-usage/">
 
 
+<meta name="description" content="为了做出腾讯游戏安全竞赛初赛的这道安卓题，开始学习 rwProcMem33  的使用来打硬件断点了 在 juice4fun 师傅做腾讯游戏安全竞赛初赛的安卓题的 writeup 时，使用了 rwProcMem33 来对安卓手机打下硬件断点分析反调试，我也对在安卓手机中打硬件断点的工具很感兴趣，所以就学习一下编译和使用的方法啦 要想使用 rwProcMem33, 编译环境 (即 AOSP 安卓内核">
+<meta property="og:type" content="article">
+<meta property="og:title" content="将rwProcMem33编译进安卓内核">
+<meta property="og:url" content="https://oacia.dev/rwProcMem33-usage/">
+<meta property="og:site_name" content="oaciaのBbBlog~">
+<meta property="og:description" content="为了做出腾讯游戏安全竞赛初赛的这道安卓题，开始学习 rwProcMem33  的使用来打硬件断点了 在 juice4fun 师傅做腾讯游戏安全竞赛初赛的安卓题的 writeup 时，使用了 rwProcMem33 来对安卓手机打下硬件断点分析反调试，我也对在安卓手机中打硬件断点的工具很感兴趣，所以就学习一下编译和使用的方法啦 要想使用 rwProcMem33, 编译环境 (即 AOSP 安卓内核">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230811162236189.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230811175325211.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230811175516413.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230811180538737.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230811180608202.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230816224032513.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230811172340268.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230811232551456.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230812144108245.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230811184714849.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230811192125650.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230813120617329.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230903200605263.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230903202421912.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230913174004277.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230913174430779.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230816235239736.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230812145430979.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230813121805073.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230817023155232.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230817023547904.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230816194207598.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230816221255328.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230816221420002.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230816221529230.png">
+<meta property="article:published_time" content="2023-08-10T13:41:17.000Z">
+<meta property="article:modified_time" content="2023-11-19T12:22:30.640Z">
+<meta property="article:author" content="oacia">
+<meta property="article:tag" content="rwProcMem33">
+<meta property="article:tag" content="android kernel">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oacia.dev/rwProcMem33-usage/image-20230811162236189.png">
+<meta name="twitter:creator" content="@oacia86">
+
 
   <title>
 将rwProcMem33编译进安卓内核 |
@@ -130,12 +171,12 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       </div>
       <div id="imgs" class="pjax">
         <ul>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_x8PA7BfLSb.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_lzqGeoYuhh.jpg"></li>
-          <li class="item" data-background-image="/picture/1BDE0313945CB87E5C30778A8FDE90F2.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_Pnwwwfj74o.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_n1WYGI3MDh.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_jUMSfwnRM5.jpg"></li>
+          <li class="item" data-background-image="/picture/82.jpg"></li>
+          <li class="item" data-background-image="/picture/37.jpg"></li>
+          <li class="item" data-background-image="/picture/60.jpg"></li>
+          <li class="item" data-background-image="/picture/62.jpg"></li>
+          <li class="item" data-background-image="/picture/47.jpg"></li>
+          <li class="item" data-background-image="/picture/101.png"></li>
         </ul>
       </div>
     </header>
@@ -460,7 +501,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item left">
       
 
-  <a href="/Pixel3-root/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_nTQVBGo8B0.jpg" title="Pixel3 刷机与root记录">
+  <a href="/Pixel3-root/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;101.png" title="Pixel3 刷机与root记录">
   <span class="type">上一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>Pixel3 刷机与root记录</h3>
@@ -470,7 +511,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item right">
       
 
-  <a href="/idapython-learning/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_6C8IVcXpiw.jpg" title="IDApython学习笔记">
+  <a href="/idapython-learning/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;32.jpg" title="IDApython学习笔记">
   <span class="type">下一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>IDApython学习笔记</h3>

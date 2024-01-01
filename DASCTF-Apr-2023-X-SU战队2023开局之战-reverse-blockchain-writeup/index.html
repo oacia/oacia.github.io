@@ -38,6 +38,27 @@
 <link rel="canonical" href="https://oacia.dev/DASCTF-Apr-2023-X-SU%E6%88%98%E9%98%9F2023%E5%BC%80%E5%B1%80%E4%B9%8B%E6%88%98-reverse-blockchain-writeup/">
 
 
+<meta name="description" content="今天坐牢坐满了八小时，出了三道逆向，一道区块链，帮助我们队拿到了这次比赛的第一名，也算可喜可贺！自己终于不是以前的菜鸡了，遥想去年还啥也不会呢 现在比赛结束了，那就写一下 wp 好咯 PS: 第一次拿到一道困难题的一血，还是很激动的，有一道题目我记得叫做 easyRE，拿了二血是因为吃饭吃到 10 点多才开始做题了，下次一定准时比赛！（下次一定 (●’◡’●)）  题目附件: 点击下载 # re">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DASCTF Apr.2023 X SU战队2023开局之战 reverse&amp;&amp;blockchain writeup">
+<meta property="og:url" content="https://oacia.dev/DASCTF-Apr-2023-X-SU%E6%88%98%E9%98%9F2023%E5%BC%80%E5%B1%80%E4%B9%8B%E6%88%98-reverse-blockchain-writeup/">
+<meta property="og:site_name" content="oaciaのBbBlog~">
+<meta property="og:description" content="今天坐牢坐满了八小时，出了三道逆向，一道区块链，帮助我们队拿到了这次比赛的第一名，也算可喜可贺！自己终于不是以前的菜鸡了，遥想去年还啥也不会呢 现在比赛结束了，那就写一下 wp 好咯 PS: 第一次拿到一道困难题的一血，还是很激动的，有一道题目我记得叫做 easyRE，拿了二血是因为吃饭吃到 10 点多才开始做题了，下次一定准时比赛！（下次一定 (●’◡’●)）  题目附件: 点击下载 # re">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oacia.dev/DASCTF-Apr-2023-X-SU%E6%88%98%E9%98%9F2023%E5%BC%80%E5%B1%80%E4%B9%8B%E6%88%98-reverse-blockchain-writeup/QQ%E5%9B%BE%E7%89%8720230503213934.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-Apr-2023-X-SU%E6%88%98%E9%98%9F2023%E5%BC%80%E5%B1%80%E4%B9%8B%E6%88%98-reverse-blockchain-writeup/image-20230422193930939.png">
+<meta property="og:image" content="https://oacia.dev/DASCTF-Apr-2023-X-SU%E6%88%98%E9%98%9F2023%E5%BC%80%E5%B1%80%E4%B9%8B%E6%88%98-reverse-blockchain-writeup/image-20230422200052059.png">
+<meta property="article:published_time" content="2023-04-22T11:15:52.000Z">
+<meta property="article:modified_time" content="2023-12-12T17:02:32.467Z">
+<meta property="article:author" content="oacia">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="python逆向">
+<meta property="article:tag" content="go逆向">
+<meta property="article:tag" content="逆向">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oacia.dev/DASCTF-Apr-2023-X-SU%E6%88%98%E9%98%9F2023%E5%BC%80%E5%B1%80%E4%B9%8B%E6%88%98-reverse-blockchain-writeup/QQ%E5%9B%BE%E7%89%8720230503213934.png">
+<meta name="twitter:creator" content="@oacia86">
+
 
   <title>
 DASCTF Apr.2023 X SU战队2023开局之战 reverse&&blockchain writeup |
@@ -130,12 +151,12 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       </div>
       <div id="imgs" class="pjax">
         <ul>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_z3haaNrwuR.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_vT4kMzOk3j.jpg"></li>
-          <li class="item" data-background-image="/picture/534BD430C8430A20C7CC5A09F68A43DA.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_Igv1aBDQm1.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_PVsjUNuXCw.jpg"></li>
-          <li class="item" data-background-image="/picture/F7927C427D30ABF23365F3C596F96BB4.jpg"></li>
+          <li class="item" data-background-image="/picture/11.jpg"></li>
+          <li class="item" data-background-image="/picture/80.jpg"></li>
+          <li class="item" data-background-image="/picture/52.jpg"></li>
+          <li class="item" data-background-image="/picture/32.jpg"></li>
+          <li class="item" data-background-image="/picture/47.jpg"></li>
+          <li class="item" data-background-image="/picture/92.jpg"></li>
         </ul>
       </div>
     </header>
@@ -287,7 +308,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item left">
       
 
-  <a href="/frida%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_h9O8kwd8KW.jpg" title="frida学习笔记-安卓逆向">
+  <a href="/frida%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;57.jpg" title="frida学习笔记-安卓逆向">
   <span class="type">上一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>frida学习笔记-安卓逆向</h3>
@@ -297,7 +318,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item right">
       
 
-  <a href="/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_XABTvOZXKW.jpg" title="Linux进程通信">
+  <a href="/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;8.jpg" title="Linux进程通信">
   <span class="type">下一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>Linux进程通信</h3>

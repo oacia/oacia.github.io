@@ -38,6 +38,26 @@
 <link rel="canonical" href="https://oacia.dev/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/">
 
 
+<meta name="description" content="在日常遇到的.so,.elf 格式的二进制文件，常常可以看到 Linux 进程通信的使用，接下来的部分，我将介绍 Linux 通信的各种实现方式以及相应的代码示例  什么是进程？ 进程是操作系统的概念，每当我们执行一个程序时，对于操作系统来讲就创建了一个进程，在这个过程中，伴随着资源的分配和释放。可以认为进程是一个程序的一次执行过程。 什么是进程通信？ 进程用户空间是相互独立的，一般而言是不能相">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux进程通信">
+<meta property="og:url" content="https://oacia.dev/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/">
+<meta property="og:site_name" content="oaciaのBbBlog~">
+<meta property="og:description" content="在日常遇到的.so,.elf 格式的二进制文件，常常可以看到 Linux 进程通信的使用，接下来的部分，我将介绍 Linux 通信的各种实现方式以及相应的代码示例  什么是进程？ 进程是操作系统的概念，每当我们执行一个程序时，对于操作系统来讲就创建了一个进程，在这个过程中，伴随着资源的分配和释放。可以认为进程是一个程序的一次执行过程。 什么是进程通信？ 进程用户空间是相互独立的，一般而言是不能相">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oacia.dev/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/image-20230529111643432.png">
+<meta property="article:published_time" content="2023-05-25T02:12:08.000Z">
+<meta property="article:modified_time" content="2023-09-14T11:02:58.951Z">
+<meta property="article:author" content="oacia">
+<meta property="article:tag" content="进程通信">
+<meta property="article:tag" content="信号量">
+<meta property="article:tag" content="消息队列">
+<meta property="article:tag" content="管道">
+<meta property="article:tag" content="共享内存">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oacia.dev/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/image-20230529111643432.png">
+<meta name="twitter:creator" content="@oacia86">
+
 
   <title>
 Linux进程通信 |
@@ -130,12 +150,12 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       </div>
       <div id="imgs" class="pjax">
         <ul>
-          <li class="item" data-background-image="/picture/v2-25a908ce7d14f96c9245e54b70702881_r.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_UdoiPCP925.jpg"></li>
-          <li class="item" data-background-image="/picture/v2-d55db9ae09c3dda1199c6b7743f72756_r.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_e2kVCwu9IT.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_i9jbNsAjrH.jpg"></li>
-          <li class="item" data-background-image="/picture/v2-a97583c11f5863b9e1feaaa306c90482_r.jpg"></li>
+          <li class="item" data-background-image="/picture/82.jpg"></li>
+          <li class="item" data-background-image="/picture/100.jpg"></li>
+          <li class="item" data-background-image="/picture/81.jpg"></li>
+          <li class="item" data-background-image="/picture/41.jpg"></li>
+          <li class="item" data-background-image="/picture/27.jpg"></li>
+          <li class="item" data-background-image="/picture/53.jpg"></li>
         </ul>
       </div>
     </header>
@@ -414,7 +434,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item left">
       
 
-  <a href="/DASCTF-Apr-2023-X-SU%E6%88%98%E9%98%9F2023%E5%BC%80%E5%B1%80%E4%B9%8B%E6%88%98-reverse-blockchain-writeup/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;C8F3C130DB5B26650AD27DF998582944.jpg" title="DASCTF Apr.2023 X SU战队2023开局之战 reverse&amp;&amp;blockchain writeup">
+  <a href="/DASCTF-Apr-2023-X-SU%E6%88%98%E9%98%9F2023%E5%BC%80%E5%B1%80%E4%B9%8B%E6%88%98-reverse-blockchain-writeup/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;70.jpg" title="DASCTF Apr.2023 X SU战队2023开局之战 reverse&amp;&amp;blockchain writeup">
   <span class="type">上一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>DASCTF Apr.2023 X SU战队2023开局之战 reverse&&blockchain writeup</h3>
@@ -424,7 +444,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item right">
       
 
-  <a href="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_IX30VL32eD.jpg" title="DASCTF 2023六月挑战赛 二进制专项 RE writeup">
+  <a href="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;50.jpg" title="DASCTF 2023六月挑战赛 二进制专项 RE writeup">
   <span class="type">下一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>DASCTF 2023六月挑战赛 二进制专项 RE writeup</h3>

@@ -38,6 +38,28 @@
 <link rel="canonical" href="https://oacia.dev/frida%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91/">
 
 
+<meta name="description" content="近期着手准备研究安卓逆向，早就听说 frida 这个安卓逆向神器，所以想要系统的学习一下，这里就当作自己的一个学习笔记，记录本人学习 frida 的过程中所遇到的知识点，防止以后遗忘.  这次的学习教程是由 r0ysue 大佬写的，膜拜！  https:&#x2F;&#x2F;github.com&#x2F;r0ysue&#x2F;AndroidSecurityStudy  # frida 的命令行基本语法 frida -U -l .">
+<meta property="og:type" content="article">
+<meta property="og:title" content="frida学习笔记-安卓逆向">
+<meta property="og:url" content="https://oacia.dev/frida%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91/">
+<meta property="og:site_name" content="oaciaのBbBlog~">
+<meta property="og:description" content="近期着手准备研究安卓逆向，早就听说 frida 这个安卓逆向神器，所以想要系统的学习一下，这里就当作自己的一个学习笔记，记录本人学习 frida 的过程中所遇到的知识点，防止以后遗忘.  这次的学习教程是由 r0ysue 大佬写的，膜拜！  https:&#x2F;&#x2F;github.com&#x2F;r0ysue&#x2F;AndroidSecurityStudy  # frida 的命令行基本语法 frida -U -l .">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oacia.dev/frida%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91/image-20230406115829489.png">
+<meta property="og:image" content="https://oacia.dev/frida%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91/image-20230406121531280.png">
+<meta property="og:image" content="https://oacia.dev/frida%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91/screenshot.png">
+<meta property="og:image" content="https://oacia.dev/frida%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91/image-20230406164512543.png">
+<meta property="og:image" content="https://oacia.dev/frida%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91/image-20230406183248013.png">
+<meta property="og:image" content="https://oacia.dev/frida%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91/test.png">
+<meta property="article:published_time" content="2023-04-05T04:36:01.000Z">
+<meta property="article:modified_time" content="2023-12-16T15:20:31.986Z">
+<meta property="article:author" content="oacia">
+<meta property="article:tag" content="frida">
+<meta property="article:tag" content="安卓逆向">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oacia.dev/frida%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91/image-20230406115829489.png">
+<meta name="twitter:creator" content="@oacia86">
+
 
   <title>
 frida学习笔记-安卓逆向 |
@@ -130,12 +152,12 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       </div>
       <div id="imgs" class="pjax">
         <ul>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_FEMKHYoIxa.jpg"></li>
-          <li class="item" data-background-image="/picture/v2-25a908ce7d14f96c9245e54b70702881_r.jpg"></li>
-          <li class="item" data-background-image="/picture/2381000B8F88BB004906DBBEC1C9B89B.jpg"></li>
-          <li class="item" data-background-image="/picture/v2-74f2b88f82ff7254d350718e5770cc1b_r.jpg"></li>
-          <li class="item" data-background-image="/picture/ApplicationFrameHost_iRbrWmLEDN.jpg"></li>
-          <li class="item" data-background-image="/picture/FAF9732986A6F0DD89CFEA1767D3754C.jpg"></li>
+          <li class="item" data-background-image="/picture/9.jpg"></li>
+          <li class="item" data-background-image="/picture/98.jpg"></li>
+          <li class="item" data-background-image="/picture/44.jpg"></li>
+          <li class="item" data-background-image="/picture/61.jpg"></li>
+          <li class="item" data-background-image="/picture/20.jpg"></li>
+          <li class="item" data-background-image="/picture/5.jpg"></li>
         </ul>
       </div>
     </header>
@@ -797,7 +819,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item left">
       
 
-  <a href="/%E5%AF%B9SM-P200%E5%B9%B3%E6%9D%BF%E7%9A%84root%E8%AE%B0%E5%BD%95/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;ApplicationFrameHost_WcEL9Nh4Mh.jpg" title="对SM-P200平板的root记录">
+  <a href="/%E5%AF%B9SM-P200%E5%B9%B3%E6%9D%BF%E7%9A%84root%E8%AE%B0%E5%BD%95/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;65.jpg" title="对SM-P200平板的root记录">
   <span class="type">上一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>对SM-P200平板的root记录</h3>
@@ -807,7 +829,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item right">
       
 
-  <a href="/DASCTF-Apr-2023-X-SU%E6%88%98%E9%98%9F2023%E5%BC%80%E5%B1%80%E4%B9%8B%E6%88%98-reverse-blockchain-writeup/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;v2-7daf5fd60d53734399086bf9e02077fb_r.jpg" title="DASCTF Apr.2023 X SU战队2023开局之战 reverse&amp;&amp;blockchain writeup">
+  <a href="/DASCTF-Apr-2023-X-SU%E6%88%98%E9%98%9F2023%E5%BC%80%E5%B1%80%E4%B9%8B%E6%88%98-reverse-blockchain-writeup/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;26.jpg" title="DASCTF Apr.2023 X SU战队2023开局之战 reverse&amp;&amp;blockchain writeup">
   <span class="type">下一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>DASCTF Apr.2023 X SU战队2023开局之战 reverse&&blockchain writeup</h3>
