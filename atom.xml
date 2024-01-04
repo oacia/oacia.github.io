@@ -14,6 +14,8 @@
     <category term="区块链" />
     <category term="学习笔记" />
     <category term="破解实战" />
+    <category term="前端" />
+    <category term="CTF" />
     <entry>
         <id>https://oacia.dev/telegram-bot-develop/</id>
         <title>telegram bot 初体验及云端部署</title>

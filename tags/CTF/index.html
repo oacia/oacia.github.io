@@ -36,15 +36,15 @@
 <link rel="canonical" href="https://oacia.dev/tags/ctf/">
 
 
-<meta name="description" content="这里的文章写给未来的自己 不要忘记现在学习的知识">
+<meta name="description" content="月遇从云 花遇和风">
 <meta property="og:type" content="website">
 <meta property="og:title" content="oaciaのBbBlog~">
 <meta property="og:url" content="https://oacia.dev/tags/ctf/">
 <meta property="og:site_name" content="oaciaのBbBlog~">
-<meta property="og:description" content="这里的文章写给未来的自己 不要忘记现在学习的知识">
+<meta property="og:description" content="月遇从云 花遇和风">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="oacia">
-<meta property="article:tag" content="reverse,安卓逆向,区块链,学习笔记,破解实战">
+<meta property="article:tag" content="reverse,安卓逆向,区块链,学习笔记,破解实战,前端,CTF">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:creator" content="@oacia86">
 
@@ -113,12 +113,12 @@
       </div>
       <div id="imgs" class="pjax">
         <ul>
-          <li class="item" data-background-image="/picture/93.jpg"></li>
-          <li class="item" data-background-image="/picture/5.jpg"></li>
-          <li class="item" data-background-image="/picture/86.jpg"></li>
-          <li class="item" data-background-image="/picture/38.jpg"></li>
-          <li class="item" data-background-image="/picture/14.jpg"></li>
-          <li class="item" data-background-image="/picture/80.jpg"></li>
+          <li class="item" data-background-image="/picture/66.jpg"></li>
+          <li class="item" data-background-image="/picture/77.jpg"></li>
+          <li class="item" data-background-image="/picture/53.jpg"></li>
+          <li class="item" data-background-image="/picture/15.jpg"></li>
+          <li class="item" data-background-image="/picture/9.jpg"></li>
+          <li class="item" data-background-image="/picture/95.jpg"></li>
         </ul>
       </div>
     </header>
@@ -184,7 +184,7 @@
   <img class="image" itemprop="image" alt="oacia"
       data-src="/images/avatar.jpg">
   <p class="name" itemprop="name">oacia</p>
-  <div class="description" itemprop="description">这里的文章写给未来的自己 不要忘记现在学习的知识</div>
+  <div class="description" itemprop="description">月遇从云 花遇和风</div>
 </div>
 
 <nav class="state">
@@ -327,6 +327,94 @@
 <script data-config type="text/javascript">
   var LOCAL = {
     path: 'tags/ctf/',
+    favicon: {
+      show: "柚鳥ナツ",
+      hide: "甘い幸せ"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+<!--尝试不使用polyfill-->
+<!--<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>-->
+
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+</body>
+</html>
+ i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">oacia @ oacia</span>
+  </div>
+  <div class="count">
+    <span class="post-meta-item-icon">
+      <i class="ic i-chart-area"></i>
+    </span>
+    <span title="站点总字数">604k 字</span>
+
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="ic i-coffee"></i>
+    </span>
+    <span title="站点阅读时长">9:09</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: 'tags/CTF/',
     favicon: {
       show: "柚鳥ナツ",
       hide: "甘い幸せ"

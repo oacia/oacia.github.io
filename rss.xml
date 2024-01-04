@@ -8,7 +8,7 @@
         <author>
           <name>oacia</name>
         </author>
-        <description>这里的文章写给未来的自己 不要忘记现在学习的知识</description>
+        <description>月遇从云 花遇和风</description>
         <language>zh-CN</language>
         <pubDate>Sun, 31 Dec 2023 21:08:18 +0800</pubDate>
         <lastBuildDate>Sun, 31 Dec 2023 21:08:18 +0800</lastBuildDate>
@@ -17,6 +17,8 @@
         <category term="区块链" />
         <category term="学习笔记" />
         <category term="破解实战" />
+        <category term="前端" />
+        <category term="CTF" />
         <item>
             <guid isPermalink="true">https://oacia.dev/telegram-bot-develop/</guid>
             <title>telegram bot 初体验及云端部署</title>
