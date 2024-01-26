@@ -1142,6 +1142,9 @@ const Loader = {
     //clearTimeout(this.timer);
     document.body.removeClass('loaded');
     loadCat.attr('style', 'display:block');
+    const canvas = document.querySelector('#jsi-cherry-container canvas');
+    canvas.parentNode.removeChild(canvas);
+
     Loader.lock = false;
   },
   hide: function(sec) {
@@ -1238,6 +1241,8 @@ const themeColorListener = function () {
   });
 }
 document.addEventListener("DOMContentLoaded", function() {
+  //console.log("DOM 加载完成");
+  //setTimeout(Loader.vanish, 5000);
   Loader.vanish();
 });
 window.onload = function(){
@@ -1729,7 +1734,7 @@ const postFancybox = function(p) {
   if($(p + ' .md img')) {
     vendorCss('fancybox');
     vendorJs('fancybox', function() {
-      var q = jQuery.noConflict();
+      var q = jQuery.noConflict(true);
 
       $.each(p + ' p.gallery', function(element) {
         var box = document.createElement('div');

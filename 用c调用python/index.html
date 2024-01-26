@@ -67,7 +67,9 @@
 oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 <meta name="generator" content="Hexo 6.3.0"></head>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
 <script>
+  var jq_151 = $.noConflict(true);
   var RENDERER = {
     INIT_CHERRY_BLOSSOM_COUNT : 30,
     MAX_ADDING_INTERVAL : 10,
@@ -81,9 +83,9 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       this.render();
     },
     setParameters : function(){
-      this.$window = jQuery(window);
-      this.$container = jQuery('#loading');
-      this.$canvas = jQuery('<canvas />');
+      this.$window = jq_151(window);
+      this.$container = jq_151('#loading');
+      this.$canvas = jq_151('<canvas />');
       this.context = this.$canvas.appendTo(this.$container).get(0).getContext('2d');
       this.cherries = [];
       this.watchIds = [];
@@ -135,7 +137,12 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       this.$window.on('resize', this.watchWindowSize);
     },
     render : function(){
-      requestAnimationFrame(this.render);
+      console.log("render")
+
+      if(jq_151(this.$container).css("display")!="none"){
+        requestAnimationFrame(this.render);
+      }
+      
       this.context.clearRect(0, 0, this.width, this.height);
       
       this.cherries.sort(function(cherry1, cherry2){
@@ -304,17 +311,19 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       return this.z > -this.FOCUS_POSITION && this.z < this.FAR_LIMIT && this.x < this.renderer.width * 1.5;
     }
   };
-  jQuery(function(){
+  jq_151(function(){
     RENDERER.init();
   });
 </script>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div id="loading" class="container">
+  <div id="loading">
     <!--
     <div class="alice">
       <img src="/images/alice-shake.gif" alt="">
     </div>
+
+    
     <div class="cat">
       <div class="body"></div>
       <div class="head">
@@ -544,7 +553,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item left">
       
 
-  <a href="/2022%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9_1024%E7%A8%8B%E5%BA%8F%E5%91%98%E8%8A%82_T4_%E5%8C%BA%E5%9D%97%E9%93%BE%E8%AF%A6%E8%A7%A3/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;98.jpg" title="2022哔哩哔哩 1024程序员节 T4 区块链详解">
+  <a href="/2022%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9_1024%E7%A8%8B%E5%BA%8F%E5%91%98%E8%8A%82_T4_%E5%8C%BA%E5%9D%97%E9%93%BE%E8%AF%A6%E8%A7%A3/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;28.jpg" title="2022哔哩哔哩 1024程序员节 T4 区块链详解">
   <span class="type">上一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>2022哔哩哔哩 1024程序员节 T4 区块链详解</h3>
@@ -554,7 +563,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item right">
       
 
-  <a href="/%E7%A5%9D%E5%B0%8F%E5%A4%8F%E7%94%9F%E6%97%A5%E5%BF%AB%E4%B9%90%EF%BC%81%CC%8B(%E0%B9%91%CB%83%CC%81%EA%87%B4%CB%82%CC%80%E0%B9%91)/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;67.jpg" title="祝小夏生日快乐(๑˃́ꇴ˂̀๑)">
+  <a href="/%E7%A5%9D%E5%B0%8F%E5%A4%8F%E7%94%9F%E6%97%A5%E5%BF%AB%E4%B9%90%EF%BC%81%CC%8B(%E0%B9%91%CB%83%CC%81%EA%87%B4%CB%82%CC%80%E0%B9%91)/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;19.jpg" title="祝小夏生日快乐(๑˃́ꇴ˂̀๑)">
   <span class="type">下一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>祝小夏生日快乐(๑˃́ꇴ˂̀๑)</h3>
@@ -759,9 +768,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 <!--<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>-->
 
 
-
 <script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
-
 <script src="/js/app.js?v=0.2.5"></script>
 
 
