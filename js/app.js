@@ -1242,8 +1242,8 @@ const themeColorListener = function () {
 }
 document.addEventListener("DOMContentLoaded", function() {
   //console.log("DOM 加载完成");
-  //setTimeout(Loader.vanish, 5000);
-  Loader.vanish();
+  setTimeout(Loader.vanish, 3000);
+  //Loader.vanish();
 });
 window.onload = function(){
   setTimeout(()=>{
