@@ -31,12 +31,12 @@
 <link rel="canonical" href="https://oacia.dev/website_maintenance/">
 
 
-<meta name="description" content="此处记录本博客自建立以来进行的所有优化  # 已知问题 无 # 2024 年 1 月 26 日  移除了文章开头的 breadcrumb  元素  detailed 将下图中左上角的元素进行移除    现在背景图片将不再随机以提高页面加载速度 将加载动画修改为花瓣飞舞  detailed 关于 jQuery 的小芝士：如果 $  符号在 js 代码中冲突的话，可以将 $(b,c)  替换成最原始">
+<meta name="description" content="此处记录本博客自建立以来进行的所有优化  # 已知问题 无 # 2024 年 1 月 26 日  移除了文章开头的 breadcrumb  元素  detailed 将下图中左上角的元素进行移除    现在背景图片将不再随机以提高页面加载速度 将 loading 动画修改为花瓣飞舞  detailed 关于 jQuery 的小芝士  如果 $  符号在 js 代码中冲突的话，可以将 $(b,c)">
 <meta property="og:type" content="website">
 <meta property="og:title" content="oaciaのBbBlog~">
 <meta property="og:url" content="https://oacia.dev/website_maintenance/">
 <meta property="og:site_name" content="oaciaのBbBlog~">
-<meta property="og:description" content="此处记录本博客自建立以来进行的所有优化  # 已知问题 无 # 2024 年 1 月 26 日  移除了文章开头的 breadcrumb  元素  detailed 将下图中左上角的元素进行移除    现在背景图片将不再随机以提高页面加载速度 将加载动画修改为花瓣飞舞  detailed 关于 jQuery 的小芝士：如果 $  符号在 js 代码中冲突的话，可以将 $(b,c)  替换成最原始">
+<meta property="og:description" content="此处记录本博客自建立以来进行的所有优化  # 已知问题 无 # 2024 年 1 月 26 日  移除了文章开头的 breadcrumb  元素  detailed 将下图中左上角的元素进行移除    现在背景图片将不再随机以提高页面加载速度 将 loading 动画修改为花瓣飞舞  detailed 关于 jQuery 的小芝士  如果 $  符号在 js 代码中冲突的话，可以将 $(b,c)">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://oacia.dev/website_maintenance/image-20240126041957239.png">
 <meta property="og:image" content="https://oacia.dev/website_maintenance/image-20231018112211729.png">
@@ -92,8 +92,8 @@
 <meta property="og:image" content="https://oacia.dev/website_maintenance/image-20230224160656566.png">
 <meta property="og:image" content="https://oacia.dev/website_maintenance/image-20230224161509537.png">
 <meta property="og:image" content="https://oacia.dev/website_maintenance/image-20230429232101076.png">
-<meta property="article:published_time" content="2024-01-26T00:58:01.892Z">
-<meta property="article:modified_time" content="2024-01-26T00:58:01.892Z">
+<meta property="article:published_time" content="2024-01-26T04:34:58.187Z">
+<meta property="article:modified_time" content="2024-01-26T04:34:58.187Z">
 <meta property="article:author" content="oacia">
 <meta property="article:tag" content="reverse,安卓逆向,区块链,学习笔记,破解实战,前端,CTF">
 <meta name="twitter:card" content="summary">
@@ -175,7 +175,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       this.$window.on('resize', this.watchWindowSize);
     },
     render : function(){
-      console.log("render")
+      //console.log("render")
 
       if(jq_151(this.$container).css("display")!="none"){
         requestAnimationFrame(this.render);
@@ -475,10 +475,57 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 </div></details>
 <ul>
 <li>现在背景图片将不再随机以提高页面加载速度</li>
-<li>将加载动画修改为花瓣飞舞</li>
+<li>将 loading 动画修改为花瓣飞舞</li>
 </ul>
 <details class="info"><summary>detailed</summary><div>
-<p>关于 jQuery 的小芝士：如果 <code>$</code>  符号在 js 代码中冲突的话，可以将 <code>$(b,c)</code>  替换成最原始的写法 <code>jQuery(b,c)</code></p>
+<p>关于 jQuery 的小芝士</p>
+<ul>
+<li>如果 <code>$</code>  符号在 js 代码中冲突的话，可以将 <code>$(b,c)</code>  替换成最原始的写法 <code>jQuery(b,c)</code></li>
+<li>可以使用 <code>var jq_151 = $.noConflict(true);</code> , <code>var jq_171 = $.noConflict(true);</code>  这样的赋值语句解决不同版本 jQuery 在 npm 包的兼容性问题</li>
+</ul>
+</div></details>
+<ul>
+<li>移除了移动端打开网页后的烟花点击特效以提高网页访问性能</li>
+</ul>
+<details class="info"><summary>如何判断当前网页是否被移动端访问?</summary><div>
+<ol>
+<li>
+<p><code>navigator.userAgent</code>  和 <code>navigator.platform</code></p>
+<p>JS 通过 <code>navigator.userAgent</code>  属性拿到这个字符串，只要里面包含 <code>mobi</code> 、 <code>android</code> 、 <code>iphone</code>  等关键字，就可以认定是移动设备，不过该属性可以被伪造</p>
+<figure class="highlight js"><figcaption data-lang="JavaScript"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">Mobi|Android|iPhone</span><span class="token regex-delimiter">/</span><span class="token regex-flags">i</span></span><span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span>navigator<span class="token punctuation">.</span>userAgent<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="2"></td><td><pre>  <span class="token comment">// 当前设备是移动设备</span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="4"></td><td><pre></pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token comment">// 另一种写法</span></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token keyword">if</span> <span class="token punctuation">(</span></pre></td></tr><tr><td data-num="7"></td><td><pre>  navigator<span class="token punctuation">.</span>userAgent<span class="token punctuation">.</span><span class="token function">match</span><span class="token punctuation">(</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">Mobi</span><span class="token regex-delimiter">/</span><span class="token regex-flags">i</span></span><span class="token punctuation">)</span> <span class="token operator">||</span></pre></td></tr><tr><td data-num="8"></td><td><pre>  navigator<span class="token punctuation">.</span>userAgent<span class="token punctuation">.</span><span class="token function">match</span><span class="token punctuation">(</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">Android</span><span class="token regex-delimiter">/</span><span class="token regex-flags">i</span></span><span class="token punctuation">)</span> <span class="token operator">||</span></pre></td></tr><tr><td data-num="9"></td><td><pre>  navigator<span class="token punctuation">.</span>userAgent<span class="token punctuation">.</span><span class="token function">match</span><span class="token punctuation">(</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">iPhone</span><span class="token regex-delimiter">/</span><span class="token regex-flags">i</span></span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="10"></td><td><pre><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="11"></td><td><pre>  <span class="token comment">// 当前设备是移动设备</span></pre></td></tr><tr><td data-num="12"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr></table></figure><p>同时 <code>navigator.userAgent</code>  仅与 <code>Chromium</code>  兼容，与 <code>Safiri</code>  和 <code>Firefox</code>  不兼容</p>
+<p>可以使用已经废除但是全浏览器支持的属性 <code>navigator.platform</code>  来达到和 <code>navigator.userAgent</code>  相同的效果</p>
+<figure class="highlight js"><figcaption data-lang="JavaScript"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">Android|iPhone|iPad|iPod</span><span class="token regex-delimiter">/</span><span class="token regex-flags">i</span></span><span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span>navigator<span class="token punctuation">.</span>platform<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="2"></td><td><pre>  <span class="token comment">// 当前设备是移动设备</span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr></table></figure></li>
+<li>
+<p>touch 事件</p>
+<p>手机浏览器的 DOM 元素可以通过 <code>ontouchstart</code>  属性，为 <code>touch</code>  事件指定监听函数。桌面设备没有这个属性。</p>
+<figure class="highlight js"><figcaption data-lang="JavaScript"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">function</span> <span class="token function">isMobile</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> </pre></td></tr><tr><td data-num="2"></td><td><pre>  <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token string">'ontouchstart'</span> <span class="token keyword">in</span> document<span class="token punctuation">.</span>documentElement<span class="token punctuation">)</span><span class="token punctuation">;</span> </pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="4"></td><td><pre></pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token comment">// 另一种写法</span></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token keyword">function</span> <span class="token function">isMobile</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="7"></td><td><pre>  <span class="token keyword">try</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="8"></td><td><pre>    document<span class="token punctuation">.</span><span class="token function">createEvent</span><span class="token punctuation">(</span><span class="token string">"TouchEvent"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="9"></td><td><pre>  <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="10"></td><td><pre>    <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span> </pre></td></tr><tr><td data-num="11"></td><td><pre>  <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="12"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr></table></figure></li>
+<li>
+<p><code>window.matchMedia()</code></p>
+<ul>
+<li>
+<p>CSS 媒介查询屏幕宽度</p>
+<p>CSS 通过 media query（媒介查询）为网页指定响应式样式。如果某个针对手机的 media query 语句生效了，就可以认为当前设备是移动设备。<br>
+ <code>window.matchMedia()</code>  的参数是一个 CSS 查询语句，表示只对屏幕宽度不超过 700 像素的设备生效。它返回一个对象，该对象的 <code>matches</code>  属性是一个布尔值。如果是 <code>true</code> ，就表示查询生效，当前设备是手机。</p>
+<figure class="highlight js"><figcaption data-lang="JavaScript"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">let</span> isMobile <span class="token operator">=</span> window<span class="token punctuation">.</span><span class="token function">matchMedia</span><span class="token punctuation">(</span><span class="token string">"only screen and (max-width: 760px)"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>matches<span class="token punctuation">;</span></pre></td></tr></table></figure></li>
+<li>
+<p>指针的精确性</p>
+<p>CSS 语句 <code>pointer:coarse</code>  表示当前设备的指针是不精确的。由于手机不支持鼠标，只支持触摸，所以符合这个条件。</p>
+<p>有些设备支持多种指针，比如同时支持鼠标和触摸。 <code>pointer:coarse</code>  只用来判断主指针</p>
+<figure class="highlight js"><figcaption data-lang="JavaScript"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">let</span> isMobile <span class="token operator">=</span> window<span class="token punctuation">.</span><span class="token function">matchMedia</span><span class="token punctuation">(</span><span class="token string">"(pointer:coarse)"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>matches<span class="token punctuation">;</span></pre></td></tr></table></figure><p>此外还有一个 <code>any-pointer</code>  命令判断所有指针，只要有一个指针是不精确的，就符合查询条件。</p>
+<figure class="highlight js"><figcaption data-lang="JavaScript"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">let</span> isMobile <span class="token operator">=</span> window<span class="token punctuation">.</span><span class="token function">matchMedia</span><span class="token punctuation">(</span><span class="token string">"(any-pointer:coarse)"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>matches<span class="token punctuation">;</span></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>
+<p><code>window.screen</code>  和 <code>window.innerWidth</code> <br>
+ <code>window.screen</code>  可以通过计算屏幕的宽度来判断是否是手机，但是手机如果处在横屏的状态，这个方法就无法判断了</p>
+<figure class="highlight js"><figcaption data-lang="JavaScript"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">if</span> <span class="token punctuation">(</span>window<span class="token punctuation">.</span>screen<span class="token punctuation">.</span>width <span class="token operator">&lt;</span> <span class="token number">500</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="2"></td><td><pre>  <span class="token comment">// 当前设备是移动设备 </span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr></table></figure><p>另一个属性 <code>window.innerWidth</code>  返回浏览器窗口里面的网页可见部分的宽度，比较适合指定网页在不同宽度下的样式。</p>
+<figure class="highlight js"><figcaption data-lang="JavaScript"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">const</span> <span class="token function-variable function">getBrowserWidth</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="2"></td><td><pre>  <span class="token keyword">if</span> <span class="token punctuation">(</span>window<span class="token punctuation">.</span>innerWidth <span class="token operator">&lt;</span> <span class="token number">768</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="3"></td><td><pre>    <span class="token keyword">return</span> <span class="token string">"xs"</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="4"></td><td><pre>  <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>window<span class="token punctuation">.</span>innerWidth <span class="token operator">&lt;</span> <span class="token number">991</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="5"></td><td><pre>    <span class="token keyword">return</span> <span class="token string">"sm"</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="6"></td><td><pre>  <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>window<span class="token punctuation">.</span>innerWidth <span class="token operator">&lt;</span> <span class="token number">1199</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="7"></td><td><pre>    <span class="token keyword">return</span> <span class="token string">"md"</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="8"></td><td><pre>  <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="9"></td><td><pre>    <span class="token keyword">return</span> <span class="token string">"lg"</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="10"></td><td><pre>  <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="11"></td><td><pre><span class="token punctuation">&#125;</span><span class="token punctuation">;</span></pre></td></tr></table></figure></li>
+<li>
+<p><code>window.orientation</code>  属性<br>
+ window.orientation <code>属性用于获取屏幕的当前方向，只有移动设备才有这个属性，桌面设备会返回</code>  undefined</p>
+<figure class="highlight js"><figcaption data-lang="JavaScript"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">typeof</span> window<span class="token punctuation">.</span>orientation <span class="token operator">!==</span> <span class="token string">'undefined'</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="2"></td><td><pre>  <span class="token comment">// 当前设备是移动设备 </span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr></table></figure><p><code>Safiri</code>  设备不兼容该属性</p>
+</li>
+</ol>
 </div></details>
 <h1 id="2024年1月1日"><a class="anchor" href="#2024年1月1日">#</a> 2024 年 1 月 1 日</h1>
 <ul>

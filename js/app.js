@@ -2519,9 +2519,13 @@ var render = anime({
 });
 
 document.addEventListener(tap, function(e) {
-  render.play();
-  updateCoords(e);
-  animateParticules(pointerX, pointerY);
+  //判断是否是移动设备
+  if (!(/Mobi|Android|iPhone/i.test(navigator.platform))) {
+    render.play();
+    updateCoords(e);
+    animateParticules(pointerX, pointerY);
+  }
+  
 }, false);
 
 setCanvasSize();
