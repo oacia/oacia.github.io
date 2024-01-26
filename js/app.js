@@ -2520,7 +2520,7 @@ var render = anime({
 
 document.addEventListener(tap, function(e) {
   //判断是否是移动设备
-  if (!(/Mobi|Android|iPhone/i.test(navigator.platform))) {
+  if (!('ontouchstart' in document.documentElement)) {
     render.play();
     updateCoords(e);
     animateParticules(pointerX, pointerY);

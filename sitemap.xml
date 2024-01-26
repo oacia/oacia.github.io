@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://oacia.dev/website_maintenance/</loc>
+    <loc>https://oacia.dev/two-way-SSL/</loc>
     
     <lastmod>2024-01-26</lastmod>
     
@@ -14,15 +14,6 @@
     <loc>https://oacia.dev/blog-domain/</loc>
     
     <lastmod>2024-01-26</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://oacia.dev/friends/</loc>
-    
-    <lastmod>2024-01-25</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -41,42 +32,6 @@
     <loc>https://oacia.dev/ollvm-study/</loc>
     
     <lastmod>2024-01-25</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://oacia.dev/two-way-SSL/</loc>
-    
-    <lastmod>2024-01-25</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://oacia.dev/about-oacia/</loc>
-    
-    <lastmod>2024-01-25</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://oacia.dev/TODOlist/</loc>
-    
-    <lastmod>2024-01-25</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://oacia.dev/tweets/</loc>
-    
-    <lastmod>2024-01-03</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -149,15 +104,6 @@
     <loc>https://oacia.dev/rwProcMem33-usage/</loc>
     
     <lastmod>2023-11-19</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://oacia.dev/music/</loc>
-    
-    <lastmod>2023-11-13</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
