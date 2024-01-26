@@ -5,11 +5,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <style>
-    html{
-      cursor: url('/cusor/normal.png') auto;s
-    }
-  </style>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#FFF">
@@ -36,15 +31,15 @@
 <link rel="canonical" href="https://oacia.dev/TODOlist/">
 
 
-<meta name="description" content="今年的这些事情我一定要在今年做完，加油加油加油⛱  # 小目标 ⭐️   2023 年 12 月之前，完成对 360 加固保 dex 解密流程的分析   2024 年 4 月之前， 写出一个初具雏形的 flutter 开源静态分析逆向工具 (blutter 和我的想法相同，我决定先研究一下 blutter 的实现原理)   # 现在在做滴🌞  processing 学会使用 unidbg">
+<meta name="description" content="# 现在在做的🌞  processing  最近想研究一下大厂的保护是啥样的，正好也去学习一下，想了想 360 加固应该挺适合我这样的新手的，那就从 360 加固开始分析吧！  自己写一个 360 加固的 demo, 研究 dex 的加密算法   processing 完成对 ollvm 三种混淆的三种反混淆方法分析  # 挖的新坑🕳  todo 分析 reflutter,blutter 的实">
 <meta property="og:type" content="website">
 <meta property="og:title" content="要做的事">
 <meta property="og:url" content="https://oacia.dev/TODOlist/">
 <meta property="og:site_name" content="oaciaのBbBlog~">
-<meta property="og:description" content="今年的这些事情我一定要在今年做完，加油加油加油⛱  # 小目标 ⭐️   2023 年 12 月之前，完成对 360 加固保 dex 解密流程的分析   2024 年 4 月之前， 写出一个初具雏形的 flutter 开源静态分析逆向工具 (blutter 和我的想法相同，我决定先研究一下 blutter 的实现原理)   # 现在在做滴🌞  processing 学会使用 unidbg">
+<meta property="og:description" content="# 现在在做的🌞  processing  最近想研究一下大厂的保护是啥样的，正好也去学习一下，想了想 360 加固应该挺适合我这样的新手的，那就从 360 加固开始分析吧！  自己写一个 360 加固的 demo, 研究 dex 的加密算法   processing 完成对 ollvm 三种混淆的三种反混淆方法分析  # 挖的新坑🕳  todo 分析 reflutter,blutter 的实">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-01-03T14:14:09.218Z">
-<meta property="article:modified_time" content="2023-12-12T17:02:40.054Z">
+<meta property="article:published_time" content="2024-01-25T19:25:00.582Z">
+<meta property="article:modified_time" content="2024-01-25T19:25:00.582Z">
 <meta property="article:author" content="oacia">
 <meta property="article:tag" content="reverse,安卓逆向,区块链,学习笔记,破解实战,前端,CTF">
 <meta name="twitter:card" content="summary">
@@ -54,12 +49,255 @@
   <title>要做的事 |
 oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 <meta name="generator" content="Hexo 6.3.0"></head>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+  var RENDERER = {
+    INIT_CHERRY_BLOSSOM_COUNT : 30,
+    MAX_ADDING_INTERVAL : 10,
+    WATCH_INTERVAL : 300,
+    
+    init : function(){
+      this.setParameters();
+      this.reconstructMethods();
+      this.setup();
+      this.bindEvent();
+      this.render();
+    },
+    setParameters : function(){
+      this.$window = jQuery(window);
+      this.$container = jQuery('#loading');
+      this.$canvas = jQuery('<canvas />');
+      this.context = this.$canvas.appendTo(this.$container).get(0).getContext('2d');
+      this.cherries = [];
+      this.watchIds = [];
+    },
+    reconstructMethods : function(){
+      this.watchWindowSize = this.watchWindowSize.bind(this);
+      this.jdugeToStopResize = this.jdugeToStopResize.bind(this);
+      this.render = this.render.bind(this);
+    },
+    setup : function(){
+      this.cherries.length = 0;
+      this.watchIds.length = 0;
+      this.width = this.$container.width();
+      this.height = this.$container.height();
+      this.$canvas.attr({width : this.width, height : this.height});
+      this.maxAddingInterval = Math.round(this.MAX_ADDING_INTERVAL * 1000 / this.width);
+      this.addingInterval = this.maxAddingInterval;
+      this.createCherries();
+    },
+    createCherries : function(){
+      for(var i = 0, length = Math.round(this.INIT_CHERRY_BLOSSOM_COUNT * this.width / 1000); i < length; i++){
+        this.cherries.push(new CHERRY_BLOSSOM(this, true));
+      }
+    },
+    watchWindowSize : function(){
+      this.clearTimer();
+      this.tmpWidth = window.width;
+      this.tmpHeight = window.height;
+      this.watchIds.push(setTimeout(this.jdugeToStopResize, this.WATCH_INTERVAL));
+    },
+    clearTimer : function(){
+      while(this.watchIds.length > 0){
+        clearTimeout(this.watchIds.pop());
+      }
+    },
+    jdugeToStopResize : function(){
+      var width = window.width,
+        height = window.height,
+        stopped = (width == this.tmpWidth && height == this.tmpHeight);
+        
+      this.tmpWidth = width;
+      this.tmpHeight = height;
+      
+      if(stopped){
+        this.setup();
+      }
+    },
+    bindEvent : function(){
+      this.$window.on('resize', this.watchWindowSize);
+    },
+    render : function(){
+      requestAnimationFrame(this.render);
+      this.context.clearRect(0, 0, this.width, this.height);
+      
+      this.cherries.sort(function(cherry1, cherry2){
+        return cherry1.z - cherry2.z;
+      });
+      for(var i = this.cherries.length - 1; i >= 0; i--){
+        if(!this.cherries[i].render(this.context)){
+          this.cherries.splice(i, 1);
+        }
+      }
+      if(--this.addingInterval == 0){
+        this.addingInterval = this.maxAddingInterval;
+        this.cherries.push(new CHERRY_BLOSSOM(this, false));
+      }
+    }
+  };
+  var CHERRY_BLOSSOM = function(renderer, isRandom){
+    this.renderer = renderer;
+    this.init(isRandom);
+  };
+  CHERRY_BLOSSOM.prototype = {
+    FOCUS_POSITION : 300,
+    FAR_LIMIT : 600,
+    MAX_RIPPLE_COUNT : 100,
+    RIPPLE_RADIUS : 100,
+    SURFACE_RATE : 0.5,
+    SINK_OFFSET : 20,
+    
+    init : function(isRandom){
+      this.x = this.getRandomValue(-this.renderer.width, this.renderer.width);
+      this.y = isRandom ? this.getRandomValue(0, this.renderer.height) : this.renderer.height * 1.5;
+      this.z = this.getRandomValue(0, this.FAR_LIMIT);
+      this.vx = this.getRandomValue(-2, 2);
+      this.vy = -2;
+      this.theta = this.getRandomValue(0, Math.PI * 2);
+      this.phi = this.getRandomValue(0, Math.PI * 2);
+      this.psi = 0;
+      this.dpsi = this.getRandomValue(Math.PI / 600, Math.PI / 300);
+      this.opacity = 0;
+      this.endTheta = false;
+      this.endPhi = false;
+      this.rippleCount = 0;
+      
+      var axis = this.getAxis(),
+        theta = this.theta + Math.ceil(-(this.y + this.renderer.height * this.SURFACE_RATE) / this.vy) * Math.PI / 500;
+      theta %= Math.PI * 2;
+      
+      this.offsetY = 40 * ((theta <= Math.PI / 2 || theta >= Math.PI * 3 / 2) ? -1 : 1);
+      this.thresholdY = this.renderer.height / 2 + this.renderer.height * this.SURFACE_RATE * axis.rate;
+      this.entityColor = this.renderer.context.createRadialGradient(0, 40, 0, 0, 40, 80);
+      this.entityColor.addColorStop(0, 'hsl(330, 70%, ' + 50 * (0.3 + axis.rate) + '%)');
+      this.entityColor.addColorStop(0.05, 'hsl(330, 40%,' + 55 * (0.3 + axis.rate) + '%)');
+      this.entityColor.addColorStop(1, 'hsl(330, 20%, ' + 70 * (0.3 + axis.rate) + '%)');
+      this.shadowColor = this.renderer.context.createRadialGradient(0, 40, 0, 0, 40, 80);
+      this.shadowColor.addColorStop(0, 'hsl(330, 40%, ' + 30 * (0.3 + axis.rate) + '%)');
+      this.shadowColor.addColorStop(0.05, 'hsl(330, 40%,' + 30 * (0.3 + axis.rate) + '%)');
+      this.shadowColor.addColorStop(1, 'hsl(330, 20%, ' + 40 * (0.3 + axis.rate) + '%)');
+    },
+    getRandomValue : function(min, max){
+      return min + (max - min) * Math.random();
+    },
+    getAxis : function(){
+      var rate = this.FOCUS_POSITION / (this.z + this.FOCUS_POSITION),
+        x = this.renderer.width / 2 + this.x * rate,
+        y = this.renderer.height / 2 - this.y * rate;
+      return {rate : rate, x : x, y : y};
+    },
+    renderCherry : function(context, axis){
+      context.beginPath();
+      context.moveTo(0, 40);
+      context.bezierCurveTo(-60, 20, -10, -60, 0, -20);
+      context.bezierCurveTo(10, -60, 60, 20, 0, 40);
+      context.fill();
+      
+      for(var i = -4; i < 4; i++){
+        context.beginPath();
+        context.moveTo(0, 40);
+        context.quadraticCurveTo(i * 12, 10, i * 4, -24 + Math.abs(i) * 2);
+        context.stroke();
+      }
+    },
+    render : function(context){
+      var axis = this.getAxis();
+      
+      if(axis.y == this.thresholdY && this.rippleCount < this.MAX_RIPPLE_COUNT){
+        context.save();
+        context.lineWidth = 2;
+        context.strokeStyle = 'hsla(0, 0%, 100%, ' + (this.MAX_RIPPLE_COUNT - this.rippleCount) / this.MAX_RIPPLE_COUNT + ')';
+        context.translate(axis.x + this.offsetY * axis.rate * (this.theta <= Math.PI ? -1 : 1), axis.y);
+        context.scale(1, 0.3);
+        context.beginPath();
+        context.arc(0, 0, this.rippleCount / this.MAX_RIPPLE_COUNT * this.RIPPLE_RADIUS * axis.rate, 0, Math.PI * 2, false);
+        context.stroke();
+        context.restore();
+        this.rippleCount++;
+      }
+      if(axis.y < this.thresholdY || (!this.endTheta || !this.endPhi)){
+        if(this.y <= 0){
+          this.opacity = Math.min(this.opacity + 0.01, 1);
+        }
+        context.save();
+        context.globalAlpha = this.opacity;
+        context.fillStyle = this.shadowColor;
+        context.strokeStyle = 'hsl(330, 30%,' + 40 * (0.3 + axis.rate) + '%)';
+        context.translate(axis.x, Math.max(axis.y, this.thresholdY + this.thresholdY - axis.y));
+        context.rotate(Math.PI - this.theta);
+        context.scale(axis.rate * -Math.sin(this.phi), axis.rate);
+        context.translate(0, this.offsetY);
+        this.renderCherry(context, axis);
+        context.restore();
+      }
+      context.save();
+      context.fillStyle = this.entityColor;
+      context.strokeStyle = 'hsl(330, 40%,' + 70 * (0.3 + axis.rate) + '%)';
+      context.translate(axis.x, axis.y + Math.abs(this.SINK_OFFSET * Math.sin(this.psi) * axis.rate));
+      context.rotate(this.theta);
+      context.scale(axis.rate * Math.sin(this.phi), axis.rate);
+      context.translate(0, this.offsetY);
+      this.renderCherry(context, axis);
+      context.restore();
+      
+      if(this.y <= -this.renderer.height / 4){
+        if(!this.endTheta){
+          for(var theta = Math.PI / 2, end = Math.PI * 3 / 2; theta <= end; theta += Math.PI){
+            if(this.theta < theta && this.theta + Math.PI / 200 > theta){
+              this.theta = theta;
+              this.endTheta = true;
+              break;
+            }
+          }
+        }
+        if(!this.endPhi){
+          for(var phi = Math.PI / 8, end = Math.PI * 7 / 8; phi <= end; phi += Math.PI * 3 / 4){
+            if(this.phi < phi && this.phi + Math.PI / 200 > phi){
+              this.phi = Math.PI / 8;
+              this.endPhi = true;
+              break;
+            }
+          }
+        }
+      }
+      if(!this.endTheta){
+        if(axis.y == this.thresholdY){
+          this.theta += Math.PI / 200 * ((this.theta < Math.PI / 2 || (this.theta >= Math.PI && this.theta < Math.PI * 3 / 2)) ? 1 : -1);
+        }else{
+          this.theta += Math.PI / 500;
+        }
+        this.theta %= Math.PI * 2;
+      }
+      if(this.endPhi){
+        if(this.rippleCount == this.MAX_RIPPLE_COUNT){
+          this.psi += this.dpsi;
+          this.psi %= Math.PI * 2;
+        }
+      }else{
+        this.phi += Math.PI / ((axis.y == this.thresholdY) ? 200 : 500);
+        this.phi %= Math.PI;
+      }
+      if(this.y <= -this.renderer.height * this.SURFACE_RATE){
+        this.x += 2;
+        this.y = -this.renderer.height * this.SURFACE_RATE;
+      }else{
+        this.x += this.vx;
+        this.y += this.vy;
+      }
+      return this.z > -this.FOCUS_POSITION && this.z < this.FAR_LIMIT && this.x < this.renderer.width * 1.5;
+    }
+  };
+  jQuery(function(){
+    RENDERER.init();
+  });
+</script>
+
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div id="loading">
+  <div id="loading" class="container">
+    <!--
     <div class="alice">
       <img src="/images/alice-shake.gif" alt="">
     </div>
-    <!--
     <div class="cat">
       <div class="body"></div>
       <div class="head">
@@ -115,12 +353,12 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       </div>
       <div id="imgs" class="pjax">
         <ul>
-          <li class="item" data-background-image="/picture/96.jpg"></li>
-          <li class="item" data-background-image="/picture/55.jpg"></li>
-          <li class="item" data-background-image="/picture/40.jpg"></li>
-          <li class="item" data-background-image="/picture/99.jpg"></li>
-          <li class="item" data-background-image="/picture/39.jpg"></li>
-          <li class="item" data-background-image="/picture/43.jpg"></li>
+          <li class="item" data-background-image="/background_picture/1_xingye.jpg"></li>
+          <li class="item" data-background-image="/background_picture/2_hina.jpg"></li>
+          <li class="item" data-background-image="/background_picture/3_gongzi.jpg"></li>
+          <li class="item" data-background-image="/background_picture/4_xiaoxia.jpg"></li>
+          <li class="item" data-background-image="/background_picture/5_alice.jpg"></li>
+          <li class="item" data-background-image="/background_picture/6_arona_plana.jpg"></li>
         </ul>
       </div>
     </header>
@@ -158,23 +396,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
   <div class="body md" itemprop="articleBody">
     
 
-    <blockquote>
-<p>今年的这些事情我一定要在今年做完，加油加油加油⛱</p>
-</blockquote>
-<h1 id="小目标-️"><a class="anchor" href="#小目标-️">#</a> 小目标 ⭐️</h1>
-<ol>
-<li>
-<p>2023 年 12 月之前，完成对 360 加固保 dex 解密流程的分析</p>
-</li>
-<li>
-<p>2024 年 4 月之前，<span class="spoiler" title="唔~被看到了呢"> 写出一个初具雏形的 flutter 开源静态分析逆向工具</span> (blutter 和我的想法相同，我决定先研究一下 blutter 的实现原理)</p>
-</li>
-</ol>
-<h1 id="现在在做滴"><a class="anchor" href="#现在在做滴">#</a> 现在在做滴🌞</h1>
-<div class="note primary">
-<p><span class="label info">processing</span></p>
-<p>学会使用 unidbg</p>
-</div>
+    <h1 id="现在在做的"><a class="anchor" href="#现在在做的">#</a> 现在在做的🌞</h1>
 <div class="note primary">
 <p><span class="label info">processing</span></p>
 <blockquote>
@@ -184,36 +406,13 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 </div>
 <div class="note primary">
 <p><span class="label info">processing</span></p>
-<p>分析 reflutter,blutter 的实现原理，从而对 flutter 逆向有更加深入的了解</p>
-</div>
-<div class="note primary">
-<p><span class="label info">processing</span></p>
 <p>完成对 ollvm 三种混淆的三种反混淆方法分析</p>
 </div>
-<div class="note primary">
-<p><span class="label info">processing</span></p>
-<p>补充<a href="https://oacia.dev/%E9%80%86%E5%90%91%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95/">逆向常用算法</a>，加入算法的 c 语言实现，以及其他更多的算法</p>
-</div>
-<h1 id="咕了"><a class="anchor" href="#咕了">#</a> 咕了🕊</h1>
-<div class="note primary">
-<p><span class="label warning">delay</span></p>
-<blockquote>
-<p>flutter 太难哩… 问了 void✌也说不会</p>
-</blockquote>
-<p>写一个以 <code>flutter</code>  作为框架的 apk, 并使用 <code>OnMethodCall</code>  方法，研究 flutter 逆向，绕过<em>装扮少女</em>对 frida 的检测</p>
-</div>
-<div class="note primary">
-<p><span class="label warning">delay</span></p>
-<blockquote>
-<p>当前进度: unity 环境搭建完成</p>
-</blockquote>
-<p>整理 unity 中 lib2cpp 的通用逆向方法，拟定标题为<em> unity 逆向 - lib2cpp 的方法总结</em></p>
-</div>
-<div class="note primary">
-<p><span class="label warning">delay</span></p>
-<p>加一个看板娘，她就是小夏～，既然网上没有现成的模型，我就自己做一个看板娘，暑假准备苦学 ing…</p>
-</div>
 <h1 id="挖的新坑"><a class="anchor" href="#挖的新坑">#</a> 挖的新坑🕳</h1>
+<div class="note primary">
+<p><span class="label">todo</span></p>
+<p>分析 reflutter,blutter 的实现原理，从而对 flutter 逆向有更加深入的了解</p>
+</div>
 <div class="note primary">
 <p><span class="label">todo</span></p>
 <blockquote>
@@ -332,19 +531,35 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 </blockquote>
 <p>学会使用 frida-stalker</p>
 </div>
+<div class="note success">
+<p><span class="label success">✔️success</span></p>
+<p>学会使用 unidbg</p>
+</div>
+<h1 id="咕了"><a class="anchor" href="#咕了">#</a> 咕了🕊</h1>
+<div class="note primary">
+<p><span class="label warning">delay</span></p>
+<blockquote>
+<p>flutter 太难哩… 问了 void✌也说不会</p>
+</blockquote>
+<p>写一个以 <code>flutter</code>  作为框架的 apk, 并使用 <code>OnMethodCall</code>  方法，研究 flutter 逆向，绕过<em>装扮少女</em>对 frida 的检测</p>
+</div>
+<div class="note primary">
+<p><span class="label warning">delay</span></p>
+<blockquote>
+<p>当前进度: unity 环境搭建完成</p>
+</blockquote>
+<p>整理 unity 中 lib2cpp 的通用逆向方法，拟定标题为<em> unity 逆向 - lib2cpp 的方法总结</em></p>
+</div>
+<div class="note primary">
+<p><span class="label warning">delay</span></p>
+<p>加一个看板娘，她就是小夏～，既然网上没有现成的模型，我就自己做一个看板娘，暑假准备苦学 ing…</p>
+</div>
 
   </div>
 
    <footer>
 
     <div class="meta">
-  <span class="item">
-    <span class="icon">
-      <i class="ic i-calendar-check"></i>
-    </span>
-    <span class="text">更新于</span>
-    <time title="修改时间：2023-12-13 01:02:40" itemprop="dateModified" datetime="2023-12-13T01:02:40+08:00">2023-12-13</time>
-  </span>
   <span id="TODOlist/" class="item leancloud_visitors" data-flag-title="要做的事" title="阅读次数">
       <span class="icon">
         <i class="ic i-eye"></i>
@@ -390,7 +605,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
   <div class="panels">
     <div class="inner">
       <div class="contents panel pjax" data-title="文章目录">
-          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B0%8F%E7%9B%AE%E6%A0%87-%EF%B8%8F"><span class="toc-text"> 小目标 ⭐️</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%B0%E5%9C%A8%E5%9C%A8%E5%81%9A%E6%BB%B4"><span class="toc-text"> 现在在做滴🌞</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%92%95%E4%BA%86"><span class="toc-text"> 咕了🕊</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8C%96%E7%9A%84%E6%96%B0%E5%9D%91"><span class="toc-text"> 挖的新坑🕳</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%88%90%E5%8A%9F%E5%AE%8C%E6%88%90"><span class="toc-text"> 成功完成😃</span></a></li></ol>
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%B0%E5%9C%A8%E5%9C%A8%E5%81%9A%E7%9A%84"><span class="toc-text"> 现在在做的🌞</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8C%96%E7%9A%84%E6%96%B0%E5%9D%91"><span class="toc-text"> 挖的新坑🕳</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%88%90%E5%8A%9F%E5%AE%8C%E6%88%90"><span class="toc-text"> 成功完成😃</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%92%95%E4%BA%86"><span class="toc-text"> 咕了🕊</span></a></li></ol>
       </div>
       <div class="related panel pjax" data-title="系列文章">
       </div>
@@ -540,6 +755,9 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       </div>
     </footer>
   </div>
+
+
+
 <script data-config type="text/javascript">
   var LOCAL = {
     path: 'TODOlist/',
@@ -568,9 +786,11 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 <!--<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>-->
 
 
+
 <script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
 
 <script src="/js/app.js?v=0.2.5"></script>
+
 
 
 
