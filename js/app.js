@@ -1127,6 +1127,7 @@ var siteNavHeight, headerHightInner, headerHight;
 var oWinHeight = window.innerHeight;
 var oWinWidth = window.innerWidth;
 var LOCAL_HASH = 0, LOCAL_URL = window.location.href;
+var ORIGIN_URL = window.location.origin+'/'
 var pjax;
 const lazyload = lozad('img, [data-background-image]', {
     loaded: function(el) {
@@ -1367,13 +1368,15 @@ const scrollHandle = function (event) {
 }
 
 const pagePosition = function() {
-  if(CONFIG.auto_scroll)
+  if(CONFIG.auto_scroll || LOCAL_URL == ORIGIN_URL)
     store.set(LOCAL_URL, scrollAction.y)
 }
 
 const positionInit = function(comment) {
   var anchor = window.location.hash
   var target = null;
+
+  
   if(LOCAL_HASH) {
     store.del(LOCAL_URL);
     return
@@ -1382,7 +1385,7 @@ const positionInit = function(comment) {
   if(anchor)
     target = $(decodeURI(anchor))
   else {
-    target = CONFIG.auto_scroll ? parseInt(store.get(LOCAL_URL)) : 0
+    target = (CONFIG.auto_scroll || LOCAL_URL==ORIGIN_URL) ? parseInt(store.get(LOCAL_URL)) : 0
   }
 
   if(target) {
