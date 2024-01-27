@@ -292,7 +292,10 @@
         <id>https://oacia.dev/hina-AI-voice/</id>
         <title>I wanna to hear your voice, hina</title>
         <link rel="alternate" href="https://oacia.dev/hina-AI-voice/"/>
-        <content type="html">&lt;div class=&#34;media-container&#34;&gt;&lt;div class=&#34;player&#34; data-type=&#34;audio&#34; data-src=&#34;[{&amp;quot;name&amp;quot;:&amp;quot;单相思&amp;quot;,&amp;quot;url&amp;quot;:&amp;quot;/audio/hina_DanXiangSi.mp3&amp;quot;}]&#34;&gt;&lt;/div&gt;&lt;/div&gt;
+        <content type="html">&lt;blockquote&gt;
+&lt;p&gt;很喜欢日奈的声音，所以用自己的电脑训练了 hina 的声音模型，并让她唱了一首歌&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&#34;media-container&#34;&gt;&lt;div class=&#34;player&#34; data-type=&#34;audio&#34; data-src=&#34;[{&amp;quot;name&amp;quot;:&amp;quot;单相思&amp;quot;,&amp;quot;url&amp;quot;:&amp;quot;/audio/hina_DanXiangSi.mp3&amp;quot;}]&#34;&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;h1 id=&#34;python虚拟环境搭建&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#python虚拟环境搭建&#34;&gt;#&lt;/a&gt; python 虚拟环境搭建&lt;/h1&gt;
 &lt;p&gt;这里我使用的 Python 版本为 &lt;code&gt;Python3.9&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;安装 virtualenv&lt;/strong&gt;&lt;/p&gt;
