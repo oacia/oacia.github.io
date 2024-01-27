@@ -1816,8 +1816,11 @@ const postBeauty = function () {
       var author = "# " + copyright.child('.author').innerText
       var link = "# " + copyright.child('.link').innerText
       var license = "# " + copyright.child('.license').innerText
-      var htmlData = author + "<br>" + link + "<br>" + license + "<br><br>" + window.getSelection().toString().replace(/\r\n/g, "<br>");;
-      var textData = author + "\n" + link + "\n" + license + "\n\n" + window.getSelection().toString().replace(/\r\n/g, "\n");
+      //var htmlData = author + "<br>" + link + "<br>" + license + "<br><br>" + window.getSelection().toString().replace(/\r\n/g, "<br>");;
+      //var textData = author + "\n" + link + "\n" + license + "\n\n" + window.getSelection().toString().replace(/\r\n/g, "\n");
+      var htmlData = window.getSelection().toString().replace(/\r\n/g, "<br>");;
+      var textData = window.getSelection().toString().replace(/\r\n/g, "\n");
+      
       if (event.clipboardData) {
           event.clipboardData.setData("text/html", htmlData);
           event.clipboardData.setData("text/plain", textData);
