@@ -23,8 +23,7 @@
         <content type="html">&lt;p&gt;今天闲来无事，上网冲浪，突然发现一个令我眼前一亮的项目&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly9naXRodWIuY29tL0phdmVsZXlRQVEvV2VDaGF0T3BlbkRldlRvb2xzLVB5dGhvbg==&#34;&gt; WeChatOpenDevTools-Python&lt;/span&gt;, 这这这，看 README 的介绍，我岂不是可以在小程序里面开 devtool 了吗！？&lt;/p&gt;
 &lt;p&gt;想来 2022 年也有个小程序羊了个羊爆火那会儿，我也对小程序逆向分析玩了玩，然后做了个破解版的自娱自乐了一下 (当然也是算朋友圈排名滴), 当时拿 &lt;code&gt;UnpackMiniApp.exe&lt;/code&gt;  解密了 &lt;code&gt;wxapkg&lt;/code&gt;  格式的小程序，然后用&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly9naXRodWIuY29tL3N5c3RlbS1jcHUvd3hhcHBVbnBhY2tlcg==&#34;&gt; wxappUnpacker&lt;/span&gt; 弄出了小程序的 js 源码来，审计一下找到修改的地方 patch 逻辑到最开始的 &lt;code&gt;wxapkg&lt;/code&gt;  包就破解好了&lt;/p&gt;
 &lt;p&gt;虽然但是，那时我就在想微信小程序既然用的是浏览器的内核，那么必定是有方法可以开启开发者工具的，不过由于当时在网上还没发现这样的技术所以也就只是一个想法了，现在正巧碰到了大佬开源了能够开启微信小程序的项目，于是我便想看看小程序 + devtool 逆向的感觉究竟是如何的呢～&lt;/p&gt;
-&lt;p&gt;碰巧身边的人在玩咸鱼之王 (虽然我没玩过), 但是它毕竟是一个小程序，那就拿它来浅浅尝试一下 devtool 逆向的感觉是怎么样的咯 &lt;code&gt;^.^&lt;/code&gt; &lt;br&gt;
- 既然都用上 devtool 了，那就不玩改内存这种略显低级的操作了，来研究研究更有趣的 &lt;code&gt;--&amp;gt;&lt;/code&gt;  客户端和服务端数据交换过程中变量是如何加密的 &lt;code&gt;(●ˇ∀ˇ●)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;碰巧身边的人在玩咸鱼之王 (虽然我没玩过), 但是它毕竟是一个小程序，那就拿它来浅浅尝试一下 devtool 逆向的感觉是怎么样的咯 &lt;code&gt;^.^&lt;/code&gt;&lt;/p&gt;
 &lt;div class=&#34;note warning&#34;&gt;
 &lt;p&gt;让微信小程序开启 devtool 有被封号的风险，请务必使用&lt;strong&gt;小号&lt;/strong&gt;登录电脑版微信！！！&lt;/p&gt;
 &lt;/div&gt;
@@ -59,6 +58,24 @@
 &lt;p&gt;由于咸鱼之王小程序的包是有子包的，所以需要使用 - s 参数&lt;/p&gt;
 &lt;figure class=&#34;highlight shell&#34;&gt;&lt;figcaption data-lang=&#34;Bash&#34;&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td data-num=&#34;1&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;.&lt;span class=&#34;token punctuation&#34;&gt;\&lt;/span&gt;bingo.bat .&lt;span class=&#34;token punctuation&#34;&gt;\&lt;/span&gt;dec.wxapkg &lt;span class=&#34;token parameter variable&#34;&gt;-s&lt;/span&gt;&lt;span class=&#34;token operator&#34;&gt;=&lt;/span&gt;_subpackages_game_.wxapkg&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;p&gt;解包成功～&lt;/p&gt;
 &lt;p&gt;&lt;img data-src=&#34;/wechat-mini-program-with-devtool/image-20240201170202775.png&#34; alt=&#34;image-20240201170202775&#34; style=&#34;aspect-ratio:1275 / 857;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;简单看了一下文件结构，这游戏看起来是用 coco2djs 写的，而且这 js 也没有加密全是源码，hmmm 再逆下去不就变成代码审计了吗… 那就到此为止咯：)&lt;/p&gt;
+&lt;p&gt;&lt;img data-src=&#34;/wechat-mini-program-with-devtool/image-20240201190634245.png&#34; alt=&#34;image-20240201190634245&#34; style=&#34;aspect-ratio:270 / 543;&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;其他&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#其他&#34;&gt;#&lt;/a&gt; 其他&lt;/h1&gt;
+&lt;p&gt;就这样结束似乎有点太潦草了，所以这里是我别的一些想法&lt;/p&gt;
+&lt;p&gt;既然咸鱼之王用的是 coco2djs, 而在官网的描述中，coco2d 是跨平台的，那我要是开发人员，肯定在安卓上用的也是 coco2d&lt;/p&gt;
+&lt;p&gt;&lt;img data-src=&#34;/wechat-mini-program-with-devtool/image-20240201191145377.png&#34; alt=&#34;image-20240201191145377&#34; style=&#34;aspect-ratio:417 / 458;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;果不其然，下了一个 apk 版的咸鱼之王解包之后，真的在里面发现了 &lt;code&gt;libcocos2djs.so&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img data-src=&#34;/wechat-mini-program-with-devtool/image-20240201191250448.png&#34; alt=&#34;image-20240201191250448&#34; style=&#34;aspect-ratio:521 / 216;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;有趣的是在 &lt;code&gt;assets&lt;/code&gt;  目录下有 &lt;code&gt;libjiagu.so&lt;/code&gt; , 这明显是套了一个 360 加固想要为难逆向的人呀&lt;/p&gt;
+&lt;p&gt;但 360 加固的是 dex, 但是 coco2d 的源码不全是 js 写的嘛？唯一的作用应该就是防止重打包了吧&lt;/p&gt;
+&lt;p&gt;&lt;img data-src=&#34;/wechat-mini-program-with-devtool/image-20240201191325364.png&#34; alt=&#34;image-20240201191325364&#34; style=&#34;aspect-ratio:791 / 416;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;而且这个源代码甚至连 &lt;code&gt;coco2dx-js&lt;/code&gt;  内置的把源码加密成 &lt;code&gt;jsc&lt;/code&gt;  的功能都没有，这下连密钥都不用找了…&lt;/p&gt;
+&lt;p&gt;&lt;img data-src=&#34;/wechat-mini-program-with-devtool/image-20240201194515519.png&#34; alt=&#34;image-20240201194515519&#34; style=&#34;aspect-ratio:813 / 184;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;那顺便记录一下加密成 jsc 类似下图的样子该如何应对吧&lt;/p&gt;
+&lt;p&gt;&lt;img data-src=&#34;/wechat-mini-program-with-devtool/o3kwTv9h8S6nqCp.png&#34; alt=&#34;Jsc结构&#34; style=&#34;aspect-ratio:434 / 310;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;很简单， &lt;code&gt;010editor&lt;/code&gt;  打开 &lt;code&gt;libcocos2djs.so&lt;/code&gt;  全局搜索 &lt;code&gt;jsb-adapater&lt;/code&gt; , 它前面那一串字符串就是 jsc 的密钥&lt;/p&gt;
+&lt;p&gt;&lt;img data-src=&#34;/wechat-mini-program-with-devtool/EYTa4KC37WZMgdG.png&#34; alt=&#34;Hex下 key&#34; style=&#34;aspect-ratio:989 / 670;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;拿到了密钥，用&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly9naXRodWIuY29tL2x1Y2t5YWliaW4vY29jb3NjcmVhdG9yanNjZGVjcnlwdA==&#34;&gt; cocoscreatorjscdecrypt&lt;/span&gt; 就可以解密出源码来了&lt;/p&gt;
 </content>
         <updated>2024-01-30T07:55:11.000Z</updated>
     </entry>
