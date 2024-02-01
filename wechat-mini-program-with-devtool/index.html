@@ -31,23 +31,30 @@
 <link rel="canonical" href="https://oacia.dev/wechat-mini-program-with-devtool/">
 
 
-<meta name="description" content="今天闲来无事，上网冲浪，突然发现一个令我眼前一亮的项目 **WeChatOpenDevTools-Python**, 这这这，看 README 的介绍，我岂不是可以在小程序里面开 devtool 了吗！？ 想来 2022 年也有个小程序羊了个羊爆火那会儿，我也对小程序逆向分析玩了玩，然后做了个破解版的自娱自乐了一下 (当然也是算朋友圈排名滴), 当时拿 UnpackMiniApp.exe  解密了">
+<meta name="description" content="今天闲来无事，上网冲浪，突然发现一个令我眼前一亮的项目 WeChatOpenDevTools-Python, 这这这，看 README 的介绍，我岂不是可以在小程序里面开 devtool 了吗！？ 想来 2022 年也有个小程序羊了个羊爆火那会儿，我也对小程序逆向分析玩了玩，然后做了个破解版的自娱自乐了一下 (当然也是算朋友圈排名滴), 当时拿 UnpackMiniApp.exe  解密了 wxa">
 <meta property="og:type" content="article">
-<meta property="og:title" content="微信小程序咸鱼之王开启devtool逆向">
+<meta property="og:title" content="微信小程序devtool抓包+反编译wxapkg">
 <meta property="og:url" content="https://oacia.dev/wechat-mini-program-with-devtool/">
 <meta property="og:site_name" content="oaciaのBbBlog~">
-<meta property="og:description" content="今天闲来无事，上网冲浪，突然发现一个令我眼前一亮的项目 **WeChatOpenDevTools-Python**, 这这这，看 README 的介绍，我岂不是可以在小程序里面开 devtool 了吗！？ 想来 2022 年也有个小程序羊了个羊爆火那会儿，我也对小程序逆向分析玩了玩，然后做了个破解版的自娱自乐了一下 (当然也是算朋友圈排名滴), 当时拿 UnpackMiniApp.exe  解密了">
+<meta property="og:description" content="今天闲来无事，上网冲浪，突然发现一个令我眼前一亮的项目 WeChatOpenDevTools-Python, 这这这，看 README 的介绍，我岂不是可以在小程序里面开 devtool 了吗！？ 想来 2022 年也有个小程序羊了个羊爆火那会儿，我也对小程序逆向分析玩了玩，然后做了个破解版的自娱自乐了一下 (当然也是算朋友圈排名滴), 当时拿 UnpackMiniApp.exe  解密了 wxa">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oacia.dev/wechat-mini-program-with-devtool/image-20240201160604783.png">
+<meta property="og:image" content="https://oacia.dev/wechat-mini-program-with-devtool/image-20240201161923899.png">
+<meta property="og:image" content="https://oacia.dev/wechat-mini-program-with-devtool/image-20240201161816680.png">
+<meta property="og:image" content="https://oacia.dev/wechat-mini-program-with-devtool/image-20240201164655557.png">
+<meta property="og:image" content="https://oacia.dev/wechat-mini-program-with-devtool/image-20240201165508082.png">
+<meta property="og:image" content="https://oacia.dev/wechat-mini-program-with-devtool/image-20240201170202775.png">
 <meta property="article:published_time" content="2024-01-30T07:55:11.000Z">
-<meta property="article:modified_time" content="2024-01-30T08:21:50.888Z">
+<meta property="article:modified_time" content="2024-02-01T09:18:51.454Z">
 <meta property="article:author" content="oacia">
 <meta property="article:tag" content="reverse,安卓逆向,区块链,学习笔记,破解实战,前端,CTF">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oacia.dev/wechat-mini-program-with-devtool/image-20240201160604783.png">
 <meta name="twitter:creator" content="@oacia86">
 
 
   <title>
-微信小程序咸鱼之王开启devtool逆向 |
+微信小程序devtool抓包+反编译wxapkg |
 oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 <meta name="generator" content="Hexo 6.3.0"></head>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -332,7 +339,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
         <div id="brand">
           <div class="pjax">
           
-  <h1 itemprop="name headline">微信小程序咸鱼之王开启devtool逆向
+  <h1 itemprop="name headline">微信小程序devtool抓包+反编译wxapkg
   </h1>
   
 <div class="meta">
@@ -348,7 +355,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       <i class="ic i-pen"></i>
     </span>
     <span class="text">本文字数</span>
-    <span>537</span>
+    <span>1.2k</span>
     <span class="text">字</span>
   </span>
   <span class="item" title="阅读时长">
@@ -436,11 +443,45 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
   <div class="body md" itemprop="articleBody">
     
 
-    <p>今天闲来无事，上网冲浪，突然发现一个令我眼前一亮的项目 **<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0phdmVsZXlRQVEvV2VDaGF0T3BlbkRldlRvb2xzLVB5dGhvbg==">WeChatOpenDevTools-Python</span>**, 这这这，看 README 的介绍，我岂不是可以在小程序里面开 devtool 了吗！？</p>
+    <p>今天闲来无事，上网冲浪，突然发现一个令我眼前一亮的项目<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0phdmVsZXlRQVEvV2VDaGF0T3BlbkRldlRvb2xzLVB5dGhvbg=="> WeChatOpenDevTools-Python</span>, 这这这，看 README 的介绍，我岂不是可以在小程序里面开 devtool 了吗！？</p>
 <p>想来 2022 年也有个小程序羊了个羊爆火那会儿，我也对小程序逆向分析玩了玩，然后做了个破解版的自娱自乐了一下 (当然也是算朋友圈排名滴), 当时拿 <code>UnpackMiniApp.exe</code>  解密了 <code>wxapkg</code>  格式的小程序，然后用<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3N5c3RlbS1jcHUvd3hhcHBVbnBhY2tlcg=="> wxappUnpacker</span> 弄出了小程序的 js 源码来，审计一下找到修改的地方 patch 逻辑到最开始的 <code>wxapkg</code>  包就破解好了</p>
 <p>虽然但是，那时我就在想微信小程序既然用的是浏览器的内核，那么必定是有方法可以开启开发者工具的，不过由于当时在网上还没发现这样的技术所以也就只是一个想法了，现在正巧碰到了大佬开源了能够开启微信小程序的项目，于是我便想看看小程序 + devtool 逆向的感觉究竟是如何的呢～</p>
 <p>碰巧身边的人在玩咸鱼之王 (虽然我没玩过), 但是它毕竟是一个小程序，那就拿它来浅浅尝试一下 devtool 逆向的感觉是怎么样的咯 <code>^.^</code> <br>
  既然都用上 devtool 了，那就不玩改内存这种略显低级的操作了，来研究研究更有趣的 <code>--&gt;</code>  客户端和服务端数据交换过程中变量是如何加密的 <code>(●ˇ∀ˇ●)</code></p>
+<div class="note warning">
+<p>让微信小程序开启 devtool 有被封号的风险，请务必使用<strong>小号</strong>登录电脑版微信！！！</p>
+</div>
+<h1 id="微信开启devtool"><a class="anchor" href="#微信开启devtool">#</a> 微信开启 devtool</h1>
+<ol>
+<li>从 github 上下载项目</li>
+</ol>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">git</span> clone https://github.com/JaveleyQAQ/WeChatOpenDevTools-Python.git</pre></td></tr></table></figure><ol start="2">
+<li>下载项目依赖</li>
+</ol>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>pip <span class="token function">install</span> <span class="token parameter variable">-r</span> requirements.txt</pre></td></tr></table></figure><ol start="3">
+<li>需要先打开电脑版微信并登录</li>
+<li>运行 <code>main.py</code></li>
+</ol>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>python main.py</pre></td></tr></table></figure><p>随便开一个小程序，出现下列信息则代表 devtool 开启成功</p>
+<p><img data-src="/wechat-mini-program-with-devtool/image-20240201160604783.png" alt="image-20240201160604783" style="aspect-ratio:625 / 272;"></p>
+<p>点一下小程序右上角的三个点</p>
+<p><img data-src="/wechat-mini-program-with-devtool/image-20240201161923899.png" alt="image-20240201161923899" style="aspect-ratio:378 / 339;"></p>
+<p>就可以开启 devtool 啦</p>
+<p><img data-src="/wechat-mini-program-with-devtool/image-20240201161816680.png" alt="image-20240201161816680" style="aspect-ratio:1182 / 789;"></p>
+<h1 id="反编译wxapkg"><a class="anchor" href="#反编译wxapkg">#</a> 反编译 wxapkg</h1>
+<p>devtool 可以帮助我们更加方便的抓到小程序的包，但是我们还需要通过反编译 wxapkg 拿到小程序的源代码，因为在 devtool 的 source 里面，小程序的源码都被整合到了一个 js 里面很难看出代码的层次结构</p>
+<h2 id="提取-wxapkg"><a class="anchor" href="#提取-wxapkg">#</a> 提取 wxapkg</h2>
+<p>Windows 默认小程序的存放路径为</p>
+<p><code>C:\Users\&#123;系统用户名&#125;\Documents\WeChat Files\Applet\&#123;小程序的AppID&#125;\</code></p>
+<p><img data-src="/wechat-mini-program-with-devtool/image-20240201164655557.png" alt="image-20240201164655557" style="aspect-ratio:653 / 129;"></p>
+<h2 id="解密-wxapkg"><a class="anchor" href="#解密-wxapkg">#</a> 解密 wxapkg</h2>
+<p>使用<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3N1cGVyZGFzaHUvcGNfd3hhcGtnX2RlY3J5cHRfcHl0aG9u"> pc_wxapkg_decrypt_python</span> 来解密 wxapkg</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>python .<span class="token punctuation">\</span>main.py <span class="token parameter variable">--wxid</span> wx0840558555a454ed <span class="token parameter variable">--file</span> .<span class="token punctuation">\</span>__APP__.wxapkg <span class="token parameter variable">--output</span> dec.wxapkg</pre></td></tr></table></figure><p><img data-src="/wechat-mini-program-with-devtool/image-20240201165508082.png" alt="image-20240201165508082" style="aspect-ratio:1633 / 106;"></p>
+<h2 id="解包-wxapkg"><a class="anchor" href="#解包-wxapkg">#</a> 解包 wxapkg</h2>
+<p>使用<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3N5c3RlbS1jcHUvd3hhcHBVbnBhY2tlcg=="> wxappUnpacker</span> 来解包 wxapkg</p>
+<p>由于咸鱼之王小程序的包是有子包的，所以需要使用 - s 参数</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>.<span class="token punctuation">\</span>bingo.bat .<span class="token punctuation">\</span>dec.wxapkg <span class="token parameter variable">-s</span><span class="token operator">=</span>_subpackages_game_.wxapkg</pre></td></tr></table></figure><p>解包成功～</p>
+<p><img data-src="/wechat-mini-program-with-devtool/image-20240201170202775.png" alt="image-20240201170202775" style="aspect-ratio:1275 / 857;"></p>
 
   </div>
 
@@ -452,9 +493,9 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       <i class="ic i-calendar-check"></i>
     </span>
     <span class="text">更新于</span>
-    <time title="修改时间：2024-01-30 16:21:50" itemprop="dateModified" datetime="2024-01-30T16:21:50+08:00">2024-01-30</time>
+    <time title="修改时间：2024-02-01 17:18:51" itemprop="dateModified" datetime="2024-02-01T17:18:51+08:00">2024-02-01</time>
   </span>
-  <span id="wechat-mini-program-with-devtool/" class="item leancloud_visitors" data-flag-title="微信小程序咸鱼之王开启devtool逆向" title="阅读次数">
+  <span id="wechat-mini-program-with-devtool/" class="item leancloud_visitors" data-flag-title="微信小程序devtool抓包+反编译wxapkg" title="阅读次数">
       <span class="icon">
         <i class="ic i-eye"></i>
       </span>
@@ -473,7 +514,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
   </li>
   <li class="link">
     <strong>本文链接：</strong>
-    <a href="https://oacia.dev/wechat-mini-program-with-devtool/" title="微信小程序咸鱼之王开启devtool逆向">https://oacia.dev/wechat-mini-program-with-devtool/</a>
+    <a href="https://oacia.dev/wechat-mini-program-with-devtool/" title="微信小程序devtool抓包+反编译wxapkg">https://oacia.dev/wechat-mini-program-with-devtool/</a>
   </li>
   <li class="license">
     <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
@@ -492,7 +533,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item left">
       
 
-  <a href="/telegram-bot-develop/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;22.jpg" title="telegram bot 初体验及云端部署">
+  <a href="/telegram-bot-develop/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;73.jpg" title="telegram bot 初体验及云端部署">
   <span class="type">上一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>telegram bot 初体验及云端部署</h3>
@@ -516,6 +557,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
   <div class="panels">
     <div class="inner">
       <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%90%AFdevtool"><span class="toc-text"> 微信开启 devtool</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%8D%E7%BC%96%E8%AF%91wxapkg"><span class="toc-text"> 反编译 wxapkg</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E5%8F%96-wxapkg"><span class="toc-text"> 提取 wxapkg</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%AF%86-wxapkg"><span class="toc-text"> 解密 wxapkg</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%8C%85-wxapkg"><span class="toc-text"> 解包 wxapkg</span></a></li></ol></li></ol>
       </div>
       <div class="related panel pjax" data-title="系列文章">
       </div>
@@ -638,7 +680,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <span class="post-meta-item-icon">
       <i class="ic i-chart-area"></i>
     </span>
-    <span title="站点总字数">604k 字</span>
+    <span title="站点总字数">605k 字</span>
 
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">

@@ -18,13 +18,47 @@
     <category term="CTF" />
     <entry>
         <id>https://oacia.dev/wechat-mini-program-with-devtool/</id>
-        <title>微信小程序咸鱼之王开启devtool逆向</title>
+        <title>微信小程序devtool抓包+反编译wxapkg</title>
         <link rel="alternate" href="https://oacia.dev/wechat-mini-program-with-devtool/"/>
-        <content type="html">&lt;p&gt;今天闲来无事，上网冲浪，突然发现一个令我眼前一亮的项目 **&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly9naXRodWIuY29tL0phdmVsZXlRQVEvV2VDaGF0T3BlbkRldlRvb2xzLVB5dGhvbg==&#34;&gt;WeChatOpenDevTools-Python&lt;/span&gt;**, 这这这，看 README 的介绍，我岂不是可以在小程序里面开 devtool 了吗！？&lt;/p&gt;
+        <content type="html">&lt;p&gt;今天闲来无事，上网冲浪，突然发现一个令我眼前一亮的项目&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly9naXRodWIuY29tL0phdmVsZXlRQVEvV2VDaGF0T3BlbkRldlRvb2xzLVB5dGhvbg==&#34;&gt; WeChatOpenDevTools-Python&lt;/span&gt;, 这这这，看 README 的介绍，我岂不是可以在小程序里面开 devtool 了吗！？&lt;/p&gt;
 &lt;p&gt;想来 2022 年也有个小程序羊了个羊爆火那会儿，我也对小程序逆向分析玩了玩，然后做了个破解版的自娱自乐了一下 (当然也是算朋友圈排名滴), 当时拿 &lt;code&gt;UnpackMiniApp.exe&lt;/code&gt;  解密了 &lt;code&gt;wxapkg&lt;/code&gt;  格式的小程序，然后用&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly9naXRodWIuY29tL3N5c3RlbS1jcHUvd3hhcHBVbnBhY2tlcg==&#34;&gt; wxappUnpacker&lt;/span&gt; 弄出了小程序的 js 源码来，审计一下找到修改的地方 patch 逻辑到最开始的 &lt;code&gt;wxapkg&lt;/code&gt;  包就破解好了&lt;/p&gt;
 &lt;p&gt;虽然但是，那时我就在想微信小程序既然用的是浏览器的内核，那么必定是有方法可以开启开发者工具的，不过由于当时在网上还没发现这样的技术所以也就只是一个想法了，现在正巧碰到了大佬开源了能够开启微信小程序的项目，于是我便想看看小程序 + devtool 逆向的感觉究竟是如何的呢～&lt;/p&gt;
 &lt;p&gt;碰巧身边的人在玩咸鱼之王 (虽然我没玩过), 但是它毕竟是一个小程序，那就拿它来浅浅尝试一下 devtool 逆向的感觉是怎么样的咯 &lt;code&gt;^.^&lt;/code&gt; &lt;br&gt;
  既然都用上 devtool 了，那就不玩改内存这种略显低级的操作了，来研究研究更有趣的 &lt;code&gt;--&amp;gt;&lt;/code&gt;  客户端和服务端数据交换过程中变量是如何加密的 &lt;code&gt;(●ˇ∀ˇ●)&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;note warning&#34;&gt;
+&lt;p&gt;让微信小程序开启 devtool 有被封号的风险，请务必使用&lt;strong&gt;小号&lt;/strong&gt;登录电脑版微信！！！&lt;/p&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;微信开启devtool&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#微信开启devtool&#34;&gt;#&lt;/a&gt; 微信开启 devtool&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;从 github 上下载项目&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure class=&#34;highlight shell&#34;&gt;&lt;figcaption data-lang=&#34;Bash&#34;&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td data-num=&#34;1&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token function&#34;&gt;git&lt;/span&gt; clone https://github.com/JaveleyQAQ/WeChatOpenDevTools-Python.git&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;下载项目依赖&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure class=&#34;highlight shell&#34;&gt;&lt;figcaption data-lang=&#34;Bash&#34;&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td data-num=&#34;1&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;pip &lt;span class=&#34;token function&#34;&gt;install&lt;/span&gt; &lt;span class=&#34;token parameter variable&#34;&gt;-r&lt;/span&gt; requirements.txt&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;需要先打开电脑版微信并登录&lt;/li&gt;
+&lt;li&gt;运行 &lt;code&gt;main.py&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure class=&#34;highlight shell&#34;&gt;&lt;figcaption data-lang=&#34;Bash&#34;&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td data-num=&#34;1&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;python main.py&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;p&gt;随便开一个小程序，出现下列信息则代表 devtool 开启成功&lt;/p&gt;
+&lt;p&gt;&lt;img data-src=&#34;/wechat-mini-program-with-devtool/image-20240201160604783.png&#34; alt=&#34;image-20240201160604783&#34; style=&#34;aspect-ratio:625 / 272;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;点一下小程序右上角的三个点&lt;/p&gt;
+&lt;p&gt;&lt;img data-src=&#34;/wechat-mini-program-with-devtool/image-20240201161923899.png&#34; alt=&#34;image-20240201161923899&#34; style=&#34;aspect-ratio:378 / 339;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;就可以开启 devtool 啦&lt;/p&gt;
+&lt;p&gt;&lt;img data-src=&#34;/wechat-mini-program-with-devtool/image-20240201161816680.png&#34; alt=&#34;image-20240201161816680&#34; style=&#34;aspect-ratio:1182 / 789;&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;反编译wxapkg&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#反编译wxapkg&#34;&gt;#&lt;/a&gt; 反编译 wxapkg&lt;/h1&gt;
+&lt;p&gt;devtool 可以帮助我们更加方便的抓到小程序的包，但是我们还需要通过反编译 wxapkg 拿到小程序的源代码，因为在 devtool 的 source 里面，小程序的源码都被整合到了一个 js 里面很难看出代码的层次结构&lt;/p&gt;
+&lt;h2 id=&#34;提取-wxapkg&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#提取-wxapkg&#34;&gt;#&lt;/a&gt; 提取 wxapkg&lt;/h2&gt;
+&lt;p&gt;Windows 默认小程序的存放路径为&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;C:\Users\&amp;#123;系统用户名&amp;#125;\Documents\WeChat Files\Applet\&amp;#123;小程序的AppID&amp;#125;\&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img data-src=&#34;/wechat-mini-program-with-devtool/image-20240201164655557.png&#34; alt=&#34;image-20240201164655557&#34; style=&#34;aspect-ratio:653 / 129;&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;解密-wxapkg&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#解密-wxapkg&#34;&gt;#&lt;/a&gt; 解密 wxapkg&lt;/h2&gt;
+&lt;p&gt;使用&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly9naXRodWIuY29tL3N1cGVyZGFzaHUvcGNfd3hhcGtnX2RlY3J5cHRfcHl0aG9u&#34;&gt; pc_wxapkg_decrypt_python&lt;/span&gt; 来解密 wxapkg&lt;/p&gt;
+&lt;figure class=&#34;highlight shell&#34;&gt;&lt;figcaption data-lang=&#34;Bash&#34;&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td data-num=&#34;1&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;python .&lt;span class=&#34;token punctuation&#34;&gt;\&lt;/span&gt;main.py &lt;span class=&#34;token parameter variable&#34;&gt;--wxid&lt;/span&gt; wx0840558555a454ed &lt;span class=&#34;token parameter variable&#34;&gt;--file&lt;/span&gt; .&lt;span class=&#34;token punctuation&#34;&gt;\&lt;/span&gt;__APP__.wxapkg &lt;span class=&#34;token parameter variable&#34;&gt;--output&lt;/span&gt; dec.wxapkg&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;p&gt;&lt;img data-src=&#34;/wechat-mini-program-with-devtool/image-20240201165508082.png&#34; alt=&#34;image-20240201165508082&#34; style=&#34;aspect-ratio:1633 / 106;&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;解包-wxapkg&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#解包-wxapkg&#34;&gt;#&lt;/a&gt; 解包 wxapkg&lt;/h2&gt;
+&lt;p&gt;使用&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly9naXRodWIuY29tL3N5c3RlbS1jcHUvd3hhcHBVbnBhY2tlcg==&#34;&gt; wxappUnpacker&lt;/span&gt; 来解包 wxapkg&lt;/p&gt;
+&lt;p&gt;由于咸鱼之王小程序的包是有子包的，所以需要使用 - s 参数&lt;/p&gt;
+&lt;figure class=&#34;highlight shell&#34;&gt;&lt;figcaption data-lang=&#34;Bash&#34;&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td data-num=&#34;1&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;.&lt;span class=&#34;token punctuation&#34;&gt;\&lt;/span&gt;bingo.bat .&lt;span class=&#34;token punctuation&#34;&gt;\&lt;/span&gt;dec.wxapkg &lt;span class=&#34;token parameter variable&#34;&gt;-s&lt;/span&gt;&lt;span class=&#34;token operator&#34;&gt;=&lt;/span&gt;_subpackages_game_.wxapkg&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;p&gt;解包成功～&lt;/p&gt;
+&lt;p&gt;&lt;img data-src=&#34;/wechat-mini-program-with-devtool/image-20240201170202775.png&#34; alt=&#34;image-20240201170202775&#34; style=&#34;aspect-ratio:1275 / 857;&#34;&gt;&lt;/p&gt;
 </content>
         <updated>2024-01-30T07:55:11.000Z</updated>
     </entry>
