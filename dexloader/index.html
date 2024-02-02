@@ -45,8 +45,9 @@
 <meta property="og:image" content="https://oacia.dev/dexloader/image-20230925150407568.png">
 <meta property="og:image" content="https://oacia.dev/dexloader/image-20230925175843816.png">
 <meta property="og:image" content="https://oacia.dev/dexloader/image-20230925183351444.png">
+<meta property="og:image" content="https://oacia.dev/dexloader/image-20240202181233262.png">
 <meta property="article:published_time" content="2023-09-25T06:01:45.000Z">
-<meta property="article:modified_time" content="2023-09-25T10:34:56.391Z">
+<meta property="article:modified_time" content="2024-02-02T10:31:46.418Z">
 <meta property="article:author" content="oacia">
 <meta property="article:tag" content="reverse,安卓逆向,区块链,学习笔记,破解实战,前端,CTF">
 <meta name="twitter:card" content="summary">
@@ -356,7 +357,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       <i class="ic i-pen"></i>
     </span>
     <span class="text">本文字数</span>
-    <span>1.8k</span>
+    <span>6.5k</span>
     <span class="text">字</span>
   </span>
   <span class="item" title="阅读时长">
@@ -364,7 +365,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       <i class="ic i-clock"></i>
     </span>
     <span class="text">阅读时长</span>
-    <span>2 分钟</span>
+    <span>6 分钟</span>
   </span>
 </div>
 
@@ -459,8 +460,8 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 <p><img data-src="/dexloader/image-20230925144009844.png" alt="image-20230925144009844" style="aspect-ratio:924 / 502;"></p>
 <p>之后我们便可以在 <code>Dexlib1/.transforms</code>  目录中找到生成的 <code>dex</code>  文件</p>
 <p><img data-src="/dexloader/image-20230925150407568.png" alt="image-20230925150407568" style="aspect-ratio:703 / 729;"></p>
-<h1 id="动态加载dex"><a class="anchor" href="#动态加载dex">#</a> 动态加载 Dex</h1>
-<p>为了让 apk 可以顺利找到我们刚刚生成的 Dex, 我们可以将这个 <code>dex_class.dex</code>  移入到 <code>asserts</code>  目录中</p>
+<h1 id="dex从文件中动态加载"><a class="anchor" href="#dex从文件中动态加载">#</a> Dex 从文件中动态加载</h1>
+<p>为了让 apk 可以顺利找到我们刚刚生成的 Dex, 我们可以将这个 <code>dex_class.dex</code>  移入到 <code>assets</code>  目录中</p>
 <p><img data-src="/dexloader/image-20230925175843816.png" alt="image-20230925175843816" style="aspect-ratio:933 / 285;"></p>
 <p>随后便可以加载该 dex 并通过反射机制进行函数调用</p>
 <blockquote>
@@ -470,6 +471,115 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 <figure class="highlight java"><figcaption data-lang="java"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="2"></td><td><pre>DexClassLoader 类参数含义</pre></td></tr><tr><td data-num="3"></td><td><pre>@param dexPath: 待加载的 dex 文件路径，如果是外存路径，一定要加上读外存文件的权限</pre></td></tr><tr><td data-num="4"></td><td><pre>@param optimizedDirectory: 解压后的.dex 文件存储路径，不可为空，此位置一定要是可读写且仅该应用可读写</pre></td></tr><tr><td data-num="5"></td><td><pre>@param librarySearchPath: 指向包含本地库 (so) 的文件夹路径，可以设为 null</pre></td></tr><tr><td data-num="6"></td><td><pre>@param parent: 父级类加载器，一般可以通过 Context.getClassLoader 获取到，也可通过 ClassLoader.getSystemClassLoader () 获取到</pre></td></tr><tr><td data-num="7"></td><td><pre>*/</pre></td></tr><tr><td data-num="8"></td><td><pre><span class="token keyword">public</span> <span class="token class-name">DexClassLoader</span><span class="token punctuation">(</span><span class="token class-name">String</span> dexPath<span class="token punctuation">,</span> <span class="token class-name">String</span> optimizedDirectory<span class="token punctuation">,</span> <span class="token class-name">String</span> librarySearchPath<span class="token punctuation">,</span> <span class="token class-name">ClassLoader</span> parent<span class="token punctuation">)</span></pre></td></tr></table></figure><p>具体代码如下</p>
 <figure class="highlight java"><figcaption data-lang="java"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">// 将 dex 文件从 assets 目录复制到应用缓存目录</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token class-name">AssetManager</span> assetManager <span class="token operator">=</span> <span class="token function">getAssets</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token class-name">InputStream</span> inputStream <span class="token operator">=</span> assetManager<span class="token punctuation">.</span><span class="token keyword">open</span><span class="token punctuation">(</span><span class="token string">"dex_class.dex"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token class-name">File</span> dexfile <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span><span class="token function">getCacheDir</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"dex_class.dex"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token class-name">OutputStream</span> outputStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileOutputStream</span><span class="token punctuation">(</span>dexfile<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> buffer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token number">1024</span><span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="7"></td><td><pre><span class="token keyword">int</span> length<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="8"></td><td><pre><span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>length <span class="token operator">=</span> inputStream<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span>buffer<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="9"></td><td><pre>    outputStream<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>buffer<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> length<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="10"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="11"></td><td><pre>inputStream<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="12"></td><td><pre>outputStream<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="13"></td><td><pre></pre></td></tr><tr><td data-num="14"></td><td><pre><span class="token comment">// 使用 DexClassLoader 加载 dex</span></pre></td></tr><tr><td data-num="15"></td><td><pre><span class="token class-name">DexClassLoader</span> classLoader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DexClassLoader</span><span class="token punctuation">(</span>dexfile<span class="token punctuation">.</span><span class="token function">getAbsolutePath</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token function">getCacheDir</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getAbsolutePath</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token keyword">null</span><span class="token punctuation">,</span><span class="token function">getClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="16"></td><td><pre></pre></td></tr><tr><td data-num="17"></td><td><pre><span class="token comment">// 加载插件的类 (插件的包名。类名)</span></pre></td></tr><tr><td data-num="18"></td><td><pre><span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> clazz <span class="token operator">=</span> classLoader<span class="token punctuation">.</span><span class="token function">loadClass</span><span class="token punctuation">(</span><span class="token string">"com.oacia.dexlib1.dex_class"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="19"></td><td><pre></pre></td></tr><tr><td data-num="20"></td><td><pre><span class="token comment">// 获取类的实例</span></pre></td></tr><tr><td data-num="21"></td><td><pre><span class="token class-name">Object</span> dexlib_obj <span class="token operator">=</span> clazz<span class="token punctuation">.</span><span class="token function">newInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="22"></td><td><pre></pre></td></tr><tr><td data-num="23"></td><td><pre><span class="token comment">// 通过反射获取对应的方法</span></pre></td></tr><tr><td data-num="24"></td><td><pre><span class="token class-name">Method</span> method <span class="token operator">=</span> clazz<span class="token punctuation">.</span><span class="token function">getDeclaredMethod</span><span class="token punctuation">(</span><span class="token string">"say_hello"</span><span class="token punctuation">,</span> <span class="token class-name">Context</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="25"></td><td><pre></pre></td></tr><tr><td data-num="26"></td><td><pre><span class="token comment">// 关闭安全检查达到提升反射速度的目的</span></pre></td></tr><tr><td data-num="27"></td><td><pre>method<span class="token punctuation">.</span><span class="token function">setAccessible</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="28"></td><td><pre></pre></td></tr><tr><td data-num="29"></td><td><pre><span class="token comment">// 调用反射方法</span></pre></td></tr><tr><td data-num="30"></td><td><pre>method<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>dexlib_obj<span class="token punctuation">,</span><span class="token class-name">MainActivity</span><span class="token punctuation">.</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><p>good! 成功调用方法！</p>
 <p><img data-src="/dexloader/image-20230925183351444.png" alt="image-20230925183351444" style="aspect-ratio:326 / 593;"></p>
+<h1 id="dex从内存中动态加载"><a class="anchor" href="#dex从内存中动态加载">#</a> Dex 从内存中动态加载</h1>
+<p>事实上，dex 是可以在内存中被动态加载的，而不一定非要使用 dex 文件的方式，这一种加载方式被称为<strong> Dex 不落地加载</strong></p>
+<p>通过 <code>InMemoryDexClassLoader</code>  可以实现 dex 在内存的加载</p>
+<pre><code class="language-c++">        // 加载dex
+    jobject classLoader = CallObjectMethod(g_context, &quot;getClassLoader&quot;, &quot;()Ljava/lang/ClassLoader;&quot;).l;
+
+	if (g_sdk_int &lt; 26) &#123;
+        ndk_dlclose(art_handle);
+    &#125; else &#123;
+        jclass ElementClass = env-&gt;FindClass(&quot;java/nio/ByteBuffer&quot;);
+        jobjectArray dexBufferArr = env-&gt;NewObjectArray(dexBuffers.size(), ElementClass, NULL);
+        for (int i = 0; i &lt; dexBuffers.size(); i++) &#123;
+            env-&gt;SetObjectArrayElement(dexBufferArr, i, dexBuffers[i]);
+        &#125;
+
+        jclass InMemoryDexClassLoaderClass = env-&gt;FindClass(&quot;dalvik/system/InMemoryDexClassLoader&quot;);
+        jmethodID InMemoryDexClassLoaderInit = env-&gt;GetMethodID(InMemoryDexClassLoaderClass, &quot;&lt;init&gt;&quot;,
+                                                                &quot;([Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V&quot;);
+        jobject InMemoryObj = env-&gt;NewObject(InMemoryDexClassLoaderClass, InMemoryDexClassLoaderInit, dexBufferArr, classLoader);
+        jobject pathListObj = GetField(InMemoryObj, &quot;pathList&quot;, &quot;Ldalvik/system/DexPathList;&quot;).l;
+        jobjectArray dexElements;
+        if (g_sdk_int &gt;= 29) &#123;
+            jclass list_jcs = env-&gt;FindClass(&quot;java/util/ArrayList&quot;);
+            jmethodID list_init = env-&gt;GetMethodID(list_jcs, &quot;&lt;init&gt;&quot;, &quot;()V&quot;);
+            jobject list_obj = env-&gt;NewObject(list_jcs, list_init);
+            dexElements = static_cast&lt;jobjectArray&gt;(CallStaticMethod(&quot;dalvik/system/DexPathList&quot;, &quot;makeInMemoryDexElements&quot;, &quot;([Ljava/nio/ByteBuffer;Ljava/util/List;)[Ldalvik/system/DexPathList$Element;&quot;, dexBufferArr, list_obj).l);
+        &#125; else &#123;
+            dexElements = static_cast&lt;jobjectArray&gt;(GetField(pathListObj, &quot;dexElements&quot;, &quot;[Ldalvik/system/DexPathList$Element;&quot;).l);
+        &#125;
+
+
+        for (int i = 0; i &lt; env-&gt;GetArrayLength(dexElements); i++) &#123;
+            dexobjs.push_back(env-&gt;GetObjectArrayElement(dexElements, i));
+        &#125;
+
+        env-&gt;DeleteLocalRef(ElementClass);
+        env-&gt;DeleteLocalRef(InMemoryDexClassLoaderClass);
+        env-&gt;DeleteLocalRef(InMemoryObj);
+        env-&gt;DeleteLocalRef(pathListObj);
+    &#125;
+</code></pre>
+<p>随后将 dex 添加到 <code>DexPathList</code>  中，这样我们就可以利用 <code>FindClass</code>  获取到这一个类了</p>
+<pre><code class="language-c++">static void make_dex_elements(JNIEnv *env, jobject classLoader, std::vector&lt;jobject&gt; dexFileobjs)
+&#123;
+    jclass PathClassLoader = env-&gt;GetObjectClass(classLoader);
+    jclass BaseDexClassLoader = env-&gt;GetSuperclass(PathClassLoader);
+    // get pathList fieldid
+    jfieldID pathListid = env-&gt;GetFieldID(BaseDexClassLoader, &quot;pathList&quot;, &quot;Ldalvik/system/DexPathList;&quot;);
+    jobject pathList = env-&gt;GetObjectField(classLoader, pathListid);
+
+    // get DexPathList Class
+    jclass DexPathListClass = env-&gt;GetObjectClass(pathList);
+    // get dexElements fieldid
+    jfieldID dexElementsid = env-&gt;GetFieldID(DexPathListClass, &quot;dexElements&quot;, &quot;[Ldalvik/system/DexPathList$Element;&quot;);
+    jobjectArray dexElement = static_cast&lt;jobjectArray&gt;(env-&gt;GetObjectField(pathList, dexElementsid));
+
+    jint len = env-&gt;GetArrayLength(dexElement);
+
+    LOGD(&quot;[+]Elements size:%d, dex File size: %d&quot;, len, dexFileobjs.size());
+
+    // Get dexElement all values and add  add each value to the new array
+    jclass ElementClass = env-&gt;FindClass(
+            &quot;dalvik/system/DexPathList$Element&quot;); // dalvik/system/DexPathList$Element
+    jobjectArray new_dexElement = env-&gt;NewObjectArray(len + dexFileobjs.size(), ElementClass, NULL);
+    for (int i = 0; i &lt; len; i++)
+    &#123;
+        env-&gt;SetObjectArrayElement(new_dexElement, i, env-&gt;GetObjectArrayElement(dexElement, i));
+    &#125;
+
+    if (g_sdk_int &lt; 26) &#123;
+        jmethodID ElementInit = env-&gt;GetMethodID(ElementClass, &quot;&lt;init&gt;&quot;,
+                                                 &quot;(Ljava/io/File;ZLjava/io/File;Ldalvik/system/DexFile;)V&quot;);
+        jboolean isDirectory = JNI_FALSE;
+        for (int i = 0; i &lt; dexFileobjs.size(); i++) &#123;
+            jobject element_obj = env-&gt;NewObject(ElementClass, ElementInit, NULL, isDirectory, NULL,
+                                                 dexFileobjs[i]);
+            env-&gt;SetObjectArrayElement(new_dexElement, len + i, element_obj);
+        &#125;
+    &#125; else &#123;
+        for (int i = 0; i &lt; dexFileobjs.size(); i++) &#123;
+            env-&gt;SetObjectArrayElement(new_dexElement, len + i, dexFileobjs[i]);
+        &#125;
+    &#125;
+    env-&gt;SetObjectField(pathList, dexElementsid, new_dexElement);
+
+    env-&gt;DeleteLocalRef(ElementClass);
+    env-&gt;DeleteLocalRef(dexElement);
+    env-&gt;DeleteLocalRef(DexPathListClass);
+    env-&gt;DeleteLocalRef(pathList);
+    env-&gt;DeleteLocalRef(BaseDexClassLoader);
+    env-&gt;DeleteLocalRef(PathClassLoader);
+&#125;
+</code></pre>
+<p>当 dex 被加载到内存中之后，使用下列的语句即可实现相关函数的反射调用</p>
+<pre><code class="language-c++">jclass clazz = env-&gt;FindClass(&quot;com/oacia/dexlib1/dex_class&quot;);
+//创建类com/oacia/dexlib1/dex_class的实例
+jobject obj = env-&gt;AllocObject(clazz);
+// 获取 Java 方法 &quot;say_hello&quot; 的 JNI 引用
+jmethodID methodID = env-&gt;GetMethodID(clazz, &quot;say_hello&quot;, &quot;(Landroid/content/Context;)V&quot;);
+// 调用 Java 方法
+env-&gt;CallVoidMethod(obj, methodID,cnt);
+</code></pre>
+<p>点击 <code>LOAD MEMORY DEX</code> , 函数调用成功～</p>
+<p><img data-src="/dexloader/image-20240202181233262.png" alt="image-20240202181233262" style="aspect-ratio:491 / 891;"></p>
+<h1 id="参考资料"><a class="anchor" href="#参考资料">#</a> 参考资料</h1>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9iYnMua2FueHVlLmNvbS90aHJlYWQtMjc3Mjk4Lmh0bQ==">Android 加壳与脱壳（11）—— 不落地加载壳的对抗研究</span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZyZXpyaWsvSmlhZ3U=">https://github.com/Frezrik/Jiagu</span></li>
+</ul>
 
   </div>
 
@@ -481,7 +591,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       <i class="ic i-calendar-check"></i>
     </span>
     <span class="text">更新于</span>
-    <time title="修改时间：2023-09-25 18:34:56" itemprop="dateModified" datetime="2023-09-25T18:34:56+08:00">2023-09-25</time>
+    <time title="修改时间：2024-02-02 18:31:46" itemprop="dateModified" datetime="2024-02-02T18:31:46+08:00">2024-02-02</time>
   </span>
   <span id="dexloader/" class="item leancloud_visitors" data-flag-title="Android动态加载dex" title="阅读次数">
       <span class="icon">
@@ -521,7 +631,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item left">
       
 
-  <a href="/360-jiagu/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;21.jpg" title="(doing)360加固dex解密算法分析">
+  <a href="/360-jiagu/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;39.jpg" title="(doing)360加固dex解密算法分析">
   <span class="type">上一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>(doing)360加固dex解密算法分析</h3>
@@ -531,7 +641,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item right">
       
 
-  <a href="/ollvm-study/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;14.jpg" title="(doing)ollvm三种混淆模式的反混淆思路">
+  <a href="/ollvm-study/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;45.jpg" title="(doing)ollvm三种混淆模式的反混淆思路">
   <span class="type">下一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>(doing)ollvm三种混淆模式的反混淆思路</h3>
@@ -553,7 +663,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
   <div class="panels">
     <div class="inner">
       <div class="contents panel pjax" data-title="文章目录">
-          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#android-studio%E7%94%9F%E6%88%90dex"><span class="toc-text"> Android studio 生成 dex</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E5%8A%A0%E8%BD%BDdex"><span class="toc-text"> 动态加载 Dex</span></a></li></ol>
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#android-studio%E7%94%9F%E6%88%90dex"><span class="toc-text"> Android studio 生成 dex</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#dex%E4%BB%8E%E6%96%87%E4%BB%B6%E4%B8%AD%E5%8A%A8%E6%80%81%E5%8A%A0%E8%BD%BD"><span class="toc-text"> Dex 从文件中动态加载</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#dex%E4%BB%8E%E5%86%85%E5%AD%98%E4%B8%AD%E5%8A%A8%E6%80%81%E5%8A%A0%E8%BD%BD"><span class="toc-text"> Dex 从内存中动态加载</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-text"> 参考资料</span></a></li></ol>
       </div>
       <div class="related panel pjax" data-title="系列文章">
       </div>
@@ -678,13 +788,13 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <span class="post-meta-item-icon">
       <i class="ic i-chart-area"></i>
     </span>
-    <span title="站点总字数">606k 字</span>
+    <span title="站点总字数">610k 字</span>
 
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="ic i-coffee"></i>
     </span>
-    <span title="站点阅读时长">9:11</span>
+    <span title="站点阅读时长">9:15</span>
   </div>
   <div class="powered-by">
     基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>

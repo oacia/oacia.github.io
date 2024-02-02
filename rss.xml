@@ -2171,8 +2171,8 @@ Status ServiceManager::addService(const std::string&amp;amp; name, const sp&amp;
 &lt;p&gt;&lt;img data-src=&#34;/dexloader/image-20230925144009844.png&#34; alt=&#34;image-20230925144009844&#34; style=&#34;aspect-ratio:924 / 502;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;之后我们便可以在 &lt;code&gt;Dexlib1/.transforms&lt;/code&gt;  目录中找到生成的 &lt;code&gt;dex&lt;/code&gt;  文件&lt;/p&gt;
 &lt;p&gt;&lt;img data-src=&#34;/dexloader/image-20230925150407568.png&#34; alt=&#34;image-20230925150407568&#34; style=&#34;aspect-ratio:703 / 729;&#34;&gt;&lt;/p&gt;
-&lt;h1 id=&#34;动态加载dex&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#动态加载dex&#34;&gt;#&lt;/a&gt; 动态加载 Dex&lt;/h1&gt;
-&lt;p&gt;为了让 apk 可以顺利找到我们刚刚生成的 Dex, 我们可以将这个 &lt;code&gt;dex_class.dex&lt;/code&gt;  移入到 &lt;code&gt;asserts&lt;/code&gt;  目录中&lt;/p&gt;
+&lt;h1 id=&#34;dex从文件中动态加载&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#dex从文件中动态加载&#34;&gt;#&lt;/a&gt; Dex 从文件中动态加载&lt;/h1&gt;
+&lt;p&gt;为了让 apk 可以顺利找到我们刚刚生成的 Dex, 我们可以将这个 &lt;code&gt;dex_class.dex&lt;/code&gt;  移入到 &lt;code&gt;assets&lt;/code&gt;  目录中&lt;/p&gt;
 &lt;p&gt;&lt;img data-src=&#34;/dexloader/image-20230925175843816.png&#34; alt=&#34;image-20230925175843816&#34; style=&#34;aspect-ratio:933 / 285;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;随后便可以加载该 dex 并通过反射机制进行函数调用&lt;/p&gt;
 &lt;blockquote&gt;
@@ -2182,6 +2182,115 @@ Status ServiceManager::addService(const std::string&amp;amp; name, const sp&amp;
 &lt;figure class=&#34;highlight java&#34;&gt;&lt;figcaption data-lang=&#34;java&#34;&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td data-num=&#34;1&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token comment&#34;&gt;/*&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;2&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;DexClassLoader 类参数含义&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;3&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;@param dexPath: 待加载的 dex 文件路径，如果是外存路径，一定要加上读外存文件的权限&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;4&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;@param optimizedDirectory: 解压后的.dex 文件存储路径，不可为空，此位置一定要是可读写且仅该应用可读写&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;5&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;@param librarySearchPath: 指向包含本地库 (so) 的文件夹路径，可以设为 null&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;6&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;@param parent: 父级类加载器，一般可以通过 Context.getClassLoader 获取到，也可通过 ClassLoader.getSystemClassLoader () 获取到&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;7&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;*/&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;8&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token keyword&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;token class-name&#34;&gt;DexClassLoader&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token class-name&#34;&gt;String&lt;/span&gt; dexPath&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token class-name&#34;&gt;String&lt;/span&gt; optimizedDirectory&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token class-name&#34;&gt;String&lt;/span&gt; librarySearchPath&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token class-name&#34;&gt;ClassLoader&lt;/span&gt; parent&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;p&gt;具体代码如下&lt;/p&gt;
 &lt;figure class=&#34;highlight java&#34;&gt;&lt;figcaption data-lang=&#34;java&#34;&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td data-num=&#34;1&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token comment&#34;&gt;// 将 dex 文件从 assets 目录复制到应用缓存目录&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;2&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token class-name&#34;&gt;AssetManager&lt;/span&gt; assetManager &lt;span class=&#34;token operator&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;token function&#34;&gt;getAssets&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;3&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token class-name&#34;&gt;InputStream&lt;/span&gt; inputStream &lt;span class=&#34;token operator&#34;&gt;=&lt;/span&gt; assetManager&lt;span class=&#34;token punctuation&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;token keyword&#34;&gt;open&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token string&#34;&gt;&#34;dex_class.dex&#34;&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;4&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token class-name&#34;&gt;File&lt;/span&gt; dexfile &lt;span class=&#34;token operator&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;token class-name&#34;&gt;File&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token function&#34;&gt;getCacheDir&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token string&#34;&gt;&#34;dex_class.dex&#34;&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;5&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token class-name&#34;&gt;OutputStream&lt;/span&gt; outputStream &lt;span class=&#34;token operator&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;token class-name&#34;&gt;FileOutputStream&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;dexfile&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;6&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token keyword&#34;&gt;byte&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;]&lt;/span&gt; buffer &lt;span class=&#34;token operator&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;byte&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;token number&#34;&gt;1024&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;7&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; length&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;8&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token keyword&#34;&gt;while&lt;/span&gt; &lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;length &lt;span class=&#34;token operator&#34;&gt;=&lt;/span&gt; inputStream&lt;span class=&#34;token punctuation&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;token function&#34;&gt;read&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;buffer&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;&gt;&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;9&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;    outputStream&lt;span class=&#34;token punctuation&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;token function&#34;&gt;write&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;buffer&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; length&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;10&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;11&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;inputStream&lt;span class=&#34;token punctuation&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;token function&#34;&gt;close&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;12&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;outputStream&lt;span class=&#34;token punctuation&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;token function&#34;&gt;close&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;13&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;14&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token comment&#34;&gt;// 使用 DexClassLoader 加载 dex&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;15&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token class-name&#34;&gt;DexClassLoader&lt;/span&gt; classLoader &lt;span class=&#34;token operator&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;token class-name&#34;&gt;DexClassLoader&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;dexfile&lt;span class=&#34;token punctuation&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;token function&#34;&gt;getAbsolutePath&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;token function&#34;&gt;getCacheDir&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;token function&#34;&gt;getAbsolutePath&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;token keyword&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;token function&#34;&gt;getClassLoader&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;16&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;17&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token comment&#34;&gt;// 加载插件的类 (插件的包名。类名)&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;18&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token class-name&#34;&gt;Class&lt;/span&gt;&lt;span class=&#34;token generics&#34;&gt;&lt;span class=&#34;token punctuation&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;token operator&#34;&gt;?&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;&gt;&lt;/span&gt;&lt;/span&gt; clazz &lt;span class=&#34;token operator&#34;&gt;=&lt;/span&gt; classLoader&lt;span class=&#34;token punctuation&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;token function&#34;&gt;loadClass&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token string&#34;&gt;&#34;com.oacia.dexlib1.dex_class&#34;&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;19&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;20&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token comment&#34;&gt;// 获取类的实例&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;21&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token class-name&#34;&gt;Object&lt;/span&gt; dexlib_obj &lt;span class=&#34;token operator&#34;&gt;=&lt;/span&gt; clazz&lt;span class=&#34;token punctuation&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;token function&#34;&gt;newInstance&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;22&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;23&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token comment&#34;&gt;// 通过反射获取对应的方法&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;24&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token class-name&#34;&gt;Method&lt;/span&gt; method &lt;span class=&#34;token operator&#34;&gt;=&lt;/span&gt; clazz&lt;span class=&#34;token punctuation&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;token function&#34;&gt;getDeclaredMethod&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token string&#34;&gt;&#34;say_hello&#34;&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token class-name&#34;&gt;Context&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;token keyword&#34;&gt;class&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;25&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;26&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token comment&#34;&gt;// 关闭安全检查达到提升反射速度的目的&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;27&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;method&lt;span class=&#34;token punctuation&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;token function&#34;&gt;setAccessible&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token boolean&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;28&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;29&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;&lt;span class=&#34;token comment&#34;&gt;// 调用反射方法&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td data-num=&#34;30&#34;&gt;&lt;/td&gt;&lt;td&gt;&lt;pre&gt;method&lt;span class=&#34;token punctuation&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;token function&#34;&gt;invoke&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;dexlib_obj&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;token class-name&#34;&gt;MainActivity&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;token keyword&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;p&gt;good! 成功调用方法！&lt;/p&gt;
 &lt;p&gt;&lt;img data-src=&#34;/dexloader/image-20230925183351444.png&#34; alt=&#34;image-20230925183351444&#34; style=&#34;aspect-ratio:326 / 593;&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;dex从内存中动态加载&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#dex从内存中动态加载&#34;&gt;#&lt;/a&gt; Dex 从内存中动态加载&lt;/h1&gt;
+&lt;p&gt;事实上，dex 是可以在内存中被动态加载的，而不一定非要使用 dex 文件的方式，这一种加载方式被称为&lt;strong&gt; Dex 不落地加载&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;通过 &lt;code&gt;InMemoryDexClassLoader&lt;/code&gt;  可以实现 dex 在内存的加载&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;        // 加载dex
+    jobject classLoader = CallObjectMethod(g_context, &amp;quot;getClassLoader&amp;quot;, &amp;quot;()Ljava/lang/ClassLoader;&amp;quot;).l;
+
+	if (g_sdk_int &amp;lt; 26) &amp;#123;
+        ndk_dlclose(art_handle);
+    &amp;#125; else &amp;#123;
+        jclass ElementClass = env-&amp;gt;FindClass(&amp;quot;java/nio/ByteBuffer&amp;quot;);
+        jobjectArray dexBufferArr = env-&amp;gt;NewObjectArray(dexBuffers.size(), ElementClass, NULL);
+        for (int i = 0; i &amp;lt; dexBuffers.size(); i++) &amp;#123;
+            env-&amp;gt;SetObjectArrayElement(dexBufferArr, i, dexBuffers[i]);
+        &amp;#125;
+
+        jclass InMemoryDexClassLoaderClass = env-&amp;gt;FindClass(&amp;quot;dalvik/system/InMemoryDexClassLoader&amp;quot;);
+        jmethodID InMemoryDexClassLoaderInit = env-&amp;gt;GetMethodID(InMemoryDexClassLoaderClass, &amp;quot;&amp;lt;init&amp;gt;&amp;quot;,
+                                                                &amp;quot;([Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V&amp;quot;);
+        jobject InMemoryObj = env-&amp;gt;NewObject(InMemoryDexClassLoaderClass, InMemoryDexClassLoaderInit, dexBufferArr, classLoader);
+        jobject pathListObj = GetField(InMemoryObj, &amp;quot;pathList&amp;quot;, &amp;quot;Ldalvik/system/DexPathList;&amp;quot;).l;
+        jobjectArray dexElements;
+        if (g_sdk_int &amp;gt;= 29) &amp;#123;
+            jclass list_jcs = env-&amp;gt;FindClass(&amp;quot;java/util/ArrayList&amp;quot;);
+            jmethodID list_init = env-&amp;gt;GetMethodID(list_jcs, &amp;quot;&amp;lt;init&amp;gt;&amp;quot;, &amp;quot;()V&amp;quot;);
+            jobject list_obj = env-&amp;gt;NewObject(list_jcs, list_init);
+            dexElements = static_cast&amp;lt;jobjectArray&amp;gt;(CallStaticMethod(&amp;quot;dalvik/system/DexPathList&amp;quot;, &amp;quot;makeInMemoryDexElements&amp;quot;, &amp;quot;([Ljava/nio/ByteBuffer;Ljava/util/List;)[Ldalvik/system/DexPathList$Element;&amp;quot;, dexBufferArr, list_obj).l);
+        &amp;#125; else &amp;#123;
+            dexElements = static_cast&amp;lt;jobjectArray&amp;gt;(GetField(pathListObj, &amp;quot;dexElements&amp;quot;, &amp;quot;[Ldalvik/system/DexPathList$Element;&amp;quot;).l);
+        &amp;#125;
+
+
+        for (int i = 0; i &amp;lt; env-&amp;gt;GetArrayLength(dexElements); i++) &amp;#123;
+            dexobjs.push_back(env-&amp;gt;GetObjectArrayElement(dexElements, i));
+        &amp;#125;
+
+        env-&amp;gt;DeleteLocalRef(ElementClass);
+        env-&amp;gt;DeleteLocalRef(InMemoryDexClassLoaderClass);
+        env-&amp;gt;DeleteLocalRef(InMemoryObj);
+        env-&amp;gt;DeleteLocalRef(pathListObj);
+    &amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;随后将 dex 添加到 &lt;code&gt;DexPathList&lt;/code&gt;  中，这样我们就可以利用 &lt;code&gt;FindClass&lt;/code&gt;  获取到这一个类了&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;static void make_dex_elements(JNIEnv *env, jobject classLoader, std::vector&amp;lt;jobject&amp;gt; dexFileobjs)
+&amp;#123;
+    jclass PathClassLoader = env-&amp;gt;GetObjectClass(classLoader);
+    jclass BaseDexClassLoader = env-&amp;gt;GetSuperclass(PathClassLoader);
+    // get pathList fieldid
+    jfieldID pathListid = env-&amp;gt;GetFieldID(BaseDexClassLoader, &amp;quot;pathList&amp;quot;, &amp;quot;Ldalvik/system/DexPathList;&amp;quot;);
+    jobject pathList = env-&amp;gt;GetObjectField(classLoader, pathListid);
+
+    // get DexPathList Class
+    jclass DexPathListClass = env-&amp;gt;GetObjectClass(pathList);
+    // get dexElements fieldid
+    jfieldID dexElementsid = env-&amp;gt;GetFieldID(DexPathListClass, &amp;quot;dexElements&amp;quot;, &amp;quot;[Ldalvik/system/DexPathList$Element;&amp;quot;);
+    jobjectArray dexElement = static_cast&amp;lt;jobjectArray&amp;gt;(env-&amp;gt;GetObjectField(pathList, dexElementsid));
+
+    jint len = env-&amp;gt;GetArrayLength(dexElement);
+
+    LOGD(&amp;quot;[+]Elements size:%d, dex File size: %d&amp;quot;, len, dexFileobjs.size());
+
+    // Get dexElement all values and add  add each value to the new array
+    jclass ElementClass = env-&amp;gt;FindClass(
+            &amp;quot;dalvik/system/DexPathList$Element&amp;quot;); // dalvik/system/DexPathList$Element
+    jobjectArray new_dexElement = env-&amp;gt;NewObjectArray(len + dexFileobjs.size(), ElementClass, NULL);
+    for (int i = 0; i &amp;lt; len; i++)
+    &amp;#123;
+        env-&amp;gt;SetObjectArrayElement(new_dexElement, i, env-&amp;gt;GetObjectArrayElement(dexElement, i));
+    &amp;#125;
+
+    if (g_sdk_int &amp;lt; 26) &amp;#123;
+        jmethodID ElementInit = env-&amp;gt;GetMethodID(ElementClass, &amp;quot;&amp;lt;init&amp;gt;&amp;quot;,
+                                                 &amp;quot;(Ljava/io/File;ZLjava/io/File;Ldalvik/system/DexFile;)V&amp;quot;);
+        jboolean isDirectory = JNI_FALSE;
+        for (int i = 0; i &amp;lt; dexFileobjs.size(); i++) &amp;#123;
+            jobject element_obj = env-&amp;gt;NewObject(ElementClass, ElementInit, NULL, isDirectory, NULL,
+                                                 dexFileobjs[i]);
+            env-&amp;gt;SetObjectArrayElement(new_dexElement, len + i, element_obj);
+        &amp;#125;
+    &amp;#125; else &amp;#123;
+        for (int i = 0; i &amp;lt; dexFileobjs.size(); i++) &amp;#123;
+            env-&amp;gt;SetObjectArrayElement(new_dexElement, len + i, dexFileobjs[i]);
+        &amp;#125;
+    &amp;#125;
+    env-&amp;gt;SetObjectField(pathList, dexElementsid, new_dexElement);
+
+    env-&amp;gt;DeleteLocalRef(ElementClass);
+    env-&amp;gt;DeleteLocalRef(dexElement);
+    env-&amp;gt;DeleteLocalRef(DexPathListClass);
+    env-&amp;gt;DeleteLocalRef(pathList);
+    env-&amp;gt;DeleteLocalRef(BaseDexClassLoader);
+    env-&amp;gt;DeleteLocalRef(PathClassLoader);
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;当 dex 被加载到内存中之后，使用下列的语句即可实现相关函数的反射调用&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;jclass clazz = env-&amp;gt;FindClass(&amp;quot;com/oacia/dexlib1/dex_class&amp;quot;);
+//创建类com/oacia/dexlib1/dex_class的实例
+jobject obj = env-&amp;gt;AllocObject(clazz);
+// 获取 Java 方法 &amp;quot;say_hello&amp;quot; 的 JNI 引用
+jmethodID methodID = env-&amp;gt;GetMethodID(clazz, &amp;quot;say_hello&amp;quot;, &amp;quot;(Landroid/content/Context;)V&amp;quot;);
+// 调用 Java 方法
+env-&amp;gt;CallVoidMethod(obj, methodID,cnt);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;点击 &lt;code&gt;LOAD MEMORY DEX&lt;/code&gt; , 函数调用成功～&lt;/p&gt;
+&lt;p&gt;&lt;img data-src=&#34;/dexloader/image-20240202181233262.png&#34; alt=&#34;image-20240202181233262&#34; style=&#34;aspect-ratio:491 / 891;&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;参考资料&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#参考资料&#34;&gt;#&lt;/a&gt; 参考资料&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly9iYnMua2FueHVlLmNvbS90aHJlYWQtMjc3Mjk4Lmh0bQ==&#34;&gt;Android 加壳与脱壳（11）—— 不落地加载壳的对抗研究&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly9naXRodWIuY29tL0ZyZXpyaWsvSmlhZ3U=&#34;&gt;https://github.com/Frezrik/Jiagu&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
  ]]></description>
         </item>
         <item>

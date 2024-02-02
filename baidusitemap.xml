@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://oacia.dev/dexloader/</loc>
+    <lastmod>2024-02-02</lastmod>
+  </url>
+  <url>
     <loc>https://oacia.dev/wechat-mini-program-with-devtool/</loc>
     <lastmod>2024-02-01</lastmod>
   </url>
@@ -103,10 +107,6 @@
   <url>
     <loc>https://oacia.dev/%E9%80%86%E5%90%91%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95/</loc>
     <lastmod>2023-10-07</lastmod>
-  </url>
-  <url>
-    <loc>https://oacia.dev/dexloader/</loc>
-    <lastmod>2023-09-25</lastmod>
   </url>
   <url>
     <loc>https://oacia.dev/linux-socket-tcp-udp/</loc>
