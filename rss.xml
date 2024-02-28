@@ -324,7 +324,7 @@
 &lt;p&gt;看看这两个大小分别是 &lt;code&gt;0x1650&lt;/code&gt;  和 &lt;code&gt;0x25188&lt;/code&gt; , 这不就和我们刚刚分离出来的文件大小一模一样嘛，说明我们离修复完成不远了&lt;/p&gt;
 &lt;p&gt;&lt;img data-src=&#34;/360-jiagu/image-20240220224638674.png&#34; alt=&#34;image-20240220224638674&#34; style=&#34;aspect-ratio:1175 / 182;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;然后就是和之前一样，跳转到 &lt;code&gt;.rela.plt&lt;/code&gt;  和 &lt;code&gt;.rela.dyn&lt;/code&gt;  的对应地址，然后把这些段本来的数据粘贴进去&lt;/p&gt;
-&lt;p&gt;现在我们就修复好啦，拿 ida 打开主 ELF 看看，满满的都是符号呢～&lt;/p&gt;
+&lt;p&gt;现在我们就修复好啦，拿 ida 打开主 ELF 看看，满满的都是符号！&lt;/p&gt;
 &lt;p&gt;&lt;img data-src=&#34;/360-jiagu/image-20240221131944227.png&#34; alt=&#34;image-20240221131944227&#34; style=&#34;aspect-ratio:1920 / 1080;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;随便找个导入函数交叉引用看看，一切正常 &lt;code&gt;(●&#39;◡&#39;●)&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img data-src=&#34;/360-jiagu/image-20240221132044506.png&#34; alt=&#34;image-20240221132044506&#34; style=&#34;aspect-ratio:1920 / 1080;&#34;&gt;&lt;/p&gt;
