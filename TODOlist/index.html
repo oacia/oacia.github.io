@@ -31,15 +31,15 @@
 <link rel="canonical" href="https://oacia.dev/TODOlist/">
 
 
-<meta name="description" content="# 2024 年 3 至 6 月份的总体规划  ✔️success  最近想研究一下大厂的保护是啥样的，正好也去学习一下，想了想 360 加固应该挺适合我这样的新手的，那就从 360 加固开始分析吧！  自己写一个 360 加固的 demo, 分析加固壳的加固技术   processing 学习 AOSP 中的 dex 加载相关的代码   processing 完成对 ollvm 三种混淆的反混淆">
+<meta name="description" content="# 源码阅读  阅读优秀的开源项目源码，学习作者的思想   inline hook principle   frida MemoryAccessMonitor rwprocmem33 perf_event stackplz perf_event pwatch perf_event [other] frida Process.setExceptionHandler manually throw ex">
 <meta property="og:type" content="article">
 <meta property="og:title" content="要做的事">
 <meta property="og:url" content="https://oacia.dev/TODOlist/">
 <meta property="og:site_name" content="oaciaのBbBlog~">
-<meta property="og:description" content="# 2024 年 3 至 6 月份的总体规划  ✔️success  最近想研究一下大厂的保护是啥样的，正好也去学习一下，想了想 360 加固应该挺适合我这样的新手的，那就从 360 加固开始分析吧！  自己写一个 360 加固的 demo, 分析加固壳的加固技术   processing 学习 AOSP 中的 dex 加载相关的代码   processing 完成对 ollvm 三种混淆的反混淆">
+<meta property="og:description" content="# 源码阅读  阅读优秀的开源项目源码，学习作者的思想   inline hook principle   frida MemoryAccessMonitor rwprocmem33 perf_event stackplz perf_event pwatch perf_event [other] frida Process.setExceptionHandler manually throw ex">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-12-31T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-03-10T03:52:36.625Z">
+<meta property="article:modified_time" content="2024-03-12T13:08:33.696Z">
 <meta property="article:author" content="oacia">
 <meta property="article:tag" content="reverse,安卓逆向,区块链,学习笔记,破解实战,前端,CTF">
 <meta name="twitter:card" content="summary">
@@ -348,7 +348,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       <i class="ic i-pen"></i>
     </span>
     <span class="text">本文字数</span>
-    <span>1.8k</span>
+    <span>1.9k</span>
     <span class="text">字</span>
   </span>
   <span class="item" title="阅读时长">
@@ -436,7 +436,39 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
   <div class="body md" itemprop="articleBody">
     
 
-    <h1 id="2024年3至6月份的总体规划"><a class="anchor" href="#2024年3至6月份的总体规划">#</a> 2024 年 3 至 6 月份的总体规划</h1>
+    <h1 id="源码阅读"><a class="anchor" href="#源码阅读">#</a> 源码阅读</h1>
+<blockquote>
+<p>阅读优秀的开源项目源码，学习作者的思想</p>
+</blockquote>
+<ol>
+<li><strong>inline hook principle</strong></li>
+</ol>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2ZyaWRhL2ZyaWRh">frida</span> <span class="exturl" data-url="aHR0cHM6Ly9mcmlkYS5yZS9kb2NzL2phdmFzY3JpcHQtYXBpLyNtZW1vcnlhY2Nlc3Ntb25pdG9y">MemoryAccessMonitor</span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FiY3ozMTYvcndQcm9jTWVtMzM=">rwprocmem33</span> perf_event</li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL1NlZUZsb3dlclgvc3RhY2twbHo=">stackplz</span> perf_event</li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3JpLWNoYXIvcHdhdGNo">pwatch</span> perf_event</li>
+<li>[other] frida <span class="exturl" data-url="aHR0cHM6Ly9mcmlkYS5yZS9kb2NzL2phdmFzY3JpcHQtYXBpLyNwcm9jZXNz">Process.setExceptionHandler</span> manually throw exception to trigger an inline breakpoint?</li>
+</ul>
+<ol start="2">
+<li><strong>zygisk principle &amp; usage</strong></li>
+</ol>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3RvcGpvaG53dS9NYWdpc2s=">magisk</span> <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3RvcGpvaG53dS96eWdpc2stbW9kdWxlLXNhbXBsZQ==">zygisk module</span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL1BlcmZhcmUvWnlnaXNrLUlsMkNwcER1bXBlcg==">zygisk-il2cppdumper</span></li>
+</ul>
+<ol start="3">
+<li><strong>direct hook principle(jump to other hookserver and go back)</strong></li>
+</ol>
+<ul>
+<li>frida intercepter</li>
+<li>LSPosed hook</li>
+</ul>
+<ol start="4">
+<li><strong>frida stalker</strong></li>
+<li><strong>AOSP dexloader</strong></li>
+</ol>
+<h1 id="2024年3至6月份的总体规划"><a class="anchor" href="#2024年3至6月份的总体规划">#</a> 2024 年 3 至 6 月份的总体规划</h1>
 <div class="note success">
 <p><span class="label success">✔️success</span></p>
 <blockquote>
@@ -444,24 +476,16 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 </blockquote>
 <p>自己写一个 360 加固的 demo, 分析加固壳的加固技术</p>
 </div>
-<div class="note primary">
-<p><span class="label info">processing</span></p>
-<p>学习 AOSP 中的 dex 加载相关的代码</p>
-</div>
-<div class="note primary">
+<div class="note info">
 <p><span class="label info">processing</span></p>
 <p>完成对 ollvm 三种混淆的反混淆方法分析</p>
 </div>
-<h1 id="现在在做的"><a class="anchor" href="#现在在做的">#</a> 现在在做的🌞</h1>
-<div class="note primary">
-<p><span class="label info">processing</span></p>
-<p>分析<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FiY3ozMTYvcndQcm9jTWVtMzM="> rwpromem33</span>,<span class="exturl" data-url="aHR0cHM6Ly9mcmlkYS5yZS9kb2NzL2phdmFzY3JpcHQtYXBpLyNtZW1vcnlhY2Nlc3Ntb25pdG9y">frida-MemoryAccessMonitor</span>,<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3JpLWNoYXIvcHdhdGNo">pwatch</span> 的硬件断点原理</p>
-</div>
-<div class="note primary">
+<div class="note info">
 <p><span class="label info">processing</span></p>
 <p>优化博客，解决进入博客期间加载动画卡顿的问题</p>
 </div>
 <h1 id="挖的新坑"><a class="anchor" href="#挖的新坑">#</a> 挖的新坑🕳</h1>
+<details class="primary"><summary>click to expand</summary><div>
 <div class="note primary">
 <p><span class="label info">processing</span></p>
 <p>分析 360 加固解密出来的 dex 中 native 化的 onCreate 函数，研究 dex2c 的 apk 还原方法</p>
@@ -509,20 +533,6 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 <div class="note primary">
 <p><span class="label">todo</span></p>
 <blockquote>
-<p>被 d3ctf 的一道安卓题 d3Tetris 折磨了，这题用到了 TCP 通信，但是我完全不知道手机和电脑之间该如何进行通信</p>
-</blockquote>
-<p>实现电脑和手机之间用 TCP 通信，手机作为客户端，电脑作为服务端</p>
-</div>
-<div class="note primary">
-<p><span class="label">todo</span></p>
-<blockquote>
-<p>d3 的题目真的好难，去年一道不会，今年也是一道不会，但是也花了很多时间。全靠其他逆向师傅带飞，还好大家都写了 writeup, 得好好复现一下</p>
-</blockquote>
-<p>复现 2023 d3ctf 的逆向</p>
-</div>
-<div class="note primary">
-<p><span class="label">todo</span></p>
-<blockquote>
 <p>Soundpad Demo 拖了那么久不能再拖下去了，这播放次数限制我必得破除！</p>
 </blockquote>
 <p>破解 Soundpad Demo</p>
@@ -544,7 +554,9 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 <li><span class="exturl" data-url="aHR0cDovL2dhbGF4eWxhYi5waW5nYW4uY29tLmNuLyVFNSU5RiVCQSVFNCVCQSU4RS11bmljb3JuLSVFNyU5QSU4NCVFNSU4RCU5NSVFNCVCOCVBQSVFNSU4NyVCRCVFNiU5NSVCMCVFNiVBOCVBMSVFNiU4QiU5RiVFNiU4OSVBNyVFOCVBMSU4QyVFNSU5MiU4Qy1mdXp6ZXItJUU1JUFFJTlFJUU3JThFJUIwLw==">基于 unicorn 的单个函数模拟执行和 fuzzer 实现</span></li>
 </ul>
 </div>
+</div></details>
 <h1 id="成功完成"><a class="anchor" href="#成功完成">#</a> 成功完成😃</h1>
+<details class="success"><summary>click to expand</summary><div>
 <div class="note success">
 <p><span class="label success">✔️success</span></p>
 <p>学习 android 源码中加载 ELF 的流程</p>
@@ -596,7 +608,9 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 <p><span class="label success">✔️success</span></p>
 <p>学会使用 unidbg</p>
 </div>
+</div></details>
 <h1 id="咕了"><a class="anchor" href="#咕了">#</a> 咕了🕊</h1>
+<details class="primary"><summary>click to expand</summary><div>
 <div class="note primary">
 <p><span class="label warning">delay</span></p>
 <blockquote>
@@ -615,6 +629,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 <p><span class="label warning">delay</span></p>
 <p>加一个看板娘，她就是小夏～，既然网上没有现成的模型，我就自己做一个看板娘，暑假准备苦学 ing…</p>
 </div>
+</div></details>
 <!-- flag of hidden posts -->
   </div>
 
@@ -626,7 +641,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       <i class="ic i-calendar-check"></i>
     </span>
     <span class="text">更新于</span>
-    <time title="修改时间：2024-03-10 11:52:36" itemprop="dateModified" datetime="2024-03-10T11:52:36+08:00">2024-03-10</time>
+    <time title="修改时间：2024-03-12 21:08:33" itemprop="dateModified" datetime="2024-03-12T21:08:33+08:00">2024-03-12</time>
   </span>
   <span id="TODOlist/" class="item leancloud_visitors" data-flag-title="要做的事" title="阅读次数">
       <span class="icon">
@@ -682,7 +697,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
   <div class="panels">
     <div class="inner">
       <div class="contents panel pjax" data-title="文章目录">
-          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#2024%E5%B9%B43%E8%87%B36%E6%9C%88%E4%BB%BD%E7%9A%84%E6%80%BB%E4%BD%93%E8%A7%84%E5%88%92"><span class="toc-text"> 2024 年 3 至 6 月份的总体规划</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%B0%E5%9C%A8%E5%9C%A8%E5%81%9A%E7%9A%84"><span class="toc-text"> 现在在做的🌞</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8C%96%E7%9A%84%E6%96%B0%E5%9D%91"><span class="toc-text"> 挖的新坑🕳</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%88%90%E5%8A%9F%E5%AE%8C%E6%88%90"><span class="toc-text"> 成功完成😃</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%92%95%E4%BA%86"><span class="toc-text"> 咕了🕊</span></a></li></ol>
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB"><span class="toc-text"> 源码阅读</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2024%E5%B9%B43%E8%87%B36%E6%9C%88%E4%BB%BD%E7%9A%84%E6%80%BB%E4%BD%93%E8%A7%84%E5%88%92"><span class="toc-text"> 2024 年 3 至 6 月份的总体规划</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8C%96%E7%9A%84%E6%96%B0%E5%9D%91"><span class="toc-text"> 挖的新坑🕳</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%88%90%E5%8A%9F%E5%AE%8C%E6%88%90"><span class="toc-text"> 成功完成😃</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%92%95%E4%BA%86"><span class="toc-text"> 咕了🕊</span></a></li></ol>
       </div>
       <div class="related panel pjax" data-title="系列文章">
       </div>
