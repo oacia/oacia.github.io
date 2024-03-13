@@ -1240,15 +1240,16 @@ const themeColorListener = function () {
     })
   });
 }
-// document.addEventListener("DOMContentLoaded", function() {
-//   //console.log("DOM 加载完成");
-//   setTimeout(Loader.vanish, 3000);
-//   //Loader.vanish();
-// });
-document.fonts.ready.then(function() {
-  // 字体加载完成后的逻辑
+document.addEventListener("DOMContentLoaded", function() {
+  //console.log("DOM 加载完成");
   setTimeout(Loader.vanish, 3000);
-  });
+  //Loader.vanish();
+});
+// document.fonts.ready.then(function() {
+//   // 字体加载完成后的逻辑
+//   Loader.show();
+//   setTimeout(Loader.vanish, 3000);
+//   });
 window.onload = function(){
   setTimeout(()=>{
     let t = performance.timing,
