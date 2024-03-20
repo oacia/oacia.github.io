@@ -21,7 +21,20 @@
 <link rel="alternate" type="application/rss+xml" title="oaciaのBbBlog~" href="https://oacia.dev/rss.xml" />
 <link rel="alternate" type="application/atom+xml" title="oaciaのBbBlog~" href="https://oacia.dev/atom.xml" />
 <link rel="alternate" type="application/json" title="oaciaのBbBlog~" href="https://oacia.dev/feed.json" />
-
+<link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin=""
+      href="/fonts/noto-serif-sc-v22-chinese-simplified_latin-regular.woff2"
+/>
+<link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin=""
+      href="/fonts/noto-serif-sc-v22-chinese-simplified_latin-700.woff2"
+/>
 
 
 <link rel="stylesheet" href="/css/app.css?v=0.2.5">
@@ -31,12 +44,12 @@
 <link rel="canonical" href="https://oacia.dev/website_maintenance/">
 
 
-<meta name="description" content="此处记录本博客自建立以来进行的所有优化   如果您在浏览博客时发现任何的 bug 和影响使用体验的地方，或有着充满想象力的页面美化建议，请尽管在本页下方的评论区中留言 阿里嘎多！ _(:з」∠)_  # 已知问题 无 # 即将优化  切换页面时背景图片将保持轮换不会从头加载  # 2024 年 3 月 13 日  现在回复的评论将会正确的显示在最新评论一栏 现在回复的评论将会正确计入评论总数 移">
+<meta name="description" content="此处记录本博客自建立以来进行的所有优化   如果您在浏览博客时发现任何的 bug 和影响使用体验的地方，或有着充满想象力的页面美化建议，请尽管在本页下方的评论区中留言 阿里嘎多！ _(:з」∠)_  # 已知问题 无 # 即将优化  切换页面时背景图片将保持轮换不会从头加载 增加 画廊 页面  # 2024 年 3 月 20 日  略微提高了背景图灰色蒙版的色值 将主页 brand 改为自己的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="更新日志">
 <meta property="og:url" content="https://oacia.dev/website_maintenance/">
 <meta property="og:site_name" content="oaciaのBbBlog~">
-<meta property="og:description" content="此处记录本博客自建立以来进行的所有优化   如果您在浏览博客时发现任何的 bug 和影响使用体验的地方，或有着充满想象力的页面美化建议，请尽管在本页下方的评论区中留言 阿里嘎多！ _(:з」∠)_  # 已知问题 无 # 即将优化  切换页面时背景图片将保持轮换不会从头加载  # 2024 年 3 月 13 日  现在回复的评论将会正确的显示在最新评论一栏 现在回复的评论将会正确计入评论总数 移">
+<meta property="og:description" content="此处记录本博客自建立以来进行的所有优化   如果您在浏览博客时发现任何的 bug 和影响使用体验的地方，或有着充满想象力的页面美化建议，请尽管在本页下方的评论区中留言 阿里嘎多！ _(:з」∠)_  # 已知问题 无 # 即将优化  切换页面时背景图片将保持轮换不会从头加载 增加 画廊 页面  # 2024 年 3 月 20 日  略微提高了背景图灰色蒙版的色值 将主页 brand 改为自己的">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://oacia.dev/website_maintenance/image-20240126041957239.png">
 <meta property="og:image" content="https://oacia.dev/website_maintenance/image-20240126182704322.png">
@@ -99,7 +112,7 @@
 <meta property="og:image" content="https://oacia.dev/website_maintenance/image-20230224161509537.png">
 <meta property="og:image" content="https://oacia.dev/website_maintenance/image-20230429232101076.png">
 <meta property="article:published_time" content="2024-01-01T04:00:00.000Z">
-<meta property="article:modified_time" content="2024-03-13T19:01:24.750Z">
+<meta property="article:modified_time" content="2024-03-20T12:08:28.412Z">
 <meta property="article:author" content="oacia">
 <meta property="article:tag" content="reverse,安卓逆向,区块链,学习笔记,破解实战,前端,CTF">
 <meta name="twitter:card" content="summary">
@@ -385,6 +398,16 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     </div>
     -->
   </div>
+  <script
+      defer="defer"
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/gsap.min.js"
+      integrity="sha512-1dalHDkG9EtcOmCnoCjiwQ/HEB5SDNqw8d4G2MKoNwjiwMNeBAkudsBCmSlMnXdsH8Bm0mOd3tl/6nL5y0bMaQ=="
+      crossorigin="anonymous"
+    ></script>
+  <script defer="defer" src="/js/gsap/DrawSVGPlugin.min.js"></script>
+  <script defer="defer" src="/js/gsap/CustomEase.min.js"></script>
+  <script defer="defer" src="/js/gsap/CustomBounce.min.js"></script>
+  <script defer="defer" src="/js/gsap/logo-run.js"></script>
   <div id="container">
     <header id="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="inner">
@@ -507,6 +530,12 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 <h1 id="即将优化"><a class="anchor" href="#即将优化">#</a> 即将优化</h1>
 <ul>
 <li>切换页面时背景图片将保持轮换不会从头加载</li>
+<li>增加 <code>画廊</code> 页面</li>
+</ul>
+<h1 id="2024年3月20日"><a class="anchor" href="#2024年3月20日">#</a> 2024 年 3 月 20 日</h1>
+<ul>
+<li>略微提高了背景图灰色蒙版的色值</li>
+<li>将主页 brand 改为自己的 svg logo 动画</li>
 </ul>
 <h1 id="2024年3月13日"><a class="anchor" href="#2024年3月13日">#</a> 2024 年 3 月 13 日</h1>
 <ul>
@@ -963,7 +992,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       <i class="ic i-calendar-check"></i>
     </span>
     <span class="text">更新于</span>
-    <time title="修改时间：2024-03-14 03:01:24" itemprop="dateModified" datetime="2024-03-14T03:01:24+08:00">2024-03-14</time>
+    <time title="修改时间：2024-03-20 20:08:28" itemprop="dateModified" datetime="2024-03-20T20:08:28+08:00">2024-03-20</time>
   </span>
   <span id="website_maintenance/" class="item leancloud_visitors" data-flag-title="更新日志" title="阅读次数">
       <span class="icon">
@@ -1019,7 +1048,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
   <div class="panels">
     <div class="inner">
       <div class="contents panel pjax" data-title="文章目录">
-          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B7%B2%E7%9F%A5%E9%97%AE%E9%A2%98"><span class="toc-text"> 已知问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8D%B3%E5%B0%86%E4%BC%98%E5%8C%96"><span class="toc-text"> 即将优化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2024%E5%B9%B43%E6%9C%8813%E6%97%A5"><span class="toc-text"> 2024 年 3 月 13 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2024%E5%B9%B41%E6%9C%8827%E6%97%A5"><span class="toc-text"> 2024 年 1 月 27 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2024%E5%B9%B41%E6%9C%8826%E6%97%A5"><span class="toc-text"> 2024 年 1 月 26 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2024%E5%B9%B41%E6%9C%881%E6%97%A5"><span class="toc-text"> 2024 年 1 月 1 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B412%E6%9C%8826%E6%97%A5"><span class="toc-text"> 2023 年 12 月 26 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B412%E6%9C%8823%E6%97%A5"><span class="toc-text"> 2023 年 12 月 23 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B412%E6%9C%8812%E6%97%A5"><span class="toc-text"> 2023 年 12 月 12 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B411%E6%9C%8813%E6%97%A5"><span class="toc-text"> 2023 年 11 月 13 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B410%E6%9C%8824%E6%97%A5"><span class="toc-text"> 2023 年 10 月 24 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B410%E6%9C%8818%E6%97%A5"><span class="toc-text"> 2023 年 10 月 18 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B410%E6%9C%8817%E6%97%A5"><span class="toc-text"> 2023 年 10 月 17 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B49%E6%9C%8826%E6%97%A5"><span class="toc-text"> 2023 年 9 月 26 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B49%E6%9C%8819%E6%97%A5"><span class="toc-text"> 2023 年 9 月 19 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B49%E6%9C%888%E6%97%A5"><span class="toc-text"> 2023 年 9 月 8 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B49%E6%9C%885%E6%97%A5"><span class="toc-text"> 2023 年 9 月 5 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B49%E6%9C%883%E6%97%A5"><span class="toc-text"> 2023 年 9 月 3 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B48%E6%9C%8816%E6%97%A5"><span class="toc-text"> 2023 年 8 月 16 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B48%E6%9C%882%E6%97%A5"><span class="toc-text"> 2023 年 8 月 2 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B47%E6%9C%8830%E6%97%A5"><span class="toc-text"> 2023 年 7 月 30 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B47%E6%9C%881%E6%97%A5"><span class="toc-text"> 2023 年 7 月 1 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B46%E6%9C%8830%E6%97%A5"><span class="toc-text"> 2023 年 6 月 30 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B45%E6%9C%881%E6%97%A5"><span class="toc-text"> 2023 年 5 月 1 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B44%E6%9C%8830%E6%97%A5"><span class="toc-text"> 2023 年 4 月 30 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B44%E6%9C%8824%E6%97%A5"><span class="toc-text"> 2023 年 4 月 24 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B42%E6%9C%8826%E6%97%A5"><span class="toc-text"> 2023 年 2 月 26 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B42%E6%9C%8824%E6%97%A5"><span class="toc-text"> 2023 年 2 月 24 日</span></a></li></ol>
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B7%B2%E7%9F%A5%E9%97%AE%E9%A2%98"><span class="toc-text"> 已知问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8D%B3%E5%B0%86%E4%BC%98%E5%8C%96"><span class="toc-text"> 即将优化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2024%E5%B9%B43%E6%9C%8820%E6%97%A5"><span class="toc-text"> 2024 年 3 月 20 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2024%E5%B9%B43%E6%9C%8813%E6%97%A5"><span class="toc-text"> 2024 年 3 月 13 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2024%E5%B9%B41%E6%9C%8827%E6%97%A5"><span class="toc-text"> 2024 年 1 月 27 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2024%E5%B9%B41%E6%9C%8826%E6%97%A5"><span class="toc-text"> 2024 年 1 月 26 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2024%E5%B9%B41%E6%9C%881%E6%97%A5"><span class="toc-text"> 2024 年 1 月 1 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B412%E6%9C%8826%E6%97%A5"><span class="toc-text"> 2023 年 12 月 26 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B412%E6%9C%8823%E6%97%A5"><span class="toc-text"> 2023 年 12 月 23 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B412%E6%9C%8812%E6%97%A5"><span class="toc-text"> 2023 年 12 月 12 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B411%E6%9C%8813%E6%97%A5"><span class="toc-text"> 2023 年 11 月 13 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B410%E6%9C%8824%E6%97%A5"><span class="toc-text"> 2023 年 10 月 24 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B410%E6%9C%8818%E6%97%A5"><span class="toc-text"> 2023 年 10 月 18 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B410%E6%9C%8817%E6%97%A5"><span class="toc-text"> 2023 年 10 月 17 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B49%E6%9C%8826%E6%97%A5"><span class="toc-text"> 2023 年 9 月 26 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B49%E6%9C%8819%E6%97%A5"><span class="toc-text"> 2023 年 9 月 19 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B49%E6%9C%888%E6%97%A5"><span class="toc-text"> 2023 年 9 月 8 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B49%E6%9C%885%E6%97%A5"><span class="toc-text"> 2023 年 9 月 5 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B49%E6%9C%883%E6%97%A5"><span class="toc-text"> 2023 年 9 月 3 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B48%E6%9C%8816%E6%97%A5"><span class="toc-text"> 2023 年 8 月 16 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B48%E6%9C%882%E6%97%A5"><span class="toc-text"> 2023 年 8 月 2 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B47%E6%9C%8830%E6%97%A5"><span class="toc-text"> 2023 年 7 月 30 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B47%E6%9C%881%E6%97%A5"><span class="toc-text"> 2023 年 7 月 1 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B46%E6%9C%8830%E6%97%A5"><span class="toc-text"> 2023 年 6 月 30 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B45%E6%9C%881%E6%97%A5"><span class="toc-text"> 2023 年 5 月 1 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B44%E6%9C%8830%E6%97%A5"><span class="toc-text"> 2023 年 4 月 30 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B44%E6%9C%8824%E6%97%A5"><span class="toc-text"> 2023 年 4 月 24 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B42%E6%9C%8826%E6%97%A5"><span class="toc-text"> 2023 年 2 月 26 日</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B42%E6%9C%8824%E6%97%A5"><span class="toc-text"> 2023 年 2 月 24 日</span></a></li></ol>
       </div>
       <div class="related panel pjax" data-title="系列文章">
       </div>

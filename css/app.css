@@ -51,13 +51,6 @@ body.type2 {
 }
 @font-face {
   font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
-  font-family: 'Fredericka the Great';
-  font-style: normal;
-  font-weight: 400;
-  src: url("/fonts/fredericka-the-great-v21-latin-regular.woff2") format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
-}
-@font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
   font-family: 'Noto Serif SC';
   font-style: normal;
   font-weight: 400;
@@ -1658,7 +1651,7 @@ main >.inner {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.2);
+  background-color: rgba(0,0,0,0.1);
   z-index: 1;
   transition: all 0.2s ease-in-out 0s;
 }

@@ -1161,6 +1161,7 @@ const Loader = {
       transition(loadCat, 0)
     document.body.addClass('loaded');
     Loader.lock = true;
+    logo_run();
   }
 }
 
