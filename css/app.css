@@ -2389,7 +2389,6 @@ main >.inner {
   text-align: center;
   text-decoration: none;
   background-color: rgba(0,0,0,0.08);
-  transition: all 0.2s ease-out 0s;
 }
 #sidebar .tab .item:nth-child(2) {
   margin: auto 0.625rem;
@@ -2399,6 +2398,7 @@ main >.inner {
   word-break: keep-all;
 }
 #sidebar .tab .item.active span {
+  overflow: hidden;
   display: inherit;
 }
 #sidebar .tab .item.active:hover {
@@ -2407,9 +2407,6 @@ main >.inner {
 #sidebar .tab .item::before {
   font-family: 'ic';
   font-weight: normal;
-}
-#sidebar .tab .item.active::before {
-  margin-right: 0.3125rem;
 }
 #sidebar.affix .tab {
   padding-top: 0.625rem;

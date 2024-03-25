@@ -1483,7 +1483,7 @@ const sideBarTab = function () {
     span.appendChild(text);
     tab.appendChild(span);
     tab.addClass(item + ' item');
-
+    
     if(active) {
       element.addClass(active);
       tab.addClass(active);
@@ -1493,10 +1493,14 @@ const sideBarTab = function () {
 
     tab.addEventListener('click', function (element) {
       var target = event.currentTarget;
+      //console.log(gsap.getProperty(target,"width"));
       if (target.hasClass('active'))
         return;
-
+      
       sideBar.find('.tab .item').forEach(function (element) {
+        // gsap.to(target,{
+        //   width: 44,
+        // })
         element.removeClass('active')
       });
 
@@ -1505,10 +1509,36 @@ const sideBarTab = function () {
       });
 
       sideBar.child('.panel.' + target.className.replace(' item', '')).addClass('active');
-
       target.addClass('active');
+      
+      if(target.className.indexOf("contents")!=-1){
+        active_tab = ".contents.item.active";
+        inactive_tab = ".overview.item";
+      }
+      else{
+        active_tab = ".overview.item.active";
+        inactive_tab = ".contents.item";
+      }
+      //设置tab过渡动画
+      gsap.timeline()
+      .set(active_tab,{
+        width: 44,
+      })
+      .set(inactive_tab,{
+        width:100,
+      })
+      .to(inactive_tab, {
+        width: 44, 
+        duration: 1,
+        ease: "back.inOut(1.7)",
+      })
+      .to(active_tab, {
+        width: 100,
+        duration: 1, 
+        ease: "back.inOut(1.7)",
+      })
     });
-
+    
     list.appendChild(tab);
     active = '';
   });
@@ -1519,6 +1549,8 @@ const sideBarTab = function () {
   } else {
     sideBar.child('.panels').style.paddingTop = '.625rem'
   }
+
+  
 }
 
 const sidebarTOC = function () {
