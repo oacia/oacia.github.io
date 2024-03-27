@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://oacia.dev/two-way-SSL/</loc>
+    <lastmod>2024-03-27</lastmod>
+  </url>
+  <url>
     <loc>https://oacia.dev/360-jiagu/</loc>
     <lastmod>2024-03-15</lastmod>
   </url>
@@ -35,10 +39,6 @@
   <url>
     <loc>https://oacia.dev/wechat-mini-program-with-devtool/</loc>
     <lastmod>2024-02-01</lastmod>
-  </url>
-  <url>
-    <loc>https://oacia.dev/two-way-SSL/</loc>
-    <lastmod>2024-01-26</lastmod>
   </url>
   <url>
     <loc>https://oacia.dev/blog-domain/</loc>

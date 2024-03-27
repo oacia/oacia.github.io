@@ -3413,6 +3413,18 @@ main >.inner {
 .segments > .item:hover .cover img {
   transform: scale(1.05) rotate(1deg);
 }
+.segments > .item:hover h3 a {
+  line-height: 1.5;
+  background-image: linear-gradient(transparent 50%, #e1fffe 50%, #b0f8ff 85%, transparent 85%, transparent 100%);
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  animation: animatedBackground 1s cubic-bezier(0.645, 0.045, 0.355, 1) 0.5s forwards;
+}
+@keyframes animatedBackground {
+  to {
+    background-size: 100% 100%;
+  }
+}
 .segments .cover {
   width: 50%;
   margin-right: 1.5rem;
@@ -3467,6 +3479,18 @@ main >.inner {
   white-space: nowrap;
   margin: 0.625rem 0;
   color: var(--primary-color);
+}
+.segments .info h3 a:hover {
+  line-height: 1.5;
+  background-image: linear-gradient(transparent 50%, #f5d5d5 50%, #f9cfc3 85%, transparent 85%, transparent 100%);
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  animation: animatedBackground 1s cubic-bezier(0.645, 0.045, 0.355, 1) 0.5s forwards;
+}
+@keyframes animatedBackground {
+  to {
+    background-size: 100% 100%;
+  }
 }
 .segments .info .excerpt {
   overflow: hidden;
