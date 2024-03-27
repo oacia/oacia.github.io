@@ -1154,6 +1154,7 @@ const Loader = {
     //this.timer = setTimeout(this.vanish, sec||3000);
   },
   vanish: function() {
+    
     if(Loader.lock)
       return;
     //console.log("vanish call",Loader.lock);
@@ -1162,6 +1163,10 @@ const Loader = {
     document.body.addClass('loaded');
     Loader.lock = true;
     logo_run();
+    //overviewpanel.clear();
+    //sideBarAnimate_init();
+    //sideBarAnimate();
+    //overviewpanel.play();
   }
 }
 
@@ -1452,7 +1457,153 @@ const sideBarToggleHandle = function (event, force) {
   }
 }
 
+var overviewTl;
+const sideBarAnimate_init = function(){
+  gsap.registerPlugin(SplitText);
+  overviewTl = gsap.timeline({ paused: true });
+  gsap.set(".author img",{
+    xPercent:80,
+  })
+  gsap.set(".author img",{
+    width:0,
+  })
+
+  gsap.set(".logo-overview .path", {
+    drawSVG: "0% 0%",
+  });
+  gsap.set(".logo-overview .dot-group", {
+    yPercent: 100,
+  });
+}
+
+
+const sideBarAnimate = function(overviewTl_){
+  //const overviewpanel = gsap.timeline({ paused: true });
+
+  //avatar动画
+  const avatarTl = gsap.timeline();
+  
+  avatarTl
+  .set(".author img", { autoAlpha: 1 })
+  .to(".author img", {
+    width:77.2,
+    ease: "power4.out",
+    duration: 1,
+  })
+  .to(".author img", {
+    xPercent:0,
+    ease: "power4.out",
+    duration: 0.7,
+  },
+  "-=0.3")
+  //logo动画
+  const logoTl = gsap.timeline();
+  
+  CustomBounce.create("myBounce", { strength: 0.6, squash: 2 });
+  logoTl
+  .set(".logo-overview", { autoAlpha: 1 })
+  .staggerTo(
+    ".logo-overview .oPath",
+    0.4,
+    { drawSVG: "100%", ease: Linear.easeNone },
+    0.1,
+    1
+  )
+  .staggerTo(
+    ".logo-overview .a1Path",
+    0.4,
+    { drawSVG: "100%", ease: Linear.easeNone },
+    0.1,
+    "-=0.1"
+  )
+  .staggerTo(
+    ".logo-overview .cPath",
+    0.3,
+    { drawSVG: "100%", ease: Linear.easeNone },
+    0.1,
+    "-=0.2"
+  )
+  .from(".logo-overview .dot-group #dot", 0.01, { autoAlpha: 0 }, "-=0.08")
+  .to(".logo-overview .dot-group #dot", 0.4, { yPercent: -300, ease: Power4.easeOut }, "-=0.05")
+  .to(".logo-overview .dot-group", 0.4, { scale: 1.4, ease: Power4.easeOut }, "-=0.4")
+  .to(".logo-overview .dot-group #dot", 0.9, { yPercent: -80, ease: "myBounce" })
+  .to(".logo-overview .dot-group #dot", 0.9, {
+    scaleY: 0.6,
+    scaleX: 1.2,
+    ease: "myBounce-squash",
+    transformOrigin: "bottom",
+    delay: -0.9,
+  })
+  .staggerTo(
+    ".logo-overview .i_bPath",
+    0.2,
+    { drawSVG: "100%", ease: Linear.easeNone },
+    0.05,
+    "-=0.3"
+  )
+  .staggerTo(
+    ".logo-overview .a2Path",
+    0.2,
+    { drawSVG: "100%", ease: Linear.easeNone },
+    0.07,
+    "-=0.2"
+  )
+  .to(".logo-overview #strokes", 0.2, {
+    opacity: 0,
+  });
+  
+  const descriptionTl = gsap.timeline();
+  var descST = new SplitText(".description", {
+    type: "chars, words",
+  });
+  descriptionTl
+  .set(".description", { autoAlpha: 1 })
+  .from(descST.chars, {
+    duration: 1, 
+    x: 100, 
+    autoAlpha: 0, 
+    stagger: 0.05
+  });
+  gsap.set(".state", {
+    scaleX: 0,
+  });
+  //state动画
+  const stateTl = gsap.timeline();
+  stateTl
+  .set(".state", { autoAlpha: 1 })
+  .to(".state", {
+    scaleX:1,
+    ease: "power4.out",
+    duration: 1.2,
+  })
+  
+  //social动画
+  const socialTl = gsap.timeline();
+  gsap.set(".social", {
+    scaleX: 0,
+  });
+  socialTl
+  .set(".social", { autoAlpha: 1 })
+  .to(".social", {
+    scaleX:1,
+    ease: "power4.out",
+    duration: 1.2,
+  })
+  
+  //串联动画
+  overviewTl_
+  .add(avatarTl,'>-0.5')
+  .add(logoTl,'>-1.2')
+  .add(descriptionTl,'>')
+  .add(stateTl,'>')
+  .add(socialTl,'<')
+
+
+}
+
+
 const sideBarTab = function () {
+  sideBarAnimate_init();
   var sideBarInner = sideBar.child('.inner');
   var panels = sideBar.find('.panel');
 
@@ -1462,7 +1613,7 @@ const sideBarTab = function () {
 
   var list = document.createElement('ul'), active = 'active';
   list.className = 'tab';
-
+  
   ['contents', 'related', 'overview'].forEach(function (item) {
     var element = sideBar.child('.panel.' + item)
 
@@ -1490,7 +1641,7 @@ const sideBarTab = function () {
     } else {
       element.removeClass('active');
     }
-
+    
     tab.addEventListener('click', function (element) {
       var target = event.currentTarget;
       //console.log(gsap.getProperty(target,"width"));
@@ -1498,9 +1649,6 @@ const sideBarTab = function () {
         return;
       
       sideBar.find('.tab .item').forEach(function (element) {
-        // gsap.to(target,{
-        //   width: 44,
-        // })
         element.removeClass('active')
       });
 
@@ -1520,7 +1668,8 @@ const sideBarTab = function () {
         inactive_tab = ".contents.item";
       }
       //设置tab过渡动画
-      gsap.timeline()
+      tabTl = gsap.timeline();
+      tabTl
       .set(active_tab,{
         width: 44,
       })
@@ -1536,7 +1685,22 @@ const sideBarTab = function () {
         width: 100,
         duration: 1, 
         ease: "back.inOut(1.7)",
-      })
+      },
+      "-=0.35")
+
+      overviewTl.clear();
+      sideBarAnimate_init();
+
+      overviewTl
+      .add(tabTl)
+      
+      //为站点概览添加显示动画
+      if(active_tab==".overview.item.active"){
+        sideBarAnimate(overviewTl);
+        // overviewTl
+        // .add(overviewpanel)
+      }
+      overviewTl.play();
     });
     
     list.appendChild(tab);
