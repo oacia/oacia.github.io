@@ -5,10 +5,10 @@ function logo_run(){
     return;
   }
 
-  gsap.set(".path", {
+  gsap.set(".logo-me .path", {
     drawSVG: "0% 0%",
   });
-  gsap.set(".dot-group", {
+  gsap.set(".logo-me .dot-group", {
     yPercent: 100,
   });
 
@@ -20,33 +20,31 @@ function logo_run(){
     .set(".logo-me", { autoAlpha: 1 })
     .timeScale(0.9)
     .staggerTo(
-      ".oPath",
+      ".logo-me .oPath",
       0.4,
       { drawSVG: "100%", ease: Linear.easeNone },
       0.1,
       1
     )
     .staggerTo(
-      ".a1Path",
+      ".logo-me .a1Path",
       0.4,
       { drawSVG: "100%", ease: Linear.easeNone },
       0.1,
       "-=0.1"
     )
     .staggerTo(
-      ".cPath",
+      ".logo-me .cPath",
       0.3,
       { drawSVG: "100%", ease: Linear.easeNone },
       0.1,
       "-=0.2"
     )
-    
-
-    .from("#dot", 0.01, { autoAlpha: 0 }, "-=0.08")
-    .to("#dot", 0.4, { yPercent: -300, ease: Power4.easeOut }, "-=0.05")
-    .to(".dot-group", 0.4, { scale: 1.4, ease: Power4.easeOut }, "-=0.4")
-    .to("#dot", 0.9, { yPercent: -80, ease: "myBounce" })
-    .to("#dot", 0.9, {
+    .from(".logo-me .dot-group #dot", 0.01, { autoAlpha: 0 }, "-=0.08")
+    .to(".logo-me .dot-group #dot", 0.4, { yPercent: -300, ease: Power4.easeOut }, "-=0.05")
+    .to(".logo-me .dot-group", 0.4, { scale: 1.4, ease: Power4.easeOut }, "-=0.4")
+    .to(".logo-me .dot-group #dot", 0.9, { yPercent: -80, ease: "myBounce" })
+    .to(".logo-me .dot-group #dot", 0.9, {
       scaleY: 0.6,
       scaleX: 1.2,
       ease: "myBounce-squash",
@@ -54,20 +52,20 @@ function logo_run(){
       delay: -0.9,
     })
     .staggerTo(
-      ".i_bPath",
+      ".logo-me .i_bPath",
       0.2,
       { drawSVG: "100%", ease: Linear.easeNone },
       0.05,
       "-=0.3"
     )
     .staggerTo(
-      ".a2Path",
+      ".logo-me .a2Path",
       0.2,
       { drawSVG: "100%", ease: Linear.easeNone },
       0.07,
       "-=0.2"
     )
-    .to("#strokes", 0.2, {
+    .to(".logo-me #strokes", 0.2, {
       opacity: 0,
     });
 

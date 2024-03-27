@@ -878,7 +878,7 @@ details[open] > div,
 }
 .slide-up-big-in,
 body.loaded #main .wrap,
-body.loaded #sidebar .panel.active,
+body.loaded #sidebar .contents.panel.active,
 .cards .item.show,
 .segments > .item.show {
   animation: slideUpBigIn 0.5s;
@@ -896,7 +896,7 @@ body.loaded #brand .pjax,
   animation: slideDownIn 0.3s;
 }
 .blur,
-.lozaded {
+.lozaded:not(.image) {
   animation: blur 0.8s ease-in-out forwards;
 }
 .elastic,
@@ -1125,7 +1125,10 @@ body {
 body.loaded {
   overflow: auto;
 }
-body.loaded #sidebar .panel.active {
+body.loaded #sidebar .contents.panel.active {
+  display: block;
+}
+body.loaded #sidebar .overview.panel.active {
   display: block;
 }
 @media (max-width: 991px) {
@@ -2184,11 +2187,22 @@ main >.inner {
     transform: translateX(-100%);
   }
 }
+.overview .author:hover .image {
+  visibility: hidden;
+}
+.overview .author .logo-overview {
+  position: relative;
+  bottom: 8.5px;
+  width: 7rem;
+  overflow: visible;
+  visibility: hidden;
+  display: inline;
+}
 .overview .author .image {
   border: 0.0625rem solid var(--body-bg-shadow);
-  display: block;
+  display: inline;
   margin: 0 auto;
-  max-width: 10rem;
+  max-width: 4.7rem;
   padding: 0.125rem;
   box-shadow: 0 0rem 1rem 0.625rem var(--body-bg-shadow);
   border-radius: 50%;
@@ -2202,8 +2216,8 @@ main >.inner {
 .overview .author .description {
   color: var(--grey-5);
   font-size: 1em;
-  margin-top: 0.3125rem;
   text-align: center;
+  visibility: hidden;
 }
 @keyframes shake {
   0% {
@@ -2274,6 +2288,7 @@ main >.inner {
 .social {
   margin-top: 0.9375rem;
   text-align: center;
+  visibility: hidden;
 }
 .social .item {
   display: inline-block;
