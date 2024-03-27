@@ -1162,11 +1162,16 @@ const Loader = {
       transition(loadCat, 0)
     document.body.addClass('loaded');
     Loader.lock = true;
-    logo_run();
-    //overviewpanel.clear();
-    //sideBarAnimate_init();
-    //sideBarAnimate();
-    //overviewpanel.play();
+    if(LOCAL_URL == ORIGIN_URL){
+      logo_run();
+    }
+    if(!sidebar_toggle_tab){
+      sideBarAnimate_init();
+      sideBarAnimate(overviewTl);
+      console.log("after loader overviewTl play")
+      overviewTl.play();
+    }
+    
   }
 }
 
@@ -1458,22 +1463,39 @@ const sideBarToggleHandle = function (event, force) {
 }
 
 var overviewTl;
+var if_overviewTl_init = false;//判断overviewTl是否经过初始化
+var sidebar_toggle_tab;
+/**
+ * the animation running should be always along with the animation init.
+ * we should run overview panel animation when loader vanished and
+ * the sidebar shouldn't have toggle tab property.
+ * if we have once finished the loader and jump from /page to /, 
+ * the animation shouldn't run.
+ * but if we jump from / to /page, the animation should run.
+ * 
+ * the sidebar overview panel animation have 3 locks:
+ * 1.loader_lock: after loader vanished, lock locked
+ * 2.overviewTl_instance_lock: the whole site should only have one
+ *   overviewTl animation instance, also known as singleton pattern
+ * 3.sidebar_toggle_tab_lock: this lock determines whether we should
+ *   perform the overview tab animation after the loader vanished, for
+ *   if siderbar has the property to toggle tab then the toc tab will
+ *   be shown first, so we have no need to perform overview animation
+ *   because we can not see it in deed.
+ * 
+ * potential bug:
+ * class "logo-me" and class "logo-overview" shares the same id in <g> tab
+ * such as "url(#o)", "url(#a1)", etc. but now the animation performs well
+ * as expected so if it truly turns out  bugs in the future, i will fix it.
+ */
 const sideBarAnimate_init = function(){
-  gsap.registerPlugin(SplitText);
-  overviewTl = gsap.timeline({ paused: true });
-  gsap.set(".author img",{
-    xPercent:80,
-  })
-  gsap.set(".author img",{
-    width:0,
-  })
-
-  gsap.set(".logo-overview .path", {
-    drawSVG: "0% 0%",
-  });
-  gsap.set(".logo-overview .dot-group", {
-    yPercent: 100,
-  });
+  if(!if_overviewTl_init){
+    if_overviewTl_init = true;
+    gsap.registerPlugin(SplitText);
+    overviewTl = gsap.timeline({ paused: true });
+  }
+  overviewTl.progress(1).pause();
+  overviewTl.clear();//always ensure overviewTl has no timeline after init
 }
 
 
@@ -1482,7 +1504,12 @@ const sideBarAnimate = function(overviewTl_){
 
   //avatar动画
   const avatarTl = gsap.timeline();
-  
+  gsap.set(".author img",{
+    xPercent:80,
+  })
+  gsap.set(".author img",{
+    width:0,
+  })
   avatarTl
   .set(".author img", { autoAlpha: 1 })
   .to(".author img", {
@@ -1498,7 +1525,12 @@ const sideBarAnimate = function(overviewTl_){
   "-=0.3")
   //logo动画
   const logoTl = gsap.timeline();
-  
+  gsap.set(".logo-overview .path", {
+    drawSVG: "0% 0%",
+  });
+  gsap.set(".logo-overview .dot-group", {
+    yPercent: 100,
+  });
   CustomBounce.create("myBounce", { strength: 0.6, squash: 2 });
   logoTl
   .set(".logo-overview", { autoAlpha: 1 })
@@ -1601,7 +1633,7 @@ const sideBarAnimate = function(overviewTl_){
 
 }
 
-
+//sideBarTab() is always called when page refresh.
 const sideBarTab = function () {
   sideBarAnimate_init();
   var sideBarInner = sideBar.child('.inner');
@@ -1688,7 +1720,6 @@ const sideBarTab = function () {
       },
       "-=0.35")
 
-      overviewTl.clear();
       sideBarAnimate_init();
 
       overviewTl
@@ -1708,9 +1739,22 @@ const sideBarTab = function () {
   });
 
   if (list.childNodes.length > 1) {
+    sidebar_toggle_tab = true;
     sideBarInner.insertBefore(list, sideBarInner.childNodes[0]);
     sideBar.child('.panels').style.paddingTop = ''
   } else {
+    sidebar_toggle_tab = false;
+    if(Loader.lock){
+      sideBarAnimate_init();
+      sideBarAnimate(overviewTl);
+      if(LOCAL_URL == ORIGIN_URL){
+        logo_run();
+        overviewTl.progress(1).pause();
+      }
+      else{
+        overviewTl.play();
+      }
+    }
     sideBar.child('.panels').style.paddingTop = '.625rem'
   }
 
