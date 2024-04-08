@@ -2749,7 +2749,7 @@ determine the corresponding memory address.&lt;/p&gt;
     </entry>
     <entry>
         <id>https://oacia.dev/android-binder/</id>
-        <title>android-binder</title>
+        <title>(doing)android binder源码分析</title>
         <link rel="alternate" href="https://oacia.dev/android-binder/"/>
         <content type="html">&lt;p&gt;Binder 是 Android 独有的一种通信机制， &lt;code&gt;Activity&lt;/code&gt; ， &lt;code&gt;Service&lt;/code&gt; ， &lt;code&gt;Broadcast&lt;/code&gt; ， &lt;code&gt;ContentProvider&lt;/code&gt;  这四大组件所涉及的多进程间的通信底层都是依赖于 Binder IPC 机制。学好底层的通信原理对掌握安卓这幢大厦有着重要的意义.&lt;/p&gt;
 &lt;h1 id=&#34;说明&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#说明&#34;&gt;#&lt;/a&gt; 说明&lt;/h1&gt;
