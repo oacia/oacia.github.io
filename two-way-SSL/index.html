@@ -68,7 +68,7 @@
 <meta property="og:image" content="https://oacia.dev/two-way-SSL/p620909.png">
 <meta property="og:image" content="https://oacia.dev/two-way-SSL/p620908.png">
 <meta property="article:published_time" content="2023-12-14T10:00:32.000Z">
-<meta property="article:modified_time" content="2024-03-27T18:59:21.246Z">
+<meta property="article:modified_time" content="2024-04-10T02:07:46.863Z">
 <meta property="article:author" content="oacia">
 <meta property="article:tag" content="reverse,安卓逆向,区块链,学习笔记,破解实战,前端,CTF">
 <meta name="twitter:card" content="summary">
@@ -511,13 +511,14 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 <li>服务端用自己的私钥去解密这个密文，得到了密钥 R</li>
 <li>服务端和客户端在后续通讯过程中就使用这个密钥 R 进行通信了。</li>
 </ol>
-<h1 id="证书准备"><a class="anchor" href="#证书准备">#</a> 证书准备</h1>
+<h1 id="自签名证书"><a class="anchor" href="#自签名证书">#</a> 自签名证书</h1>
+<h2 id="证书准备"><a class="anchor" href="#证书准备">#</a> 证书准备</h2>
 <p>在制作证书前，我们先来了解一下每一个证书的格式</p>
 <ul>
 <li>JKS：数字证书库。JKS 里有 KeyEntry 和 CertEntry，在库里的每个 Entry 都是靠别名（alias）来识别的。</li>
 <li>P12：是 PKCS12 的缩写。同样是一个存储私钥的证书库，由 .jks 文件导出的，用户在 PC 平台安装，用于标示用户的身份。</li>
 <li>CER：俗称数字证书，目的就是用于存储公钥证书，任何人都可以获取这个文件 。</li>
-<li>BKS：由于 Android 平台不识别 .keystore 和 .jks 格式的证书库文件，因此 Android 平台引入一种的证书库格式，BKS。</li>
+<li>BKS：由于 Android 平台不识别 .keystore 和 .jks 格式的证书库文件，因此 Android 平台引入一种新的证书库格式，BKS。</li>
 </ul>
 <p>整个双向认证的流程需要六个证书文件：</p>
 <ul>
@@ -528,7 +529,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 <li>客户端私钥文件：client.key</li>
 <li>客户端集成证书（包括公钥和私钥，用于安卓访问场景）：client.bks</li>
 </ul>
-<h2 id="自签名证书制作"><a class="anchor" href="#自签名证书制作">#</a> 自签名证书制作</h2>
+<h2 id="证书制作"><a class="anchor" href="#证书制作">#</a> 证书制作</h2>
 <p>因为自签名证书完全免费，所以这里我们使用自签名证书来作为我们的客户端 / 服务端证书</p>
 <p><img data-src="/two-way-SSL/p620908.png" alt="image" style="aspect-ratio:1448 / 706;"></p>
 <h3 id="生成自签名根证书"><a class="anchor" href="#生成自签名根证书">#</a> 生成自签名根证书</h3>
@@ -599,7 +600,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 </ul>
 </li>
 </ul>
-<h1 id="android客户端"><a class="anchor" href="#android客户端">#</a> Android 客户端</h1>
+<h2 id="android客户端"><a class="anchor" href="#android客户端">#</a> Android 客户端</h2>
 <h1 id="参考资料"><a class="anchor" href="#参考资料">#</a> 参考资料</h1>
 <ul>
 <li><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20venBjaGNiZC9wLzEzNzA5NjkwLmh0bWw=">关于单向认证与双向认证 </span></li>
@@ -616,7 +617,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       <i class="ic i-calendar-check"></i>
     </span>
     <span class="text">更新于</span>
-    <time title="修改时间：2024-03-28 02:59:21" itemprop="dateModified" datetime="2024-03-28T02:59:21+08:00">2024-03-28</time>
+    <time title="修改时间：2024-04-10 10:07:46" itemprop="dateModified" datetime="2024-04-10T10:07:46+08:00">2024-04-10</time>
   </span>
   <span id="two-way-SSL/" class="item leancloud_visitors" data-flag-title="(doing)https双向认证及绕过方法" title="阅读次数">
       <span class="icon">
@@ -656,7 +657,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item left">
       
 
-  <a href="/blog-domain/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;100.webp" title="这两个月关于域名的二三事">
+  <a href="/blog-domain/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;56.webp" title="这两个月关于域名的二三事">
   <span class="type">上一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>这两个月关于域名的二三事</h3>
@@ -666,7 +667,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item right">
       
 
-  <a href="/telegram-bot-develop/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;37.webp" title="telegram bot 初体验及云端部署">
+  <a href="/telegram-bot-develop/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;41.webp" title="telegram bot 初体验及云端部署">
   <span class="type">下一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>telegram bot 初体验及云端部署</h3>
@@ -688,7 +689,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
   <div class="panels">
     <div class="inner">
       <div class="contents panel pjax" data-title="文章目录">
-          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ssl-pinning"><span class="toc-text"> SSL pinning</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%81%E4%B9%A6%E9%94%81%E5%AE%9A"><span class="toc-text"> 证书锁定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AC%E9%92%A5%E9%94%81%E5%AE%9A"><span class="toc-text"> 公钥锁定</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#https%E5%8F%8C%E5%90%91%E8%AE%A4%E8%AF%81%E5%8E%9F%E7%90%86"><span class="toc-text"> HTTPS 双向认证原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AF%81%E4%B9%A6%E5%87%86%E5%A4%87"><span class="toc-text"> 证书准备</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6%E5%88%B6%E4%BD%9C"><span class="toc-text"> 自签名证书制作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E8%87%AA%E7%AD%BE%E5%90%8D%E6%A0%B9%E8%AF%81%E4%B9%A6"><span class="toc-text"> 生成自签名根证书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E8%87%AA%E7%AD%BE%E5%90%8D%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E8%AF%81%E4%B9%A6"><span class="toc-text"> 生成自签名服务器端证书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E8%87%AA%E7%AD%BE%E5%90%8D%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AF%81%E4%B9%A6"><span class="toc-text"> 生成自签名客户端证书</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#android%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-text"> Android 客户端</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-text"> 参考资料</span></a></li></ol>
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ssl-pinning"><span class="toc-text"> SSL pinning</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%81%E4%B9%A6%E9%94%81%E5%AE%9A"><span class="toc-text"> 证书锁定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AC%E9%92%A5%E9%94%81%E5%AE%9A"><span class="toc-text"> 公钥锁定</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#https%E5%8F%8C%E5%90%91%E8%AE%A4%E8%AF%81%E5%8E%9F%E7%90%86"><span class="toc-text"> HTTPS 双向认证原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6"><span class="toc-text"> 自签名证书</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%81%E4%B9%A6%E5%87%86%E5%A4%87"><span class="toc-text"> 证书准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%81%E4%B9%A6%E5%88%B6%E4%BD%9C"><span class="toc-text"> 证书制作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E8%87%AA%E7%AD%BE%E5%90%8D%E6%A0%B9%E8%AF%81%E4%B9%A6"><span class="toc-text"> 生成自签名根证书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E8%87%AA%E7%AD%BE%E5%90%8D%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E8%AF%81%E4%B9%A6"><span class="toc-text"> 生成自签名服务器端证书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E8%87%AA%E7%AD%BE%E5%90%8D%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AF%81%E4%B9%A6"><span class="toc-text"> 生成自签名客户端证书</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#android%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-text"> Android 客户端</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-text"> 参考资料</span></a></li></ol>
       </div>
       <div class="related panel pjax" data-title="系列文章">
       </div>
@@ -806,7 +807,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 <nav class="state">
     <div class="item posts">
       <a href="/archives/">
-        <span class="count">45</span>
+        <span class="count">46</span>
         <span class="name">文章</span>
       </a>
     </div>
@@ -916,13 +917,13 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <span class="post-meta-item-icon">
       <i class="ic i-chart-area"></i>
     </span>
-    <span title="站点总字数">779k 字</span>
+    <span title="站点总字数">789k 字</span>
 
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="ic i-coffee"></i>
     </span>
-    <span title="站点阅读时长">11:48</span>
+    <span title="站点阅读时长">11:57</span>
   </div>
   <div class="powered-by">
     基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
