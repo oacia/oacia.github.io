@@ -65,12 +65,14 @@
 <meta property="og:site_name" content="oaciaのBbBlog~">
 <meta property="og:description" content="今年上半年把我的老平板 SM-P200 root 了，不过用着用着就发现这平板的 USB 竟然接触不良！每过一段时间 usb 就会断开连接… az, 这对于我来说问题可是致命的，谁能忍受研究的好好的突然手机就失联了嘞 于是我在咸鱼淘了一台二手 pixel3, 至于为什么是 pixel3, 问就是谷歌亲儿子～ 看了眼手机已经刷成安卓 10 了，卖家也说解了 BL 锁，不过唯一美中不足的就是安卓 1">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oacia.dev/Pixel3-root/image-20240504121930465.png">
 <meta property="article:published_time" content="2023-08-08T06:34:45.000Z">
-<meta property="article:modified_time" content="2023-08-13T05:47:59.246Z">
+<meta property="article:modified_time" content="2024-05-04T05:46:19.034Z">
 <meta property="article:author" content="oacia">
 <meta property="article:tag" content="root">
 <meta property="article:tag" content="pixel3">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oacia.dev/Pixel3-root/image-20240504121930465.png">
 <meta name="twitter:creator" content="@oacia86">
 
 
@@ -385,7 +387,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       <i class="ic i-pen"></i>
     </span>
     <span class="text">本文字数</span>
-    <span>1.5k</span>
+    <span>2k</span>
     <span class="text">字</span>
   </span>
   <span class="item" title="阅读时长">
@@ -393,7 +395,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       <i class="ic i-clock"></i>
     </span>
     <span class="text">阅读时长</span>
-    <span>1 分钟</span>
+    <span>2 分钟</span>
   </span>
 </div>
 
@@ -492,14 +494,40 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 </div>
 <ul>
 <li>
-<p>手机： <code>开发者选项-&gt;OEM 解锁</code>  - 打开 - 重启进入  <code>fastboot</code>  模式（ <code>电源键</code>  +  <code>音量减</code> ）</p>
+<p>手机： <code>开发者选项-&gt;OEM 解锁</code>  - 打开</p>
 </li>
 <li>
-<p>电脑：连接手机 - 执行  <code>fastboot flashing unlock</code></p>
+<p>手机：进入  <code>fastboot</code>  模式，有以下两种方式</p>
+<ul>
+<li>
+<p>重启并长按（ <code>电源键</code>  +  <code>音量减</code> ）</p>
 </li>
 <li>
-<p>手机：按音量键直到看见  <code>Unlock the bootloader</code>  - 按电源键确认</p>
+<p>输入 <code>adb reboot bootloader</code>  命令</p>
 </li>
+</ul>
+</li>
+<li>
+<p>电脑：USB 连接手机 - 执行  <code>fastboot flashing unlock</code></p>
+</li>
+</ul>
+<div class="note info">
+<p>我在 pixel6 解锁 BL 的过程中，执行 <code>fastboot flashing unlock</code>  命令一直卡在 <code>&lt; waiting for any device &gt;</code> , 所以这里记录一下我的解决方法</p>
+<p><strong>原因一</strong></p>
+<p>https://www.youtube.com/watch?v=ajdcWIY-5yo</p>
+<p>这可能是由于未安装 <code>Google USB Driver</code>  导致的，前往官网下载<span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXIuYW5kcm9pZC5jb20vc3R1ZGlvL3J1bi93aW4tdXNi">安装包</span></p>
+<p><img data-src="/Pixel3-root/image-20240504121930465.png" alt="image-20240504121930465" style="aspect-ratio:1117 / 451;"></p>
+<p>官网也有写好的<span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXIuYW5kcm9pZC5jb20vc3R1ZGlvL3J1bi9vZW0tdXNiI0luc3RhbGxpbmdEcml2ZXI=">安装教程</span>了</p>
+<p><code>我的电脑右键-&gt;管理</code> 进入设备管理器</p>
+<p>随后 <code>右键其他设备,选择手机的设备-&gt;更新驱动-&gt;浏览我的电脑以查找驱动程序</code> ，选择 <code>usb_driver_r13-windows.zip</code>  解压之后的文件夹路径</p>
+<p>不过这个方法对我无效</p>
+<p><strong>原因二</strong></p>
+<p>试了半天，发现是 USB 数据线的问题，我在解锁 pixel6 的 BL 时发现 fastboot 似乎不识别 type-c, 需要让手机用 USB 连接电脑时，手机处于充电的状态才证明这根线是可用的</p>
+<p>https://www.reddit.com/r/GooglePixel/comments/rc2lm7/pixel_6_not_detected_by_pc/</p>
+<p>换一根线就好了 (幸好线多～)</p>
+</div>
+<ul>
+<li>手机：按音量键直到看见  <code>Unlock the bootloader</code>  - 按电源键确认</li>
 </ul>
 <h1 id="下载手机镜像"><a class="anchor" href="#下载手机镜像">#</a> 下载手机镜像</h1>
 <p>pixel 系列最好的一点就是镜像不用花钱买直接官网就能下载了～<span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXJzLmdvb2dsZS5jb20vYW5kcm9pZC9pbWFnZXM/aGw9emgtY24jYmx1ZWxpbmU=">下载地址</span></p>
@@ -537,7 +565,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       <i class="ic i-calendar-check"></i>
     </span>
     <span class="text">更新于</span>
-    <time title="修改时间：2023-08-13 13:47:59" itemprop="dateModified" datetime="2023-08-13T13:47:59+08:00">2023-08-13</time>
+    <time title="修改时间：2024-05-04 13:46:19" itemprop="dateModified" datetime="2024-05-04T13:46:19+08:00">2024-05-04</time>
   </span>
   <span id="Pixel3-root/" class="item leancloud_visitors" data-flag-title="Pixel3 刷机与root记录" title="阅读次数">
       <span class="icon">
@@ -577,7 +605,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item left">
       
 
-  <a href="/starctf-writeup/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;37.webp" title="StarCTF2023 逆向writeup">
+  <a href="/starctf-writeup/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;87.webp" title="StarCTF2023 逆向writeup">
   <span class="type">上一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>StarCTF2023 逆向writeup</h3>
@@ -587,7 +615,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item right">
       
 
-  <a href="/rwProcMem33-usage/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;96.webp" title="将rwProcMem33编译进安卓内核">
+  <a href="/rwProcMem33-usage/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;25.webp" title="将rwProcMem33编译进安卓内核">
   <span class="type">下一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>将rwProcMem33编译进安卓内核</h3>
