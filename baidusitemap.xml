@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://oacia.dev/android-bcc/</loc>
+    <lastmod>2024-05-09</lastmod>
+  </url>
+  <url>
     <loc>https://oacia.dev/idapython-learning/</loc>
     <lastmod>2024-05-05</lastmod>
   </url>
