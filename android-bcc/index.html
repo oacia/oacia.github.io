@@ -56,18 +56,21 @@
 <link rel="canonical" href="https://oacia.dev/android-bcc/">
 
 
-<meta name="description" content="pixel6 到手的第一件事，当然是去玩玩看 ebpf 了～ebpf 的无痕 hook 听上去就感觉相当的强大，去官网看了一下 ebpf 知名度排名前几的项目，那非 bcc 莫属了，用 python 就可以运行 ebpf 代码，虽然 ebpf 的核心代码还是 C 写的，但是用 python 去执行就感觉十分的舒适 在网上也找到了两篇非常详细的 Android bcc 编译教程，前人种树，后人乘凉">
+<meta name="description" content="pixel6 到手的第一件事，当然是去玩玩看 ebpf 了～ebpf 的无痕 hook 听上去就感觉相当的强大，去官网看了一下 ebpf 知名度排名前几的项目，那非 bcc 莫属了，用 python 就可以运行 ebpf 代码，虽然 ebpf 的核心代码还是 C 写的，但是用 python 去执行就感觉十分的舒适 在网上也找到了三篇非常详细的 Android bcc 编译教程，前人种树，后人乘凉">
 <meta property="og:type" content="article">
 <meta property="og:title" content="EBPF android bcc初体验">
 <meta property="og:url" content="https://oacia.dev/android-bcc/">
 <meta property="og:site_name" content="oaciaのBbBlog~">
-<meta property="og:description" content="pixel6 到手的第一件事，当然是去玩玩看 ebpf 了～ebpf 的无痕 hook 听上去就感觉相当的强大，去官网看了一下 ebpf 知名度排名前几的项目，那非 bcc 莫属了，用 python 就可以运行 ebpf 代码，虽然 ebpf 的核心代码还是 C 写的，但是用 python 去执行就感觉十分的舒适 在网上也找到了两篇非常详细的 Android bcc 编译教程，前人种树，后人乘凉">
+<meta property="og:description" content="pixel6 到手的第一件事，当然是去玩玩看 ebpf 了～ebpf 的无痕 hook 听上去就感觉相当的强大，去官网看了一下 ebpf 知名度排名前几的项目，那非 bcc 莫属了，用 python 就可以运行 ebpf 代码，虽然 ebpf 的核心代码还是 C 写的，但是用 python 去执行就感觉十分的舒适 在网上也找到了三篇非常详细的 Android bcc 编译教程，前人种树，后人乘凉">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://oacia.dev/android-bcc/image-20240507160213733.png">
 <meta property="og:image" content="https://oacia.dev/android-bcc/image-20240507154231052.png">
 <meta property="og:image" content="https://oacia.dev/android-bcc/image-20240509205100257.png">
+<meta property="og:image" content="https://oacia.dev/android-bcc/image-20240512122600431.png">
+<meta property="og:image" content="https://oacia.dev/android-bcc/image-20240512124227438.png">
+<meta property="og:image" content="https://oacia.dev/android-bcc/image-20240512135018318.png">
 <meta property="article:published_time" content="2024-05-07T07:31:28.000Z">
-<meta property="article:modified_time" content="2024-05-09T15:22:36.082Z">
+<meta property="article:modified_time" content="2024-05-12T05:52:32.908Z">
 <meta property="article:author" content="oacia">
 <meta property="article:tag" content="reverse,安卓逆向,区块链,学习笔记,破解实战,前端,CTF">
 <meta name="twitter:card" content="summary">
@@ -386,7 +389,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       <i class="ic i-pen"></i>
     </span>
     <span class="text">本文字数</span>
-    <span>2.8k</span>
+    <span>3.3k</span>
     <span class="text">字</span>
   </span>
   <span class="item" title="阅读时长">
@@ -475,10 +478,11 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     
 
     <p>pixel6 到手的第一件事，当然是去玩玩看 ebpf 了～ebpf 的无痕 hook 听上去就感觉相当的强大，去<span class="exturl" data-url="aHR0cHM6Ly9lYnBmLmlvL2FwcGxpY2F0aW9ucy8=">官网</span>看了一下 ebpf 知名度排名前几的项目，那非<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2lvdmlzb3IvYmNj"> bcc</span> 莫属了，用 python 就可以运行 ebpf 代码，虽然 ebpf 的核心代码还是 C 写的，但是用 python 去执行就感觉十分的舒适</p>
-<p>在网上也找到了两篇非常详细的 Android bcc 编译教程，前人种树，后人乘凉 <code>^.^</code>  可以试试看 ebpf 究竟是什么样子的啦</p>
+<p>在网上也找到了三篇非常详细的 Android bcc 编译教程，前人种树，后人乘凉 <code>^.^</code>  可以试试看 ebpf 究竟是什么样子的啦</p>
 <ul>
 <li><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLnNlZWZsb3dlci5kZXYvYXJjaGl2ZXMvMTQwLw==">eBPF on Android 之 bcc 环境准备 ——eadb 原版</span></li>
 <li><span class="exturl" data-url="aHR0cHM6Ly9iYnMua2FueHVlLmNvbS90aHJlYWQtMjc1MTc2Lmh0bQ==">[原创] 60 秒学会用 eBPF-BCC hook 系统调用 ( 2 ) hook 安卓所有 syscall</span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLnNlZWZsb3dlci5kZXYvYXJjaGl2ZXMvMTExLyM=">eBPF on Android 之 bcc 编译与体验</span></li>
 </ul>
 <h1 id="bcc环境搭建"><a class="anchor" href="#bcc环境搭建">#</a> bcc 环境搭建</h1>
 <p>接下来进行 bcc 的环境搭建，我们将使用<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3RpYW5uL2VhZGI="> eadb</span> 在手机中配置 Debian 系统，并通过 ssh 让 Windows 上的 vscode 可以连接手机中的 Debian</p>
@@ -516,14 +520,28 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 </div>
 <h1 id="bcc编译运行"><a class="anchor" href="#bcc编译运行">#</a> bcc 编译运行</h1>
 <p>环境搭建好了之后，就可以编译 bcc 了</p>
-<p>首先把 bcc 源码编译一下 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2lvdmlzb3IvYmNjL2Jsb2IvbWFzdGVyL0lOU1RBTEwubWQjZGViaWFuLS0tc291cmNl">bcc INSTALL</span></p>
-<p>然后把 bcc 下过来</p>
-<figure class="highlight bash"><figcaption data-lang="bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">git</span> clone https://github.com/iovisor/bcc.git <span class="token parameter variable">--depth</span><span class="token operator">=</span><span class="token number">1</span></pre></td></tr></table></figure><p>编译 bcc</p>
-<figure class="highlight bash"><figcaption data-lang="bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">mkdir</span> bcc/build<span class="token punctuation">;</span> <span class="token builtin class-name">cd</span> bcc/build</pre></td></tr><tr><td data-num="2"></td><td><pre>cmake <span class="token punctuation">..</span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token function">make</span></pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token function">sudo</span> <span class="token function">make</span> <span class="token function">install</span></pre></td></tr></table></figure><p>试试看官方的例子</p>
-<figure class="highlight bash"><figcaption data-lang="bash"></figcaption><table><tr><td data-num="1"></td><td><pre>python bcc/examples/hello_world.py</pre></td></tr></table></figure><h1 id="参考资料"><a class="anchor" href="#参考资料">#</a> 参考资料</h1>
+<p>先把 bcc 下过来</p>
+<figure class="highlight bash"><figcaption data-lang="bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">git</span> clone https://github.com/iovisor/bcc.git</pre></td></tr></table></figure><p>编译 bcc</p>
+<figure class="highlight bash"><figcaption data-lang="bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">mkdir</span> bcc/build<span class="token punctuation">;</span> <span class="token builtin class-name">cd</span> bcc/build</pre></td></tr><tr><td data-num="2"></td><td><pre>cmake <span class="token punctuation">..</span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token function">make</span></pre></td></tr></table></figure><p>我在编译的过程中遇到了如下的报错</p>
+<p><img data-src="/android-bcc/image-20240512122600431.png" alt="image-20240512122600431" style="aspect-ratio:1482 / 265;"></p>
+<p>先装个 pip</p>
+<figure class="highlight bash"><figcaption data-lang="bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">wget</span> https://bootstrap.pypa.io/get-pip.py</pre></td></tr><tr><td data-num="2"></td><td><pre>python get-pip.py</pre></td></tr></table></figure><p>然后再安装 setuptools</p>
+<figure class="highlight bash"><figcaption data-lang="bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">wget</span> https://files.pythonhosted.org/packages/af/e7/02db816dc88c598281bacebbb7ccf2c9f1a6164942e88f1a0fded8643659/setuptools-45.0.0-py2.py3-none-any.whl</pre></td></tr><tr><td data-num="2"></td><td><pre>pip <span class="token function">install</span> setuptools-45.0.0-py2.py3-none-any.whl</pre></td></tr></table></figure><p>后来又报错 zip 没安装</p>
+<p><img data-src="/android-bcc/image-20240512124227438.png" alt="image-20240512124227438" style="aspect-ratio:1179 / 150;"></p>
+<p>装一个 zip</p>
+<figure class="highlight bash"><figcaption data-lang="bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">apt-get</span> <span class="token function">install</span> <span class="token function">zip</span></pre></td></tr></table></figure><p>重新 <code>make</code>  之后编译成功～</p>
+<p>然后把 bcc 安装一下</p>
+<figure class="highlight bash"><figcaption data-lang="bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">make</span> <span class="token function">install</span></pre></td></tr></table></figure><p>随后再编译一下 python 的 bcc</p>
+<figure class="highlight bash"><figcaption data-lang="bash"></figcaption><table><tr><td data-num="1"></td><td><pre>cmake <span class="token parameter variable">-DPYTHON_CMD</span><span class="token operator">=</span>python3 <span class="token punctuation">..</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token function">pushd</span> src/python/</pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token function">make</span></pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token function">make</span> <span class="token function">install</span></pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token function">popd</span></pre></td></tr></table></figure><p>试试看官方的例子</p>
+<figure class="highlight bash"><figcaption data-lang="bash"></figcaption><table><tr><td data-num="1"></td><td><pre>python3 bcc/examples/hello_world.py</pre></td></tr></table></figure><p>结果竟然没输出？</p>
+<p>哈哈，原来是 tracing 的开关没开，开一下</p>
+<figure class="highlight bash"><figcaption data-lang="bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token builtin class-name">echo</span> <span class="token number">1</span> <span class="token operator">></span> /sys/kernel/tracing/tracing_on</pre></td></tr></table></figure><p><strong>Hello, World!</strong></p>
+<p><img data-src="/android-bcc/image-20240512135018318.png" alt="image-20240512135018318" style="aspect-ratio:1030 / 192;"></p>
+<h1 id="参考资料"><a class="anchor" href="#参考资料">#</a> 参考资料</h1>
 <ul>
 <li><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLnNlZWZsb3dlci5kZXYvYXJjaGl2ZXMvMTQwLw==">eBPF on Android 之 bcc 环境准备 ——eadb 原版</span></li>
 <li><span class="exturl" data-url="aHR0cHM6Ly9iYnMua2FueHVlLmNvbS90aHJlYWQtMjc1MTc2Lmh0bQ==">[原创] 60 秒学会用 eBPF-BCC hook 系统调用 ( 2 ) hook 安卓所有 syscall</span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLnNlZWZsb3dlci5kZXYvYXJjaGl2ZXMvMTExLyM=">eBPF on Android 之 bcc 编译与体验</span></li>
 </ul>
 
   </div>
@@ -536,7 +554,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       <i class="ic i-calendar-check"></i>
     </span>
     <span class="text">更新于</span>
-    <time title="修改时间：2024-05-09 23:22:36" itemprop="dateModified" datetime="2024-05-09T23:22:36+08:00">2024-05-09</time>
+    <time title="修改时间：2024-05-12 13:52:32" itemprop="dateModified" datetime="2024-05-12T13:52:32+08:00">2024-05-12</time>
   </span>
   <span id="android-bcc/" class="item leancloud_visitors" data-flag-title="EBPF android bcc初体验" title="阅读次数">
       <span class="icon">
@@ -576,7 +594,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item left">
       
 
-  <a href="/d3ctf-2024/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;59.webp" title="d3ctf2024 reverse wp">
+  <a href="/d3ctf-2024/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;60.webp" title="d3ctf2024 reverse wp">
   <span class="type">上一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>d3ctf2024 reverse wp</h3>
