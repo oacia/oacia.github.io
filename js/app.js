@@ -1781,7 +1781,6 @@ const sidebarTOC = function () {
     var anchorScroll = function (event) {
       event.preventDefault();
       var target = $(decodeURI(event.currentTarget.attr('href')));
-
       activeLock = index;
       pageScroll(target, null, function() {
           activateNavByIndex(index)
