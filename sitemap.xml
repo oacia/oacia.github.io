@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://oacia.dev/idapython-learning/</loc>
+    
+    <lastmod>2024-07-12</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://oacia.dev/ollvm-study/</loc>
     
     <lastmod>2024-07-12</lastmod>
@@ -39,15 +48,6 @@
   
   <url>
     <loc>https://oacia.dev/android-load-so/</loc>
-    
-    <lastmod>2024-07-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://oacia.dev/idapython-learning/</loc>
     
     <lastmod>2024-07-12</lastmod>
     
