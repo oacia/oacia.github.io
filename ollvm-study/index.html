@@ -70,9 +70,23 @@
 <meta property="og:image" content="https://oacia.dev/ollvm-study/image-20230727162652645.png">
 <meta property="og:image" content="https://oacia.dev/ollvm-study/image-20230727185741834.png">
 <meta property="og:image" content="https://oacia.dev/ollvm-study/image-20230727203726728.png">
-<meta property="og:image" content="https://oacia.dev/ollvm-study/image-20230727230937099.png">
-<meta property="article:published_time" content="2023-09-26T01:24:52.000Z">
-<meta property="article:modified_time" content="2024-01-25T19:45:13.560Z">
+<meta property="og:image" content="https://oacia.dev/ollvm-study/image-20240711153007836.png">
+<meta property="og:image" content="https://oacia.dev/ollvm-study/image-20240711153057510.png">
+<meta property="og:image" content="https://oacia.dev/ollvm-study/image-20240712102230251.png">
+<meta property="og:image" content="https://oacia.dev/ollvm-study/image-20240712102331669.png">
+<meta property="og:image" content="https://oacia.dev/ollvm-study/image-20240712103021119.png">
+<meta property="og:image" content="https://oacia.dev/ollvm-study/image-20240712103224264.png">
+<meta property="og:image" content="https://oacia.dev/ollvm-study/image-20240712104339001.png">
+<meta property="og:image" content="https://oacia.dev/ollvm-study/image-20240712105930858.png">
+<meta property="og:image" content="https://oacia.dev/ollvm-study/image-20240712110422977.png">
+<meta property="og:image" content="https://oacia.dev/ollvm-study/image-20240712111021857.png">
+<meta property="og:image" content="https://oacia.dev/ollvm-study/bb352c9f40d9ae979f5ac203fc2eb835.png">
+<meta property="og:image" content="https://oacia.dev/ollvm-study/471ec1aa469805a15db47e130dde5485.png">
+<meta property="og:image" content="https://oacia.dev/ollvm-study/b6d9662e5a216ac6e7a976dd8d814a79.png">
+<meta property="og:image" content="https://oacia.dev/ollvm-study/image-20240712132834341.png">
+<meta property="og:image" content="https://oacia.dev/ollvm-study/image-20240712132814751.png">
+<meta property="article:published_time" content="2024-07-12T01:24:52.000Z">
+<meta property="article:modified_time" content="2024-07-12T05:30:57.999Z">
 <meta property="article:author" content="oacia">
 <meta property="article:tag" content="ollvm">
 <meta name="twitter:card" content="summary">
@@ -379,19 +393,19 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
   </h1>
   
 <div class="meta">
-  <span class="item" title="创建时间：2023-09-26 09:24:52">
+  <span class="item" title="创建时间：2024-07-12 09:24:52">
     <span class="icon">
       <i class="ic i-calendar"></i>
     </span>
     <span class="text">发表于</span>
-    <time itemprop="dateCreated datePublished" datetime="2023-09-26T09:24:52+08:00">2023-09-26</time>
+    <time itemprop="dateCreated datePublished" datetime="2024-07-12T09:24:52+08:00">2024-07-12</time>
   </span>
   <span class="item" title="本文字数">
     <span class="icon">
       <i class="ic i-pen"></i>
     </span>
     <span class="text">本文字数</span>
-    <span>5k</span>
+    <span>7.5k</span>
     <span class="text">字</span>
   </span>
   <span class="item" title="阅读时长">
@@ -399,7 +413,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       <i class="ic i-clock"></i>
     </span>
     <span class="text">阅读时长</span>
-    <span>5 分钟</span>
+    <span>7 分钟</span>
   </span>
 </div>
 
@@ -517,7 +531,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 <p>使用该命令复制 clang 所需的头文件到 <code>/usr/include/</code> ,  <code>cp -r -i</code>  后面跟的参数为 <code>ollvm的源码目录/build_release/lib/clang/4.0.1/include/.</code> , 这个文件夹内包含了 <code>clang</code>  编译器所需的头文件</p>
 <figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">cp</span> <span class="token parameter variable">-r</span> <span class="token parameter variable">-i</span> /home/oacia/Desktop/obfuscator/build_release/lib/clang/4.0.1/include/. /usr/include/</pre></td></tr></table></figure><p>如果提示有重名文件的话，最好先对 <code>/usr/include</code>  内的重名文件作好备份，然后去掉 <code>-i</code>  参数重新进行复制头文件操作</p>
 <h1 id="虚假控制流bcfbogus-control-flow"><a class="anchor" href="#虚假控制流bcfbogus-control-flow">#</a> 虚假控制流 BCF (Bogus Control Flow)</h1>
-<h2 id="定义"><a class="anchor" href="#定义">#</a> 定义</h2>
+<h2 id="原理"><a class="anchor" href="#原理">#</a> 原理</h2>
 <p>虚假控制流混淆通过加入包含<strong>不透明谓词</strong>的条件跳转（也就是跳转与否在运行之前就已经确定的跳转，但 IDA 无法分析）和<strong>不可达的基本块</strong>，来干扰 IDA 的控制流分析和 F5 反汇编。</p>
 <p>所谓的不透明谓词，例如</p>
 <figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">if</span><span class="token punctuation">(</span>x<span class="token operator">></span><span class="token number">10</span> <span class="token operator">&amp;&amp;</span> x<span class="token operator">&lt;=</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="2"></td><td><pre>    <span class="token keyword">goto</span> Label1<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr></table></figure><p>对于这类表达式，我们可以很明显的看到， <code>x&gt;10 &amp;&amp; x&lt;=10</code>  是永假式，所以 <code>goto Label1</code>  这个跳转永远不会被执行，但是对于 IDA 来说可不是这个样子，在静态分析的时候，IDA 并不知道 <code>x</code>  的值是多少，所以说这类虚假控制流就会干扰我们的静态分析.</p>
@@ -535,10 +549,10 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 <p>打开 BCF 混淆之后 IDA 的伪代码，发现多了许多的 <code>while</code> , <code>if</code>  表达式，伪代码变得十分复杂，也让我们无法一眼就可以看出这是何种加密</p>
 <p><img data-src="/ollvm-study/image-20230727162652645.png" alt="image-20230727162652645" style="aspect-ratio:1286 / 684;"></p>
 <h2 id="ollvm的bcf反混淆"><a class="anchor" href="#ollvm的bcf反混淆">#</a> ollvm 的 BCF 反混淆</h2>
-<p>铺垫了这么长的时间，终于要来到本篇文章的第一个有趣的环节，BCF 的反混淆了，<span class="spoiler" title="唔~被看到了呢"> 装环境真的好无聊呀😔</span></p>
+<p>铺垫了这么长的时间，终于要来到本篇文章的第一个有趣的环节，BCF 的反混淆了</p>
 <p>我们往上看 <code>while</code>  内的表达式 <code>y_4 &gt;= 10 &amp;&amp; (((x_3 - 1) * x_3) &amp; 1) != 0</code> , 在这个式子中， <code>(x_3 - 1) * x_3)</code>  的值永远为偶数，所以 <code>(x_3 - 1) * x_3) &amp; 1</code>  永远返回 <code>0</code> , 不等号左边 <code>y_4 &gt;= 10 &amp;&amp; (((x_3 - 1) * x_3) &amp; 1)</code> , 因为是用逻辑与 <code>&amp;&amp;</code>  作为连接词，所以左侧的表达式其实为永假式， <code>y_4 &gt;= 10 &amp;&amp; (((x_3 - 1) * x_3) &amp; 1) != 0</code>  永远不成立</p>
-<p>对于 BCF, 有 4 种思路可以帮助我们去进行反混淆</p>
-<h3 id="思路一-将全局变量赋值并将segment设为只读"><a class="anchor" href="#思路一-将全局变量赋值并将segment设为只读">#</a> 思路一：将全局变量赋值并将 segment 设为只读</h3>
+<p>对于 BCF, 有 3 种思路可以帮助我们去进行反混淆</p>
+<h3 id="思路一-将全局变量赋值并将segment设为只读"><a class="anchor" href="#思路一-将全局变量赋值并将segment设为只读">#</a> 思路一 将全局变量赋值并将 segment 设为只读</h3>
 <p>IDA 其实是有死代码消除 (DCE, Dead Code Elimination) 的，但是由于 <code>y_4</code> , <code>x_3</code>  被定义为了全局变量，在静态分析时，IDA 不知道这个表达式的值是多少，所以 IDA 也不敢轻易的就把这段代码给消除了 (万一把重要的代码也给消除掉了那逆向人员真的要 *** 了)</p>
 <p>但是如果我们把这个变量的值定下来，并且将变量所在的 <code>segment</code>  设为 <code>只读</code> ，那这个变量值在没运行前也变不了，IDA 不就可以自己算出来这个表达式的值是多少了嘛，这样那些没有用的跳转 IDA 就可以自动优化了</p>
 <p>所以我们先双击 <code>x_3</code>  跳转到 <code>x_3</code>  的地址</p>
@@ -547,10 +561,85 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 <p><img data-src="/ollvm-study/image-20230727203726728.png" alt="image-20230727203726728" style="aspect-ratio:742 / 427;"></p>
 <p>光是这样还不够，因为 <code>.bss段</code> 中的变量还没有被赋过值，所以我们还需要 patch 这个段来固定 <code>.bss段</code> 内变量的值</p>
 <p>一个变量一个变量去 patch 显然显得有些麻烦，所以我们可以直接编写 IDApython 脚本来实现一步到位的效果，并且对于常规的 ollvm 的 bcf 混淆来说，bcf 的不透明谓词都是处于 <code>.bss段</code> 中。如果不透明谓词定义在其他段中，将 IDApython 中的代码做出相对应的修改即可</p>
-<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">import</span> ida_segment</pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token keyword">import</span> ida_bytes</pre></td></tr><tr><td data-num="3"></td><td><pre></pre></td></tr><tr><td data-num="4"></td><td><pre>seg <span class="token operator">=</span> ida_segment<span class="token punctuation">.</span>get_segm_by_name<span class="token punctuation">(</span><span class="token string">'.bss'</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="5"></td><td><pre></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token keyword">for</span> ea <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>seg<span class="token punctuation">.</span>start_ea<span class="token punctuation">,</span> seg<span class="token punctuation">.</span>end_ea<span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="7"></td><td><pre>    ida_bytes<span class="token punctuation">.</span>patch_bytes<span class="token punctuation">(</span>ea<span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">.</span>to_bytes<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token string">'little'</span><span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="8"></td><td><pre></pre></td></tr><tr><td data-num="9"></td><td><pre><span class="token triple-quoted-string string">'''</span></pre></td></tr><tr><td data-num="10"></td><td><pre>seg.perm: 由三位二进制数表示,例如一个segment为可读,不可写,不可执行,则seg.perm = 0b100</pre></td></tr><tr><td data-num="11"></td><td><pre>(seg.perm >> 2)&amp;1: Read</pre></td></tr><tr><td data-num="12"></td><td><pre>(seg.perm >> 1)&amp;1: Write</pre></td></tr><tr><td data-num="13"></td><td><pre>(seg.perm >> 0)&amp;1: Execute</pre></td></tr><tr><td data-num="14"></td><td><pre>'''</pre></td></tr><tr><td data-num="15"></td><td><pre>seg<span class="token punctuation">.</span>perm <span class="token operator">=</span> <span class="token number">0b100</span></pre></td></tr></table></figure><h2 id="思路二-patch不透明谓词的赋值语句汇编"><a class="anchor" href="#思路二-patch不透明谓词的赋值语句汇编">#</a> 思路二: patch 不透明谓词的赋值语句汇编</h2>
-<p>我们可以观察一下这些不透明谓词 (如伪代码为 <code>y_10 &lt; 10 || (((x_9 - 1) * x_9) &amp; 1) == 0</code> ) 的汇编</p>
-<p><img data-src="/ollvm-study/image-20230727230937099.png" alt="image-20230727230937099" style="aspect-ratio:328 / 288;"></p>
-<p>我们重点关注 <code>mov eax, ds:x_9</code>  这行汇编，它的作用是将变量 <code>x_9</code>  的值赋给寄存器 <code>eax</code></p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">import</span> ida_segment</pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token keyword">import</span> ida_bytes</pre></td></tr><tr><td data-num="3"></td><td><pre></pre></td></tr><tr><td data-num="4"></td><td><pre>seg <span class="token operator">=</span> ida_segment<span class="token punctuation">.</span>get_segm_by_name<span class="token punctuation">(</span><span class="token string">'.bss'</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="5"></td><td><pre></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token keyword">for</span> ea <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>seg<span class="token punctuation">.</span>start_ea<span class="token punctuation">,</span> seg<span class="token punctuation">.</span>end_ea<span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="7"></td><td><pre>    ida_bytes<span class="token punctuation">.</span>patch_bytes<span class="token punctuation">(</span>ea<span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">.</span>to_bytes<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token string">'little'</span><span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="8"></td><td><pre></pre></td></tr><tr><td data-num="9"></td><td><pre><span class="token triple-quoted-string string">'''</span></pre></td></tr><tr><td data-num="10"></td><td><pre>seg.perm: 由三位二进制数表示,例如一个segment为可读,不可写,不可执行,则seg.perm = 0b100</pre></td></tr><tr><td data-num="11"></td><td><pre>(seg.perm >> 2)&amp;1: Read</pre></td></tr><tr><td data-num="12"></td><td><pre>(seg.perm >> 1)&amp;1: Write</pre></td></tr><tr><td data-num="13"></td><td><pre>(seg.perm >> 0)&amp;1: Execute</pre></td></tr><tr><td data-num="14"></td><td><pre>'''</pre></td></tr><tr><td data-num="15"></td><td><pre>seg<span class="token punctuation">.</span>perm <span class="token operator">=</span> <span class="token number">0b100</span></pre></td></tr></table></figure><h3 id="思路二-使用d810去除bcf"><a class="anchor" href="#思路二-使用d810去除bcf">#</a> 思路二 使用 d810 去除 BCF</h3>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRsYWIuY29tL2VzaGFyZC9kODEw">d810</span> 中内置了很多的不透明谓词表达式，它的匹配器也是非常的厉害完全可以做到去除虚假控制流</p>
+<p>在 <code>Edit-&gt;plugins-&gt;D-810</code>  打开之后，选择 <code>default_unflattening_switch_case.json</code>  之后点击 <code>start</code> , 即可做到对不透明谓词的去除并还原控制流</p>
+<p><img data-src="/ollvm-study/image-20240711153007836.png" alt="image-20240711153007836" style="aspect-ratio:1523 / 701;"></p>
+<p>还原后的效果如下，可以发现和原本的代码基本是一样的了</p>
+<p><img data-src="/ollvm-study/image-20240711153057510.png" alt="image-20240711153057510" style="aspect-ratio:1034 / 646;"></p>
+<p>当然如果发现有一些恒定值的不透明谓词表达式 d810 没有识别到无法去除的话，我们也可以手动添加规则让 D810 进行匹配来消除 BCF</p>
+<p>例如对于这个表达式 <code>((x_0&gt;=10 &amp;&amp; x_10&lt;10)==false) == True</code> , 我们可以先在 <code>\plugins\d810\conf\xxx.json</code>  里面添加我们自己的规则</p>
+<p><img data-src="/ollvm-study/image-20240712102230251.png" alt="image-20240712102230251" style="aspect-ratio:658 / 547;"></p>
+<p>随后来到 <code>plugins\d810\optimizers\instructions\pattern_matching\rewrite_and.py</code>  中加一个我们自己的类 <code>OaciaRule0</code> , 这样就可以完成一个自定义规则的导入啦</p>
+<p><img data-src="/ollvm-study/image-20240712102331669.png" alt="image-20240712102331669" style="aspect-ratio:1220 / 499;"></p>
+<h3 id="思路三-使用idapython-patch不透明谓词"><a class="anchor" href="#思路三-使用idapython-patch不透明谓词">#</a> 思路三 使用 idapython patch 不透明谓词</h3>
+<p>在思路一中，我们通过对不透明谓词变量进行交叉引用找到了它们所在的 segment, 并通过将全局变量赋值并将 segment 设为只读的方法消除了 BCF, 但是其实我们还可以用另外的一种方式去消除 bcf, 就是在汇编中将不透明谓词直接 patch 掉</p>
+<p>例如对于该不透明谓词 <code>x_9</code> , <code>y_10</code> , 它的 c 表达式为 <code>y_10 &gt;= 10 &amp;&amp; ((((_BYTE)x_9 - 1) * (_BYTE)x_9) &amp; 1) != 0</code></p>
+<p><img data-src="/ollvm-study/image-20240712103021119.png" alt="image-20240712103021119" style="aspect-ratio:945 / 482;"></p>
+<p>我们要做的就是让 <code>mov     eax, ds:x_9</code>  改成 <code>mov     eax, 0</code> , 这样就可以做到消除 BCF 的目的</p>
+<p><img data-src="/ollvm-study/image-20240712103224264.png" alt="image-20240712103224264" style="aspect-ratio:866 / 454;"></p>
+<p>但是这样一个一个改过去显得十分的麻烦，所以我们可以用 ida python, 通过找到不透明谓词的所有交叉引用的方式来批量修改</p>
+<figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment"># 去除虚假控制流 idapython 脚本</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token keyword">import</span> ida_xref</pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token keyword">import</span> ida_idaapi</pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token keyword">from</span> ida_bytes <span class="token keyword">import</span> get_bytes<span class="token punctuation">,</span> patch_bytes</pre></td></tr><tr><td data-num="5"></td><td><pre> </pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token comment"># 将 mov 寄存器，不透明谓词 修改为 mov 寄存器，0</span></pre></td></tr><tr><td data-num="7"></td><td><pre><span class="token keyword">def</span> <span class="token function">do_patch</span><span class="token punctuation">(</span>ea<span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="8"></td><td><pre>    <span class="token keyword">if</span> get_bytes<span class="token punctuation">(</span>ea<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token string">b"\x8B"</span><span class="token punctuation">:</span> <span class="token comment"># mov eax-edi, dword</span></pre></td></tr><tr><td data-num="9"></td><td><pre>        reg <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token builtin">ord</span><span class="token punctuation">(</span>get_bytes<span class="token punctuation">(</span>ea <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">0b00111000</span><span class="token punctuation">)</span> <span class="token operator">>></span> <span class="token number">3</span></pre></td></tr><tr><td data-num="10"></td><td><pre>        patch_bytes<span class="token punctuation">(</span>ea<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">0xB8</span> <span class="token operator">+</span> reg<span class="token punctuation">)</span><span class="token punctuation">.</span>to_bytes<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token string">'little'</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">b'\x00\x00\x00\x00\x90\x90'</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="11"></td><td><pre>    <span class="token keyword">else</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="12"></td><td><pre>        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'error'</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="13"></td><td><pre> </pre></td></tr><tr><td data-num="14"></td><td><pre><span class="token comment"># 不透明谓词在.bss 段的范围</span></pre></td></tr><tr><td data-num="15"></td><td><pre>seg <span class="token operator">=</span> ida_segment<span class="token punctuation">.</span>get_segm_by_name<span class="token punctuation">(</span><span class="token string">'.bss'</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="16"></td><td><pre>start <span class="token operator">=</span> seg<span class="token punctuation">.</span>start_ea</pre></td></tr><tr><td data-num="17"></td><td><pre>end <span class="token operator">=</span> seg<span class="token punctuation">.</span>end_ea</pre></td></tr><tr><td data-num="18"></td><td><pre> </pre></td></tr><tr><td data-num="19"></td><td><pre><span class="token keyword">for</span> addr <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>start<span class="token punctuation">,</span>end<span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="20"></td><td><pre>    ref <span class="token operator">=</span> ida_xref<span class="token punctuation">.</span>get_first_dref_to<span class="token punctuation">(</span>addr<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="21"></td><td><pre>    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">hex</span><span class="token punctuation">(</span>addr<span class="token punctuation">)</span><span class="token punctuation">.</span>center<span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">,</span><span class="token string">'-'</span><span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="22"></td><td><pre>    <span class="token comment"># 获取所有交叉引用</span></pre></td></tr><tr><td data-num="23"></td><td><pre>    <span class="token keyword">while</span><span class="token punctuation">(</span>ref <span class="token operator">!=</span> ida_idaapi<span class="token punctuation">.</span>BADADDR<span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="24"></td><td><pre>        do_patch<span class="token punctuation">(</span>ref<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="25"></td><td><pre>        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'patch at '</span> <span class="token operator">+</span> <span class="token builtin">hex</span><span class="token punctuation">(</span>ref<span class="token punctuation">)</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="26"></td><td><pre>        ref <span class="token operator">=</span> ida_xref<span class="token punctuation">.</span>get_next_dref_to<span class="token punctuation">(</span>addr<span class="token punctuation">,</span> ref<span class="token punctuation">)</span></pre></td></tr><tr><td data-num="27"></td><td><pre>    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'-'</span> <span class="token operator">*</span> <span class="token number">20</span><span class="token punctuation">)</span></pre></td></tr></table></figure><p>这样 BCF 就被去掉啦</p>
+<p><img data-src="/ollvm-study/image-20240712104339001.png" alt="image-20240712104339001" style="aspect-ratio:1102 / 607;"></p>
+<h1 id="指令替换sub"><a class="anchor" href="#指令替换sub">#</a> 指令替换（SUB）</h1>
+<h2 id="原理-2"><a class="anchor" href="#原理-2">#</a> 原理</h2>
+<p>指令替换（Instruction Substitution）是一种代码混淆技术，用于将程序中的原始指令替换为等效但更难理解和还原的指令序列。通过指令替换，可以增加程序的复杂性和抵抗逆向工程的能力。</p>
+<p>它的本质其实就是数学公式的简化，例如 <code>(x + y) - 2 * (x &amp; y) -&gt; x ^ y</code>  (过去学离散数学感觉做的就是这种样子的…)</p>
+<h2 id="ollvm的sub混淆"><a class="anchor" href="#ollvm的sub混淆">#</a> ollvm 的 SUB 混淆</h2>
+<p>使用下面的命令对代码进行 SUB 混淆</p>
+<figure class="highlight bash"><figcaption data-lang="bash"></figcaption><table><tr><td data-num="1"></td><td><pre>clang <span class="token parameter variable">-mllvm</span> <span class="token parameter variable">-sub</span> <span class="token parameter variable">-mllvm</span> <span class="token parameter variable">-sub_loop</span><span class="token operator">=</span><span class="token number">3</span> test-sub.c <span class="token parameter variable">-o</span> test-sub</pre></td></tr></table></figure><p>可用选项</p>
+<ul>
+<li><code>-mllvm -sub</code>  : 激活指令替换</li>
+<li><code>-mllvm -sub_loop=3</code> : 混淆次数，这里一个函数会被混淆 3 次，默认为 1 次</li>
+</ul>
+<p>经过指令替换后，代码明显变长了很多</p>
+<p><img data-src="/ollvm-study/image-20240712105930858.png" alt="image-20240712105930858" style="aspect-ratio:1523 / 668;"></p>
+<h2 id="ollvm的sub反混淆"><a class="anchor" href="#ollvm的sub反混淆">#</a> ollvm 的 SUB 反混淆</h2>
+<h3 id="思路一-使用d810去除sub"><a class="anchor" href="#思路一-使用d810去除sub">#</a> 思路一 使用 d810 去除 SUB</h3>
+<p>D810 太猛了！这里又用到了 D810</p>
+<p>还是和去除 BCF 反混淆一样，我们直接跑一下 d810, 虽然还是有一些部分没有去掉，但是看起来已经很清晰了，因为指令替换不影响程序整体的执行逻辑，所以我想剩下的一点点 SUB 应该难不倒逆向的同学吧～</p>
+<p><img data-src="/ollvm-study/image-20240712110422977.png" alt="image-20240712110422977" style="aspect-ratio:1510 / 659;"></p>
+<h3 id="思路二-使用gamba简化复杂的sub表达式"><a class="anchor" href="#思路二-使用gamba简化复杂的sub表达式">#</a> 思路二 使用 GAMBA 简化复杂的 SUB 表达式</h3>
+<p>这个思路二其实就是思路一那一点点未解决的 SUB 的补充，对于一些复杂的表达式来说，github 上的开源工具<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0RlbnV2b1NvZnR3YXJlU29sdXRpb25zL0dBTUJB"> GAMBA</span> 可以很好的帮助我们简化</p>
+<p>具体可以参考<a href="https://oacia.dev/sec-2023/">细品 sec2023 安卓赛题</a>中的 <code>加密三 vm 指令分析</code></p>
+<p><img data-src="/ollvm-study/image-20240712111021857.png" alt="image-20240712111021857" style="aspect-ratio:1073 / 771;"></p>
+<h1 id="控制流平坦化fla"><a class="anchor" href="#控制流平坦化fla">#</a> 控制流平坦化（FLA）</h1>
+<h2 id="原理-3"><a class="anchor" href="#原理-3">#</a> 原理</h2>
+<p>控制流平坦化 (control flow flattening) 的基本思想主要是通过一个主分发器来控制程序基本块的执行流程，例如下图是正常的执行流程</p>
+<p><img data-src="/ollvm-study/bb352c9f40d9ae979f5ac203fc2eb835.png" alt="img" style="aspect-ratio:579 / 169;"></p>
+<p>经过控制流平坦化后的执行流程就如下图</p>
+<p><img data-src="/ollvm-study/471ec1aa469805a15db47e130dde5485.png" alt="img" style="aspect-ratio:683 / 263;"></p>
+<p>这样可以模糊基本块之间的前后关系</p>
+<p>此图是一个经典的控制流平坦化 CFG</p>
+<p><img data-src="/ollvm-study/b6d9662e5a216ac6e7a976dd8d814a79.png" alt="img" style="aspect-ratio:1125 / 1052;"></p>
+<p>其中</p>
+<ul>
+<li>序言：函数的第一个执行的基本块</li>
+<li>主 (子) 分发器：控制程序跳转到下一个待执行的基本块</li>
+<li>retn 块：函数出口</li>
+<li>真实块：混淆前的基本块，程序真正执行工作的块</li>
+<li>预处理器：跳转到主分发器</li>
+</ul>
+<h2 id="ollvm的fla混淆"><a class="anchor" href="#ollvm的fla混淆">#</a> ollvm 的 FLA 混淆</h2>
+<p>使用如下命令即可完成 fla 混淆</p>
+<figure class="highlight bash"><figcaption data-lang="bash"></figcaption><table><tr><td data-num="1"></td><td><pre>clang <span class="token parameter variable">-mllvm</span> <span class="token parameter variable">-fla</span> <span class="token parameter variable">-mllvm</span> <span class="token parameter variable">-split</span> <span class="token parameter variable">-mllvm</span> <span class="token parameter variable">-split_num</span><span class="token operator">=</span><span class="token number">3</span> test-fla.c <span class="token parameter variable">-o</span> test-fla</pre></td></tr></table></figure><p>可用选项：</p>
+<ul>
+<li>-mllvm -fla : 激活控制流平坦化</li>
+<li>-mllvm -split : 激活基本块分割</li>
+<li>-mllvm -split_num=3 : 指定基本块分割的数目</li>
+</ul>
+<p>经过控制流平坦化之后，函数的逻辑已经很难看清楚了</p>
+<p><img data-src="/ollvm-study/image-20240712132834341.png" alt="image-20240712132834341" style="aspect-ratio:745 / 806;"></p>
+<h2 id="ollvm的fla混淆-2"><a class="anchor" href="#ollvm的fla混淆-2">#</a> ollvm 的 FLA 混淆</h2>
+<p>想要定位各个块其实很简单</p>
+<ol>
+<li>找到<strong>序言块</strong>，这是整个函数的入口</li>
+<li>序言块的后继是<strong>主分发器</strong></li>
+<li>主分发器的前驱有两个，除了序言块外，另一个块就是<strong>预处理器</strong></li>
+<li>预处理器的前驱是<strong>真实块</strong></li>
+<li>除此之外的其他块是<strong>子分发器</strong></li>
+</ol>
+<p><img data-src="/ollvm-study/image-20240712132814751.png" alt="image-20240712132814751" style="aspect-ratio:990 / 856;"></p>
 <h1 id="参考资料"><a class="anchor" href="#参考资料">#</a> 参考资料</h1>
 <ul>
 <li>
@@ -564,6 +653,15 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 </li>
 <li>
 <p><span class="exturl" data-url="aHR0cHM6Ly9iYnMua2FueHVlLmNvbS90aHJlYWQtMjY2MDA1LTEuaHRt">利用 angr 符号执行去除虚假控制流</span></p>
+</li>
+<li>
+<p><span class="exturl" data-url="aHR0cHM6Ly9iYnMua2FueHVlLmNvbS90aHJlYWQtMjc0NTMyLmh0bQ==">[原创] Android APP 漏洞之战（14）——Ollvm 混淆与反混淆</span></p>
+</li>
+<li>
+<p><span class="exturl" data-url="aHR0cHM6Ly9zZWN1cml0eS50ZW5jZW50LmNvbS9pbmRleC5waHAvYmxvZy9tc2cvMTEy">利用符号执行去除控制流平坦化</span></p>
+</li>
+<li>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vT25seS14aWFveGlhby9wLzE2ODg4NjExLmh0bWw=">代码混淆与反混淆学习 - 第一弹</span></p>
 </li>
 </ul>
 
@@ -580,7 +678,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
       <i class="ic i-calendar-check"></i>
     </span>
     <span class="text">更新于</span>
-    <time title="修改时间：2024-01-26 03:45:13" itemprop="dateModified" datetime="2024-01-26T03:45:13+08:00">2024-01-26</time>
+    <time title="修改时间：2024-07-12 13:30:57" itemprop="dateModified" datetime="2024-07-12T13:30:57+08:00">2024-07-12</time>
   </span>
   <span id="ollvm-study/" class="item leancloud_visitors" data-flag-title="(doing)ollvm三种混淆模式的反混淆思路" title="阅读次数">
       <span class="icon">
@@ -620,22 +718,14 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item left">
       
 
-  <a href="/dexloader/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;12.webp" title="Android动态加载dex">
+  <a href="/android-binder/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;65.webp" title="android binder源码分析">
   <span class="type">上一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
-  <h3>Android动态加载dex</h3>
+  <h3>android binder源码分析</h3>
   </a>
 
     </div>
     <div class="item right">
-      
-
-  <a href="/android-system-architecture/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;49.webp" title="安卓系统架构概览">
-  <span class="type">下一篇</span>
-  <span class="category"><i class="ic i-flag"></i> </span>
-  <h3>安卓系统架构概览</h3>
-  </a>
-
     </div>
 </div>
 
@@ -652,7 +742,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
   <div class="panels">
     <div class="inner">
       <div class="contents panel pjax" data-title="文章目录">
-          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86"><span class="toc-text"> 预备知识</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ollvm%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-text"> ollvm 环境搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BDollvm-40%E6%BA%90%E7%A0%81"><span class="toc-text"> 下载 ollvm 4.0 源码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85docker"><span class="toc-text"> 安装 docker</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E7%BC%96%E8%AF%91ollvm%E7%9A%84docker%E7%8E%AF%E5%A2%83"><span class="toc-text"> 安装编译 ollvm 的 docker 环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E8%AF%91ollvm"><span class="toc-text"> 编译 ollvm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E7%BC%96%E8%AF%91%E8%84%9A%E6%9C%AC"><span class="toc-text"> 下载编译脚本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E8%AF%91"><span class="toc-text"> 编译</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%A1%AC%E9%93%BE%E6%8E%A5"><span class="toc-text"> 创建硬链接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91"><span class="toc-text"> 使用测试代码尝试编译</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%99%9A%E5%81%87%E6%8E%A7%E5%88%B6%E6%B5%81bcfbogus-control-flow"><span class="toc-text"> 虚假控制流 BCF (Bogus Control Flow)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-text"> 定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ollvm%E7%9A%84bcf%E6%B7%B7%E6%B7%86"><span class="toc-text"> ollvm 的 BCF 混淆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ollvm%E7%9A%84bcf%E5%8F%8D%E6%B7%B7%E6%B7%86"><span class="toc-text"> ollvm 的 BCF 反混淆</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%E4%B8%80-%E5%B0%86%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E8%B5%8B%E5%80%BC%E5%B9%B6%E5%B0%86segment%E8%AE%BE%E4%B8%BA%E5%8F%AA%E8%AF%BB"><span class="toc-text"> 思路一：将全局变量赋值并将 segment 设为只读</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%E4%BA%8C-patch%E4%B8%8D%E9%80%8F%E6%98%8E%E8%B0%93%E8%AF%8D%E7%9A%84%E8%B5%8B%E5%80%BC%E8%AF%AD%E5%8F%A5%E6%B1%87%E7%BC%96"><span class="toc-text"> 思路二: patch 不透明谓词的赋值语句汇编</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-text"> 参考资料</span></a></li></ol>
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86"><span class="toc-text"> 预备知识</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ollvm%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-text"> ollvm 环境搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BDollvm-40%E6%BA%90%E7%A0%81"><span class="toc-text"> 下载 ollvm 4.0 源码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85docker"><span class="toc-text"> 安装 docker</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E7%BC%96%E8%AF%91ollvm%E7%9A%84docker%E7%8E%AF%E5%A2%83"><span class="toc-text"> 安装编译 ollvm 的 docker 环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E8%AF%91ollvm"><span class="toc-text"> 编译 ollvm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E7%BC%96%E8%AF%91%E8%84%9A%E6%9C%AC"><span class="toc-text"> 下载编译脚本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E8%AF%91"><span class="toc-text"> 编译</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%A1%AC%E9%93%BE%E6%8E%A5"><span class="toc-text"> 创建硬链接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91"><span class="toc-text"> 使用测试代码尝试编译</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%99%9A%E5%81%87%E6%8E%A7%E5%88%B6%E6%B5%81bcfbogus-control-flow"><span class="toc-text"> 虚假控制流 BCF (Bogus Control Flow)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-text"> 原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ollvm%E7%9A%84bcf%E6%B7%B7%E6%B7%86"><span class="toc-text"> ollvm 的 BCF 混淆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ollvm%E7%9A%84bcf%E5%8F%8D%E6%B7%B7%E6%B7%86"><span class="toc-text"> ollvm 的 BCF 反混淆</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%E4%B8%80-%E5%B0%86%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E8%B5%8B%E5%80%BC%E5%B9%B6%E5%B0%86segment%E8%AE%BE%E4%B8%BA%E5%8F%AA%E8%AF%BB"><span class="toc-text"> 思路一 将全局变量赋值并将 segment 设为只读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%E4%BA%8C-%E4%BD%BF%E7%94%A8d810%E5%8E%BB%E9%99%A4bcf"><span class="toc-text"> 思路二 使用 d810 去除 BCF</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%E4%B8%89-%E4%BD%BF%E7%94%A8idapython-patch%E4%B8%8D%E9%80%8F%E6%98%8E%E8%B0%93%E8%AF%8D"><span class="toc-text"> 思路三 使用 idapython patch 不透明谓词</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4%E6%9B%BF%E6%8D%A2sub"><span class="toc-text"> 指令替换（SUB）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-2"><span class="toc-text"> 原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ollvm%E7%9A%84sub%E6%B7%B7%E6%B7%86"><span class="toc-text"> ollvm 的 SUB 混淆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ollvm%E7%9A%84sub%E5%8F%8D%E6%B7%B7%E6%B7%86"><span class="toc-text"> ollvm 的 SUB 反混淆</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%E4%B8%80-%E4%BD%BF%E7%94%A8d810%E5%8E%BB%E9%99%A4sub"><span class="toc-text"> 思路一 使用 d810 去除 SUB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%E4%BA%8C-%E4%BD%BF%E7%94%A8gamba%E7%AE%80%E5%8C%96%E5%A4%8D%E6%9D%82%E7%9A%84sub%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-text"> 思路二 使用 GAMBA 简化复杂的 SUB 表达式</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E6%B5%81%E5%B9%B3%E5%9D%A6%E5%8C%96fla"><span class="toc-text"> 控制流平坦化（FLA）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-3"><span class="toc-text"> 原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ollvm%E7%9A%84fla%E6%B7%B7%E6%B7%86"><span class="toc-text"> ollvm 的 FLA 混淆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ollvm%E7%9A%84fla%E6%B7%B7%E6%B7%86-2"><span class="toc-text"> ollvm 的 FLA 混淆</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-text"> 参考资料</span></a></li></ol>
       </div>
       <div class="related panel pjax" data-title="系列文章">
       </div>
@@ -840,12 +930,10 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 
   <ul id="quick">
     <li class="prev pjax">
-        <a href="/dexloader/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
     </li>
     <li class="up"><i class="ic i-arrow-up"></i></li>
     <li class="down"><i class="ic i-arrow-down"></i></li>
     <li class="next pjax">
-        <a href="/android-system-architecture/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
     </li>
     <li class="percent"></li>
   </ul>
@@ -880,13 +968,13 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <span class="post-meta-item-icon">
       <i class="ic i-chart-area"></i>
     </span>
-    <span title="站点总字数">850k 字</span>
+    <span title="站点总字数">861k 字</span>
 
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="ic i-coffee"></i>
     </span>
-    <span title="站点阅读时长">12:53</span>
+    <span title="站点阅读时长">13:03</span>
   </div>
   <div class="powered-by">
     基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
