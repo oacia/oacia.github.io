@@ -1253,7 +1253,7 @@ const themeColorListener = function () {
 }
 document.addEventListener("DOMContentLoaded", function() {
   //console.log("DOM 加载完成");
-  setTimeout(Loader.vanish, 3000);
+  setTimeout(Loader.vanish, 1000);
   //Loader.vanish();
 });
 // document.fonts.ready.then(function() {
