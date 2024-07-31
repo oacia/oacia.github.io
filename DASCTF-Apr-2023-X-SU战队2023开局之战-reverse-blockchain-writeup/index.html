@@ -52,7 +52,7 @@
 <link rel="stylesheet" href="/css/app.css?v=0.2.5">
 
   
-  <meta name="keywords" content="CTF,逆向,python逆向,go逆向" />
+  <meta name="keywords" content="CTF,python逆向,go逆向,逆向" />
 
 
 <link rel="canonical" href="https://oacia.dev/DASCTF-Apr-2023-X-SU%E6%88%98%E9%98%9F2023%E5%BC%80%E5%B1%80%E4%B9%8B%E6%88%98-reverse-blockchain-writeup/">
@@ -72,9 +72,9 @@
 <meta property="article:modified_time" content="2023-12-12T17:02:32.467Z">
 <meta property="article:author" content="oacia">
 <meta property="article:tag" content="CTF">
-<meta property="article:tag" content="逆向">
 <meta property="article:tag" content="python逆向">
 <meta property="article:tag" content="go逆向">
+<meta property="article:tag" content="逆向">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://oacia.dev/DASCTF-Apr-2023-X-SU%E6%88%98%E9%98%9F2023%E5%BC%80%E5%B1%80%E4%B9%8B%E6%88%98-reverse-blockchain-writeup/QQ%E5%9B%BE%E7%89%8720230503213934.png">
 <meta name="twitter:creator" content="@oacia86">
@@ -533,9 +533,9 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
 <figure class="highlight solidity"><figcaption data-lang="Solidity (Ethereum)"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">contract</span> <span class="token class-name">Solve</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="2"></td><td><pre>    Greeter <span class="token keyword">public</span> greeter<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="3"></td><td><pre>    SignIn <span class="token keyword">public</span> signin<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="4"></td><td><pre>    <span class="token builtin">uint</span> signinTimestamp<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="5"></td><td><pre>    </pre></td></tr><tr><td data-num="6"></td><td><pre>    <span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token builtin">address</span> _addr<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="7"></td><td><pre>        greeter <span class="token operator">=</span> <span class="token function">Greeter</span><span class="token punctuation">(</span>_addr<span class="token punctuation">)</span><span class="token punctuation">;</span>  </pre></td></tr><tr><td data-num="8"></td><td><pre>        signin <span class="token operator">=</span> <span class="token function">SignIn</span><span class="token punctuation">(</span>greeter<span class="token punctuation">.</span><span class="token function">startChallenge</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="9"></td><td><pre>        signinTimestamp <span class="token operator">=</span> block<span class="token punctuation">.</span>timestamp<span class="token punctuation">;</span> <span class="token comment">// 记录 SignIn 部署时间戳</span></pre></td></tr><tr><td data-num="10"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="11"></td><td><pre>    </pre></td></tr><tr><td data-num="12"></td><td><pre>    <span class="token keyword">function</span> <span class="token function">solve</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">public</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="13"></td><td><pre>        <span class="token builtin">bytes32</span> key <span class="token operator">=</span> <span class="token function">keccak256</span><span class="token punctuation">(</span>abi<span class="token punctuation">.</span><span class="token function">encodePacked</span><span class="token punctuation">(</span>signinTimestamp<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  </pre></td></tr><tr><td data-num="14"></td><td><pre>            </pre></td></tr><tr><td data-num="15"></td><td><pre>        signin<span class="token punctuation">.</span><span class="token function">getFlag</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>  </pre></td></tr><tr><td data-num="16"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="17"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr></table></figure>
       <div class="tags">
           <a href="/tags/CTF/" rel="tag"><i class="ic i-tag"></i> CTF</a>
-          <a href="/tags/%E9%80%86%E5%90%91/" rel="tag"><i class="ic i-tag"></i> 逆向</a>
           <a href="/tags/python%E9%80%86%E5%90%91/" rel="tag"><i class="ic i-tag"></i> python逆向</a>
           <a href="/tags/go%E9%80%86%E5%90%91/" rel="tag"><i class="ic i-tag"></i> go逆向</a>
+          <a href="/tags/%E9%80%86%E5%90%91/" rel="tag"><i class="ic i-tag"></i> 逆向</a>
       </div>
   </div>
 
@@ -587,7 +587,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item left">
       
 
-  <a href="/frida%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;24.webp" title="frida学习笔记-安卓逆向">
+  <a href="/frida%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;18.webp" title="frida学习笔记-安卓逆向">
   <span class="type">上一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>frida学习笔记-安卓逆向</h3>
@@ -597,7 +597,7 @@ oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
     <div class="item right">
       
 
-  <a href="/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;9.webp" title="Linux进程通信">
+  <a href="/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;86.webp" title="Linux进程通信">
   <span class="type">下一篇</span>
   <span class="category"><i class="ic i-flag"></i> </span>
   <h3>Linux进程通信</h3>

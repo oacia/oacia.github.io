@@ -273,10 +273,10 @@
   background-color: var(--color-orange);
 }
 .v .item .tag.friend {
-  background-color: var(--color-aqua);
+  background-color: var(--color-pink);
 }
 .v .item .tag.investor {
-  background-color: var(--color-pink);
+  background-color: var(--color-aqua);
 }
 .v .item .at {
   color: var(--primary-color);
