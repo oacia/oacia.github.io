@@ -119,11 +119,15 @@ body.type2 {
   --color-cyan-light: #e3fdf5;
   --color-red: #e9546b;
   --color-pink: #ed6ea0;
+  --color-pink1: #f5d5d5;
+  --color-pink2: #f9cfc3;
   --color-orange: #ec8c69;
   --color-yellow: #eab700;
   --color-green: #0a7426;
   --color-aqua: #3e999f;
   --color-blue: #38a1db;
+  --color-blue1: #e1fffe;
+  --color-blue2: #b0f8ff;
   --color-purple: #9d5b8b;
   --color-grey: #869194;
   --color-red-a1: rgba(233,84,107,0.1);
@@ -190,11 +194,15 @@ body.type2 {
   --color-cyan-light: #2d3230;
   --color-red: rgba(237,118,137,0.9);
   --color-pink: rgba(241,139,179,0.8);
+  --color-pink1: #21252b;
+  --color-pink2: #596372;
   --color-orange: rgba(240,163,135,0.8);
   --color-yellow: #ffe175;
   --color-green: #86c59d;
   --color-aqua: #97d3d6;
   --color-blue: #9cd0ed;
+  --color-blue1: #21252b;
+  --color-blue2: #39547c;
   --color-purple: #cfacc5;
   --color-grey: #c3c8ca;
   --body-bg-shadow: #000;
@@ -3415,7 +3423,7 @@ main >.inner {
 }
 .segments > .item:hover h3 a {
   line-height: 1.5;
-  background-image: linear-gradient(transparent 50%, #e1fffe 50%, #b0f8ff 85%, transparent 85%, transparent 100%);
+  background-image: linear-gradient(transparent 50%, var(--color-blue1) 50%, var(--color-blue2) 85%, transparent 85%, transparent 100%);
   background-repeat: no-repeat;
   background-size: 0% 100%;
   animation: animatedBackground 1s cubic-bezier(0.645, 0.045, 0.355, 1) 0.5s forwards;
@@ -3482,7 +3490,7 @@ main >.inner {
 }
 .segments .info h3 a:hover {
   line-height: 1.5;
-  background-image: linear-gradient(transparent 50%, #f5d5d5 50%, #f9cfc3 85%, transparent 85%, transparent 100%);
+  background-image: linear-gradient(transparent 50%, var(--color-pink1) 50%, var(--color-pink2) 85%, transparent 85%, transparent 100%);
   background-repeat: no-repeat;
   background-size: 0% 100%;
   animation: animatedBackground 1s cubic-bezier(0.645, 0.045, 0.355, 1) 0.5s forwards;

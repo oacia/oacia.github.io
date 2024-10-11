@@ -1283,14 +1283,14 @@ const visibilityListener = function () {
     switch(document.visibilityState) {
       case 'hidden':
         $('[rel="icon"]').attr('href', statics + CONFIG.favicon.hidden);
-        document.title = LOCAL.favicon.hide;
+        //document.title = LOCAL.favicon.hide;
         if(CONFIG.loader.switch)
           Loader.show()
         //clearTimeout(titleTime);
       break;
       case 'visible':
         $('[rel="icon"]').attr('href', statics + CONFIG.favicon.normal);
-        document.title = LOCAL.favicon.show;
+        //document.title = LOCAL.favicon.show;
         if(CONFIG.loader.switch)
           Loader.hide(1000)
         document.title = originTitle;
