@@ -360,21 +360,31 @@ const mediaPlayer = function(t, config) {
         source.forEach(function(raw) {
           var meta = utils.parse(raw)
           if(meta[0]) {
-            var skey = JSON.stringify(meta)
-            var playlist = store.get(skey)
-            if(playlist) {
-              list.push.apply(list, JSON.parse(playlist));
+            fetch('https://api.i-meto.com/meting/api?server='+meta[0]+'&type='+meta[1]+'&id='+meta[2]+'&r='+ Math.random())
+            .then(function(response) {
+              return response.json()
+            }).then(function(json) {
+              //store.set(skey, JSON.stringify(json))
+              list.push.apply(list, json);
               resolve(list);
-            } else {
-              fetch('https://api.i-meto.com/meting/api?server='+meta[0]+'&type='+meta[1]+'&id='+meta[2]+'&r='+ Math.random())
-                .then(function(response) {
-                  return response.json()
-                }).then(function(json) {
-                  store.set(skey, JSON.stringify(json))
-                  list.push.apply(list, json);
-                  resolve(list);
-                }).catch(function(ex) {})
-            }
+            }).catch(function(ex) {})
+
+            
+            // var skey = JSON.stringify(meta)
+            // var playlist = store.get(skey)
+            // if(playlist) {
+            //   list.push.apply(list, JSON.parse(playlist));
+            //   resolve(list);
+            // } else {
+            //   fetch('https://api.i-meto.com/meting/api?server='+meta[0]+'&type='+meta[1]+'&id='+meta[2]+'&r='+ Math.random())
+            //     .then(function(response) {
+            //       return response.json()
+            //     }).then(function(json) {
+            //       //store.set(skey, JSON.stringify(json))
+            //       list.push.apply(list, json);
+            //       resolve(list);
+            //     }).catch(function(ex) {})
+            // }
           } else {
             list.push(raw);
             resolve(list);
@@ -498,8 +508,8 @@ const mediaPlayer = function(t, config) {
           next()
           break;
         case 'loop':
-          if(controller.step)
-            next()
+          // if(controller.step)
+          //   next()
 
           if(playlist.index == -1)
             random()
