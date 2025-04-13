@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Allow: /archives/
+Allow: /categories/
+Allow: /tags/
+Allow: /TODOlist/
+Allow: /website_maintenance/
+Allow: /friends/
+Allow: /music/
+
+Sitemap: https://oacia.dev/sitemap.xml
+Sitemap: https://oacia.dev/baidusitemap.xml

@@ -1,0 +1,1024 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="google-site-verification" content="qQVmgWozVe7BXoA15J3gAZpEA5dK168admH4U3W6PAk">
+  <meta name="msvalidate.01" content="4902E39C0135E72DE537BCB0FE08B40A">
+  <meta name="baidu-site-verification" content="codeva-CSYjpuVg5v">
+
+
+<link rel="alternate" type="application/rss+xml" title="oaciaのBbBlog~" href="https://oacia.dev/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="oaciaのBbBlog~" href="https://oacia.dev/atom.xml" />
+<link rel="alternate" type="application/json" title="oaciaのBbBlog~" href="https://oacia.dev/feed.json" />
+<link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin=""
+      href="/fonts/noto-serif-sc-v22-chinese-simplified_latin-regular.woff2"
+/>
+<link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin=""
+      href="/fonts/noto-serif-sc-v22-chinese-simplified_latin-700.woff2"
+/>
+<link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin=""
+      href="/fonts/font_1832207_igi8uaupcus.woff2"
+/>
+<link rel="preload" href="/background_picture/1_gongzi.webp" as="image" />
+<link rel="preload" href="/background_picture/2_xiaoxia.webp" as="image" />
+<link rel="preload" href="/background_picture/3_xingye.webp" as="image" />
+<link rel="preload" href="/images/avatar.jpg" as="image" />
+
+
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="进程通信,信号量,消息队列,管道,共享内存" />
+
+
+<link rel="canonical" href="https://oacia.dev/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/">
+
+
+<meta name="description" content="在日常遇到的.so,.elf 格式的二进制文件，常常可以看到 Linux 进程通信的使用，接下来的部分，我将介绍 Linux 通信的各种实现方式以及相应的代码示例  什么是进程？ 进程是操作系统的概念，每当我们执行一个程序时，对于操作系统来讲就创建了一个进程，在这个过程中，伴随着资源的分配和释放。可以认为进程是一个程序的一次执行过程。 什么是进程通信？ 进程用户空间是相互独立的，一般而言是不能相">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux进程通信">
+<meta property="og:url" content="https://oacia.dev/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/">
+<meta property="og:site_name" content="oaciaのBbBlog~">
+<meta property="og:description" content="在日常遇到的.so,.elf 格式的二进制文件，常常可以看到 Linux 进程通信的使用，接下来的部分，我将介绍 Linux 通信的各种实现方式以及相应的代码示例  什么是进程？ 进程是操作系统的概念，每当我们执行一个程序时，对于操作系统来讲就创建了一个进程，在这个过程中，伴随着资源的分配和释放。可以认为进程是一个程序的一次执行过程。 什么是进程通信？ 进程用户空间是相互独立的，一般而言是不能相">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oacia.dev/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/image-20230529111643432.png">
+<meta property="article:published_time" content="2023-05-25T02:12:08.000Z">
+<meta property="article:modified_time" content="2025-04-08T18:55:11.428Z">
+<meta property="article:author" content="oacia">
+<meta property="article:tag" content="进程通信">
+<meta property="article:tag" content="信号量">
+<meta property="article:tag" content="消息队列">
+<meta property="article:tag" content="管道">
+<meta property="article:tag" content="共享内存">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oacia.dev/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/image-20230529111643432.png">
+<meta name="twitter:creator" content="@oacia86">
+
+
+  <title>
+Linux进程通信 |
+oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+  var jq_151 = $.noConflict(true);
+  var RENDERER = {
+    INIT_CHERRY_BLOSSOM_COUNT : 30,
+    MAX_ADDING_INTERVAL : 10,
+    WATCH_INTERVAL : 300,
+    
+    init : function(){
+      this.setParameters();
+      this.reconstructMethods();
+      this.setup();
+      this.bindEvent();
+      this.render();
+    },
+    setParameters : function(){
+      this.$window = jq_151(window);
+      this.$container = jq_151('#loading');
+      this.$canvas = jq_151('<canvas />');
+      this.context = this.$canvas.appendTo(this.$container).get(0).getContext('2d');
+      this.cherries = [];
+      this.watchIds = [];
+    },
+    reconstructMethods : function(){
+      this.watchWindowSize = this.watchWindowSize.bind(this);
+      this.jdugeToStopResize = this.jdugeToStopResize.bind(this);
+      this.render = this.render.bind(this);
+    },
+    setup : function(){
+      this.cherries.length = 0;
+      this.watchIds.length = 0;
+      this.width = this.$container.width();
+      this.height = this.$container.height();
+      this.$canvas.attr({width : this.width, height : this.height});
+      this.maxAddingInterval = Math.round(this.MAX_ADDING_INTERVAL * 1000 / this.width);
+      this.addingInterval = this.maxAddingInterval;
+      this.createCherries();
+    },
+    createCherries : function(){
+      for(var i = 0, length = Math.round(this.INIT_CHERRY_BLOSSOM_COUNT * this.width / 1000); i < length; i++){
+        this.cherries.push(new CHERRY_BLOSSOM(this, true));
+      }
+    },
+    watchWindowSize : function(){
+      this.clearTimer();
+      this.tmpWidth = window.width;
+      this.tmpHeight = window.height;
+      this.watchIds.push(setTimeout(this.jdugeToStopResize, this.WATCH_INTERVAL));
+    },
+    clearTimer : function(){
+      while(this.watchIds.length > 0){
+        clearTimeout(this.watchIds.pop());
+      }
+    },
+    jdugeToStopResize : function(){
+      var width = window.width,
+        height = window.height,
+        stopped = (width == this.tmpWidth && height == this.tmpHeight);
+        
+      this.tmpWidth = width;
+      this.tmpHeight = height;
+      
+      if(stopped){
+        this.setup();
+      }
+    },
+    bindEvent : function(){
+      this.$window.on('resize', this.watchWindowSize);
+    },
+    render : function(){
+      //console.log("render")
+
+      if(jq_151(this.$container).css("display")!="none"){
+        requestAnimationFrame(this.render);
+      }
+      
+      this.context.clearRect(0, 0, this.width, this.height);
+      
+      this.cherries.sort(function(cherry1, cherry2){
+        return cherry1.z - cherry2.z;
+      });
+      for(var i = this.cherries.length - 1; i >= 0; i--){
+        if(!this.cherries[i].render(this.context)){
+          this.cherries.splice(i, 1);
+        }
+      }
+      if(--this.addingInterval == 0){
+        this.addingInterval = this.maxAddingInterval;
+        this.cherries.push(new CHERRY_BLOSSOM(this, false));
+      }
+    }
+  };
+  var CHERRY_BLOSSOM = function(renderer, isRandom){
+    this.renderer = renderer;
+    this.init(isRandom);
+  };
+  CHERRY_BLOSSOM.prototype = {
+    FOCUS_POSITION : 300,
+    FAR_LIMIT : 600,
+    MAX_RIPPLE_COUNT : 100,
+    RIPPLE_RADIUS : 100,
+    SURFACE_RATE : 0.5,
+    SINK_OFFSET : 20,
+    
+    init : function(isRandom){
+      this.x = this.getRandomValue(-this.renderer.width, this.renderer.width);
+      this.y = isRandom ? this.getRandomValue(0, this.renderer.height) : this.renderer.height * 1.5;
+      this.z = this.getRandomValue(0, this.FAR_LIMIT);
+      this.vx = this.getRandomValue(-2, 2);
+      this.vy = -2;
+      this.theta = this.getRandomValue(0, Math.PI * 2);
+      this.phi = this.getRandomValue(0, Math.PI * 2);
+      this.psi = 0;
+      this.dpsi = this.getRandomValue(Math.PI / 600, Math.PI / 300);
+      this.opacity = 0;
+      this.endTheta = false;
+      this.endPhi = false;
+      this.rippleCount = 0;
+      
+      var axis = this.getAxis(),
+        theta = this.theta + Math.ceil(-(this.y + this.renderer.height * this.SURFACE_RATE) / this.vy) * Math.PI / 500;
+      theta %= Math.PI * 2;
+      
+      this.offsetY = 40 * ((theta <= Math.PI / 2 || theta >= Math.PI * 3 / 2) ? -1 : 1);
+      this.thresholdY = this.renderer.height / 2 + this.renderer.height * this.SURFACE_RATE * axis.rate;
+      this.entityColor = this.renderer.context.createRadialGradient(0, 40, 0, 0, 40, 80);
+      this.entityColor.addColorStop(0, 'hsl(330, 70%, ' + 50 * (0.3 + axis.rate) + '%)');
+      this.entityColor.addColorStop(0.05, 'hsl(330, 40%,' + 55 * (0.3 + axis.rate) + '%)');
+      this.entityColor.addColorStop(1, 'hsl(330, 20%, ' + 70 * (0.3 + axis.rate) + '%)');
+      this.shadowColor = this.renderer.context.createRadialGradient(0, 40, 0, 0, 40, 80);
+      this.shadowColor.addColorStop(0, 'hsl(330, 40%, ' + 30 * (0.3 + axis.rate) + '%)');
+      this.shadowColor.addColorStop(0.05, 'hsl(330, 40%,' + 30 * (0.3 + axis.rate) + '%)');
+      this.shadowColor.addColorStop(1, 'hsl(330, 20%, ' + 40 * (0.3 + axis.rate) + '%)');
+    },
+    getRandomValue : function(min, max){
+      return min + (max - min) * Math.random();
+    },
+    getAxis : function(){
+      var rate = this.FOCUS_POSITION / (this.z + this.FOCUS_POSITION),
+        x = this.renderer.width / 2 + this.x * rate,
+        y = this.renderer.height / 2 - this.y * rate;
+      return {rate : rate, x : x, y : y};
+    },
+    renderCherry : function(context, axis){
+      context.beginPath();
+      context.moveTo(0, 40);
+      context.bezierCurveTo(-60, 20, -10, -60, 0, -20);
+      context.bezierCurveTo(10, -60, 60, 20, 0, 40);
+      context.fill();
+      
+      for(var i = -4; i < 4; i++){
+        context.beginPath();
+        context.moveTo(0, 40);
+        context.quadraticCurveTo(i * 12, 10, i * 4, -24 + Math.abs(i) * 2);
+        context.stroke();
+      }
+    },
+    render : function(context){
+      var axis = this.getAxis();
+      
+      if(axis.y == this.thresholdY && this.rippleCount < this.MAX_RIPPLE_COUNT){
+        context.save();
+        context.lineWidth = 2;
+        context.strokeStyle = 'hsla(0, 0%, 100%, ' + (this.MAX_RIPPLE_COUNT - this.rippleCount) / this.MAX_RIPPLE_COUNT + ')';
+        context.translate(axis.x + this.offsetY * axis.rate * (this.theta <= Math.PI ? -1 : 1), axis.y);
+        context.scale(1, 0.3);
+        context.beginPath();
+        context.arc(0, 0, this.rippleCount / this.MAX_RIPPLE_COUNT * this.RIPPLE_RADIUS * axis.rate, 0, Math.PI * 2, false);
+        context.stroke();
+        context.restore();
+        this.rippleCount++;
+      }
+      if(axis.y < this.thresholdY || (!this.endTheta || !this.endPhi)){
+        if(this.y <= 0){
+          this.opacity = Math.min(this.opacity + 0.01, 1);
+        }
+        context.save();
+        context.globalAlpha = this.opacity;
+        context.fillStyle = this.shadowColor;
+        context.strokeStyle = 'hsl(330, 30%,' + 40 * (0.3 + axis.rate) + '%)';
+        context.translate(axis.x, Math.max(axis.y, this.thresholdY + this.thresholdY - axis.y));
+        context.rotate(Math.PI - this.theta);
+        context.scale(axis.rate * -Math.sin(this.phi), axis.rate);
+        context.translate(0, this.offsetY);
+        this.renderCherry(context, axis);
+        context.restore();
+      }
+      context.save();
+      context.fillStyle = this.entityColor;
+      context.strokeStyle = 'hsl(330, 40%,' + 70 * (0.3 + axis.rate) + '%)';
+      context.translate(axis.x, axis.y + Math.abs(this.SINK_OFFSET * Math.sin(this.psi) * axis.rate));
+      context.rotate(this.theta);
+      context.scale(axis.rate * Math.sin(this.phi), axis.rate);
+      context.translate(0, this.offsetY);
+      this.renderCherry(context, axis);
+      context.restore();
+      
+      if(this.y <= -this.renderer.height / 4){
+        if(!this.endTheta){
+          for(var theta = Math.PI / 2, end = Math.PI * 3 / 2; theta <= end; theta += Math.PI){
+            if(this.theta < theta && this.theta + Math.PI / 200 > theta){
+              this.theta = theta;
+              this.endTheta = true;
+              break;
+            }
+          }
+        }
+        if(!this.endPhi){
+          for(var phi = Math.PI / 8, end = Math.PI * 7 / 8; phi <= end; phi += Math.PI * 3 / 4){
+            if(this.phi < phi && this.phi + Math.PI / 200 > phi){
+              this.phi = Math.PI / 8;
+              this.endPhi = true;
+              break;
+            }
+          }
+        }
+      }
+      if(!this.endTheta){
+        if(axis.y == this.thresholdY){
+          this.theta += Math.PI / 200 * ((this.theta < Math.PI / 2 || (this.theta >= Math.PI && this.theta < Math.PI * 3 / 2)) ? 1 : -1);
+        }else{
+          this.theta += Math.PI / 500;
+        }
+        this.theta %= Math.PI * 2;
+      }
+      if(this.endPhi){
+        if(this.rippleCount == this.MAX_RIPPLE_COUNT){
+          this.psi += this.dpsi;
+          this.psi %= Math.PI * 2;
+        }
+      }else{
+        this.phi += Math.PI / ((axis.y == this.thresholdY) ? 200 : 500);
+        this.phi %= Math.PI;
+      }
+      if(this.y <= -this.renderer.height * this.SURFACE_RATE){
+        this.x += 2;
+        this.y = -this.renderer.height * this.SURFACE_RATE;
+      }else{
+        this.x += this.vx;
+        this.y += this.vy;
+      }
+      return this.z > -this.FOCUS_POSITION && this.z < this.FAR_LIMIT && this.x < this.renderer.width * 1.5;
+    }
+  };
+  jq_151(function(){
+    RENDERER.init();
+  });
+</script>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <!--
+    <div class="alice">
+      <img src="/images/alice-shake.gif" alt="">
+    </div>
+
+    
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+    -->
+  </div>
+  <script
+      defer="defer"
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/gsap.min.js"
+      integrity="sha512-1dalHDkG9EtcOmCnoCjiwQ/HEB5SDNqw8d4G2MKoNwjiwMNeBAkudsBCmSlMnXdsH8Bm0mOd3tl/6nL5y0bMaQ=="
+      crossorigin="anonymous"
+    ></script>
+  <script defer="defer" src="/js/gsap/DrawSVGPlugin.min.js"></script>
+  <script defer="defer" src="/js/gsap/CustomEase.min.js"></script>
+  <script defer="defer" src="/js/gsap/CustomBounce.min.js"></script>
+  <script defer="defer" src="/js/gsap/SplitText.min.js"></script>
+  <script defer="defer" src="/js/gsap/logo-run.js"></script>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">Linux进程通信
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2023-05-25 10:12:08">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2023-05-25T10:12:08+08:00">2023-05-25</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span class="text">本文字数</span>
+    <span>18k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span class="text">阅读时长</span>
+    <span>16 分钟</span>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">oacia</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="/background_picture/1_mary.jpg"></li>
+          <li class="item" data-background-image="/background_picture/2_xingye.webp"></li>
+          <li class="item" data-background-image="/background_picture/3_xiaoxia.webp"></li>
+          <li class="item" data-background-image="/background_picture/4_alice.webp"></li>
+          <li class="item" data-background-image="/background_picture/5_mutsuki.jpg"></li>
+          <li class="item" data-background-image="/background_picture/6_arona_plana.webp"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb">
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="https://oacia.dev/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="oacia">
+    <meta itemprop="description" content="DEVIL or SWEET, 月遇从云 花遇和风">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="oaciaのBbBlog~">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <blockquote>
+<p>在日常遇到的.so,.elf 格式的二进制文件，常常可以看到 Linux 进程通信的使用，接下来的部分，我将介绍 Linux 通信的各种实现方式以及相应的代码示例</p>
+</blockquote>
+<p><strong>什么是进程？</strong></p>
+<p>进程是操作系统的概念，每当我们执行一个程序时，对于操作系统来讲就创建了一个进程，在这个过程中，伴随着资源的分配和释放。可以认为进程是一个程序的一次执行过程。</p>
+<p><strong>什么是进程通信？</strong></p>
+<p>进程用户空间是相互独立的，一般而言是不能相互访问的。但很多情况下进程间需要互相通信，来完成系统的某项功能。进程通过与内核及其它进程之间的互相通信来协调它们的行为。</p>
+<p><strong>什么时候会用到进程通信？</strong></p>
+<ul>
+<li>
+<p>数据传输：一个进程需要将它的数据发送给另一个进程，发送的数据量在一个字节到几兆字节之间。</p>
+</li>
+<li>
+<p>共享数据：多个进程想要操作共享数据，一个进程对共享数据的修改，别的进程应该立刻看到。</p>
+</li>
+<li>
+<p>通知事件：一个进程需要向另一个或一组进程发送消息，通知它（它们）发生了某种事件（如进程终止时要通知父进程）。</p>
+</li>
+<li>
+<p>资源共享：多个进程之间共享同样的资源。为了作到这一点，需要内核提供锁和同步机制。</p>
+</li>
+<li>
+<p>进程控制：有些进程希望完全控制另一个进程的执行（如 Debug 进程），此时控制进程希望能够拦截另一个进程的所有陷入和异常，并能够及时知道它的状态改变。</p>
+</li>
+</ul>
+<h1 id="posix信号量"><a class="anchor" href="#posix信号量">#</a> POSIX 信号量</h1>
+<blockquote>
+<p>linux sem 信号量是一种特殊的变量，访问具有原子性， 用于解决进程或线程间共享资源引发的同步问题。</p>
+<p>用户态进程对 sem 信号量可以有以下两种操作：</p>
+<ul>
+<li>等待信号量<br>
+当信号量值为 0 时，程序等待；当信号量值大于 0 时，信号量减 1，程序继续运行。</li>
+<li>发送信号量<br>
+将信号量值加 1</li>
+</ul>
+<p>通过对信号量的控制，从而实现共享资源的顺序访问。</p>
+</blockquote>
+<p>使用信号量需要包含头文件 <code>semaphore.h</code></p>
+<h2 id="有名信号量函数"><a class="anchor" href="#有名信号量函数">#</a> 有名信号量函数</h2>
+<blockquote>
+<p>有名信号量是通过 sem_open 创建或打开信号量，用 sem_close 关闭信号量，用 sem_unlink 销毁信号量。</p>
+</blockquote>
+<h3 id="sem_open"><a class="anchor" href="#sem_open">#</a> sem_open</h3>
+<p>创建并初始化或者打开一个已有的有名信号量</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="2"></td><td><pre>@param name: 信号量文件的名字。该名字可以在最前面加 "/"，在之后不能再加 "/"，但是无论加不加 "/"，</pre></td></tr><tr><td data-num="3"></td><td><pre>指定的文件都是 /dev/shm/sem.xxx。比如传入的 name 为 "mysem"，那么指定的是 /dev/shm/sem.mysem</pre></td></tr><tr><td data-num="4"></td><td><pre>@param oflag: 打开的标志，如果需要打开已经存在的信号量文件，则传入 O_RDWR 即可，不用再传入后两个参数。如果需要创建信号量，则传入 O_CREAT，如果指定的文件不存在，则创建文件，由后两个参数指定文件权限</pre></td></tr><tr><td data-num="5"></td><td><pre>和信号量的初值。如果指定的文件存在，则打开信号量文件，并忽略后两个参数。如果传入的是 O_CREAT|O_EXCL</pre></td></tr><tr><td data-num="6"></td><td><pre>那么会检查指定的文件是否存在，如果文件已经存在，那么 sem_open 会返回 - 1。</pre></td></tr><tr><td data-num="7"></td><td><pre>@param mode: 一般传入 0666 (可读可写)</pre></td></tr><tr><td data-num="8"></td><td><pre>@param value: 信号量初值</pre></td></tr><tr><td data-num="9"></td><td><pre>@return: 成功时函数返回有名信号量的地址，失败时返回 SEM_FAILED，其值为 ((void *) 0)。</pre></td></tr><tr><td data-num="10"></td><td><pre>*/</pre></td></tr><tr><td data-num="11"></td><td><pre><span class="token class-name">sem_t</span> <span class="token operator">*</span><span class="token function">sem_open</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>name<span class="token punctuation">,</span> <span class="token keyword">int</span> oflag<span class="token punctuation">,</span> <span class="token class-name">mode_t</span> mode<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><h3 id="sem_close"><a class="anchor" href="#sem_close">#</a> sem_close</h3>
+<p>关闭信号量</p>
+<blockquote>
+<p>该函数应该与 sem_open 成对调用</p>
+</blockquote>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="2"></td><td><pre>@param sem: 信号量地址</pre></td></tr><tr><td data-num="3"></td><td><pre>@return: 成功返回 0，失败返回 - 1</pre></td></tr><tr><td data-num="4"></td><td><pre>*/</pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token keyword">int</span> <span class="token function">sem_close</span><span class="token punctuation">(</span><span class="token class-name">sem_t</span> <span class="token operator">*</span>sem<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><h3 id="sem_unlink"><a class="anchor" href="#sem_unlink">#</a> sem_unlink</h3>
+<p>删除信号量文件</p>
+<blockquote>
+<p>POSIX 中的信号量是随内核持续的，如果信号量不 sem_unlink 的话，该命名信号量会常驻在 kernel 之中，即使进程结束了也会存在，而 sem_open 创建信号量时，如果该 named semaphore 存在内核中，设置的初始化参数是无效的</p>
+</blockquote>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="2"></td><td><pre>@param name: 信号量文件的名称</pre></td></tr><tr><td data-num="3"></td><td><pre>@return: 成功返回 0，失败返回 - 1</pre></td></tr><tr><td data-num="4"></td><td><pre>*/</pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token keyword">int</span> <span class="token function">sem_unlink</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><h2 id="无名信号量函数"><a class="anchor" href="#无名信号量函数">#</a> 无名信号量函数</h2>
+<blockquote>
+<p>无名信号量通过 sem_init 进行初始化，使用完之后用 sem_destroy 进行销毁，常用在线程间</p>
+</blockquote>
+<h3 id="sem_init"><a class="anchor" href="#sem_init">#</a> sem_init</h3>
+<p>该函数初始化由 sem 指向的信号对象，并给它一个初始的整数值 value。</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="2"></td><td><pre>@param sem: 要初始化的目标信号量</pre></td></tr><tr><td data-num="3"></td><td><pre>@param pshared: 控制信号量的类型，值为 0 代表该信号量用于多线程间的同步，值如果大于 0 表示可以共享，用于多个相关进程间的同步</pre></td></tr><tr><td data-num="4"></td><td><pre>@return : 当 sem_init () 成功完成初始化操作时，返回值为 0，否则返回 -1</pre></td></tr><tr><td data-num="5"></td><td><pre>*/</pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token keyword">int</span> <span class="token function">sem_init</span><span class="token punctuation">(</span><span class="token class-name">sem_t</span> <span class="token operator">*</span>sem<span class="token punctuation">,</span> <span class="token keyword">int</span> pshared<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><h3 id="sem_destroy"><a class="anchor" href="#sem_destroy">#</a> sem_destroy</h3>
+<p>该函数用于对用完的信号量的清理</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="2"></td><td><pre>@param sem: 要初始化的目标信号量</pre></td></tr><tr><td data-num="3"></td><td><pre>@return : 当 sem_destroy 成功完成信号量的清理时，返回值为 0, 否则返回 -1</pre></td></tr><tr><td data-num="4"></td><td><pre>*/</pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token keyword">int</span> <span class="token function">sem_destroy</span><span class="token punctuation">(</span><span class="token class-name">sem_t</span> <span class="token operator">*</span>sem<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><h2 id="信号量通用函数"><a class="anchor" href="#信号量通用函数">#</a> 信号量通用函数</h2>
+<h3 id="sem_wait"><a class="anchor" href="#sem_wait">#</a> sem_wait</h3>
+<p>sem_wait 是一个阻塞的函数，测试所指定信号量的值，它的操作是原子的。若 sem value &gt; 0，则该信号量值减去 1 并立即返回。若 sem value = 0，则阻塞直到 sem value &gt; 0，此时立即减去 1，然后返回。</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="2"></td><td><pre>@param sem: 要初始化的目标信号量</pre></td></tr><tr><td data-num="3"></td><td><pre>*/</pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token keyword">int</span> <span class="token function">sem_wait</span><span class="token punctuation">(</span><span class="token class-name">sem_t</span> <span class="token operator">*</span>sem<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><p>sem_trywait 函数是非阻塞的函数，它会尝试获取获取 sem value 值，如果 sem value = 0，不是阻塞住，而是直接返回一个错误 EAGAIN。</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="2"></td><td><pre>@param sem: 要初始化的目标信号量</pre></td></tr><tr><td data-num="3"></td><td><pre>*/</pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token keyword">int</span> <span class="token function">sem_trywait</span><span class="token punctuation">(</span><span class="token class-name">sem_t</span> <span class="token operator">*</span>sem<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><h3 id="sem_post"><a class="anchor" href="#sem_post">#</a> sem_post</h3>
+<p>把指定的信号量 sem 的值加 1，唤醒正在等待该信号量的任意线程</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="2"></td><td><pre>@param sem: 要初始化的目标信号量</pre></td></tr><tr><td data-num="3"></td><td><pre>*/</pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token keyword">int</span> <span class="token function">sem_post</span><span class="token punctuation">(</span><span class="token class-name">sem_t</span> <span class="token operator">*</span>sem<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><h3 id="sem_getvalue"><a class="anchor" href="#sem_getvalue">#</a> sem_getvalue</h3>
+<p>获取信号量 sem 的当前值，把该值保存在 sval，若有 1 个或者多个线程正在调用 sem_wait 阻塞在该信号量上，该函数返回阻塞在该信号量上进程或线程个数</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="2"></td><td><pre>@param sem: 要初始化的目标信号量</pre></td></tr><tr><td data-num="3"></td><td><pre>*/</pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token keyword">int</span> <span class="token function">sem_getvalue</span><span class="token punctuation">(</span><span class="token class-name">sem_t</span> <span class="token operator">*</span>sem<span class="token punctuation">,</span> <span class="token keyword">int</span> <span class="token operator">*</span>sval<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><h2 id="示例一-4-个售票员卖-10-张票"><a class="anchor" href="#示例一-4-个售票员卖-10-张票">#</a> 示例一: 4 个售票员卖 10 张票</h2>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span><span class="token string">&lt;stdio.h></span></span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span><span class="token string">&lt;stdlib.h></span></span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span><span class="token string">&lt;pthread.h></span></span></pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span><span class="token string">&lt;semaphore.h></span></span></pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span><span class="token string">&lt;unistd.h></span></span></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token comment">// 创建信号量</span></pre></td></tr><tr><td data-num="7"></td><td><pre><span class="token class-name">sem_t</span> mySem<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="8"></td><td><pre><span class="token comment">// 设置总票数</span></pre></td></tr><tr><td data-num="9"></td><td><pre><span class="token keyword">int</span> ticket_sum <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="10"></td><td><pre><span class="token comment">// 模拟买票过程</span></pre></td></tr><tr><td data-num="11"></td><td><pre><span class="token keyword">void</span> <span class="token operator">*</span><span class="token function">sell_ticket</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span>arg<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="12"></td><td><pre>    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"当前线程ID：%u\n"</span><span class="token punctuation">,</span> <span class="token function">pthread_self</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="13"></td><td><pre>    <span class="token keyword">int</span> i<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="14"></td><td><pre>    <span class="token keyword">int</span> flag<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="15"></td><td><pre>    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="16"></td><td><pre>    <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="17"></td><td><pre>        <span class="token comment">// 完成信号量 "减 1" 操作，否则暂停执行</span></pre></td></tr><tr><td data-num="18"></td><td><pre>        flag <span class="token operator">=</span> <span class="token function">sem_wait</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mySem<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="19"></td><td><pre>        <span class="token keyword">if</span> <span class="token punctuation">(</span>flag <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="20"></td><td><pre>            <span class="token keyword">if</span> <span class="token punctuation">(</span>ticket_sum <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="21"></td><td><pre>            <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="22"></td><td><pre>                <span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="23"></td><td><pre>                <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%u 卖第 %d 张票\n"</span><span class="token punctuation">,</span> <span class="token function">pthread_self</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">10</span> <span class="token operator">-</span> ticket_sum <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="24"></td><td><pre>                ticket_sum<span class="token operator">--</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="25"></td><td><pre>            <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="26"></td><td><pre>            <span class="token comment">// 执行 “加 1” 操作</span></pre></td></tr><tr><td data-num="27"></td><td><pre>            <span class="token function">sem_post</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mySem<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="28"></td><td><pre>            <span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="29"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="30"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="31"></td><td><pre>    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="32"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="33"></td><td><pre></pre></td></tr><tr><td data-num="34"></td><td><pre><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="35"></td><td><pre>    <span class="token keyword">int</span> flag<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="36"></td><td><pre>    <span class="token keyword">int</span> i<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="37"></td><td><pre>    <span class="token keyword">void</span> <span class="token operator">*</span>ans<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="38"></td><td><pre>    <span class="token comment">// 创建 4 个线程</span></pre></td></tr><tr><td data-num="39"></td><td><pre>    <span class="token class-name">pthread_t</span> tids<span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="40"></td><td><pre>    <span class="token comment">// 初始化信号量</span></pre></td></tr><tr><td data-num="41"></td><td><pre>    flag <span class="token operator">=</span> <span class="token function">sem_init</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mySem<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="42"></td><td><pre>    <span class="token keyword">if</span> <span class="token punctuation">(</span>flag <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="43"></td><td><pre>        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"初始化信号量失败\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="44"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="45"></td><td><pre>    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">4</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="46"></td><td><pre>    <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="47"></td><td><pre>        flag <span class="token operator">=</span> <span class="token function">pthread_create</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>tids<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>sell_ticket<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="48"></td><td><pre>        <span class="token keyword">if</span> <span class="token punctuation">(</span>flag <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="49"></td><td><pre>            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"线程创建失败!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="50"></td><td><pre>            <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="51"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="52"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="53"></td><td><pre>    <span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="54"></td><td><pre>    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">4</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="55"></td><td><pre>    <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="56"></td><td><pre>        flag <span class="token operator">=</span> <span class="token function">pthread_join</span><span class="token punctuation">(</span>tids<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>ans<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="57"></td><td><pre>        <span class="token keyword">if</span> <span class="token punctuation">(</span>flag <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="58"></td><td><pre>            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"tid=%d 等待失败！"</span><span class="token punctuation">,</span> tids<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="59"></td><td><pre>            <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="60"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="61"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="62"></td><td><pre>    <span class="token comment">// 执行结束前，销毁信号量</span></pre></td></tr><tr><td data-num="63"></td><td><pre>    <span class="token function">sem_destroy</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mySem<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="64"></td><td><pre>    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="65"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="66"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="67"></td><td><pre>当前线程 ID：1199965952</pre></td></tr><tr><td data-num="68"></td><td><pre>当前线程 ID：1189476096</pre></td></tr><tr><td data-num="69"></td><td><pre>当前线程 ID：1168496384</pre></td></tr><tr><td data-num="70"></td><td><pre>当前线程 ID：1178986240</pre></td></tr><tr><td data-num="71"></td><td><pre>1199965952 卖第 1 张票</pre></td></tr><tr><td data-num="72"></td><td><pre>1189476096 卖第 2 张票</pre></td></tr><tr><td data-num="73"></td><td><pre>1199965952 卖第 3 张票</pre></td></tr><tr><td data-num="74"></td><td><pre>1178986240 卖第 4 张票</pre></td></tr><tr><td data-num="75"></td><td><pre>1168496384 卖第 5 张票</pre></td></tr><tr><td data-num="76"></td><td><pre>1189476096 卖第 6 张票</pre></td></tr><tr><td data-num="77"></td><td><pre>1199965952 卖第 7 张票</pre></td></tr><tr><td data-num="78"></td><td><pre>1178986240 卖第 8 张票</pre></td></tr><tr><td data-num="79"></td><td><pre>1168496384 卖第 9 张票</pre></td></tr><tr><td data-num="80"></td><td><pre>1189476096 卖第 10 张票</pre></td></tr><tr><td data-num="81"></td><td><pre>*/</pre></td></tr></table></figure><h1 id="进程间通信的几种方式"><a class="anchor" href="#进程间通信的几种方式">#</a> 进程间通信的几种方式</h1>
+<h2 id="消息队列"><a class="anchor" href="#消息队列">#</a> 消息队列</h2>
+<blockquote>
+<p>消息队列是消息的链表，存放在内核中并由消息队列标识符标识。消息队列克服了信号传递信息少，管道只能承载无格式字节流以及缓冲区大小受限等特点。消息队列是 UNIX 下不同进程之间可实现共享资源的一种机制，UNIX 允许不同进程将格式化的数据流以消息队列形式发送给任意进程。对消息队列具有操作权限的进程都可以使用 msget 完成对消息队列的操作控制。通过使用消息类型，进程可以按任何顺序读信息，或为消息安排优先级顺序.</p>
+</blockquote>
+<h3 id="相关函数"><a class="anchor" href="#相关函数">#</a> 相关函数</h3>
+<p>使用消息队列需要包含头文件 <code>sys/msg.h</code></p>
+<h4 id="msgget"><a class="anchor" href="#msgget">#</a> msgget</h4>
+<p>创建消息队列，key 值唯一标识该消息队列</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="2"></td><td><pre>@param key: 消息队列的名称 (非零整数)</pre></td></tr><tr><td data-num="3"></td><td><pre>@param msgflg: 控制当前消息队列满或队列消息到达系统范围的限制时将要发生的事情。msgflg 通常取值 0666, msgflg 可以与 IPC_CREAT 做或操作，表示当 key 所命名的消息队列不存在时创建一个消息队列</pre></td></tr><tr><td data-num="4"></td><td><pre>*/</pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token keyword">int</span> <span class="token function">msgget</span><span class="token punctuation">(</span><span class="token class-name">key_t</span> key<span class="token punctuation">,</span> <span class="token keyword">int</span> msgflg<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><h4 id="msgctl"><a class="anchor" href="#msgctl">#</a> msgctl</h4>
+<p>控制消息队列</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="2"></td><td><pre>@param msqid: 由 msgget 函数返回的消息队列标识符。</pre></td></tr><tr><td data-num="3"></td><td><pre>@param: cmd: 是将要采取的动作，它可以取 3 个值：IPC_STAT, IPC_SET, IPC_RMID</pre></td></tr><tr><td data-num="4"></td><td><pre>IPC_STAT：把 msqid_ds 结构中的数据设置为消息队列的当前关联值，即用消息队列的当前关联值覆盖 msqid_ds 的值。</pre></td></tr><tr><td data-num="5"></td><td><pre>IPC_SET：如果进程有足够的权限，就把消息列队的当前关联值设置为 msqid_ds 结构中给出的值</pre></td></tr><tr><td data-num="6"></td><td><pre>IPC_RMID：删除消息队列</pre></td></tr><tr><td data-num="7"></td><td><pre>@param buf: buf 是指向 msgid_ds 结构的指针，它指向消息队列模式和访问权限的结构。msqid_ds 结构至少包括以下成员：</pre></td></tr><tr><td data-num="8"></td><td><pre>struct msqid_ds</pre></td></tr><tr><td data-num="9"></td><td><pre>&#123;</pre></td></tr><tr><td data-num="10"></td><td><pre>    uid_t shm_perm.uid;</pre></td></tr><tr><td data-num="11"></td><td><pre>    uid_t shm_perm.gid;</pre></td></tr><tr><td data-num="12"></td><td><pre>    mode_t shm_perm.mode;</pre></td></tr><tr><td data-num="13"></td><td><pre>&#125;;</pre></td></tr><tr><td data-num="14"></td><td><pre>*/</pre></td></tr><tr><td data-num="15"></td><td><pre><span class="token keyword">int</span> <span class="token function">msgctl</span><span class="token punctuation">(</span><span class="token keyword">int</span> msqid<span class="token punctuation">,</span> <span class="token keyword">int</span> cmd<span class="token punctuation">,</span> <span class="token keyword">struct</span> <span class="token class-name">msqid_ds</span> <span class="token operator">*</span>buf<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><h4 id="msgsnd"><a class="anchor" href="#msgsnd">#</a> msgsnd</h4>
+<p>发送消息</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="2"></td><td><pre>@param msqid: 由 msgget 函数返回的消息队列标识符。</pre></td></tr><tr><td data-num="3"></td><td><pre>@param msg_ptr: 一个指向准备发送消息的指针，指针 msg_ptr 所指向的消息结构一定要是以一个长整型成员变量开始的结构体，接收函数将用这个成员来确定消息的类型。</pre></td></tr><tr><td data-num="4"></td><td><pre>@param msg_sz: msg_ptr 指向的消息的长度，注意是消息的长度，而不是整个结构体的长度，也就是说 msg_sz 是不包括长整型消息类型成员变量的长度。</pre></td></tr><tr><td data-num="5"></td><td><pre>@param msgflg: 控制当前消息队列满或队列消息到达系统范围的限制时将要发生的事情。</pre></td></tr><tr><td data-num="6"></td><td><pre>*/</pre></td></tr><tr><td data-num="7"></td><td><pre><span class="token keyword">int</span> <span class="token function">msgsnd</span><span class="token punctuation">(</span><span class="token keyword">int</span> msqid<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">void</span> <span class="token operator">*</span>msg_ptr<span class="token punctuation">,</span> <span class="token class-name">size_t</span> msg_sz<span class="token punctuation">,</span> <span class="token keyword">int</span> msgflg<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><h4 id="msgrcv"><a class="anchor" href="#msgrcv">#</a> msgrcv</h4>
+<p>接收消息</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="2"></td><td><pre>@param msqid: 由 msgget 函数返回的消息队列标识符。</pre></td></tr><tr><td data-num="3"></td><td><pre>@param msg_ptr: 一个指向准备发送消息的指针，指针 msg_ptr 所指向的消息结构一定要是以一个长整型成员变量开始的结构体，接收函数将用这个成员来确定消息的类型。</pre></td></tr><tr><td data-num="4"></td><td><pre>@param msg_sz: msg_ptr 指向的消息的长度，注意是消息的长度，而不是整个结构体的长度，也就是说 msg_sz 是不包括长整型消息类型成员变量的长度。</pre></td></tr><tr><td data-num="5"></td><td><pre>@param msgtype: msgtype 可以实现一种简单的接收优先级。如果 msgtype 为 0，就获取队列中的第一个消息。如果它的值大于零，将获取具有相同消息类型的第一个信息。如果它小于零，就获取类型等于或小于 msgtype 的绝对值的第一个消息。</pre></td></tr><tr><td data-num="6"></td><td><pre>@param msgflg: 控制当前消息队列满或队列消息到达系统范围的限制时将要发生的事情。</pre></td></tr><tr><td data-num="7"></td><td><pre>*/</pre></td></tr><tr><td data-num="8"></td><td><pre><span class="token keyword">int</span> <span class="token function">msgrcv</span><span class="token punctuation">(</span><span class="token keyword">int</span> msqid<span class="token punctuation">,</span> <span class="token keyword">void</span> <span class="token operator">*</span>msg_ptr<span class="token punctuation">,</span> <span class="token class-name">size_t</span> msg_sz<span class="token punctuation">,</span> <span class="token keyword">long</span> <span class="token keyword">int</span> msgtype<span class="token punctuation">,</span> <span class="token keyword">int</span> msgflg<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><h3 id="示例-利用-linux-的消息队列通信机制实现两个线程间的通信"><a class="anchor" href="#示例-利用-linux-的消息队列通信机制实现两个线程间的通信">#</a> 示例：利用 Linux 的消息队列通信机制实现两个线程间的通信</h3>
+<blockquote>
+<p>编写程序创建三个线程：sender1 线程、sender2 线程和 receive 线程，三个线程的功能。描述如下：</p>
+<ul>
+<li>sender1 线程：运行函数 sender1 ()，它创建一个消息队列，然后等待用户通过终端输入一串字符，并将这串字符通过消息队列发送给 receiver 线程；可循环发送多个消息，直到用户输入 “exit” 为止，表示它不再发送消息，最后向 receiver 线程发送消息 “end1”，并且等待 receiver 的应答，等到应答消息后，将接收到的应答信息显示在终端屏幕上，结束线程的运行。</li>
+<li>sender2 线程：运行函数 sender2 ()，共享 sender1 创建的消息队列，等待用户通过终端输入一串字符，并将这串字符通过消息队列发送给 receiver 线程；可循环发送多个消息， 直到用户输入 “exit” 为止，表示它不再发送消息，最后向 receiver 线程发送消息 “end2”， 并且等待 receiver 的应答，等到应答消息后，将接收到的应答信息显示在终端屏幕上，结束 线程的运行。</li>
+<li>receiver 线程：运行函数 receive ()，它通过消息队列接收来自 sender1 和 sender2 两 个线程的消息，将消息显示在终端屏幕上，当收到内容为 “end1” 的消息时，就向 sender1 发送一个应答消息 “over1”； 当收到内容为 “end2” 的消息时，就向 sender2 发送一个应答消息 “over2”；消息接收完成后删除消息队列，结束线程的运行。选择合适的信号量机制实现三个线程之间的同步与互斥。</li>
+</ul>
+</blockquote>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h></span></span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string.h></span></span></pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;pthread.h></span></span></pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/types.h></span></span></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/ipc.h></span></span></pre></td></tr><tr><td data-num="7"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/msg.h></span></span></pre></td></tr><tr><td data-num="8"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;semaphore.h></span></span></pre></td></tr><tr><td data-num="9"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">MAX_MSG_SIZE</span> <span class="token expression"><span class="token number">256</span></span></span></pre></td></tr><tr><td data-num="10"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">SENDER1_MSG_TYPE</span> <span class="token expression"><span class="token number">1</span></span></span></pre></td></tr><tr><td data-num="11"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">SENDER2_MSG_TYPE</span> <span class="token expression"><span class="token number">2</span></span></span></pre></td></tr><tr><td data-num="12"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">RECEIVER_MSG_TYPE</span> <span class="token expression"><span class="token number">3</span></span></span></pre></td></tr><tr><td data-num="13"></td><td><pre></pre></td></tr><tr><td data-num="14"></td><td><pre><span class="token keyword">struct</span> <span class="token class-name">message</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="15"></td><td><pre>    <span class="token keyword">long</span> mtype<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="16"></td><td><pre>    <span class="token keyword">char</span> mtext<span class="token punctuation">[</span>MAX_MSG_SIZE<span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="17"></td><td><pre><span class="token punctuation">&#125;</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="18"></td><td><pre></pre></td></tr><tr><td data-num="19"></td><td><pre><span class="token keyword">int</span> msgQueueID<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="20"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="21"></td><td><pre>@signal send: 对线程 sender1 和 sender2 上锁，两个线程是互斥的</pre></td></tr><tr><td data-num="22"></td><td><pre>@signal receive: 对 sender 发送消息给 receiver 的过程上锁，防止 receiver 完成接受消息的动作之前，sender 开始下一轮接受消息</pre></td></tr><tr><td data-num="23"></td><td><pre>@signal ifexit: 当 sender1 发送 end1 消息给 receiver,receiver 将会发送 over1 给 sender1, 但是 over1 消息有概率会被 receiver 自身接受</pre></td></tr><tr><td data-num="24"></td><td><pre>*/</pre></td></tr><tr><td data-num="25"></td><td><pre><span class="token class-name">sem_t</span> send<span class="token punctuation">,</span>receive<span class="token punctuation">,</span>ifexit<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="26"></td><td><pre></pre></td></tr><tr><td data-num="27"></td><td><pre><span class="token keyword">void</span><span class="token operator">*</span> <span class="token function">sender1</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="28"></td><td><pre>    <span class="token keyword">struct</span> <span class="token class-name">message</span> msg<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="29"></td><td><pre>    <span class="token keyword">int</span> running <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="30"></td><td><pre>	<span class="token function">sem_wait</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>send<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="31"></td><td><pre>    <span class="token keyword">while</span> <span class="token punctuation">(</span>running<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="32"></td><td><pre>    	<span class="token function">sem_wait</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>receive<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="33"></td><td><pre>        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Sender1: Enter a message (or 'exit' to quit): "</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="34"></td><td><pre>        <span class="token function">fgets</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>mtext<span class="token punctuation">,</span> MAX_MSG_SIZE<span class="token punctuation">,</span> <span class="token constant">stdin</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="35"></td><td><pre>        msg<span class="token punctuation">.</span>mtext<span class="token punctuation">[</span><span class="token function">strcspn</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>mtext<span class="token punctuation">,</span> <span class="token string">"\n"</span><span class="token punctuation">)</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token char">'\0'</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="36"></td><td><pre>        msg<span class="token punctuation">.</span>mtype <span class="token operator">=</span> SENDER1_MSG_TYPE<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="37"></td><td><pre>        <span class="token function">msgsnd</span><span class="token punctuation">(</span>msgQueueID<span class="token punctuation">,</span> <span class="token operator">&amp;</span>msg<span class="token punctuation">,</span> <span class="token function">strlen</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>mtext<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="38"></td><td><pre>        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>mtext<span class="token punctuation">,</span> <span class="token string">"exit"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="39"></td><td><pre>            running <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="40"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="41"></td><td><pre></pre></td></tr><tr><td data-num="42"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="43"></td><td><pre>	<span class="token function">sem_wait</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>receive<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">// 这行代码的作用是防止信号量 receive 被赋值为 2, 同时也确保了消息发送和接收的正确进行</span></pre></td></tr><tr><td data-num="44"></td><td><pre>    <span class="token function">strcpy</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>mtext<span class="token punctuation">,</span> <span class="token string">"end1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="45"></td><td><pre>    msg<span class="token punctuation">.</span>mtype <span class="token operator">=</span> SENDER1_MSG_TYPE<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="46"></td><td><pre>    <span class="token function">msgsnd</span><span class="token punctuation">(</span>msgQueueID<span class="token punctuation">,</span> <span class="token operator">&amp;</span>msg<span class="token punctuation">,</span> <span class="token function">strlen</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>mtext<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="47"></td><td><pre>	<span class="token function">msgrcv</span><span class="token punctuation">(</span>msgQueueID<span class="token punctuation">,</span> <span class="token operator">&amp;</span>msg<span class="token punctuation">,</span> MAX_MSG_SIZE<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="48"></td><td><pre>	<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>mtext<span class="token punctuation">,</span> <span class="token string">"over1"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="49"></td><td><pre>        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Sender1: Exiting.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="50"></td><td><pre>	<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="51"></td><td><pre>	<span class="token function">sem_post</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>ifexit<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">// 通知 receiver: sender1 准备退出</span></pre></td></tr><tr><td data-num="52"></td><td><pre>	<span class="token function">sem_post</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>send<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">// 通知 sender2: 可以准备接收消息</span></pre></td></tr><tr><td data-num="53"></td><td><pre>    <span class="token function">pthread_exit</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="54"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="55"></td><td><pre></pre></td></tr><tr><td data-num="56"></td><td><pre><span class="token keyword">void</span><span class="token operator">*</span> <span class="token function">sender2</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="57"></td><td><pre>    <span class="token keyword">struct</span> <span class="token class-name">message</span> msg<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="58"></td><td><pre>    <span class="token keyword">int</span> running <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="59"></td><td><pre>	<span class="token function">sem_wait</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>send<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="60"></td><td><pre>    <span class="token keyword">while</span> <span class="token punctuation">(</span>running<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="61"></td><td><pre>    	<span class="token function">sem_wait</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>receive<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="62"></td><td><pre>        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Sender2: Enter a message (or 'exit' to quit): "</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="63"></td><td><pre>        <span class="token function">fgets</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>mtext<span class="token punctuation">,</span> MAX_MSG_SIZE<span class="token punctuation">,</span> <span class="token constant">stdin</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="64"></td><td><pre>        msg<span class="token punctuation">.</span>mtext<span class="token punctuation">[</span><span class="token function">strcspn</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>mtext<span class="token punctuation">,</span> <span class="token string">"\n"</span><span class="token punctuation">)</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token char">'\0'</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="65"></td><td><pre>        msg<span class="token punctuation">.</span>mtype <span class="token operator">=</span> SENDER2_MSG_TYPE<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="66"></td><td><pre>        <span class="token function">msgsnd</span><span class="token punctuation">(</span>msgQueueID<span class="token punctuation">,</span> <span class="token operator">&amp;</span>msg<span class="token punctuation">,</span> <span class="token function">strlen</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>mtext<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="67"></td><td><pre>        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>mtext<span class="token punctuation">,</span> <span class="token string">"exit"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="68"></td><td><pre>            running <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="69"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="70"></td><td><pre></pre></td></tr><tr><td data-num="71"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="72"></td><td><pre>	<span class="token function">sem_wait</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>receive<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">// 这行代码的作用是防止信号量 receive 被赋值为 2, 同时也确保了消息发送和接收的正确进行</span></pre></td></tr><tr><td data-num="73"></td><td><pre>    <span class="token function">strcpy</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>mtext<span class="token punctuation">,</span> <span class="token string">"end2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="74"></td><td><pre>    msg<span class="token punctuation">.</span>mtype <span class="token operator">=</span> SENDER2_MSG_TYPE<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="75"></td><td><pre>    <span class="token function">msgsnd</span><span class="token punctuation">(</span>msgQueueID<span class="token punctuation">,</span> <span class="token operator">&amp;</span>msg<span class="token punctuation">,</span> <span class="token function">strlen</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>mtext<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="76"></td><td><pre>	<span class="token function">msgrcv</span><span class="token punctuation">(</span>msgQueueID<span class="token punctuation">,</span> <span class="token operator">&amp;</span>msg<span class="token punctuation">,</span> MAX_MSG_SIZE<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="77"></td><td><pre>	<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>mtext<span class="token punctuation">,</span> <span class="token string">"over2"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="78"></td><td><pre>    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Sender2: Exiting.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="79"></td><td><pre>	<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="80"></td><td><pre>	<span class="token function">sem_post</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>ifexit<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="81"></td><td><pre>	<span class="token function">sem_post</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>send<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="82"></td><td><pre>    <span class="token function">pthread_exit</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="83"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="84"></td><td><pre></pre></td></tr><tr><td data-num="85"></td><td><pre></pre></td></tr><tr><td data-num="86"></td><td><pre><span class="token keyword">void</span><span class="token operator">*</span> <span class="token function">receiver</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="87"></td><td><pre>    <span class="token keyword">struct</span> <span class="token class-name">message</span> msg<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="88"></td><td><pre>    <span class="token keyword">int</span> running <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="89"></td><td><pre>    <span class="token keyword">while</span> <span class="token punctuation">(</span>running<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="90"></td><td><pre>        <span class="token function">msgrcv</span><span class="token punctuation">(</span>msgQueueID<span class="token punctuation">,</span> <span class="token operator">&amp;</span>msg<span class="token punctuation">,</span> MAX_MSG_SIZE<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="91"></td><td><pre></pre></td></tr><tr><td data-num="92"></td><td><pre>		<span class="token keyword">if</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>mtype <span class="token operator">==</span> SENDER1_MSG_TYPE<span class="token punctuation">)</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="93"></td><td><pre>			<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>mtext<span class="token punctuation">,</span> <span class="token string">"end1"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="94"></td><td><pre>				<span class="token function">strcpy</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>mtext<span class="token punctuation">,</span> <span class="token string">"over1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="95"></td><td><pre>            	msg<span class="token punctuation">.</span>mtype <span class="token operator">=</span> RECEIVER_MSG_TYPE<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="96"></td><td><pre>            	<span class="token function">msgsnd</span><span class="token punctuation">(</span>msgQueueID<span class="token punctuation">,</span> <span class="token operator">&amp;</span>msg<span class="token punctuation">,</span> <span class="token function">strlen</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>mtext<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="97"></td><td><pre>            	running<span class="token operator">-=</span><span class="token number">1</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="98"></td><td><pre>            	<span class="token function">sem_wait</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>ifexit<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">// 等待退出动作完成</span></pre></td></tr><tr><td data-num="99"></td><td><pre>			<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="100"></td><td><pre>			<span class="token keyword">else</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="101"></td><td><pre>				<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Receiver: Message received: %s from sender1\n"</span><span class="token punctuation">,</span> msg<span class="token punctuation">.</span>mtext<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="102"></td><td><pre>			<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="103"></td><td><pre>			</pre></td></tr><tr><td data-num="104"></td><td><pre>		<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="105"></td><td><pre>		<span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>mtype <span class="token operator">==</span> SENDER2_MSG_TYPE<span class="token punctuation">)</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="106"></td><td><pre>			<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>mtext<span class="token punctuation">,</span> <span class="token string">"end2"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="107"></td><td><pre>				<span class="token function">strcpy</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>mtext<span class="token punctuation">,</span> <span class="token string">"over2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="108"></td><td><pre>            	msg<span class="token punctuation">.</span>mtype <span class="token operator">=</span> RECEIVER_MSG_TYPE<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="109"></td><td><pre>            	<span class="token function">msgsnd</span><span class="token punctuation">(</span>msgQueueID<span class="token punctuation">,</span> <span class="token operator">&amp;</span>msg<span class="token punctuation">,</span> <span class="token function">strlen</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>mtext<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="110"></td><td><pre>            	running<span class="token operator">-=</span><span class="token number">1</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="111"></td><td><pre>            	<span class="token function">sem_wait</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>ifexit<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">// 等待退出动作完成</span></pre></td></tr><tr><td data-num="112"></td><td><pre>			<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="113"></td><td><pre>			<span class="token keyword">else</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="114"></td><td><pre>				<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Receiver: Message received: %s from sender2\n"</span><span class="token punctuation">,</span> msg<span class="token punctuation">.</span>mtext<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="115"></td><td><pre>			<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="116"></td><td><pre>			</pre></td></tr><tr><td data-num="117"></td><td><pre>		<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="118"></td><td><pre>		<span class="token function">sem_post</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>receive<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="119"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="120"></td><td><pre></pre></td></tr><tr><td data-num="121"></td><td><pre>    <span class="token function">msgctl</span><span class="token punctuation">(</span>msgQueueID<span class="token punctuation">,</span> IPC_RMID<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="122"></td><td><pre></pre></td></tr><tr><td data-num="123"></td><td><pre>    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Receiver: Exiting.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="124"></td><td><pre></pre></td></tr><tr><td data-num="125"></td><td><pre>    <span class="token function">pthread_exit</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="126"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="127"></td><td><pre></pre></td></tr><tr><td data-num="128"></td><td><pre><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="129"></td><td><pre>    <span class="token class-name">pthread_t</span> sender1Thread<span class="token punctuation">,</span> sender2Thread<span class="token punctuation">,</span> receiverThread<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="130"></td><td><pre>	</pre></td></tr><tr><td data-num="131"></td><td><pre>    <span class="token class-name">key_t</span> key <span class="token operator">=</span> <span class="token number">5555</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="132"></td><td><pre>    msgQueueID <span class="token operator">=</span> <span class="token function">msgget</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> IPC_CREAT <span class="token operator">|</span> <span class="token number">0666</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="133"></td><td><pre></pre></td></tr><tr><td data-num="134"></td><td><pre>    <span class="token keyword">if</span> <span class="token punctuation">(</span>msgQueueID <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="135"></td><td><pre>        <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"Failed to create message queue"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="136"></td><td><pre>        <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="137"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="138"></td><td><pre>	<span class="token function">sem_init</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>send<span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="139"></td><td><pre>	<span class="token function">sem_init</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>receive<span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="140"></td><td><pre>    <span class="token function">sem_init</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>ifexit<span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="141"></td><td><pre>    <span class="token function">pthread_create</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>sender1Thread<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> sender1<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="142"></td><td><pre>    <span class="token function">pthread_create</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>sender2Thread<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> sender2<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="143"></td><td><pre>    <span class="token function">pthread_create</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>receiverThread<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> receiver<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="144"></td><td><pre></pre></td></tr><tr><td data-num="145"></td><td><pre>    <span class="token function">pthread_join</span><span class="token punctuation">(</span>sender1Thread<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="146"></td><td><pre>    <span class="token function">pthread_join</span><span class="token punctuation">(</span>sender2Thread<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="147"></td><td><pre>    <span class="token function">pthread_join</span><span class="token punctuation">(</span>receiverThread<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="148"></td><td><pre></pre></td></tr><tr><td data-num="149"></td><td><pre>    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="150"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr></table></figure><h2 id="共享内存"><a class="anchor" href="#共享内存">#</a> 共享内存</h2>
+<blockquote>
+<p>共享内存并未提供同步机制，也就是说，在第一个进程结束对共享内存的写操作之前，并无自动机制可以阻止第二个进程开始对它进行读取。所以我们通常需要用其他的机制来同步对共享内存的访问，例如前面说到的信号量</p>
+</blockquote>
+<p>使用共享内存需要包含头文件 <code>sys/shm.h</code></p>
+<h3 id="相关函数-2"><a class="anchor" href="#相关函数-2">#</a> 相关函数</h3>
+<h4 id="shmget"><a class="anchor" href="#shmget">#</a> shmget</h4>
+<p>创建共享内存</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="2"></td><td><pre>@param key: 为共享内存段命名</pre></td></tr><tr><td data-num="3"></td><td><pre>@param size: 以字节为单位指定需要共享的内存容量</pre></td></tr><tr><td data-num="4"></td><td><pre>@param shmflg: 控制当前消息队列满或队列消息到达系统范围的限制时将要发生的事情。shmflg 通常取值 0666, shmflg 可以与 IPC_CREAT 做或操作，表示当 key 所命名的共享内存不存在时创建一个共享内存</pre></td></tr><tr><td data-num="5"></td><td><pre>@return: 成功时返回一个与 key 相关的共享内存标识符（非负整数），用于后续的共享内存函数。调用失败返回 - 1</pre></td></tr><tr><td data-num="6"></td><td><pre>*/</pre></td></tr><tr><td data-num="7"></td><td><pre><span class="token keyword">int</span> <span class="token function">shmget</span><span class="token punctuation">(</span><span class="token class-name">key_t</span> key<span class="token punctuation">,</span> <span class="token class-name">size_t</span> size<span class="token punctuation">,</span> <span class="token keyword">int</span> shmflg<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><h4 id="shmat"><a class="anchor" href="#shmat">#</a> shmat</h4>
+<p>第一次创建完共享内存时，它还不能被任何进程访问，shmat 函数的作用就是用来启动对该共享内存的访问，并把共享内存连接到当前进程的地址空间</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="2"></td><td><pre>@param shm_id: 由 shmget 函数返回的共享内存标识。</pre></td></tr><tr><td data-num="3"></td><td><pre>@param shm_addr: 指定共享内存连接到当前进程中的地址位置，通常为空，表示让系统来选择共享内存的地址。</pre></td></tr><tr><td data-num="4"></td><td><pre>@param shm_flg: 标志位，通常为 0。</pre></td></tr><tr><td data-num="5"></td><td><pre>@return: 调用成功时返回一个指向共享内存第一个字节的指针，如果调用失败返回 - 1.</pre></td></tr><tr><td data-num="6"></td><td><pre>*/</pre></td></tr><tr><td data-num="7"></td><td><pre><span class="token keyword">void</span> <span class="token operator">*</span><span class="token function">shmat</span><span class="token punctuation">(</span><span class="token keyword">int</span> shm_id<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">void</span> <span class="token operator">*</span>shm_addr<span class="token punctuation">,</span> <span class="token keyword">int</span> shmflg<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><h4 id="shmdt"><a class="anchor" href="#shmdt">#</a> shmdt</h4>
+<p>该函数用于将共享内存从当前进程中分离。注意，将共享内存分离并不是删除它，只是使该共享内存对当前进程不再可用</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="2"></td><td><pre>@param shmaddr: shmat 函数返回的地址指针</pre></td></tr><tr><td data-num="3"></td><td><pre>@return: 调用成功时返回 0，失败时返回 - 1</pre></td></tr><tr><td data-num="4"></td><td><pre>*/</pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token keyword">int</span> <span class="token function">shmdt</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">void</span> <span class="token operator">*</span>shmaddr<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><h4 id="shmctl"><a class="anchor" href="#shmctl">#</a> shmctl</h4>
+<p>类比信号量中的 semctl 函数，用来控制共享内存</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="2"></td><td><pre>@param shm_id: 由 shmget 函数返回的共享内存标识。</pre></td></tr><tr><td data-num="3"></td><td><pre>@param command: 要采取的操作，它可以取下面的三个值 ：</pre></td></tr><tr><td data-num="4"></td><td><pre>IPC_STAT：把 shmid_ds 结构中的数据设置为共享内存的当前关联值，即用共享内存的当前关联值覆盖 shmid_ds 的值。</pre></td></tr><tr><td data-num="5"></td><td><pre>IPC_SET：如果进程有足够的权限，就把共享内存的当前关联值设置为 shmid_ds 结构中给出的值</pre></td></tr><tr><td data-num="6"></td><td><pre>IPC_RMID：删除共享内存段</pre></td></tr><tr><td data-num="7"></td><td><pre>@param buf: buf 是一个结构指针，它指向共享内存模式和访问权限的结构。</pre></td></tr><tr><td data-num="8"></td><td><pre>shmid_ds 结构至少包括以下成员：</pre></td></tr><tr><td data-num="9"></td><td><pre>struct shmid_ds</pre></td></tr><tr><td data-num="10"></td><td><pre>&#123;</pre></td></tr><tr><td data-num="11"></td><td><pre>    uid_t shm_perm.uid;</pre></td></tr><tr><td data-num="12"></td><td><pre>    uid_t shm_perm.gid;</pre></td></tr><tr><td data-num="13"></td><td><pre>    mode_t shm_perm.mode;</pre></td></tr><tr><td data-num="14"></td><td><pre>&#125;;</pre></td></tr><tr><td data-num="15"></td><td><pre>*/</pre></td></tr><tr><td data-num="16"></td><td><pre><span class="token keyword">int</span> <span class="token function">shmctl</span><span class="token punctuation">(</span><span class="token keyword">int</span> shm_id<span class="token punctuation">,</span> <span class="token keyword">int</span> command<span class="token punctuation">,</span> <span class="token keyword">struct</span> <span class="token class-name">shmid_ds</span> <span class="token operator">*</span>buf<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><h3 id="示例-利用-linux-的共享内存通信机制实现两个进程间的通信"><a class="anchor" href="#示例-利用-linux-的共享内存通信机制实现两个进程间的通信">#</a> 示例：利用 Linux 的共享内存通信机制实现两个进程间的通信</h3>
+<blockquote>
+<ul>
+<li>编写程序 sender，它创建一个共享内存，然后随机产生一个 100 以内的计算表达式（例如 12+34），并将这串表达式字符串通过共享内存发送给 receiver；最后，receiver 完成表达式运算后，将计算结果 (36) 写到共享内存 ，sender 收到应答消息后，将接收到的计算结果显示在终端屏幕上。上述计算重复 10 次后，sender 向 receiver 发送”end”，等待 recever 发送”over” 信息后，删除共享内存，结束程序的运行。</li>
+<li>编写程序 receiver， 它通过共享内存接收来自 sender 产生的信息，如果该信息是计算表达式，则将表达式显示在终端屏幕上，然后计算表达式的结果，再通过该共享内存向 sender 发送计算结果，等待接收下一个消息；如果该信息是”end”，则向 sender 发送一个应答消息”over”，并结束程序的运行。选择合适的信号量机制实现两个进程对共享内存的互斥及同步使用。</li>
+</ul>
+</blockquote>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">//common.h</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h></span></span></pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string.h></span></span></pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;unistd.h></span></span></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;semaphore.h></span></span></pre></td></tr><tr><td data-num="7"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;fcntl.h></span></span></pre></td></tr><tr><td data-num="8"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/shm.h></span></span></pre></td></tr><tr><td data-num="9"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;time.h></span></span></pre></td></tr><tr><td data-num="10"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">TEXT_SZ</span> <span class="token expression"><span class="token number">100</span></span></span></pre></td></tr><tr><td data-num="11"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="12"></td><td><pre>MSG1 表示 sender 为写端，receiver 为读端</pre></td></tr><tr><td data-num="13"></td><td><pre>MSG2 表示 sender 为读端，receiver 为写端</pre></td></tr><tr><td data-num="14"></td><td><pre>*/</pre></td></tr><tr><td data-num="15"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">MSG1_SEMRD</span> <span class="token string">"msg1_sem_read"</span></span></pre></td></tr><tr><td data-num="16"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">MSG1_SEMWR</span> <span class="token string">"msg1_sem_write"</span></span></pre></td></tr><tr><td data-num="17"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">MSG2_SEMRD</span> <span class="token string">"msg2_sem_read"</span></span></pre></td></tr><tr><td data-num="18"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">MSG2_SEMWR</span> <span class="token string">"msg2_sem_write"</span></span></pre></td></tr><tr><td data-num="19"></td><td><pre><span class="token keyword">struct</span> <span class="token class-name">shm_data</span></pre></td></tr><tr><td data-num="20"></td><td><pre><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="21"></td><td><pre>	<span class="token keyword">char</span> text<span class="token punctuation">[</span>TEXT_SZ<span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="22"></td><td><pre><span class="token punctuation">&#125;</span><span class="token punctuation">;</span></pre></td></tr></table></figure><figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">//sender.c</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span><span class="token string">"common.h"</span></span></pre></td></tr><tr><td data-num="3"></td><td><pre></pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="5"></td><td><pre>    <span class="token keyword">struct</span> <span class="token class-name">shm_data</span> <span class="token operator">*</span>shared<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="6"></td><td><pre></pre></td></tr><tr><td data-num="7"></td><td><pre>    <span class="token comment">// 创建共享内存</span></pre></td></tr><tr><td data-num="8"></td><td><pre>    <span class="token keyword">int</span> shm_id <span class="token operator">=</span> <span class="token function">shmget</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">key_t</span><span class="token punctuation">)</span><span class="token number">1234</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">shm_data</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0666</span><span class="token operator">|</span>IPC_CREAT<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="9"></td><td><pre>    <span class="token keyword">if</span> <span class="token punctuation">(</span>shm_id <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="10"></td><td><pre>        <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"Failed to get shared memory"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="11"></td><td><pre>        <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="12"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="13"></td><td><pre></pre></td></tr><tr><td data-num="14"></td><td><pre>	<span class="token comment">// 将共享内存连接到当前进程的地址空间</span></pre></td></tr><tr><td data-num="15"></td><td><pre>    <span class="token keyword">char</span> <span class="token operator">*</span>shm <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">shmat</span><span class="token punctuation">(</span>shm_id<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="16"></td><td><pre>    <span class="token keyword">if</span> <span class="token punctuation">(</span>shm <span class="token operator">==</span> <span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="17"></td><td><pre>        <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"Failed to attach shared memory"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="18"></td><td><pre>        <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="19"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="20"></td><td><pre></pre></td></tr><tr><td data-num="21"></td><td><pre>    <span class="token comment">// 设置共享内存</span></pre></td></tr><tr><td data-num="22"></td><td><pre>	shared <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">shm_data</span><span class="token operator">*</span><span class="token punctuation">)</span>shm<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="23"></td><td><pre></pre></td></tr><tr><td data-num="24"></td><td><pre>    <span class="token comment">// 设置信号量</span></pre></td></tr><tr><td data-num="25"></td><td><pre>    <span class="token class-name">sem_t</span> <span class="token operator">*</span>msg1_semwr<span class="token punctuation">,</span><span class="token operator">*</span>msg1_semrd<span class="token punctuation">,</span><span class="token operator">*</span>msg2_semwr<span class="token punctuation">,</span><span class="token operator">*</span>msg2_semrd<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="26"></td><td><pre>    msg1_semwr<span class="token operator">=</span><span class="token function">sem_open</span><span class="token punctuation">(</span>MSG1_SEMWR<span class="token punctuation">,</span>O_CREAT<span class="token punctuation">,</span><span class="token number">0666</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="27"></td><td><pre>    msg1_semrd<span class="token operator">=</span><span class="token function">sem_open</span><span class="token punctuation">(</span>MSG1_SEMRD<span class="token punctuation">,</span>O_CREAT<span class="token punctuation">,</span><span class="token number">0666</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="28"></td><td><pre>    msg2_semwr<span class="token operator">=</span><span class="token function">sem_open</span><span class="token punctuation">(</span>MSG2_SEMWR<span class="token punctuation">,</span>O_CREAT<span class="token punctuation">,</span><span class="token number">0666</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="29"></td><td><pre>    msg2_semrd<span class="token operator">=</span><span class="token function">sem_open</span><span class="token punctuation">(</span>MSG2_SEMRD<span class="token punctuation">,</span>O_CREAT<span class="token punctuation">,</span><span class="token number">0666</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="30"></td><td><pre>    <span class="token keyword">if</span><span class="token punctuation">(</span>msg1_semwr<span class="token operator">==</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">1</span> <span class="token operator">||</span> msg1_semrd<span class="token operator">==</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">1</span> <span class="token operator">||</span>msg2_semwr<span class="token operator">==</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">1</span> <span class="token operator">||</span> msg2_semrd<span class="token operator">==</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="31"></td><td><pre>        <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"sem_open failure"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="32"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="33"></td><td><pre></pre></td></tr><tr><td data-num="34"></td><td><pre>    <span class="token comment">// 随机产生并发送表达式</span></pre></td></tr><tr><td data-num="35"></td><td><pre>    <span class="token function">srand</span><span class="token punctuation">(</span><span class="token function">time</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="36"></td><td><pre>    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="37"></td><td><pre>        <span class="token function">sem_wait</span><span class="token punctuation">(</span>msg1_semwr<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="38"></td><td><pre>        <span class="token keyword">int</span> num1 <span class="token operator">=</span> <span class="token function">rand</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">100</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="39"></td><td><pre>        <span class="token keyword">int</span> num2 <span class="token operator">=</span> <span class="token function">rand</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">100</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="40"></td><td><pre>        <span class="token function">sprintf</span><span class="token punctuation">(</span>shared<span class="token operator">-></span>text<span class="token punctuation">,</span> <span class="token string">"%d+%d"</span><span class="token punctuation">,</span> num1<span class="token punctuation">,</span> num2<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="41"></td><td><pre>        <span class="token comment">//printf("Sender: Sent expression '%s'\n", expression);</span></pre></td></tr><tr><td data-num="42"></td><td><pre>        <span class="token function">sem_post</span><span class="token punctuation">(</span>msg1_semrd<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="43"></td><td><pre></pre></td></tr><tr><td data-num="44"></td><td><pre>        <span class="token function">sem_wait</span><span class="token punctuation">(</span>msg2_semrd<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="45"></td><td><pre>        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Sender: received calculation results %s from Receiver\n"</span><span class="token punctuation">,</span>shared<span class="token operator">-></span>text<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="46"></td><td><pre>        <span class="token function">sem_post</span><span class="token punctuation">(</span>msg2_semwr<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="47"></td><td><pre>        <span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="48"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="49"></td><td><pre></pre></td></tr><tr><td data-num="50"></td><td><pre>    <span class="token comment">// 发送结束信号</span></pre></td></tr><tr><td data-num="51"></td><td><pre>    <span class="token function">sem_wait</span><span class="token punctuation">(</span>msg1_semwr<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="52"></td><td><pre>    <span class="token function">strcpy</span><span class="token punctuation">(</span>shared<span class="token operator">-></span>text<span class="token punctuation">,</span> <span class="token string">"end"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="53"></td><td><pre>    <span class="token function">sem_post</span><span class="token punctuation">(</span>msg1_semrd<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="54"></td><td><pre></pre></td></tr><tr><td data-num="55"></td><td><pre>    <span class="token comment">// 等待接收 'over' 信号并删除共享内存</span></pre></td></tr><tr><td data-num="56"></td><td><pre>    <span class="token function">sem_wait</span><span class="token punctuation">(</span>msg2_semrd<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="57"></td><td><pre>    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Sender: received %s from Receiver\n"</span><span class="token punctuation">,</span>shared<span class="token operator">-></span>text<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="58"></td><td><pre>    <span class="token comment">// 把共享内存从当前进程中分离</span></pre></td></tr><tr><td data-num="59"></td><td><pre>    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">shmdt</span><span class="token punctuation">(</span>shm<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="60"></td><td><pre>    <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="61"></td><td><pre>        <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"shmdt failed\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="62"></td><td><pre>        <span class="token function">exit</span><span class="token punctuation">(</span>EXIT_FAILURE<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="63"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="64"></td><td><pre>    <span class="token comment">// 删除共享内存</span></pre></td></tr><tr><td data-num="65"></td><td><pre>    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">shmctl</span><span class="token punctuation">(</span>shm_id<span class="token punctuation">,</span> IPC_RMID<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="66"></td><td><pre>    <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="67"></td><td><pre>        <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"shmctl(IPC_RMID) failed\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="68"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="69"></td><td><pre>    <span class="token function">sem_post</span><span class="token punctuation">(</span>msg2_semwr<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="70"></td><td><pre></pre></td></tr><tr><td data-num="71"></td><td><pre>    <span class="token comment">// 关闭信号量</span></pre></td></tr><tr><td data-num="72"></td><td><pre>    <span class="token function">sem_close</span><span class="token punctuation">(</span>msg1_semwr<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="73"></td><td><pre>    <span class="token function">sem_close</span><span class="token punctuation">(</span>msg1_semrd<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="74"></td><td><pre>    <span class="token function">sem_close</span><span class="token punctuation">(</span>msg2_semwr<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="75"></td><td><pre>    <span class="token function">sem_close</span><span class="token punctuation">(</span>msg2_semrd<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="76"></td><td><pre>    <span class="token comment">// 删除信号量文件</span></pre></td></tr><tr><td data-num="77"></td><td><pre>    <span class="token function">sem_unlink</span><span class="token punctuation">(</span>MSG1_SEMRD<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="78"></td><td><pre>    <span class="token function">sem_unlink</span><span class="token punctuation">(</span>MSG1_SEMWR<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="79"></td><td><pre>    <span class="token function">sem_unlink</span><span class="token punctuation">(</span>MSG2_SEMRD<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="80"></td><td><pre>    <span class="token function">sem_unlink</span><span class="token punctuation">(</span>MSG2_SEMWR<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="81"></td><td><pre>    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="82"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr></table></figure><figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">//receiver.c</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span><span class="token string">"common.h"</span></span></pre></td></tr><tr><td data-num="3"></td><td><pre></pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="5"></td><td><pre>    <span class="token keyword">struct</span> <span class="token class-name">shm_data</span> <span class="token operator">*</span>shared<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="6"></td><td><pre></pre></td></tr><tr><td data-num="7"></td><td><pre>    <span class="token comment">// 创建共享内存</span></pre></td></tr><tr><td data-num="8"></td><td><pre>    <span class="token keyword">int</span> shm_id <span class="token operator">=</span> <span class="token function">shmget</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">key_t</span><span class="token punctuation">)</span><span class="token number">1234</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">shm_data</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0666</span><span class="token operator">|</span>IPC_CREAT<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="9"></td><td><pre>    <span class="token keyword">if</span> <span class="token punctuation">(</span>shm_id <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="10"></td><td><pre>        <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"Failed to get shared memory"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="11"></td><td><pre>        <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="12"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="13"></td><td><pre></pre></td></tr><tr><td data-num="14"></td><td><pre>	<span class="token comment">// 将共享内存连接到当前进程的地址空间</span></pre></td></tr><tr><td data-num="15"></td><td><pre>    <span class="token keyword">char</span> <span class="token operator">*</span>shm <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">shmat</span><span class="token punctuation">(</span>shm_id<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="16"></td><td><pre>    <span class="token keyword">if</span> <span class="token punctuation">(</span>shm <span class="token operator">==</span> <span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="17"></td><td><pre>        <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"Failed to attach shared memory"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="18"></td><td><pre>        <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="19"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="20"></td><td><pre></pre></td></tr><tr><td data-num="21"></td><td><pre>    <span class="token comment">// 设置共享内存</span></pre></td></tr><tr><td data-num="22"></td><td><pre>	shared <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">shm_data</span><span class="token operator">*</span><span class="token punctuation">)</span>shm<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="23"></td><td><pre></pre></td></tr><tr><td data-num="24"></td><td><pre>    <span class="token comment">// 设置信号量</span></pre></td></tr><tr><td data-num="25"></td><td><pre>    <span class="token class-name">sem_t</span> <span class="token operator">*</span>msg1_semwr<span class="token punctuation">,</span><span class="token operator">*</span>msg1_semrd<span class="token punctuation">,</span><span class="token operator">*</span>msg2_semwr<span class="token punctuation">,</span><span class="token operator">*</span>msg2_semrd<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="26"></td><td><pre>    msg1_semwr<span class="token operator">=</span><span class="token function">sem_open</span><span class="token punctuation">(</span>MSG1_SEMWR<span class="token punctuation">,</span>O_CREAT<span class="token punctuation">,</span><span class="token number">0666</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="27"></td><td><pre>    msg1_semrd<span class="token operator">=</span><span class="token function">sem_open</span><span class="token punctuation">(</span>MSG1_SEMRD<span class="token punctuation">,</span>O_CREAT<span class="token punctuation">,</span><span class="token number">0666</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="28"></td><td><pre>    msg2_semwr<span class="token operator">=</span><span class="token function">sem_open</span><span class="token punctuation">(</span>MSG2_SEMWR<span class="token punctuation">,</span>O_CREAT<span class="token punctuation">,</span><span class="token number">0666</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="29"></td><td><pre>    msg2_semrd<span class="token operator">=</span><span class="token function">sem_open</span><span class="token punctuation">(</span>MSG2_SEMRD<span class="token punctuation">,</span>O_CREAT<span class="token punctuation">,</span><span class="token number">0666</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="30"></td><td><pre>    <span class="token keyword">if</span><span class="token punctuation">(</span>msg1_semwr<span class="token operator">==</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">1</span> <span class="token operator">||</span> msg1_semrd<span class="token operator">==</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">1</span> <span class="token operator">||</span>msg2_semwr<span class="token operator">==</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">1</span> <span class="token operator">||</span> msg2_semrd<span class="token operator">==</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="31"></td><td><pre>        <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"sem_open failure"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="32"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="33"></td><td><pre></pre></td></tr><tr><td data-num="34"></td><td><pre>    <span class="token keyword">int</span> running <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="35"></td><td><pre>    <span class="token comment">// 接收并处理消息</span></pre></td></tr><tr><td data-num="36"></td><td><pre>    <span class="token keyword">while</span> <span class="token punctuation">(</span>running<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="37"></td><td><pre>        <span class="token function">sem_wait</span><span class="token punctuation">(</span>msg1_semrd<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="38"></td><td><pre>        <span class="token keyword">char</span> expression<span class="token punctuation">[</span><span class="token number">100</span><span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="39"></td><td><pre>        <span class="token function">strcpy</span><span class="token punctuation">(</span>expression<span class="token punctuation">,</span>shared<span class="token operator">-></span>text<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="40"></td><td><pre>        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>expression<span class="token punctuation">,</span> <span class="token string">"end"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="41"></td><td><pre>            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Receiver: Received end from Sender\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="42"></td><td><pre>            <span class="token function">sem_post</span><span class="token punctuation">(</span>msg1_semwr<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="43"></td><td><pre></pre></td></tr><tr><td data-num="44"></td><td><pre>            <span class="token function">sem_wait</span><span class="token punctuation">(</span>msg2_semwr<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="45"></td><td><pre>            <span class="token function">strcpy</span><span class="token punctuation">(</span>shared<span class="token operator">-></span>text<span class="token punctuation">,</span> <span class="token string">"over"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="46"></td><td><pre>            running<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="47"></td><td><pre>            <span class="token function">sem_post</span><span class="token punctuation">(</span>msg2_semrd<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="48"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="49"></td><td><pre>        <span class="token keyword">else</span><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="50"></td><td><pre>            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Receiver: Received expression '%s' from Sender\n"</span><span class="token punctuation">,</span> expression<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="51"></td><td><pre>            <span class="token function">sem_post</span><span class="token punctuation">(</span>msg1_semwr<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="52"></td><td><pre></pre></td></tr><tr><td data-num="53"></td><td><pre>            <span class="token comment">// 计算表达式结果</span></pre></td></tr><tr><td data-num="54"></td><td><pre>            <span class="token function">sem_wait</span><span class="token punctuation">(</span>msg2_semwr<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="55"></td><td><pre>            <span class="token keyword">int</span> num1<span class="token punctuation">,</span> num2<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="56"></td><td><pre>            <span class="token function">sscanf</span><span class="token punctuation">(</span>expression<span class="token punctuation">,</span> <span class="token string">"%d+%d"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>num1<span class="token punctuation">,</span> <span class="token operator">&amp;</span>num2<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="57"></td><td><pre>            <span class="token keyword">int</span> result <span class="token operator">=</span> num1 <span class="token operator">+</span> num2<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="58"></td><td><pre>            <span class="token function">sprintf</span><span class="token punctuation">(</span>shared<span class="token operator">-></span>text<span class="token punctuation">,</span> <span class="token string">"%d"</span><span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="59"></td><td><pre>            <span class="token function">sem_post</span><span class="token punctuation">(</span>msg2_semrd<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="60"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="61"></td><td><pre>        </pre></td></tr><tr><td data-num="62"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="63"></td><td><pre></pre></td></tr><tr><td data-num="64"></td><td><pre>    <span class="token comment">// 关闭信号量</span></pre></td></tr><tr><td data-num="65"></td><td><pre>    <span class="token function">sem_close</span><span class="token punctuation">(</span>msg1_semwr<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="66"></td><td><pre>    <span class="token function">sem_close</span><span class="token punctuation">(</span>msg1_semrd<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="67"></td><td><pre>    <span class="token function">sem_close</span><span class="token punctuation">(</span>msg2_semwr<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="68"></td><td><pre>    <span class="token function">sem_close</span><span class="token punctuation">(</span>msg2_semrd<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="69"></td><td><pre>    <span class="token comment">// 删除信号量文件</span></pre></td></tr><tr><td data-num="70"></td><td><pre>    <span class="token function">sem_unlink</span><span class="token punctuation">(</span>MSG1_SEMRD<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="71"></td><td><pre>    <span class="token function">sem_unlink</span><span class="token punctuation">(</span>MSG1_SEMWR<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="72"></td><td><pre>    <span class="token function">sem_unlink</span><span class="token punctuation">(</span>MSG2_SEMRD<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="73"></td><td><pre>    <span class="token function">sem_unlink</span><span class="token punctuation">(</span>MSG2_SEMWR<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="74"></td><td><pre>    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="75"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr></table></figure><h2 id="管道"><a class="anchor" href="#管道">#</a> 管道</h2>
+<blockquote>
+<p>操作系统在内核中为进程创建的的一块缓冲区，若多个进程可以访问到同一块缓冲区，就可以实现进程间通信，通过半双工通信（可以选择方向的单向通信）实现数据传输</p>
+</blockquote>
+<h3 id="匿名管道"><a class="anchor" href="#匿名管道">#</a> 匿名管道</h3>
+<blockquote>
+<p>在这块内核中的缓冲区没有明确的标识符，其他进程无法直接访问管道</p>
+</blockquote>
+<p>使用匿名管道需要包含头文件 <code>unistd.h</code></p>
+<p><strong>特性</strong></p>
+<ul>
+<li>匿名管道只能用于具有亲缘关系的进程间通信</li>
+<li>匿名管道创建时，操作系统会提供两个操作句柄（文件描述符）（其中一个用于从操作管道读取数据，一个向管道中写入数据）</li>
+<li>因此只能通过创建子进程，子进程通过复制父进程的方式，获取到管道的操作句柄，进而实现访问同一个管道通信</li>
+</ul>
+<p><img data-src="/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/image-20230529111643432.png" alt="image-20230529111643432" style="aspect-ratio:930 / 446;"></p>
+<h4 id="pipe"><a class="anchor" href="#pipe">#</a> pipe</h4>
+<p>创建匿名管道</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="2"></td><td><pre>@param fd [2]: 文件描述符数组，其中 fd [0] 表示读端，fd [1] 表示写端 </pre></td></tr><tr><td data-num="3"></td><td><pre>@return: 成功返回 0，失败返回 - 1</pre></td></tr><tr><td data-num="4"></td><td><pre>*/</pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token keyword">int</span> <span class="token function">pipe</span><span class="token punctuation">(</span><span class="token keyword">int</span> fd<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><div class="note info">
+<ul>
+<li>
+<p>管道要不然只能读，要不然只能写（单向传输）；使用的时候如果不使用哪一端，关闭哪一端就可以</p>
+</li>
+<li>
+<p>若管道中没有数据，则 read 就会阻塞；若管道中数据写满了则 write 就会阻塞</p>
+</li>
+</ul>
+</div>
+<h4 id="示例"><a class="anchor" href="#示例">#</a> 示例</h4>
+<blockquote>
+<p>从键盘读取数据，写入管道，读取管道，写到屏幕</p>
+</blockquote>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span> </span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h></span> </span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string.h></span> </span></pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;unistd.h></span></span></pre></td></tr><tr><td data-num="5"></td><td><pre></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="7"></td><td><pre><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="8"></td><td><pre>    <span class="token keyword">int</span> fds<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="9"></td><td><pre>    <span class="token keyword">char</span> buf<span class="token punctuation">[</span><span class="token number">100</span><span class="token punctuation">]</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="10"></td><td><pre>    <span class="token keyword">int</span> len<span class="token punctuation">;</span></pre></td></tr><tr><td data-num="11"></td><td><pre>    </pre></td></tr><tr><td data-num="12"></td><td><pre>	<span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">pipe</span><span class="token punctuation">(</span>fds<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token punctuation">)</span> </pre></td></tr><tr><td data-num="13"></td><td><pre>		<span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"make pipe error"</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="14"></td><td><pre>		</pre></td></tr><tr><td data-num="15"></td><td><pre>    <span class="token comment">// read from stdin</span></pre></td></tr><tr><td data-num="16"></td><td><pre>    <span class="token keyword">while</span> <span class="token punctuation">(</span> <span class="token function">fgets</span><span class="token punctuation">(</span>buf<span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">,</span> <span class="token constant">stdin</span><span class="token punctuation">)</span> <span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="17"></td><td><pre>        len <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="18"></td><td><pre>        <span class="token comment">// write into pipe</span></pre></td></tr><tr><td data-num="19"></td><td><pre>        <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">write</span><span class="token punctuation">(</span>fds<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> buf<span class="token punctuation">,</span> len<span class="token punctuation">)</span> <span class="token operator">!=</span> len <span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="20"></td><td><pre>            <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"write to pipe error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="21"></td><td><pre>			<span class="token keyword">break</span><span class="token punctuation">;</span> </pre></td></tr><tr><td data-num="22"></td><td><pre>		<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="23"></td><td><pre>        <span class="token function">memset</span><span class="token punctuation">(</span>buf<span class="token punctuation">,</span> <span class="token number">0x00</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="24"></td><td><pre>        </pre></td></tr><tr><td data-num="25"></td><td><pre>        <span class="token comment">// read from pipe</span></pre></td></tr><tr><td data-num="26"></td><td><pre>		<span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token punctuation">(</span>len<span class="token operator">=</span><span class="token function">read</span><span class="token punctuation">(</span>fds<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> buf<span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> </pre></td></tr><tr><td data-num="27"></td><td><pre>			<span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"read from pipe error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="28"></td><td><pre>			<span class="token keyword">break</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="29"></td><td><pre>		<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="30"></td><td><pre>		</pre></td></tr><tr><td data-num="31"></td><td><pre>        <span class="token comment">// write to stdout</span></pre></td></tr><tr><td data-num="32"></td><td><pre>        <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">write</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> buf<span class="token punctuation">,</span> len<span class="token punctuation">)</span> <span class="token operator">!=</span> len <span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="33"></td><td><pre>            <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"write to stdout error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="34"></td><td><pre>            <span class="token keyword">break</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="35"></td><td><pre>		<span class="token punctuation">&#125;</span> 	</pre></td></tr><tr><td data-num="36"></td><td><pre>	<span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="37"></td><td><pre>	<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="38"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr></table></figure><h3 id="命名管道"><a class="anchor" href="#命名管道">#</a> 命名管道</h3>
+<blockquote>
+<p>命名管道是内核中的缓冲区，这块缓冲区具有标识符（标识符是一个可见于文件系统的管道文件），其他的进程可以通过这个标识符，找到这个缓冲区（通过打开一个管道文件，进而访问到同一块缓冲区），进而实现通信</p>
+</blockquote>
+<p>使用命名管道需要包含头文件  <code>sys/types.h</code> ,  <code>sys/stat.h</code></p>
+<p><strong>特性</strong></p>
+<ul>
+<li>可用于同一主机上的任意进程间通信</li>
+<li>多个进程通过命名管道通信时通过打开命令管道文件访问同一块内核中的缓冲区实现通信</li>
+</ul>
+<h4 id="mkfifo"><a class="anchor" href="#mkfifo">#</a> mkfifo</h4>
+<p>创建命名管道</p>
+<blockquote>
+<p>mkfifo 函数默认指定 O_CREAT | O_EXECL 方式创建 FIFO, mkfifo 的一般使用方式是：通过 mkfifo 创建 FIFO，然后调用 open，以读或者写的方式之一打开 FIFO，然后进行数据通信。</p>
+</blockquote>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">/*</span></pre></td></tr><tr><td data-num="2"></td><td><pre>@param filename: 管道文件名称</pre></td></tr><tr><td data-num="3"></td><td><pre>@param mode: 指定的文件权限位，类似于 open 函数的第三个参数。即创建该 FIFO 时，指定用户的访问权限，有以下值：S_IRUSR，S_IWUSR，S_IRGRP，S_IWGRP，S_IROTH，S_IWOTH。</pre></td></tr><tr><td data-num="4"></td><td><pre>@return: 成功返回 0，失败返回 - 1</pre></td></tr><tr><td data-num="5"></td><td><pre>*/</pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token keyword">int</span> <span class="token function">mkfifo</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>filename<span class="token punctuation">,</span> <span class="token class-name">mode_t</span> mode<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><h4 id="示例-2"><a class="anchor" href="#示例-2">#</a> 示例</h4>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">// FIFOwrite.c</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span>  </span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string.h></span>  </span></pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;unistd.h></span>  </span></pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/types.h></span>  </span></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/stat.h></span>  </span></pre></td></tr><tr><td data-num="7"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;fcntl.h></span>  </span></pre></td></tr><tr><td data-num="8"></td><td><pre>  </pre></td></tr><tr><td data-num="9"></td><td><pre><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  </pre></td></tr><tr><td data-num="10"></td><td><pre><span class="token punctuation">&#123;</span>  </pre></td></tr><tr><td data-num="11"></td><td><pre>    <span class="token keyword">int</span> fd<span class="token punctuation">;</span>  </pre></td></tr><tr><td data-num="12"></td><td><pre>    <span class="token keyword">int</span> ret<span class="token punctuation">;</span>      </pre></td></tr><tr><td data-num="13"></td><td><pre>    ret <span class="token operator">=</span> <span class="token function">mkfifo</span><span class="token punctuation">(</span><span class="token string">"my_fifo"</span><span class="token punctuation">,</span> <span class="token number">0666</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 创建命名管道  </span></pre></td></tr><tr><td data-num="14"></td><td><pre>    <span class="token keyword">if</span><span class="token punctuation">(</span>ret <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span>  </pre></td></tr><tr><td data-num="15"></td><td><pre>    <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="16"></td><td><pre>        <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"mkfifo"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  </pre></td></tr><tr><td data-num="17"></td><td><pre>    <span class="token punctuation">&#125;</span> </pre></td></tr><tr><td data-num="18"></td><td><pre>    fd <span class="token operator">=</span> <span class="token function">open</span><span class="token punctuation">(</span><span class="token string">"my_fifo"</span><span class="token punctuation">,</span> O_WRONLY<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 等着只读  </span></pre></td></tr><tr><td data-num="19"></td><td><pre>    <span class="token keyword">if</span><span class="token punctuation">(</span>fd <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span>  </pre></td></tr><tr><td data-num="20"></td><td><pre>    <span class="token punctuation">&#123;</span>  </pre></td></tr><tr><td data-num="21"></td><td><pre>        <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"open fifo"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  </pre></td></tr><tr><td data-num="22"></td><td><pre>    <span class="token punctuation">&#125;</span>  </pre></td></tr><tr><td data-num="23"></td><td><pre>    <span class="token keyword">char</span> send<span class="token punctuation">[</span><span class="token number">100</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"Hello World"</span><span class="token punctuation">;</span>  </pre></td></tr><tr><td data-num="24"></td><td><pre>    <span class="token function">write</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> send<span class="token punctuation">,</span> <span class="token function">strlen</span><span class="token punctuation">(</span>send<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 写数据  </span></pre></td></tr><tr><td data-num="25"></td><td><pre>    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"write to my_fifo buf=%s\n"</span><span class="token punctuation">,</span>send<span class="token punctuation">)</span><span class="token punctuation">;</span>  </pre></td></tr><tr><td data-num="26"></td><td><pre>    <span class="token keyword">while</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 阻塞，保证读写进程保持着通信过程</span></pre></td></tr><tr><td data-num="27"></td><td><pre>    <span class="token function">close</span><span class="token punctuation">(</span>fd<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="28"></td><td><pre>    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>  </pre></td></tr><tr><td data-num="29"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr></table></figure><figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment">// FIFOread.c</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span>  </span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string.h></span>  </span></pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;unistd.h></span>  </span></pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/types.h></span>  </span></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/stat.h></span>  </span></pre></td></tr><tr><td data-num="7"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;fcntl.h></span>  </span></pre></td></tr><tr><td data-num="8"></td><td><pre>  </pre></td></tr><tr><td data-num="9"></td><td><pre><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  </pre></td></tr><tr><td data-num="10"></td><td><pre><span class="token punctuation">&#123;</span>  </pre></td></tr><tr><td data-num="11"></td><td><pre>    <span class="token keyword">int</span> fd<span class="token punctuation">;</span>  </pre></td></tr><tr><td data-num="12"></td><td><pre>    <span class="token keyword">int</span> ret<span class="token punctuation">;</span>      </pre></td></tr><tr><td data-num="13"></td><td><pre>    ret <span class="token operator">=</span> <span class="token function">mkfifo</span><span class="token punctuation">(</span><span class="token string">"my_fifo"</span><span class="token punctuation">,</span> <span class="token number">0666</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 创建命名管道  </span></pre></td></tr><tr><td data-num="14"></td><td><pre>    <span class="token keyword">if</span><span class="token punctuation">(</span>ret <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span>  </pre></td></tr><tr><td data-num="15"></td><td><pre>    <span class="token punctuation">&#123;</span>  </pre></td></tr><tr><td data-num="16"></td><td><pre>        <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"mkfifo"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  </pre></td></tr><tr><td data-num="17"></td><td><pre>    <span class="token punctuation">&#125;</span>  </pre></td></tr><tr><td data-num="18"></td><td><pre>    fd <span class="token operator">=</span> <span class="token function">open</span><span class="token punctuation">(</span><span class="token string">"my_fifo"</span><span class="token punctuation">,</span> O_RDONLY<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 等着只写  </span></pre></td></tr><tr><td data-num="19"></td><td><pre>    <span class="token keyword">if</span><span class="token punctuation">(</span>fd <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span>  </pre></td></tr><tr><td data-num="20"></td><td><pre>    <span class="token punctuation">&#123;</span>  </pre></td></tr><tr><td data-num="21"></td><td><pre>        <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"open fifo"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  </pre></td></tr><tr><td data-num="22"></td><td><pre>    <span class="token punctuation">&#125;</span>  </pre></td></tr><tr><td data-num="23"></td><td><pre>    <span class="token keyword">while</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>  </pre></td></tr><tr><td data-num="24"></td><td><pre>    <span class="token punctuation">&#123;</span>  </pre></td></tr><tr><td data-num="25"></td><td><pre>        <span class="token keyword">char</span> recv<span class="token punctuation">[</span><span class="token number">100</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token number">0</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="26"></td><td><pre>        <span class="token function">read</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> recv<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>recv<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 读数据  </span></pre></td></tr><tr><td data-num="27"></td><td><pre>        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"read from my_fifo buf=[%s]\n"</span><span class="token punctuation">,</span> recv<span class="token punctuation">)</span><span class="token punctuation">;</span>  </pre></td></tr><tr><td data-num="28"></td><td><pre>        <span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  </pre></td></tr><tr><td data-num="29"></td><td><pre>    <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="30"></td><td><pre>    <span class="token function">close</span><span class="token punctuation">(</span>fd<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="31"></td><td><pre>    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>  </pre></td></tr><tr><td data-num="32"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr></table></figure><h1 id="参考资料"><a class="anchor" href="#参考资料">#</a> 参考资料</h1>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cubGludXhwcm9iZS5jb20vbGludXgtcHJvY2Vzcy1tZXRob2QuaHRtbA==">6 种 Linux 进程间的通信方式</span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xqaWFuaHVpL2FydGljbGUvZGV0YWlscy8xMDI4Nzg3OQ==">Linux 进程间通信 —— 使用消息队列</span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzE5OTIzMjE3L2FydGljbGUvZGV0YWlscy84MjkwMjQ0Mg==">linux 多线程之信号量 sem_init</span></li>
+<li><span class="exturl" data-url="aHR0cDovL2MuYmlhbmNoZW5nLm5ldC92aWV3Lzg2MzIuaHRtbA==">Linux 信号量详解</span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC9iYzk3MjdjMWZlMDI=">进程间通信 —POSIX 信号量实现机制</span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vU3V6a2ZseS9wLzE0MzUxNDQ5Lmh0bWw=">有名信号量 —— 无关进程间同步</span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vYWFsYW4vcC8xNTkyOTc4OC5odG1s">利用信号量 semaphore 实现两个进程读写同步</span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xqaWFuaHVpL2FydGljbGUvZGV0YWlscy8xMDI1MzM0NQ==">Linux 进程间通信 —— 使用共享内存</span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9qdWVqaW4uY24vcG9zdC83MDIzNjg3NzcxMjY5MTIwMDM2I2hlYWRpbmctMw==">Linux：带你理解进程间通信–管道</span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2RhYWlrdWFpY2h1YW4vYXJ0aWNsZS9kZXRhaWxzLzgyODI3OTk0">进程间通信之管道（pipe）和命名管道（FIFO）</span></li>
+</ul>
+
+      <div class="tags">
+          <a href="/tags/%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/" rel="tag"><i class="ic i-tag"></i> 进程通信</a>
+          <a href="/tags/%E4%BF%A1%E5%8F%B7%E9%87%8F/" rel="tag"><i class="ic i-tag"></i> 信号量</a>
+          <a href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" rel="tag"><i class="ic i-tag"></i> 消息队列</a>
+          <a href="/tags/%E7%AE%A1%E9%81%93/" rel="tag"><i class="ic i-tag"></i> 管道</a>
+          <a href="/tags/%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/" rel="tag"><i class="ic i-tag"></i> 共享内存</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2025-04-09 02:55:11" itemprop="dateModified" datetime="2025-04-09T02:55:11+08:00">2025-04-09</time>
+  </span>
+  <span id="Linux进程通信/" class="item leancloud_visitors" data-flag-title="Linux进程通信" title="阅读次数">
+      <span class="icon">
+        <i class="ic i-eye"></i>
+      </span>
+      <span class="text">阅读次数</span>
+      <span class="leancloud-visitors-count"></span>
+      <span class="text">次</span>
+  </span>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>oacia <i class="ic i-at"><em>@</em></i>oaciaのBbBlog~
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="https://oacia.dev/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/" title="Linux进程通信">https://oacia.dev/Linux进程通信/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/DASCTF-Apr-2023-X-SU%E6%88%98%E9%98%9F2023%E5%BC%80%E5%B1%80%E4%B9%8B%E6%88%98-reverse-blockchain-writeup/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;557037.webp" title="DASCTF Apr.2023 X SU战队2023开局之战 reverse&amp;&amp;blockchain writeup">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> </span>
+  <h3>DASCTF Apr.2023 X SU战队2023开局之战 reverse&&blockchain writeup</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;330447.webp" title="DASCTF 2023六月挑战赛 二进制专项 RE writeup">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> </span>
+  <h3>DASCTF 2023六月挑战赛 二进制专项 RE writeup</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#posix%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="toc-text"> POSIX 信号量</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E5%90%8D%E4%BF%A1%E5%8F%B7%E9%87%8F%E5%87%BD%E6%95%B0"><span class="toc-text"> 有名信号量函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#sem_open"><span class="toc-text"> sem_open</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sem_close"><span class="toc-text"> sem_close</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sem_unlink"><span class="toc-text"> sem_unlink</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A0%E5%90%8D%E4%BF%A1%E5%8F%B7%E9%87%8F%E5%87%BD%E6%95%B0"><span class="toc-text"> 无名信号量函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#sem_init"><span class="toc-text"> sem_init</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sem_destroy"><span class="toc-text"> sem_destroy</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-text"> 信号量通用函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#sem_wait"><span class="toc-text"> sem_wait</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sem_post"><span class="toc-text"> sem_post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sem_getvalue"><span class="toc-text"> sem_getvalue</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E4%B8%80-4-%E4%B8%AA%E5%94%AE%E7%A5%A8%E5%91%98%E5%8D%96-10-%E5%BC%A0%E7%A5%A8"><span class="toc-text"> 示例一: 4 个售票员卖 10 张票</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="toc-text"> 进程间通信的几种方式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="toc-text"> 消息队列</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0"><span class="toc-text"> 相关函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#msgget"><span class="toc-text"> msgget</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#msgctl"><span class="toc-text"> msgctl</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#msgsnd"><span class="toc-text"> msgsnd</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#msgrcv"><span class="toc-text"> msgrcv</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B-%E5%88%A9%E7%94%A8-linux-%E7%9A%84%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%AE%9E%E7%8E%B0%E4%B8%A4%E4%B8%AA%E7%BA%BF%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1"><span class="toc-text"> 示例：利用 Linux 的消息队列通信机制实现两个线程间的通信</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="toc-text"> 共享内存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0-2"><span class="toc-text"> 相关函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#shmget"><span class="toc-text"> shmget</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#shmat"><span class="toc-text"> shmat</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#shmdt"><span class="toc-text"> shmdt</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#shmctl"><span class="toc-text"> shmctl</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B-%E5%88%A9%E7%94%A8-linux-%E7%9A%84%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%AE%9E%E7%8E%B0%E4%B8%A4%E4%B8%AA%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1"><span class="toc-text"> 示例：利用 Linux 的共享内存通信机制实现两个进程间的通信</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%A1%E9%81%93"><span class="toc-text"> 管道</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8C%BF%E5%90%8D%E7%AE%A1%E9%81%93"><span class="toc-text"> 匿名管道</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#pipe"><span class="toc-text"> pipe</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-text"> 示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E5%90%8D%E7%AE%A1%E9%81%93"><span class="toc-text"> 命名管道</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#mkfifo"><span class="toc-text"> mkfifo</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B-2"><span class="toc-text"> 示例</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-text"> 参考资料</span></a></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="oacia"
+      data-src="/images/avatar.jpg">
+  
+  <svg class="logo-overview" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540.19 380.99">
+    <g id="clips" fill= #00a99d; stroke="none">
+      <clipPath id="o">
+        <path d="M93.57,284c8,0,14.91-1,20.75-3,5.83-2,10.41-3.66,13.75-5,4.66-1.66,6.16-.75,4.5,2.75-1.67,3.5-4.67,6.42-9,8.75-2.34,1.34-6.09,2.84-11.25,4.5-5.17,1.67-11.09,2.5-17.75,2.5-.34,8.67-3.34,16.84-9,24.5-5.67,7.67-13.34,13.34-23,17-6,2.34-12.17,3.59-18.5,3.75-6.34,.17-12.17-.66-17.5-2.5-5.34-1.83-10.09-4.66-14.25-8.5-4.17-3.83-7.25-8.41-9.25-13.75-2-5.33-2.83-11-2.5-17s1.83-11.83,4.5-17.5c2.66-5.66,6.33-10.75,11-15.25,4.66-4.5,10.16-7.75,16.5-9.75,5.66-1.66,11.41-1.66,17.25,0,5.83,1.67,10.08,4.34,12.75,8,1.66,2.67,2.5,5.67,2.5,9,3-2,6.33-3,10-3h1c3.33,0,6.5,.84,9.5,2.5,3,1.67,5.33,4.5,7,8.5l1,3.5Zm-34,39.5c5.66-.66,10.33-3.83,14-9.5,3.66-5.66,5.33-12.16,5-19.5-4.67,.34-9.09-.41-13.25-2.25-4.17-1.83-6.42-4.58-6.75-8.25-.67-3,0-5.5,2-7.5-.67-2.66-2.75-5-6.25-7s-7.09-2.16-10.75-.5c-4.67,2-8.25,5.84-10.75,11.5-2.5,5.67-3.09,11.84-1.75,18.5,1.33,8,4.75,14.34,10.25,19,5.5,4.67,11.58,6.5,18.25,5.5Z"/>
+      </clipPath>
+      <clipPath id="a1">
+        <path d="M176.06,270c5,4,8.5,9.17,10.5,15.5,.66-1.33,1.25-2.33,1.75-3,.5-.66,1.08-1.33,1.75-2,3.66-2.66,8-3.08,13-1.25,5,1.84,8.5,4.09,10.5,6.75,1,1.34,1.41,2.75,1.25,4.25-.17,1.5-.5,3.42-1,5.75-.5,2.34-1,5.09-1.5,8.25-.5,3.17-.42,6.92,.25,11.25,.33,3.67,1.25,6.5,2.75,8.5s3.16,3.25,5,3.75c1.83,.5,3.75,.34,5.75-.5,2-.83,3.83-2.08,5.5-3.75,3-3.66,5.75-7.66,8.25-12,2.5-4.33,4.25-8.16,5.25-11.5,1.33-3.66,3.41-5.25,6.25-4.75,2.83,.5,3.58,3.09,2.25,7.75-1.34,4.67-3,8.92-5,12.75-2,3.84-5.17,8.59-9.5,14.25-4.67,5.67-11.34,9.59-20,11.75-8.67,2.17-17.67,.42-27-5.25-5-3.33-8.34-8.83-10-16.5-.67,1.34-2,3.34-4,6-3.67,4.67-7.84,8.59-12.5,11.75-4.67,3.17-9.42,5.34-14.25,6.5-4.84,1.17-9.59,1.34-14.25,.5-4.67-.83-9-2.75-13-5.75-7.67-6-11.75-14.33-12.25-25-.5-10.66,2.91-20.83,10.25-30.5,7.33-9.66,16.25-15.75,26.75-18.25s19.58-.91,27.25,4.75Zm-25,60c4.66,1.67,9.66,.17,15-4.5,5.33-4.66,9.33-10.83,12-18.5,2.33-6.66,2.58-12.5,.75-17.5-1.84-5-5.09-8.33-9.75-10-4.67-1.66-9.34-1.33-14,1-4.67,2.34-8.34,7.34-11,15-3,7.67-3.84,14.92-2.5,21.75,1.33,6.84,4.5,11.09,9.5,12.75Z"/>
+      </clipPath>
+      <clipPath id="c">
+        <path d="M250.06,280.5c4.66-7.66,12-13.16,22-16.5,10-3.33,19.83-3.66,29.5-1,7.66,2.34,13.5,5.67,17.5,10,4,4.34,5.83,8.5,5.5,12.5-.34,4.67-2.25,8.59-5.75,11.75-3.5,3.17-7.09,5.34-10.75,6.5-3.67,1.17-6.84,1.25-9.5,.25-2.67-1-3.34-3.16-2-6.5,2.66-8,2.75-14.58,.25-19.75-2.5-5.16-5.92-6.41-10.25-3.75-2.67,1.67-5,4.09-7,7.25-2,3.17-3.5,6.75-4.5,10.75s-1.42,8.09-1.25,12.25c.16,4.17,.75,7.92,1.75,11.25,1.33,4,3.66,7.42,7,10.25,3.33,2.84,7.16,4.67,11.5,5.5,4.33,.84,8.91,.67,13.75-.5,4.83-1.16,9.25-3.75,13.25-7.75,7.33-6.66,12.33-14.33,15-23,.33-1.66,1.16-2.91,2.5-3.75,1.33-.83,2.5-1.08,3.5-.75,1,.34,1.83,1.09,2.5,2.25,.66,1.17,.66,2.92,0,5.25-2.34,9.34-6.34,17-12,23-4.67,5.67-10.5,10.42-17.5,14.25-7,3.84-14.25,6.09-21.75,6.75-7.5,.67-14.84-.33-22-3-7.17-2.66-13.25-7.5-18.25-14.5-6-8.66-8.75-17.66-8.25-27,.5-9.33,2.25-16.66,5.25-22Z"/>
+      </clipPath>
+      <clipPath id="i_b">
+        <path d="M393.06,330c-2.34,2.67-5.17,5.09-8.5,7.25-3.34,2.17-7.09,3.59-11.25,4.25-4.17,.67-8.59,.67-13.25,0-4.67-.66-9.17-2.33-13.5-5-4.67-2.66-7.67-7.58-9-14.75-1.34-7.16-1.83-14.66-1.5-22.5,.33-7.83,1.33-14.91,3-21.25,1.66-6.33,3.33-10.16,5-11.5,3.66-2.66,8-3.08,13-1.25,5,1.84,8.5,4.09,10.5,6.75,1,1.34,1.41,3.59,1.25,6.75-.17,3.17-.5,6.92-1,11.25-.5,4.34-1.09,8.92-1.75,13.75-.67,4.84-.67,9.42,0,13.75,.33,3.67,1.33,6.42,3,8.25,1.66,1.84,3.5,2.84,5.5,3,2,.17,4-.25,6-1.25s3.83-2.33,5.5-4c3-3.66,5.66-7.66,8-12,2.33-4.33,4.16-8.16,5.5-11.5,1-3.66,2.91-5.25,5.75-4.75,2.83,.5,3.75,3.09,2.75,7.75-1.34,4.67-3,8.92-5,12.75-2,3.84-5.34,8.59-10,14.25Z"/>
+      </clipPath>
+      <clipPath id="a2">
+        <path d="M461.56,270c5,4,8.5,9.17,10.5,15.5,.66-1.33,1.25-2.33,1.75-3,.5-.66,1.08-1.33,1.75-2,3.66-2.66,8-3.08,13-1.25,5,1.84,8.5,4.09,10.5,6.75,1,1.34,1.41,2.75,1.25,4.25-.17,1.5-.5,3.42-1,5.75-.5,2.34-1,5.09-1.5,8.25-.5,3.17-.42,6.92,.25,11.25,.33,3.67,1.25,6.5,2.75,8.5s3.16,3.25,5,3.75c1.83,.5,3.75,.34,5.75-.5,2-.83,3.83-2.08,5.5-3.75,3-3.66,5.75-7.66,8.25-12,2.5-4.33,4.25-8.16,5.25-11.5,1.33-3.66,3.41-5.25,6.25-4.75,2.83,.5,3.58,3.09,2.25,7.75-1.34,4.67-3,8.92-5,12.75-2,3.84-5.17,8.59-9.5,14.25-4.67,5.67-11.34,9.59-20,11.75-8.67,2.17-17.67,.42-27-5.25-5-3.33-8.34-8.83-10-16.5-.67,1.34-2,3.34-4,6-3.67,4.67-7.84,8.59-12.5,11.75-4.67,3.17-9.42,5.34-14.25,6.5-4.84,1.17-9.59,1.34-14.25,.5-4.67-.83-9-2.75-13-5.75-7.67-6-11.75-14.33-12.25-25-.5-10.66,2.91-20.83,10.25-30.5,7.33-9.66,16.25-15.75,26.75-18.25s19.58-.91,27.25,4.75Zm-25,60c4.66,1.67,9.66,.17,15-4.5,5.33-4.66,9.33-10.83,12-18.5,2.33-6.66,2.58-12.5,.75-17.5-1.84-5-5.09-8.33-9.75-10-4.67-1.66-9.34-1.33-14,1-4.67,2.34-8.34,7.34-11,15-3,7.67-3.84,14.92-2.5,21.75,1.33,6.84,4.5,11.09,9.5,12.75Z"/>
+      </clipPath>
+      
+    </g>
+    <g
+      id="strokes"
+      fill="none"
+      stroke=#96d7f5
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+    <path
+    clip-path="url(#o)"
+    class="oPath path"
+    d="M65.07,278.38c-.29-1.76-1.26-6.18-5-10-3.34-3.4-7.07-4.47-9-5-6.95-1.9-12.89,.22-15,1-10.95,4.04-18.33,15.16-20,26-1.42,9.21,1.56,16.56,3,20,1.49,3.55,3.94,9.39,10,14,6.66,5.07,13.73,5.65,18,6,3,.25,9.01,.67,16-2,1.72-.66,5.78-2.38,10-6,.99-.86,4.82-4.25,8-10,2.79-5.06,3.72-9.49,4-11,.39-2.12,1.09-6.93,0-13-1.05-5.85-1.95-10.86-6-13-2.83-1.5-7.27-1.62-10,1-1.73,1.66-2.85,4.55-2,7,1.04,2.99,4.58,4.01,8,5,1.16,.33,2.91,.75,8,1,4.72,.23,8.68,.18,12,0,6.49-.36,9.74-.54,12-1,4.35-.88,7.44-2.14,12-4,4.67-1.9,6.76-3.17,8-4,2.56-1.7,3.95-3.1,5-4,5.5-4.73,12.89-6.48,18-7,6.09-.62,11.96-.21,18,3,4.89,2.6,8.27,6.84,10,9,1.86,2.32,3.15,4.46,4,6"
+    stroke-width="32.5"
+    ></path>
+    <path
+      clip-path="url(#a1)"
+      class="a1Path path"
+      d="M154.07,270.38c-3.73,1.48-11.88,5.3-18,14-4.95,7.03-6.09,13.7-7,19-1.38,8.06-2.81,16.39,2,24,3.93,6.21,9.88,8.58,11,9,7.28,2.76,13.71,.75,16,0,5.19-1.71,8.32-4.6,12-8,2.48-2.29,6.78-6.34,10-13,2.71-5.61,3.51-10.73,4-14,.86-5.79,.57-9.98,1-10,.41-.02,.79,3.69,2,11,1.71,10.28,2.44,11.93,3,13,1.44,2.76,2.62,5.84,7,10,4.73,4.49,8.09,5.74,11,7,6.75,2.92,13.16,1.45,15,1,4.94-1.21,8.2-3.64,10-5,4.09-3.11,6.34-6.48,8-9,2.23-3.4,3.47-6.35,5-10,1.22-2.9,2.18-5.67,3-8,1.52-4.35,1.41-4.5,2-6,1.75-4.46,2-6,7-12,2.31-2.77,6.32-8.54,10-11,3.79-2.54,7-3.81,10-5,5.33-2.12,9-2.17,12-2,5.4,.32,10.2,4.49,12,6,2.31,1.93,6.05,6.97,7,12,.62,3.29-.19,5.13-1,8-.86,3.04-3.06,5.4-4,7"
+      stroke-width="59"
+    ></path>
+    <path
+      clip-path="url(#c)"
+      class="cPath path"
+      d="M273.07,272.38c-3.08,2.79-9.54,9.45-12,20-2.1,9.02-.22,16.29,1,21,1.57,6.05,3.22,12.44,9,18,6.67,6.42,14.58,7.66,17,8,6.36,.9,11.22-.42,17-2,3.68-1,8.59-2.39,14-6,4.13-2.76,6.84-5.67,9-8,3.24-3.49,5.27-6.46,7-9,2.22-3.27,4.18-6.89,8-14,3.39-6.3,5.1-9.5,6-12,1.67-4.63,2.38-8.58,3-12,.72-4,.94-6.77,1-9,.03-1.23,.02-2.26,0-3"
+      stroke-width="110"
+    ></path>
+    <path
+      clip-path="url(#i_b)"
+      class="i_bPath path"
+      d="M355.07,265.38c-1.55,12.11-2.45,22.6-3,31-.66,10.17-.79,16.98,2,25,1.74,5,3.75,10.53,9,13,6.29,2.97,13.34-.3,17-2,6.11-2.83,9.64-6.89,14-12,9.03-10.59,9.67-15.19,10-17,.6-3.32,1.32-6.16,1-8"
+      stroke-width="33"
+    ></path>
+    <path
+      clip-path="url(#a2)"
+      class="a2Path path"
+      d="M470.07,302.38c.32-2.77,.45-7.09-1-12-.98-3.32-5.25-15.49-17-19-12.13-3.62-22.23,4.71-25,7-6.75,5.57-9.28,12.36-11,17-1.68,4.53-5.22,14.03-2,25,1.19,4.05,3.29,11.22,10,15,7.78,4.39,16.49,1.26,20,0,6.31-2.27,10.12-6.13,14-10,4.99-4.97,7.76-9.61,11-15,1.88-3.14,4.54-7.61,7-14,3.15-8.18,3.42-14.06,4-14,.51,.05-.23,7.53,0,19,.07,3.38,.38,6.92,1,14,.41,4.62,.69,7.05,2,10,.82,1.86,2.1,4.74,5,7,4.4,3.43,9.65,3.17,13,3,1.08-.05,5.74-.35,11-3,4.39-2.21,7.04-4.97,9-7,.85-.89,3.48-3.69,6-8,1.51-2.58,1.83-3.87,4-9,1.54-3.64,2.92-6.7,4-9"
+      stroke-width="70"
+    ></path>
+    </g>
+    <g
+      id="strokes2"
+      fill="none"
+      stroke=#ff97b8
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path
+        clip-path="url(#o)"
+        class="oPath path"
+        d="M65.07,278.38c-.29-1.76-1.26-6.18-5-10-3.34-3.4-7.07-4.47-9-5-6.95-1.9-12.89,.22-15,1-10.95,4.04-18.33,15.16-20,26-1.42,9.21,1.56,16.56,3,20,1.49,3.55,3.94,9.39,10,14,6.66,5.07,13.73,5.65,18,6,3,.25,9.01,.67,16-2,1.72-.66,5.78-2.38,10-6,.99-.86,4.82-4.25,8-10,2.79-5.06,3.72-9.49,4-11,.39-2.12,1.09-6.93,0-13-1.05-5.85-1.95-10.86-6-13-2.83-1.5-7.27-1.62-10,1-1.73,1.66-2.85,4.55-2,7,1.04,2.99,4.58,4.01,8,5,1.16,.33,2.91,.75,8,1,4.72,.23,8.68,.18,12,0,6.49-.36,9.74-.54,12-1,4.35-.88,7.44-2.14,12-4,4.67-1.9,6.76-3.17,8-4,2.56-1.7,3.95-3.1,5-4,5.5-4.73,12.89-6.48,18-7,6.09-.62,11.96-.21,18,3,4.89,2.6,8.27,6.84,10,9,1.86,2.32,3.15,4.46,4,6"
+        stroke-width="32.5"
+      ></path>
+      <path
+        clip-path="url(#a1)"
+        class="a1Path path"
+        d="M154.07,270.38c-3.73,1.48-11.88,5.3-18,14-4.95,7.03-6.09,13.7-7,19-1.38,8.06-2.81,16.39,2,24,3.93,6.21,9.88,8.58,11,9,7.28,2.76,13.71,.75,16,0,5.19-1.71,8.32-4.6,12-8,2.48-2.29,6.78-6.34,10-13,2.71-5.61,3.51-10.73,4-14,.86-5.79,.57-9.98,1-10,.41-.02,.79,3.69,2,11,1.71,10.28,2.44,11.93,3,13,1.44,2.76,2.62,5.84,7,10,4.73,4.49,8.09,5.74,11,7,6.75,2.92,13.16,1.45,15,1,4.94-1.21,8.2-3.64,10-5,4.09-3.11,6.34-6.48,8-9,2.23-3.4,3.47-6.35,5-10,1.22-2.9,2.18-5.67,3-8,1.52-4.35,1.41-4.5,2-6,1.75-4.46,2-6,7-12,2.31-2.77,6.32-8.54,10-11,3.79-2.54,7-3.81,10-5,5.33-2.12,9-2.17,12-2,5.4,.32,10.2,4.49,12,6,2.31,1.93,6.05,6.97,7,12,.62,3.29-.19,5.13-1,8-.86,3.04-3.06,5.4-4,7"
+        stroke-width="59"
+      ></path>
+      <path
+        clip-path="url(#c)"
+        class="cPath path"
+        d="M273.07,272.38c-3.08,2.79-9.54,9.45-12,20-2.1,9.02-.22,16.29,1,21,1.57,6.05,3.22,12.44,9,18,6.67,6.42,14.58,7.66,17,8,6.36,.9,11.22-.42,17-2,3.68-1,8.59-2.39,14-6,4.13-2.76,6.84-5.67,9-8,3.24-3.49,5.27-6.46,7-9,2.22-3.27,4.18-6.89,8-14,3.39-6.3,5.1-9.5,6-12,1.67-4.63,2.38-8.58,3-12,.72-4,.94-6.77,1-9,.03-1.23,.02-2.26,0-3"
+        stroke-width="110"
+      ></path>
+      <path
+        clip-path="url(#i_b)"
+        class="i_bPath path"
+        d="M355.07,265.38c-1.55,12.11-2.45,22.6-3,31-.66,10.17-.79,16.98,2,25,1.74,5,3.75,10.53,9,13,6.29,2.97,13.34-.3,17-2,6.11-2.83,9.64-6.89,14-12,9.03-10.59,9.67-15.19,10-17,.6-3.32,1.32-6.16,1-8"
+        stroke-width="33"
+      ></path>
+      <path
+        clip-path="url(#a2)"
+        class="a2Path path"
+        d="M470.07,302.38c.32-2.77,.45-7.09-1-12-.98-3.32-5.25-15.49-17-19-12.13-3.62-22.23,4.71-25,7-6.75,5.57-9.28,12.36-11,17-1.68,4.53-5.22,14.03-2,25,1.19,4.05,3.29,11.22,10,15,7.78,4.39,16.49,1.26,20,0,6.31-2.27,10.12-6.13,14-10,4.99-4.97,7.76-9.61,11-15,1.88-3.14,4.54-7.61,7-14,3.15-8.18,3.42-14.06,4-14,.51,.05-.23,7.53,0,19,.07,3.38,.38,6.92,1,14,.41,4.62,.69,7.05,2,10,.82,1.86,2.1,4.74,5,7,4.4,3.43,9.65,3.17,13,3,1.08-.05,5.74-.35,11-3,4.39-2.21,7.04-4.97,9-7,.85-.89,3.48-3.69,6-8,1.51-2.58,1.83-3.87,4-9,1.54-3.64,2.92-6.7,4-9"
+        stroke-width="70"
+      ></path>
+    </g>
+    <g class="dot-group">
+      <path
+        id="dot"
+        fill=#ff97b8
+        d="M362.58,182.21c4.66-.33,9.66,1.17,15,4.5,5.33,3.34,7.66,7.5,7,12.5-.67,2.34-1.92,4.92-3.75,7.75-1.84,2.84-4,5.5-6.5,8s-4.84,4.75-7,6.75c-2.17,2-3.75,3.17-4.75,3.5-2.67,1.67-5.34,2.25-8,1.75-2.67-.5-5-1.5-7-3s-3.59-3.33-4.75-5.5c-1.17-2.16-1.92-4.25-2.25-6.25-.34-2,.16-4.66,1.5-8,1.33-3.33,3.08-6.58,5.25-9.75,2.16-3.16,4.58-6,7.25-8.5,2.66-2.5,5.33-3.75,8-3.75Z"
+      ></path>
+    </g>
+  </svg>
+  <div class="description" itemprop="description">月遇从云 花遇和风</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">53</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">46</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL29hY2lh" title="https:&#x2F;&#x2F;github.com&#x2F;oacia"><i class="ic i-github"></i></span>
+      <a target="_blank" rel="noopener" href="https://twitter.com/oacia86" title="https:&#x2F;&#x2F;twitter.com&#x2F;oacia86" class="item twitter"><i class="ic i-twitter"></i></a>
+      <span class="exturl item paper-plane" data-url="aHR0cHM6Ly90Lm1lL29hY2lh" title="https:&#x2F;&#x2F;t.me&#x2F;oacia"><i class="ic i-paper-plane"></i></span>
+      <span class="exturl item email" data-url="bWFpbHRvOm9hY2lhODZAZ21haWwuY29t" title="mailto:oacia86@gmail.com"><i class="ic i-envelope"></i></span>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/about-oacia/" rel="section"><i class="ic i-user"></i>关于oacia</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/archives/" rel="section"><i class="ic i-feather"></i>文章</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/TODOlist/" rel="section"><i class="ic i-clock"></i>要做的事</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/website_maintenance/" rel="section"><i class="ic i-calendar"></i>更新日志</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/friends/" rel="section"><i class="ic i-heart"></i>小伙伴</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/music/" rel="section"><i class="ic i-music"></i>听会儿歌吧</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/DASCTF-Apr-2023-X-SU%E6%88%98%E9%98%9F2023%E5%BC%80%E5%B1%80%E4%B9%8B%E6%88%98-reverse-blockchain-writeup/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">oacia @ oacia</span>
+  </div>
+  <div class="count">
+    <span class="post-meta-item-icon">
+      <i class="ic i-chart-area"></i>
+    </span>
+    <span title="站点总字数">968k 字</span>
+
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="ic i-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14:40</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+
+
+
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: 'Linux进程通信/',
+    favicon: {
+      show: "柚鳥ナツ",
+      hide: "甘い幸せ"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+
+<script src="//fastly.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>

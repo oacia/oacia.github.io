@@ -1,0 +1,3082 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="google-site-verification" content="qQVmgWozVe7BXoA15J3gAZpEA5dK168admH4U3W6PAk">
+  <meta name="msvalidate.01" content="4902E39C0135E72DE537BCB0FE08B40A">
+  <meta name="baidu-site-verification" content="codeva-CSYjpuVg5v">
+
+
+<link rel="alternate" type="application/rss+xml" title="oaciaのBbBlog~" href="https://oacia.dev/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="oaciaのBbBlog~" href="https://oacia.dev/atom.xml" />
+<link rel="alternate" type="application/json" title="oaciaのBbBlog~" href="https://oacia.dev/feed.json" />
+<link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin=""
+      href="/fonts/noto-serif-sc-v22-chinese-simplified_latin-regular.woff2"
+/>
+<link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin=""
+      href="/fonts/noto-serif-sc-v22-chinese-simplified_latin-700.woff2"
+/>
+<link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin=""
+      href="/fonts/font_1832207_igi8uaupcus.woff2"
+/>
+<link rel="preload" href="/background_picture/1_gongzi.webp" as="image" />
+<link rel="preload" href="/background_picture/2_xiaoxia.webp" as="image" />
+<link rel="preload" href="/background_picture/3_xingye.webp" as="image" />
+<link rel="preload" href="/images/avatar.jpg" as="image" />
+
+
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+
+<link rel="canonical" href="https://oacia.dev/">
+
+
+<meta name="description" content="月遇从云 花遇和风">
+<meta property="og:type" content="website">
+<meta property="og:title" content="oaciaのBbBlog~">
+<meta property="og:url" content="https://oacia.dev/">
+<meta property="og:site_name" content="oaciaのBbBlog~">
+<meta property="og:description" content="月遇从云 花遇和风">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="oacia">
+<meta property="article:tag" content="reverse,安卓逆向,区块链,学习笔记,破解实战,前端,CTF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@oacia86">
+
+
+  <title>oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+  var jq_151 = $.noConflict(true);
+  var RENDERER = {
+    INIT_CHERRY_BLOSSOM_COUNT : 30,
+    MAX_ADDING_INTERVAL : 10,
+    WATCH_INTERVAL : 300,
+    
+    init : function(){
+      this.setParameters();
+      this.reconstructMethods();
+      this.setup();
+      this.bindEvent();
+      this.render();
+    },
+    setParameters : function(){
+      this.$window = jq_151(window);
+      this.$container = jq_151('#loading');
+      this.$canvas = jq_151('<canvas />');
+      this.context = this.$canvas.appendTo(this.$container).get(0).getContext('2d');
+      this.cherries = [];
+      this.watchIds = [];
+    },
+    reconstructMethods : function(){
+      this.watchWindowSize = this.watchWindowSize.bind(this);
+      this.jdugeToStopResize = this.jdugeToStopResize.bind(this);
+      this.render = this.render.bind(this);
+    },
+    setup : function(){
+      this.cherries.length = 0;
+      this.watchIds.length = 0;
+      this.width = this.$container.width();
+      this.height = this.$container.height();
+      this.$canvas.attr({width : this.width, height : this.height});
+      this.maxAddingInterval = Math.round(this.MAX_ADDING_INTERVAL * 1000 / this.width);
+      this.addingInterval = this.maxAddingInterval;
+      this.createCherries();
+    },
+    createCherries : function(){
+      for(var i = 0, length = Math.round(this.INIT_CHERRY_BLOSSOM_COUNT * this.width / 1000); i < length; i++){
+        this.cherries.push(new CHERRY_BLOSSOM(this, true));
+      }
+    },
+    watchWindowSize : function(){
+      this.clearTimer();
+      this.tmpWidth = window.width;
+      this.tmpHeight = window.height;
+      this.watchIds.push(setTimeout(this.jdugeToStopResize, this.WATCH_INTERVAL));
+    },
+    clearTimer : function(){
+      while(this.watchIds.length > 0){
+        clearTimeout(this.watchIds.pop());
+      }
+    },
+    jdugeToStopResize : function(){
+      var width = window.width,
+        height = window.height,
+        stopped = (width == this.tmpWidth && height == this.tmpHeight);
+        
+      this.tmpWidth = width;
+      this.tmpHeight = height;
+      
+      if(stopped){
+        this.setup();
+      }
+    },
+    bindEvent : function(){
+      this.$window.on('resize', this.watchWindowSize);
+    },
+    render : function(){
+      //console.log("render")
+
+      if(jq_151(this.$container).css("display")!="none"){
+        requestAnimationFrame(this.render);
+      }
+      
+      this.context.clearRect(0, 0, this.width, this.height);
+      
+      this.cherries.sort(function(cherry1, cherry2){
+        return cherry1.z - cherry2.z;
+      });
+      for(var i = this.cherries.length - 1; i >= 0; i--){
+        if(!this.cherries[i].render(this.context)){
+          this.cherries.splice(i, 1);
+        }
+      }
+      if(--this.addingInterval == 0){
+        this.addingInterval = this.maxAddingInterval;
+        this.cherries.push(new CHERRY_BLOSSOM(this, false));
+      }
+    }
+  };
+  var CHERRY_BLOSSOM = function(renderer, isRandom){
+    this.renderer = renderer;
+    this.init(isRandom);
+  };
+  CHERRY_BLOSSOM.prototype = {
+    FOCUS_POSITION : 300,
+    FAR_LIMIT : 600,
+    MAX_RIPPLE_COUNT : 100,
+    RIPPLE_RADIUS : 100,
+    SURFACE_RATE : 0.5,
+    SINK_OFFSET : 20,
+    
+    init : function(isRandom){
+      this.x = this.getRandomValue(-this.renderer.width, this.renderer.width);
+      this.y = isRandom ? this.getRandomValue(0, this.renderer.height) : this.renderer.height * 1.5;
+      this.z = this.getRandomValue(0, this.FAR_LIMIT);
+      this.vx = this.getRandomValue(-2, 2);
+      this.vy = -2;
+      this.theta = this.getRandomValue(0, Math.PI * 2);
+      this.phi = this.getRandomValue(0, Math.PI * 2);
+      this.psi = 0;
+      this.dpsi = this.getRandomValue(Math.PI / 600, Math.PI / 300);
+      this.opacity = 0;
+      this.endTheta = false;
+      this.endPhi = false;
+      this.rippleCount = 0;
+      
+      var axis = this.getAxis(),
+        theta = this.theta + Math.ceil(-(this.y + this.renderer.height * this.SURFACE_RATE) / this.vy) * Math.PI / 500;
+      theta %= Math.PI * 2;
+      
+      this.offsetY = 40 * ((theta <= Math.PI / 2 || theta >= Math.PI * 3 / 2) ? -1 : 1);
+      this.thresholdY = this.renderer.height / 2 + this.renderer.height * this.SURFACE_RATE * axis.rate;
+      this.entityColor = this.renderer.context.createRadialGradient(0, 40, 0, 0, 40, 80);
+      this.entityColor.addColorStop(0, 'hsl(330, 70%, ' + 50 * (0.3 + axis.rate) + '%)');
+      this.entityColor.addColorStop(0.05, 'hsl(330, 40%,' + 55 * (0.3 + axis.rate) + '%)');
+      this.entityColor.addColorStop(1, 'hsl(330, 20%, ' + 70 * (0.3 + axis.rate) + '%)');
+      this.shadowColor = this.renderer.context.createRadialGradient(0, 40, 0, 0, 40, 80);
+      this.shadowColor.addColorStop(0, 'hsl(330, 40%, ' + 30 * (0.3 + axis.rate) + '%)');
+      this.shadowColor.addColorStop(0.05, 'hsl(330, 40%,' + 30 * (0.3 + axis.rate) + '%)');
+      this.shadowColor.addColorStop(1, 'hsl(330, 20%, ' + 40 * (0.3 + axis.rate) + '%)');
+    },
+    getRandomValue : function(min, max){
+      return min + (max - min) * Math.random();
+    },
+    getAxis : function(){
+      var rate = this.FOCUS_POSITION / (this.z + this.FOCUS_POSITION),
+        x = this.renderer.width / 2 + this.x * rate,
+        y = this.renderer.height / 2 - this.y * rate;
+      return {rate : rate, x : x, y : y};
+    },
+    renderCherry : function(context, axis){
+      context.beginPath();
+      context.moveTo(0, 40);
+      context.bezierCurveTo(-60, 20, -10, -60, 0, -20);
+      context.bezierCurveTo(10, -60, 60, 20, 0, 40);
+      context.fill();
+      
+      for(var i = -4; i < 4; i++){
+        context.beginPath();
+        context.moveTo(0, 40);
+        context.quadraticCurveTo(i * 12, 10, i * 4, -24 + Math.abs(i) * 2);
+        context.stroke();
+      }
+    },
+    render : function(context){
+      var axis = this.getAxis();
+      
+      if(axis.y == this.thresholdY && this.rippleCount < this.MAX_RIPPLE_COUNT){
+        context.save();
+        context.lineWidth = 2;
+        context.strokeStyle = 'hsla(0, 0%, 100%, ' + (this.MAX_RIPPLE_COUNT - this.rippleCount) / this.MAX_RIPPLE_COUNT + ')';
+        context.translate(axis.x + this.offsetY * axis.rate * (this.theta <= Math.PI ? -1 : 1), axis.y);
+        context.scale(1, 0.3);
+        context.beginPath();
+        context.arc(0, 0, this.rippleCount / this.MAX_RIPPLE_COUNT * this.RIPPLE_RADIUS * axis.rate, 0, Math.PI * 2, false);
+        context.stroke();
+        context.restore();
+        this.rippleCount++;
+      }
+      if(axis.y < this.thresholdY || (!this.endTheta || !this.endPhi)){
+        if(this.y <= 0){
+          this.opacity = Math.min(this.opacity + 0.01, 1);
+        }
+        context.save();
+        context.globalAlpha = this.opacity;
+        context.fillStyle = this.shadowColor;
+        context.strokeStyle = 'hsl(330, 30%,' + 40 * (0.3 + axis.rate) + '%)';
+        context.translate(axis.x, Math.max(axis.y, this.thresholdY + this.thresholdY - axis.y));
+        context.rotate(Math.PI - this.theta);
+        context.scale(axis.rate * -Math.sin(this.phi), axis.rate);
+        context.translate(0, this.offsetY);
+        this.renderCherry(context, axis);
+        context.restore();
+      }
+      context.save();
+      context.fillStyle = this.entityColor;
+      context.strokeStyle = 'hsl(330, 40%,' + 70 * (0.3 + axis.rate) + '%)';
+      context.translate(axis.x, axis.y + Math.abs(this.SINK_OFFSET * Math.sin(this.psi) * axis.rate));
+      context.rotate(this.theta);
+      context.scale(axis.rate * Math.sin(this.phi), axis.rate);
+      context.translate(0, this.offsetY);
+      this.renderCherry(context, axis);
+      context.restore();
+      
+      if(this.y <= -this.renderer.height / 4){
+        if(!this.endTheta){
+          for(var theta = Math.PI / 2, end = Math.PI * 3 / 2; theta <= end; theta += Math.PI){
+            if(this.theta < theta && this.theta + Math.PI / 200 > theta){
+              this.theta = theta;
+              this.endTheta = true;
+              break;
+            }
+          }
+        }
+        if(!this.endPhi){
+          for(var phi = Math.PI / 8, end = Math.PI * 7 / 8; phi <= end; phi += Math.PI * 3 / 4){
+            if(this.phi < phi && this.phi + Math.PI / 200 > phi){
+              this.phi = Math.PI / 8;
+              this.endPhi = true;
+              break;
+            }
+          }
+        }
+      }
+      if(!this.endTheta){
+        if(axis.y == this.thresholdY){
+          this.theta += Math.PI / 200 * ((this.theta < Math.PI / 2 || (this.theta >= Math.PI && this.theta < Math.PI * 3 / 2)) ? 1 : -1);
+        }else{
+          this.theta += Math.PI / 500;
+        }
+        this.theta %= Math.PI * 2;
+      }
+      if(this.endPhi){
+        if(this.rippleCount == this.MAX_RIPPLE_COUNT){
+          this.psi += this.dpsi;
+          this.psi %= Math.PI * 2;
+        }
+      }else{
+        this.phi += Math.PI / ((axis.y == this.thresholdY) ? 200 : 500);
+        this.phi %= Math.PI;
+      }
+      if(this.y <= -this.renderer.height * this.SURFACE_RATE){
+        this.x += 2;
+        this.y = -this.renderer.height * this.SURFACE_RATE;
+      }else{
+        this.x += this.vx;
+        this.y += this.vy;
+      }
+      return this.z > -this.FOCUS_POSITION && this.z < this.FAR_LIMIT && this.x < this.renderer.width * 1.5;
+    }
+  };
+  jq_151(function(){
+    RENDERER.init();
+  });
+</script>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <!--
+    <div class="alice">
+      <img src="/images/alice-shake.gif" alt="">
+    </div>
+
+    
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+    -->
+  </div>
+  <script
+      defer="defer"
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/gsap.min.js"
+      integrity="sha512-1dalHDkG9EtcOmCnoCjiwQ/HEB5SDNqw8d4G2MKoNwjiwMNeBAkudsBCmSlMnXdsH8Bm0mOd3tl/6nL5y0bMaQ=="
+      crossorigin="anonymous"
+    ></script>
+  <script defer="defer" src="/js/gsap/DrawSVGPlugin.min.js"></script>
+  <script defer="defer" src="/js/gsap/CustomEase.min.js"></script>
+  <script defer="defer" src="/js/gsap/CustomBounce.min.js"></script>
+  <script defer="defer" src="/js/gsap/SplitText.min.js"></script>
+  <script defer="defer" src="/js/gsap/logo-run.js"></script>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+          <svg class="logo-me" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540.19 621.99">
+              <defs>
+                <style>
+                  .logo-me {
+                    width: 15rem;
+                    overflow: visible;
+                    visibility: hidden;
+                  }
+                </style>
+              </defs>
+              <g id="clips" fill= #00a99d; stroke="none">
+                <clipPath id="o">
+                  <path d="M93.57,284c8,0,14.91-1,20.75-3,5.83-2,10.41-3.66,13.75-5,4.66-1.66,6.16-.75,4.5,2.75-1.67,3.5-4.67,6.42-9,8.75-2.34,1.34-6.09,2.84-11.25,4.5-5.17,1.67-11.09,2.5-17.75,2.5-.34,8.67-3.34,16.84-9,24.5-5.67,7.67-13.34,13.34-23,17-6,2.34-12.17,3.59-18.5,3.75-6.34,.17-12.17-.66-17.5-2.5-5.34-1.83-10.09-4.66-14.25-8.5-4.17-3.83-7.25-8.41-9.25-13.75-2-5.33-2.83-11-2.5-17s1.83-11.83,4.5-17.5c2.66-5.66,6.33-10.75,11-15.25,4.66-4.5,10.16-7.75,16.5-9.75,5.66-1.66,11.41-1.66,17.25,0,5.83,1.67,10.08,4.34,12.75,8,1.66,2.67,2.5,5.67,2.5,9,3-2,6.33-3,10-3h1c3.33,0,6.5,.84,9.5,2.5,3,1.67,5.33,4.5,7,8.5l1,3.5Zm-34,39.5c5.66-.66,10.33-3.83,14-9.5,3.66-5.66,5.33-12.16,5-19.5-4.67,.34-9.09-.41-13.25-2.25-4.17-1.83-6.42-4.58-6.75-8.25-.67-3,0-5.5,2-7.5-.67-2.66-2.75-5-6.25-7s-7.09-2.16-10.75-.5c-4.67,2-8.25,5.84-10.75,11.5-2.5,5.67-3.09,11.84-1.75,18.5,1.33,8,4.75,14.34,10.25,19,5.5,4.67,11.58,6.5,18.25,5.5Z"/>
+                </clipPath>
+                <clipPath id="a1">
+                  <path d="M176.06,270c5,4,8.5,9.17,10.5,15.5,.66-1.33,1.25-2.33,1.75-3,.5-.66,1.08-1.33,1.75-2,3.66-2.66,8-3.08,13-1.25,5,1.84,8.5,4.09,10.5,6.75,1,1.34,1.41,2.75,1.25,4.25-.17,1.5-.5,3.42-1,5.75-.5,2.34-1,5.09-1.5,8.25-.5,3.17-.42,6.92,.25,11.25,.33,3.67,1.25,6.5,2.75,8.5s3.16,3.25,5,3.75c1.83,.5,3.75,.34,5.75-.5,2-.83,3.83-2.08,5.5-3.75,3-3.66,5.75-7.66,8.25-12,2.5-4.33,4.25-8.16,5.25-11.5,1.33-3.66,3.41-5.25,6.25-4.75,2.83,.5,3.58,3.09,2.25,7.75-1.34,4.67-3,8.92-5,12.75-2,3.84-5.17,8.59-9.5,14.25-4.67,5.67-11.34,9.59-20,11.75-8.67,2.17-17.67,.42-27-5.25-5-3.33-8.34-8.83-10-16.5-.67,1.34-2,3.34-4,6-3.67,4.67-7.84,8.59-12.5,11.75-4.67,3.17-9.42,5.34-14.25,6.5-4.84,1.17-9.59,1.34-14.25,.5-4.67-.83-9-2.75-13-5.75-7.67-6-11.75-14.33-12.25-25-.5-10.66,2.91-20.83,10.25-30.5,7.33-9.66,16.25-15.75,26.75-18.25s19.58-.91,27.25,4.75Zm-25,60c4.66,1.67,9.66,.17,15-4.5,5.33-4.66,9.33-10.83,12-18.5,2.33-6.66,2.58-12.5,.75-17.5-1.84-5-5.09-8.33-9.75-10-4.67-1.66-9.34-1.33-14,1-4.67,2.34-8.34,7.34-11,15-3,7.67-3.84,14.92-2.5,21.75,1.33,6.84,4.5,11.09,9.5,12.75Z"/>
+                </clipPath>
+                <clipPath id="c">
+                  <path d="M250.06,280.5c4.66-7.66,12-13.16,22-16.5,10-3.33,19.83-3.66,29.5-1,7.66,2.34,13.5,5.67,17.5,10,4,4.34,5.83,8.5,5.5,12.5-.34,4.67-2.25,8.59-5.75,11.75-3.5,3.17-7.09,5.34-10.75,6.5-3.67,1.17-6.84,1.25-9.5,.25-2.67-1-3.34-3.16-2-6.5,2.66-8,2.75-14.58,.25-19.75-2.5-5.16-5.92-6.41-10.25-3.75-2.67,1.67-5,4.09-7,7.25-2,3.17-3.5,6.75-4.5,10.75s-1.42,8.09-1.25,12.25c.16,4.17,.75,7.92,1.75,11.25,1.33,4,3.66,7.42,7,10.25,3.33,2.84,7.16,4.67,11.5,5.5,4.33,.84,8.91,.67,13.75-.5,4.83-1.16,9.25-3.75,13.25-7.75,7.33-6.66,12.33-14.33,15-23,.33-1.66,1.16-2.91,2.5-3.75,1.33-.83,2.5-1.08,3.5-.75,1,.34,1.83,1.09,2.5,2.25,.66,1.17,.66,2.92,0,5.25-2.34,9.34-6.34,17-12,23-4.67,5.67-10.5,10.42-17.5,14.25-7,3.84-14.25,6.09-21.75,6.75-7.5,.67-14.84-.33-22-3-7.17-2.66-13.25-7.5-18.25-14.5-6-8.66-8.75-17.66-8.25-27,.5-9.33,2.25-16.66,5.25-22Z"/>
+                </clipPath>
+                <clipPath id="i_b">
+                  <path d="M393.06,330c-2.34,2.67-5.17,5.09-8.5,7.25-3.34,2.17-7.09,3.59-11.25,4.25-4.17,.67-8.59,.67-13.25,0-4.67-.66-9.17-2.33-13.5-5-4.67-2.66-7.67-7.58-9-14.75-1.34-7.16-1.83-14.66-1.5-22.5,.33-7.83,1.33-14.91,3-21.25,1.66-6.33,3.33-10.16,5-11.5,3.66-2.66,8-3.08,13-1.25,5,1.84,8.5,4.09,10.5,6.75,1,1.34,1.41,3.59,1.25,6.75-.17,3.17-.5,6.92-1,11.25-.5,4.34-1.09,8.92-1.75,13.75-.67,4.84-.67,9.42,0,13.75,.33,3.67,1.33,6.42,3,8.25,1.66,1.84,3.5,2.84,5.5,3,2,.17,4-.25,6-1.25s3.83-2.33,5.5-4c3-3.66,5.66-7.66,8-12,2.33-4.33,4.16-8.16,5.5-11.5,1-3.66,2.91-5.25,5.75-4.75,2.83,.5,3.75,3.09,2.75,7.75-1.34,4.67-3,8.92-5,12.75-2,3.84-5.34,8.59-10,14.25Z"/>
+                </clipPath>
+                <clipPath id="a2">
+                  <path d="M461.56,270c5,4,8.5,9.17,10.5,15.5,.66-1.33,1.25-2.33,1.75-3,.5-.66,1.08-1.33,1.75-2,3.66-2.66,8-3.08,13-1.25,5,1.84,8.5,4.09,10.5,6.75,1,1.34,1.41,2.75,1.25,4.25-.17,1.5-.5,3.42-1,5.75-.5,2.34-1,5.09-1.5,8.25-.5,3.17-.42,6.92,.25,11.25,.33,3.67,1.25,6.5,2.75,8.5s3.16,3.25,5,3.75c1.83,.5,3.75,.34,5.75-.5,2-.83,3.83-2.08,5.5-3.75,3-3.66,5.75-7.66,8.25-12,2.5-4.33,4.25-8.16,5.25-11.5,1.33-3.66,3.41-5.25,6.25-4.75,2.83,.5,3.58,3.09,2.25,7.75-1.34,4.67-3,8.92-5,12.75-2,3.84-5.17,8.59-9.5,14.25-4.67,5.67-11.34,9.59-20,11.75-8.67,2.17-17.67,.42-27-5.25-5-3.33-8.34-8.83-10-16.5-.67,1.34-2,3.34-4,6-3.67,4.67-7.84,8.59-12.5,11.75-4.67,3.17-9.42,5.34-14.25,6.5-4.84,1.17-9.59,1.34-14.25,.5-4.67-.83-9-2.75-13-5.75-7.67-6-11.75-14.33-12.25-25-.5-10.66,2.91-20.83,10.25-30.5,7.33-9.66,16.25-15.75,26.75-18.25s19.58-.91,27.25,4.75Zm-25,60c4.66,1.67,9.66,.17,15-4.5,5.33-4.66,9.33-10.83,12-18.5,2.33-6.66,2.58-12.5,.75-17.5-1.84-5-5.09-8.33-9.75-10-4.67-1.66-9.34-1.33-14,1-4.67,2.34-8.34,7.34-11,15-3,7.67-3.84,14.92-2.5,21.75,1.33,6.84,4.5,11.09,9.5,12.75Z"/>
+                </clipPath>
+                
+              </g>
+              <g
+                id="strokes"
+                fill="none"
+                stroke=#96d7f5
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+              <path
+              clip-path="url(#o)"
+              class="oPath path"
+              d="M65.07,278.38c-.29-1.76-1.26-6.18-5-10-3.34-3.4-7.07-4.47-9-5-6.95-1.9-12.89,.22-15,1-10.95,4.04-18.33,15.16-20,26-1.42,9.21,1.56,16.56,3,20,1.49,3.55,3.94,9.39,10,14,6.66,5.07,13.73,5.65,18,6,3,.25,9.01,.67,16-2,1.72-.66,5.78-2.38,10-6,.99-.86,4.82-4.25,8-10,2.79-5.06,3.72-9.49,4-11,.39-2.12,1.09-6.93,0-13-1.05-5.85-1.95-10.86-6-13-2.83-1.5-7.27-1.62-10,1-1.73,1.66-2.85,4.55-2,7,1.04,2.99,4.58,4.01,8,5,1.16,.33,2.91,.75,8,1,4.72,.23,8.68,.18,12,0,6.49-.36,9.74-.54,12-1,4.35-.88,7.44-2.14,12-4,4.67-1.9,6.76-3.17,8-4,2.56-1.7,3.95-3.1,5-4,5.5-4.73,12.89-6.48,18-7,6.09-.62,11.96-.21,18,3,4.89,2.6,8.27,6.84,10,9,1.86,2.32,3.15,4.46,4,6"
+              stroke-width="32.5"
+            ></path>
+            <path
+              clip-path="url(#a1)"
+              class="a1Path path"
+              d="M154.07,270.38c-3.73,1.48-11.88,5.3-18,14-4.95,7.03-6.09,13.7-7,19-1.38,8.06-2.81,16.39,2,24,3.93,6.21,9.88,8.58,11,9,7.28,2.76,13.71,.75,16,0,5.19-1.71,8.32-4.6,12-8,2.48-2.29,6.78-6.34,10-13,2.71-5.61,3.51-10.73,4-14,.86-5.79,.57-9.98,1-10,.41-.02,.79,3.69,2,11,1.71,10.28,2.44,11.93,3,13,1.44,2.76,2.62,5.84,7,10,4.73,4.49,8.09,5.74,11,7,6.75,2.92,13.16,1.45,15,1,4.94-1.21,8.2-3.64,10-5,4.09-3.11,6.34-6.48,8-9,2.23-3.4,3.47-6.35,5-10,1.22-2.9,2.18-5.67,3-8,1.52-4.35,1.41-4.5,2-6,1.75-4.46,2-6,7-12,2.31-2.77,6.32-8.54,10-11,3.79-2.54,7-3.81,10-5,5.33-2.12,9-2.17,12-2,5.4,.32,10.2,4.49,12,6,2.31,1.93,6.05,6.97,7,12,.62,3.29-.19,5.13-1,8-.86,3.04-3.06,5.4-4,7"
+              stroke-width="59"
+            ></path>
+            <path
+              clip-path="url(#c)"
+              class="cPath path"
+              d="M273.07,272.38c-3.08,2.79-9.54,9.45-12,20-2.1,9.02-.22,16.29,1,21,1.57,6.05,3.22,12.44,9,18,6.67,6.42,14.58,7.66,17,8,6.36,.9,11.22-.42,17-2,3.68-1,8.59-2.39,14-6,4.13-2.76,6.84-5.67,9-8,3.24-3.49,5.27-6.46,7-9,2.22-3.27,4.18-6.89,8-14,3.39-6.3,5.1-9.5,6-12,1.67-4.63,2.38-8.58,3-12,.72-4,.94-6.77,1-9,.03-1.23,.02-2.26,0-3"
+              stroke-width="110"
+            ></path>
+            <path
+              clip-path="url(#i_b)"
+              class="i_bPath path"
+              d="M355.07,265.38c-1.55,12.11-2.45,22.6-3,31-.66,10.17-.79,16.98,2,25,1.74,5,3.75,10.53,9,13,6.29,2.97,13.34-.3,17-2,6.11-2.83,9.64-6.89,14-12,9.03-10.59,9.67-15.19,10-17,.6-3.32,1.32-6.16,1-8"
+              stroke-width="33"
+            ></path>
+            <path
+              clip-path="url(#a2)"
+              class="a2Path path"
+              d="M470.07,302.38c.32-2.77,.45-7.09-1-12-.98-3.32-5.25-15.49-17-19-12.13-3.62-22.23,4.71-25,7-6.75,5.57-9.28,12.36-11,17-1.68,4.53-5.22,14.03-2,25,1.19,4.05,3.29,11.22,10,15,7.78,4.39,16.49,1.26,20,0,6.31-2.27,10.12-6.13,14-10,4.99-4.97,7.76-9.61,11-15,1.88-3.14,4.54-7.61,7-14,3.15-8.18,3.42-14.06,4-14,.51,.05-.23,7.53,0,19,.07,3.38,.38,6.92,1,14,.41,4.62,.69,7.05,2,10,.82,1.86,2.1,4.74,5,7,4.4,3.43,9.65,3.17,13,3,1.08-.05,5.74-.35,11-3,4.39-2.21,7.04-4.97,9-7,.85-.89,3.48-3.69,6-8,1.51-2.58,1.83-3.87,4-9,1.54-3.64,2.92-6.7,4-9"
+              stroke-width="70"
+            ></path>
+              </g>
+              <g
+                id="strokes2"
+                fill="none"
+                stroke=#ff97b8
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  clip-path="url(#o)"
+                  class="oPath path"
+                  d="M65.07,278.38c-.29-1.76-1.26-6.18-5-10-3.34-3.4-7.07-4.47-9-5-6.95-1.9-12.89,.22-15,1-10.95,4.04-18.33,15.16-20,26-1.42,9.21,1.56,16.56,3,20,1.49,3.55,3.94,9.39,10,14,6.66,5.07,13.73,5.65,18,6,3,.25,9.01,.67,16-2,1.72-.66,5.78-2.38,10-6,.99-.86,4.82-4.25,8-10,2.79-5.06,3.72-9.49,4-11,.39-2.12,1.09-6.93,0-13-1.05-5.85-1.95-10.86-6-13-2.83-1.5-7.27-1.62-10,1-1.73,1.66-2.85,4.55-2,7,1.04,2.99,4.58,4.01,8,5,1.16,.33,2.91,.75,8,1,4.72,.23,8.68,.18,12,0,6.49-.36,9.74-.54,12-1,4.35-.88,7.44-2.14,12-4,4.67-1.9,6.76-3.17,8-4,2.56-1.7,3.95-3.1,5-4,5.5-4.73,12.89-6.48,18-7,6.09-.62,11.96-.21,18,3,4.89,2.6,8.27,6.84,10,9,1.86,2.32,3.15,4.46,4,6"
+                  stroke-width="32.5"
+                ></path>
+                <path
+                  clip-path="url(#a1)"
+                  class="a1Path path"
+                  d="M154.07,270.38c-3.73,1.48-11.88,5.3-18,14-4.95,7.03-6.09,13.7-7,19-1.38,8.06-2.81,16.39,2,24,3.93,6.21,9.88,8.58,11,9,7.28,2.76,13.71,.75,16,0,5.19-1.71,8.32-4.6,12-8,2.48-2.29,6.78-6.34,10-13,2.71-5.61,3.51-10.73,4-14,.86-5.79,.57-9.98,1-10,.41-.02,.79,3.69,2,11,1.71,10.28,2.44,11.93,3,13,1.44,2.76,2.62,5.84,7,10,4.73,4.49,8.09,5.74,11,7,6.75,2.92,13.16,1.45,15,1,4.94-1.21,8.2-3.64,10-5,4.09-3.11,6.34-6.48,8-9,2.23-3.4,3.47-6.35,5-10,1.22-2.9,2.18-5.67,3-8,1.52-4.35,1.41-4.5,2-6,1.75-4.46,2-6,7-12,2.31-2.77,6.32-8.54,10-11,3.79-2.54,7-3.81,10-5,5.33-2.12,9-2.17,12-2,5.4,.32,10.2,4.49,12,6,2.31,1.93,6.05,6.97,7,12,.62,3.29-.19,5.13-1,8-.86,3.04-3.06,5.4-4,7"
+                  stroke-width="59"
+                ></path>
+                <path
+                  clip-path="url(#c)"
+                  class="cPath path"
+                  d="M273.07,272.38c-3.08,2.79-9.54,9.45-12,20-2.1,9.02-.22,16.29,1,21,1.57,6.05,3.22,12.44,9,18,6.67,6.42,14.58,7.66,17,8,6.36,.9,11.22-.42,17-2,3.68-1,8.59-2.39,14-6,4.13-2.76,6.84-5.67,9-8,3.24-3.49,5.27-6.46,7-9,2.22-3.27,4.18-6.89,8-14,3.39-6.3,5.1-9.5,6-12,1.67-4.63,2.38-8.58,3-12,.72-4,.94-6.77,1-9,.03-1.23,.02-2.26,0-3"
+                  stroke-width="110"
+                ></path>
+                <path
+                  clip-path="url(#i_b)"
+                  class="i_bPath path"
+                  d="M355.07,265.38c-1.55,12.11-2.45,22.6-3,31-.66,10.17-.79,16.98,2,25,1.74,5,3.75,10.53,9,13,6.29,2.97,13.34-.3,17-2,6.11-2.83,9.64-6.89,14-12,9.03-10.59,9.67-15.19,10-17,.6-3.32,1.32-6.16,1-8"
+                  stroke-width="33"
+                ></path>
+                <path
+                  clip-path="url(#a2)"
+                  class="a2Path path"
+                  d="M470.07,302.38c.32-2.77,.45-7.09-1-12-.98-3.32-5.25-15.49-17-19-12.13-3.62-22.23,4.71-25,7-6.75,5.57-9.28,12.36-11,17-1.68,4.53-5.22,14.03-2,25,1.19,4.05,3.29,11.22,10,15,7.78,4.39,16.49,1.26,20,0,6.31-2.27,10.12-6.13,14-10,4.99-4.97,7.76-9.61,11-15,1.88-3.14,4.54-7.61,7-14,3.15-8.18,3.42-14.06,4-14,.51,.05-.23,7.53,0,19,.07,3.38,.38,6.92,1,14,.41,4.62,.69,7.05,2,10,.82,1.86,2.1,4.74,5,7,4.4,3.43,9.65,3.17,13,3,1.08-.05,5.74-.35,11-3,4.39-2.21,7.04-4.97,9-7,.85-.89,3.48-3.69,6-8,1.51-2.58,1.83-3.87,4-9,1.54-3.64,2.92-6.7,4-9"
+                  stroke-width="70"
+                ></path>
+              </g>
+              <g class="dot-group">
+                <path
+                  id="dot"
+                  fill=#ff97b8
+                  d="M362.58,182.21c4.66-.33,9.66,1.17,15,4.5,5.33,3.34,7.66,7.5,7,12.5-.67,2.34-1.92,4.92-3.75,7.75-1.84,2.84-4,5.5-6.5,8s-4.84,4.75-7,6.75c-2.17,2-3.75,3.17-4.75,3.5-2.67,1.67-5.34,2.25-8,1.75-2.67-.5-5-1.5-7-3s-3.59-3.33-4.75-5.5c-1.17-2.16-1.92-4.25-2.25-6.25-.34-2,.16-4.66,1.5-8,1.33-3.33,3.08-6.58,5.25-9.75,2.16-3.16,4.58-6,7.25-8.5,2.66-2.5,5.33-3.75,8-3.75Z"
+                ></path>
+              </g>
+          </svg>
+            
+          
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">oacia</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="/background_picture/1_mary.jpg"></li>
+          <li class="item" data-background-image="/background_picture/2_xingye.webp"></li>
+          <li class="item" data-background-image="/background_picture/3_xiaoxia.webp"></li>
+          <li class="item" data-background-image="/background_picture/4_alice.webp"></li>
+          <li class="item" data-background-image="/background_picture/5_mutsuki.jpg"></li>
+          <li class="item" data-background-image="/background_picture/6_arona_plana.webp"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="index wrap">
+      <h2 class="divider">置顶文章</h2>
+      <div class="segments sticky">
+          
+<article class="item">
+  <div class="cover">
+    <a href="/360-jiagu/" itemprop="url"><img data-src="/picture/316653.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2024-02-22 03:14:53">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2024-02-22T03:14:53+08:00">2024-02-22</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>62k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>56 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/360-jiagu/" itemprop="url">360加固dex解密流程分析</a></h3>
+    <div class="excerpt">
+        # 前言
+
+在去年 9 月的时候，我就想研究一下 apk 的加固，在网上逛了一圈，感觉 360 加固不错，所以先选它啦，写了一个测试 apk 丢到 360 加固里面加固了一下
+这里我用的是 360 加固的免费版 (因为付费版太贵啦)
+本来计划着去年分析完 360 加固的，但是总是抽不出一段完整的时间来所以就拖到了现在，终于最近因为过年赋闲在家，就花了几天分析了一下 360 加固，感觉这几天探索 360 加固的过程真是充满了惊喜和乐趣呢～
+
+2024 年 3 月 8 号记:
+
+距离上次看 360 加固已经半个月啦，今天正想着自己要做什么事情的时候，到博客看了眼 TODOlist,...
+    </div>
+    <a href="/360-jiagu/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+          
+<article class="item">
+  <div class="cover">
+    <a href="/android-load-so/" itemprop="url"><img data-src="/picture/811055.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2024-02-14 11:19:19">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2024-02-14T11:19:19+08:00">2024-02-14</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>101k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>1:32</span>
+  </span>
+</div>
+
+    <h3><a href="/android-load-so/" itemprop="url">安卓so加载流程源码分析</a></h3>
+    <div class="excerpt">
+        对于某些加固壳，加载解释器 elf 的方式不会是常规的 System.loadLibrary , 而是仿照 System.loadLibrary 在 AOSP 中的实现方式，在 JNI 中自己实现 so 的加载
+
+本次所使用到的 AOSP 的源码的安卓版本为 android-12.0.0_r34
+# so 的启动过程
+# System.load
+在 Android 中我们想要加载一个 so 时，可以有两种方式
+
+静态加载
+System.loadLibrary(&quot;native&quot;);这种加载方式下，要加载的 so 一般已经内置在 apk 的 lib/[arch]/...
+    </div>
+    <a href="/android-load-so/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+          
+<article class="item">
+  <div class="cover">
+    <a href="/sec-2023/" itemprop="url"><img data-src="/picture/129581.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-08-31 08:19:57">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-08-31T08:19:57+08:00">2023-08-31</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>64k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>59 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/sec-2023/" itemprop="url">细品sec2023安卓赛题</a></h3>
+    <div class="excerpt">
+        # 前言
+
+在今年三月份的时候，我参加了腾讯游戏安全技术竞赛，到现在差不多快过去半年了，当时做这道安卓初赛题目时，也是卡在开头就毫无头绪了，而后看到看雪上的三位大佬 |_|sher 师傅，juice4fun 师傅和 fallw1nd...
+    </div>
+    <a href="/sec-2023/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+      </div>
+    <h2 class="divider">文章列表</h2>
+    <div class="segments posts">
+        
+<article class="item">
+  <div class="cover">
+    <a href="/unidbg-anti-br/" itemprop="url"><img data-src="/picture/298615.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2024-09-08 18:14:21">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2024-09-08T18:14:21+08:00">2024-09-08</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>19k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>17 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/unidbg-anti-br/" itemprop="url">dexguard反混淆-unidbg去除BR寄存器跳转</a></h3>
+    <div class="excerpt">
+        # 前言
+这几天一直在和 so 层的强混淆对抗，前几天有朋友问我有没有试过 IL 层面的反混淆，正好这个月遇到了一个 dexguard 的强混淆样本，所以就想试试 IL 层面的反混淆，ida 中最为出名的应该就是 ida microcode 了，但即使在两年前曾经为了研究区块链合约的字节码而学习过李樾和谭添老师的静态分析，然而并没有什么太大的进展… 果然 static analysis 是一门大学问呐 ref Hex-Rays Microcode API vs. Obfuscating Compiler
+之后又去试了试 Binary Ninja , 现在它的 medium IL...
+    </div>
+    <a href="/unidbg-anti-br/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/dexguard-java-str-dec/" itemprop="url"><img data-src="/picture/25119.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2024-09-03 18:14:21">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2024-09-03T18:14:21+08:00">2024-09-03</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>7.1k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>6 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/dexguard-java-str-dec/" itemprop="url">DexGuard java字符串反混淆</a></h3>
+    <div class="excerpt">
+        # 前言
+最近分析的 app 发现加了 DexGuard , 所以在 java 层遇到了非常强力的字符串混淆，甚至 jeb 这么强大的 java 反混淆工具都不能把字符串解密出来，所以本文是对 java 字符串反混淆的过程记录，通过 frida 的 RPC 调用，利用 python flask 搭建一个主动调用 java 字符串解密函数的 GET 接口，随后编写 jeb 脚本访问这个本地端口，并传入字符串解密函数的参数，获取字符串解密后的结果后替换 Element, 实现基于 frida RPC 主动调用的 java 字符串的反混淆
+# 神奇的防 hook 手段
+DexGuard...
+    </div>
+    <a href="/dexguard-java-str-dec/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/douyin-6shen-init/" itemprop="url"><img data-src="/picture/300992.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2024-08-20 21:52:00">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2024-08-20T21:52:00+08:00">2024-08-20</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>17k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>15 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/douyin-6shen-init/" itemprop="url">初探抖音六神之字符串解密算法分析</a></h3>
+    <div class="excerpt">
+        # 前言
+抖音六神算法，一听这名字就超 cooool 的，正好最近也没有什么别的事情，于是就趁着周末来逆一逆抖音 APP, 在分析六神算法的过程中，它的 java 层的字符串加密算法我感觉很有意思，于是就写了这篇文章来记录一下～
+本文所分析的抖音版本为 300600
+# ssl pinning 绕过
+打开 app 之后用 repable 抓包，抖音直接显示无网络，所以想都不用想，肯定是有 ssl pinning，但是常规的过 ssl pinning 的代码没有用，因为抖音和其他 app 不一样，它的 ssl 校验是在 native 层的
+hook apk 打开的 so...
+    </div>
+    <a href="/douyin-6shen-init/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/frida-inline-hook/" itemprop="url"><img data-src="/picture/914230.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2024-08-13 03:11:00">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2024-08-13T03:11:00+08:00">2024-08-13</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>21k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>20 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/frida-inline-hook/" itemprop="url">frida inline hook原理分析及实践</a></h3>
+    <div class="excerpt">
+        # 前言
+最近需要对一个固件的 arm64 linux 系统中的一个进程进行 inline hook, 然而当把 frida-inject 上传上去之后运行却发现，由于 linux 版本为 4.4 有些古老了，并且比正常的 linux 缺了一些文件，导致 frida 一运行就报错退出，所以就想着能不能自己去实现一个 inline hook. 但在这之前我们得先知道原理才行～如果想知道 inline hook 的原理是什么样子的，我认为最好的办法就是直接去看看 hook 之后的代码变成了什么样子，用调试的方法研究 frida 实现 inline hook 的具体实现
+首先我们对一个测试 apk...
+    </div>
+    <a href="/frida-inline-hook/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/bilibili-get-ticket/" itemprop="url"><img data-src="/picture/196506.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2024-07-13 18:14:21">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2024-07-13T18:14:21+08:00">2024-07-13</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>4.3k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>4 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/bilibili-get-ticket/" itemprop="url">b站app漫展抢票</a></h3>
+    <div class="excerpt">
+        # 前言
+最近萌生了想去漫展的想法，毕竟这么久了还没有去过一次漫展嘞，听说 cp30 好像不错，不过问题就是票特别的难抢😔
+趁现在 cp30 买票还没开始，今天也没有什么其他的事情，所以就简单分析了一下 b 站的 app，写了个抢票脚本自娱自乐一下
+感觉这个 app 还是很有意思的，它把主要的 webview 业务逻辑放到子进程里运行我觉得还是很不错滴，这样 frida 注入到主进程就 hook 不到了（我就被卡了快一个小时！）
+但这个抢票脚本写的相当的简陋，我就不好意思放出来啦😂不过相信大家在 github 上应该可以找到更加完善的项目吧 :)
+还有就是为什么不直接去 b...
+    </div>
+    <a href="/bilibili-get-ticket/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/ollvm-study/" itemprop="url"><img data-src="/picture/578400.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2024-07-12 09:24:52">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2024-07-12T09:24:52+08:00">2024-07-12</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>26k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>23 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/ollvm-study/" itemprop="url">ollvm三种混淆模式的反混淆思路</a></h3>
+    <div class="excerpt">
+        ollvm 算是日常逆向的过程中的一个难点，试想一下当你把程序拖进 ida 后那无穷无尽的 block 出现在面前的感受，这滋味一言难尽呐…
+所以很有必要对 ollvm 的混淆与反混淆进行系统的学习，以便在未来实际生活中遇到时，不必慌忙的去 google 寻找答案.
+
+文中的分析所用到的附件可以点这里下载哦 ollvm_bcf-fla-sub.zip
+# 预备知识
+llvm 是一个完整的编译器架构，作用可以理解为制作一个编译器，llvm 先将源码生成为与目标机器无关的 LLVM IR 代码，然后把 LLVMIR...
+    </div>
+    <a href="/ollvm-study/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/android-binder/" itemprop="url"><img data-src="/picture/476976.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2024-07-06 14:25:21">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2024-07-06T14:25:21+08:00">2024-07-06</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>85k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>1:18</span>
+  </span>
+</div>
+
+    <h3><a href="/android-binder/" itemprop="url">android binder源码分析</a></h3>
+    <div class="excerpt">
+        Binder 是 Android 独有的一种通信机制， Activity ， Service ， Broadcast ， ContentProvider 这四大组件所涉及的多进程间的通信底层都是依赖于 Binder IPC 机制。学好底层的通信原理对掌握安卓这幢大厦有着重要的意义.
+# 说明
+本文所研究的安卓内核版本为 Linux version 4.9.270-g862f51bac900-ab7613625
+安卓框架版本为 android-12.0.0_r34
+# Binder 简介
+从进程角度来看 IPC (Inter Process Communication) 机制，每个...
+    </div>
+    <a href="/android-binder/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/android-platform-compile/" itemprop="url"><img data-src="/picture/916431.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2024-06-20 17:33:17">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2024-06-20T17:33:17+08:00">2024-06-20</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>5.2k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>5 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/android-platform-compile/" itemprop="url">pixel3安卓系统编译及刷入过程记录</a></h3>
+    <div class="excerpt">
+        想要下载并编译安卓系统，请必须预留至少 250G 及以上的空余空间，并保持代理连接稳定，否则将导致下载失败并从头下载！
+
+# 安卓系统编译环境配置
+# 为虚拟机配置代理
+# 查看虚拟机代理地址
+打开 clash for windows , 并打开 Allow LAN 的开关，随后点击 network interfaces
+
+请注意我的虚拟机使用的网络连接方式为 NAT 模式，所以需要关注 VMnet8 的地址，所以对于该虚拟机，代理地址为 192.168.27.1 , 端口就是 clash 中 Port 选项所显示的端口
+
+#...
+    </div>
+    <a href="/android-platform-compile/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/android-bcc/" itemprop="url"><img data-src="/picture/129806.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2024-05-07 15:31:28">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2024-05-07T15:31:28+08:00">2024-05-07</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>3.3k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>3 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/android-bcc/" itemprop="url">EBPF android bcc初体验</a></h3>
+    <div class="excerpt">
+        pixel6 到手的第一件事，当然是去玩玩看 ebpf 了～ebpf 的无痕 hook 听上去就感觉相当的强大，去官网看了一下 ebpf 知名度排名前几的项目，那非 bcc 莫属了，用 python 就可以运行 ebpf 代码，虽然 ebpf 的核心代码还是 C 写的，但是用 python 去执行就感觉十分的舒适
+在网上也找到了三篇非常详细的 Android bcc 编译教程，前人种树，后人乘凉 ^.^ 可以试试看 ebpf 究竟是什么样子的啦
+
+eBPF on Android 之 bcc 环境准备 ——eadb 原版
+[原创] 60 秒学会用 eBPF-BCC hook 系统调用 ( 2 )...
+    </div>
+    <a href="/android-bcc/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/d3ctf-2024/" itemprop="url"><img data-src="/picture/48744.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2024-04-29 00:12:07">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2024-04-29T00:12:07+08:00">2024-04-29</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>10k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>9 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/d3ctf-2024/" itemprop="url">d3ctf2024 reverse wp</a></h3>
+    <div class="excerpt">
+        # 前言
+已经是四月底了，但是却突然发现这一整个月都没有在博客写些什么，感觉又是在不明所以中度过了，想看的 magisk , frida 源码没有看完，想做的小夏的 live2d 也迟迟没有动工，下个月努努力，多学点，多做点，加油加油
+总觉得自己还是要写下点什么才好，恰好这周听闻有个 d3ctf, 于是便想来看看逆向题，去学习一下新知识开拓视野，同时也为了度过一段充实的周末时光
+回想去年的 d3ctf, 感觉那时的自己有太多不了解的地方了，于是乎情理之中的也是一题都没做出来了，复现的题目的计划在我的 todolist 里面躺了很长一段时间，然而不知不觉间变成了 undo, 最后到现在的...
+    </div>
+    <a href="/d3ctf-2024/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/python-memory-leak/" itemprop="url"><img data-src="/picture/302736.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2024-03-02 15:00:00">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2024-03-02T15:00:00+08:00">2024-03-02</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>4.5k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>4 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/python-memory-leak/" itemprop="url">记一次python ctypes.cast引起的内存泄漏</a></h3>
+    <div class="excerpt">
+        内存泄漏（英语：memory leak）是计算机科学中的一种资源泄漏，主因是计算机程序的内存管理失当 [1]，因而失去对一段已分配内存空间的控制，程序继续占用已不再使用的内存空间，或是存储器所存储之对象无法透过执行代码而访问，令内存资源空耗 [2]。
+
+相信每一个敲过代码的朋友肯定都遇到过内存泄漏，对于 c 语言这种分配了内存却不会自己释放的语言来说，内存泄漏算是家常便饭了，但是我最近在写一个 python 代码的时候同样也遇到了内存泄漏，有朋友可能会问，python 这种自带内存回收机制的语言怎么还会内存泄漏呢？
+真相是… 我在 python 中调用了 c...
+    </div>
+    <a href="/python-memory-leak/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/ElfReader/" itemprop="url"><img data-src="/picture/967440.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2024-02-17 14:11:23">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2024-02-17T14:11:23+08:00">2024-02-17</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>34k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>31 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/ElfReader/" itemprop="url">ELF结构分析及ElfReader</a></h3>
+    <div class="excerpt">
+        在 Android 中使用 System.load 加载一个 so 时，是通过 ElfReader 去解析这个 so 的重要结构及属性的，本文将对 ELF 的结构，链接过程，装载过程进行分析，并研究 ELF 在 AOSP 中的解析过程
+# ELF 结构简析
+ELF 文件主要分为 3 个部分:
+
+ELF Header
+描述整个文件的组织
+Program Header Table
+包含了运行时加载程序所需要的信息
+Section Header Table
+包含了链接时所需要用到的信息
+
+# ELF...
+    </div>
+    <a href="/ElfReader/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/wechat-mini-program-with-devtool/" itemprop="url"><img data-src="/picture/372482.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2024-01-30 15:55:11">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2024-01-30T15:55:11+08:00">2024-01-30</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>1.7k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>2 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/wechat-mini-program-with-devtool/" itemprop="url">微信小程序devtool抓包+反编译wxapkg</a></h3>
+    <div class="excerpt">
+        今天闲来无事，上网冲浪，突然发现一个令我眼前一亮的项目 WeChatOpenDevTools-Python, 这这这，看 README 的介绍，我岂不是可以在小程序里面开 devtool 了吗！？
+想来 2022 年也有个小程序羊了个羊爆火那会儿，我也对小程序逆向分析玩了玩，然后做了个破解版的自娱自乐了一下 (当然也是算朋友圈排名滴), 当时拿 UnpackMiniApp.exe 解密了 wxapkg 格式的小程序，然后用 wxappUnpacker 弄出了小程序的 js 源码来，审计一下找到修改的地方 patch 逻辑到最开始的 wxapkg...
+    </div>
+    <a href="/wechat-mini-program-with-devtool/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/telegram-bot-develop/" itemprop="url"><img data-src="/picture/601053.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-12-31 21:08:18">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-12-31T21:08:18+08:00">2023-12-31</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>5.1k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>5 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/telegram-bot-develop/" itemprop="url">telegram bot 初体验及云端部署</a></h3>
+    <div class="excerpt">
+        # 前言
+为什么突然想要去做一个 telegram bot 了呢？
+这就要说到困扰我很久的一个小问题了，我在刷抖音的过程中，看到有意思的视频或者好看的图片，就很想要把它们给保存下来，作为壁纸或者和别人分享，但是有的时候 保存本地 这个选项是灰色的不让我去保存
+
+而且抖音在图片保存的过程中总是会打上水印，就像下面这个样子，倘若用作壁纸或者日常打开来看的时候就感觉十分的…...
+    </div>
+    <a href="/telegram-bot-develop/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/two-way-SSL/" itemprop="url"><img data-src="/picture/916431.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-12-14 18:00:32">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-12-14T18:00:32+08:00">2023-12-14</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>3.6k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>3 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/two-way-SSL/" itemprop="url">(doing)https双向认证及绕过方法</a></h3>
+    <div class="excerpt">
+        日常的 APP 为了不被别人通过抓包软件抓取与服务器通信的流量，所以会在流量的安全传输上做文章，最安全的做法当然是使用私有协议 (即协议格式不公开的协议), 例如抖音的 quic 协议，咸鱼的 spdy 协议等等，利用这些私有协议包装流量，从而使抓包工具无法识别出这串流量的实际内容是什么，所以就只能放行这段流量，面对私有协议倘若利用 reqable , fiddler , charles 等去抓包是抓不到的，而唯一能够抓到这段流量的就是 wireshark , 并且还需要对这段流量编写特定的脚本解析才可以知道这段流量所携带的实际数据
+除了私有协议之外，想让流量上的安全还可以使用 SSL...
+    </div>
+    <a href="/two-way-SSL/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/blog-domain/" itemprop="url"><img data-src="/picture/358988.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-12-13 00:59:22">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-12-13T00:59:22+08:00">2023-12-13</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>2.2k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>2 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/blog-domain/" itemprop="url">这两个月关于域名的二三事</a></h3>
+    <div class="excerpt">
+        今天刚在 namesilo 购买了一个新的域名 oacia.dev , 要是有人来过我的博客的话，应该记得这个博客曾经的域名是 oacia.cc , 当然了我也非常喜欢 cc 这个顶级域名，这个域名是我一年前注册的，不过不幸的是在今年九月份的时候，我的域名过期了，当时我看到 75 块的续费价格还纳闷为什么变贵了，因为去年的时候我记得非常清楚续费只需要三十多元的，随后就看到了阿里云的公告说 cc 域名要涨价了…
+
+唉太难受了，随后我就去腾讯云和华为云都去搜了一下 cc 这个顶级域名的价格，随后惊讶的发现华为云只需要 35 元 /...
+    </div>
+    <a href="/blog-domain/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/douyin-favorites-pic/" itemprop="url"><img data-src="/picture/220180.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-11-09 21:24:38">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-11-09T21:24:38+08:00">2023-11-09</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>1.5k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>1 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/douyin-favorites-pic/" itemprop="url">抖音收藏夹图文批量获取</a></h3>
+    <div class="excerpt">
+        最近想给自己的博客多增加些好看的图片当背景图，正好这段时间刷抖音看到了好多好看的图片，也把他们保存在收藏夹里面，但是正当我兴致勃勃的想把我收藏夹里面的图片下载下来时，发现工作量真的真的好大！所以索性就写个小脚本来让生活更加轻松咯～
+首先我们打开网页版抖音，来到收藏夹，然后疯狂向下拉直到收藏夹的底部
+
+然后在网页上 右键-&amp;gt;另存为... 把这个 html 保存为 mhtml 格式
+
+接下来写个简单的小爬虫，抖音里面收藏的图片就下载到电脑上啦～
+import reimport requestsimport osfrom tqdm import tqdmheader =...
+    </div>
+    <a href="/douyin-favorites-pic/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/hina-AI-voice/" itemprop="url"><img data-src="/picture/914230.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-11-06 17:31:57">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-11-06T17:31:57+08:00">2023-11-06</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>6.6k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>6 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/hina-AI-voice/" itemprop="url">I wanna hear your voice, hina</a></h3>
+    <div class="excerpt">
+        很喜欢日奈的声音，所以用自己的电脑训练了 hina 的声音模型，并让她唱了一首歌
+
+# python 虚拟环境搭建
+这里我使用的 Python 版本为 Python3.9
+安装 virtualenv
+pip install virtualenvpip install virtualenvwrapper # 这是对 virtualenv 的封装版本，一定要在 virtualenv 后安装创建虚拟环境
+这里我创建了名为 hina 的虚拟环境
+PS E:\virtualenvs&gt; virtualenv hina进入虚拟环境
+命令行前面有 (hina) 说明我们已经进入了这个虚拟环境
+PS...
+    </div>
+    <a href="/hina-AI-voice/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/flutter-ACTF-native-app/" itemprop="url"><img data-src="/picture/557146.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-10-31 18:04:59">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-10-31T18:04:59+08:00">2023-10-31</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>2.8k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>3 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/flutter-ACTF-native-app/" itemprop="url">flutter逆向 ACTF native app</a></h3>
+    <div class="excerpt">
+        # 前言
+算了一下好长时间没打过 CTF 了，前两天看到 ACTF 逆向有道 flutter 逆向题就过来玩玩啦，花了一个下午做完了。说来也巧，我给 DASCTF 十月赛出的逆向题其中一道也是 flutter, 不过那题我难度降的相当之低啦，不知道有多少人做出来了呢～
+# 还原函数名
+flutter 逆向的一大难点就是不知道 libapp.so 的函数名，虽然有工具 reflutter 可以帮助我们得到其中的符号，但是我个人认为基于对 libflutter.so 源码插桩后重编译再重打包 apk 的方式具有极大的不可预料性，极有可能导致 apk...
+    </div>
+    <a href="/flutter-ACTF-native-app/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/unidbg-usage/" itemprop="url"><img data-src="/picture/396385.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-10-26 17:26:55">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-10-26T17:26:55+08:00">2023-10-26</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>21k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>19 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/unidbg-usage/" itemprop="url">unidbg 学习笔记</a></h3>
+    <div class="excerpt">
+        # 下载地址
+https://github.com/zhkl0228/unidbg
+
+源码下载完成后使用 IDEA 打开即可使用
+# 快速使用
+套用以下模板，将包名等参数替换成对应的字符串即可快速使用 unidbg
+package com.oacia;import com.github.unidbg.AndroidEmulator;import com.github.unidbg.Module;import com.github.unidbg.arm.backend.Unicorn2Factory;import...
+    </div>
+    <a href="/unidbg-usage/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/CBCTF-2023/" itemprop="url"><img data-src="/picture/842214.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-10-23 14:42:47">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-10-23T14:42:47+08:00">2023-10-23</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>9.9k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>9 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/CBCTF-2023/" itemprop="url">CBCTF auuuu3和vm_flutter出题思路及wp</a></h3>
+    <div class="excerpt">
+        去年 CBCTF 的时候，我当时为这个比赛出了一道逆向题叫做 CBNET , 可是直到结束之后才终于有了一解，我那时非常自责，感觉自己把题目出难了导致大家都做不出来，那次比赛结束之后几个师傅找我问这题，我发现原来是我自己设计的自定义算法难住了大家，大家不会写逆向脚本导致的。所以今年的 CBCTF, 我总结了去年出题的经验，给自己今年出题定的目标的就是希望每一个人都可以去尝试着去做一下，并且不在算法的层面去为难大家.
+auuuu3 的出题灵感主要在上半年看到过一篇文章，说是有 hacker 在压缩包里藏了一个无毒的 autoit exe 解释器，然后这个解释器运行恶意的 au3...
+    </div>
+    <a href="/CBCTF-2023/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/lowmemorykiller/" itemprop="url"><img data-src="/picture/372482.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-10-10 15:40:53">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-10-10T15:40:53+08:00">2023-10-10</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>9.3k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>8 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/lowmemorykiller/" itemprop="url">lowmemorykiller原理分析</a></h3>
+    <div class="excerpt">
+        # lowmemorykiller 概述
+Android 的设计理念之一，便是应用程序退出，但进程还会继续存在系统以便再次启动时提高响应时间。这样的设计会带来一个问题，每个进程都有自己独立的内存地址空间，随着应用打开数量的增多，系统已使用的内存越来越大，就很有可能导致系统内存不足，那么需要一个能管理所有进程，根据一定策略来释放进程的策略，这便有了 lmk ，全称为 LowMemoryKiller (低内存杀手)，它使用 lmkd 来决定什么时机杀掉什么进程.
+Android 基于 Linux 的系统，其实 Linux 有类似的内存管理策略 ——OOM killer (Out Of Memory...
+    </div>
+    <a href="/lowmemorykiller/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/android-source-code/" itemprop="url"><img data-src="/picture/914230.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-10-10 09:47:20">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-10-10T09:47:20+08:00">2023-10-10</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>13k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>12 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/android-source-code/" itemprop="url">安卓系统源码结构</a></h3>
+    <div class="excerpt">
+        # 安卓系统源码下载
+
+想要下载并编译安卓系统全部的源码，请必须预留 250G 及以上的代理空间，如果仅下载的话，150 到 200G 的空间就足够 l
+下载过程中需要保持 VPN 连接稳定，否则将导致下载失败并从头下载！
+
+# 查看 android 版本
+进入代号，标记和 build 号来查看安卓系统的版本
+如果是预装的系统，那么 kernel 版本和系统版本是有对应关系的，例如我给 pixel3 刷入的系统为 blueline-sp1a.210812.016.c2-factory-fa981d87 , 那么在上面提到的网址内找到该安卓系统该 build ID 所对应的安卓系统版本...
+    </div>
+    <a href="/android-source-code/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/android-system-architecture/" itemprop="url"><img data-src="/picture/300992.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-10-09 09:53:07">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-10-09T09:53:07+08:00">2023-10-09</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>3.8k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>3 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/android-system-architecture/" itemprop="url">安卓系统架构概览</a></h3>
+    <div class="excerpt">
+        这两天和 360 加固抗衡了很久，突然发现自己现在的水平或许还无法搞定 360 加固，晚上睡觉的时候思考了一下，发现原因在于自己对于安卓还没有掌握，甚至连熟悉都算不上。以往学逆向的过程中总流传着一句话：要想逆向做的好，正向必须得精通。我现在连安卓里面有什么都不知道，那还怎么去搞安卓逆向呢？所以这两个月，我要静下心来，好好学习安卓的架构基本组件和基本的机制，把正向的基础打扎实！
+
+我准备用自底向上的方法来学习安卓系统，从内核开始学起，因为上层的许多模块都是基于下层的，倘若直接从上层开始学起，那肯定会遇到许多下层的模块导致一时之间摸不着头脑.
+#...
+    </div>
+    <a href="/android-system-architecture/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/dexloader/" itemprop="url"><img data-src="/picture/601053.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-09-25 14:01:45">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-09-25T14:01:45+08:00">2023-09-25</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>6.1k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>6 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/dexloader/" itemprop="url">Android动态加载dex</a></h3>
+    <div class="excerpt">
+        在安卓中可以动态加载 dex 来进行类的调用，而对于市面上常见的 dex 加固来说，也同样采取了加密 dex, 并且在解密之后动态调用的方式来进行 dex 的保护，所以我觉得我有必要去学习一下 dex 的动态加载过程，从而对 apk 的加固有更加深刻的了解和体会.
+
+# Android studio 生成 dex
+既然我们想要让我们的程序动态加载 dex, 那么我们肯定需要先生成一个 dex 才可以咯
+首先我们点击 File-&amp;gt;New-&amp;gt;New Module 新建一个 Module
+
+选中此处的 Android Library , 来创建一个...
+    </div>
+    <a href="/dexloader/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/android-JNI/" itemprop="url"><img data-src="/picture/529718.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-09-21 17:25:53">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-09-21T17:25:53+08:00">2023-09-21</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>23k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>21 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/android-JNI/" itemprop="url">安卓JNI学习</a></h3>
+    <div class="excerpt">
+        在日常的安卓逆向中，可能会遇到代码在 libxxx.so 中的情况，而这种在 so 中的代码的编写就涉及到了安卓的 JNI (Java Native Interface) 开发，俗话说要想会逆向，那么首先得要学会正向，假如都没见过某种语法，那还怎么逆向下去嘞？所以就玩玩 JNI 咯～
+
+# 在 Android studio 中开发 JNI
+首先我们需要创建一个 jni 文件夹，我们只需要右键 app, 然后点击 New-&amp;gt;Folder-&amp;gt;JNI Folder 就可以创建了
+
+接下来从 Android 布局转到 Project 布局，就可以看到新创建的 jni...
+    </div>
+    <a href="/android-JNI/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/xianyu-capture/" itemprop="url"><img data-src="/picture/582652.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-09-18 14:13:25">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-09-18T14:13:25+08:00">2023-09-18</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>1.6k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>1 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/xianyu-capture/" itemprop="url">安卓APP抓包-以咸鱼为例</a></h3>
+    <div class="excerpt">
+        最近想要研究一下安卓 APP 的抓包，正巧听说 flutter 应用非常难抓包，了解了一下应该是 flutter 应用不走代理的原因，而恰巧咸鱼 APP 就是用 flutter 写的，我寻思要是我连这么难抓包的 APP 都会抓了，那么未来去抓其他 APP 的包岂不是信手拈来～
+
+# 环境搭建
+# fiddler
+
+4.0.1 破解版已经失效，勿用！此处仅作记录
+
+下载地址，需要断网安装！
+# 破解流程
+首先下载需要替换的组件， 下载地址
+之后打开 fiddler4.0.1, 连接网络后，注册登录账号，然后点击十天免费使用
+随后，我们替换掉下列路径的文件
+Fiddler...
+    </div>
+    <a href="/xianyu-capture/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/linux-socket-tcp-udp/" itemprop="url"><img data-src="/picture/24402.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-09-14 18:37:38">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-09-14T18:37:38+08:00">2023-09-14</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>8k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>7 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/linux-socket-tcp-udp/" itemprop="url">linux socket TCP/UDP通信学习</a></h3>
+    <div class="excerpt">
+        以往学习过 Windows 中的 TCP/UDP socket 通信，但是当我研究安卓中的 tcp 通信时，发现 C 语言通信的语法截然不同，然后才发现安卓系统上是 Linux 操作系统，所以也有必要去好好学习 Linux 系统中的 tcp/udp 通信
+
+# socket API 接口
+# socket
+创建一个 socket 套接字
+#include &amp;lt;sys/types.h&gt;#include &amp;lt;sys/socket.h&gt;/*@param domain: 通信协议簇@param type: 指定 socket 类型@param protocol:...
+    </div>
+    <a href="/linux-socket-tcp-udp/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/idapython-learning/" itemprop="url"><img data-src="/picture/598879.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-08-24 18:14:21">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-08-24T18:14:21+08:00">2023-08-24</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>26k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>24 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/idapython-learning/" itemprop="url">IDApython学习笔记</a></h3>
+    <div class="excerpt">
+        IDApython 在日常逆向的过程中是十分重要的存在，过去零零散散的接触过一些 idapython, 但是我觉得还是有必要去系统的整理一下相关的函数，以便未来倘若忘记了可以快速通过这篇笔记回忆起来
+
+# 官方文档
+
+IDA Help: Alphabetical list of IDC functions
+IDAPython documentation
+
+# IDApython 编写环境
+
+PyCharm 2021.2.3 社区版
+IDA7.7
+python3.8
+
+由于 IDA 自带的 IDE 没有代码补全十分的难用，所以我准备在 PyCharm 中编写 IDApython 代码
+在...
+    </div>
+    <a href="/idapython-learning/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/rwProcMem33-usage/" itemprop="url"><img data-src="/picture/661490.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-08-10 21:41:17">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-08-10T21:41:17+08:00">2023-08-10</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>13k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>11 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/rwProcMem33-usage/" itemprop="url">将rwProcMem33编译进安卓内核</a></h3>
+    <div class="excerpt">
+        为了做出腾讯游戏安全竞赛初赛的这道安卓题，开始学习 rwProcMem33 的使用来打硬件断点了
+在 juice4fun 师傅做腾讯游戏安全竞赛初赛的安卓题的 writeup 时，使用了 rwProcMem33 来对安卓手机打下硬件断点分析反调试，我也对在安卓手机中打硬件断点的工具很感兴趣，所以就学习一下编译和使用的方法啦
+要想使用 rwProcMem33, 编译环境 (即 AOSP 安卓内核源码环境) 的搭建过程是必不可少的，因为最终内核模块是运行在安卓手机的 linux 内核中，而非虚拟机的 linux...
+    </div>
+    <a href="/rwProcMem33-usage/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/Pixel3-root/" itemprop="url"><img data-src="/picture/810491.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-08-08 14:34:45">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-08-08T14:34:45+08:00">2023-08-08</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>2k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>2 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/Pixel3-root/" itemprop="url">Pixel3 刷机与root记录</a></h3>
+    <div class="excerpt">
+        今年上半年把我的老平板 SM-P200 root 了，不过用着用着就发现这平板的 USB 竟然接触不良！每过一段时间 usb 就会断开连接…
+az, 这对于我来说问题可是致命的，谁能忍受研究的好好的突然手机就失联了嘞
+于是我在咸鱼淘了一台二手 pixel3, 至于为什么是 pixel3, 问就是谷歌亲儿子～
+看了眼手机已经刷成安卓 10 了，卖家也说解了 BL 锁，不过唯一美中不足的就是安卓 10 没 root, 那就只能亲自 root 咯～
+想了想安卓 10 安证书有点麻烦，索性就刷成安卓 9 好了哈哈
+
+# 准备工作
+在进行刷机前，请确保已经提前准备以下内容...
+    </div>
+    <a href="/Pixel3-root/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/starctf-writeup/" itemprop="url"><img data-src="/picture/48744.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-07-31 19:13:07">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-07-31T19:13:07+08:00">2023-07-31</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>52k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>47 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/starctf-writeup/" itemprop="url">StarCTF2023 逆向writeup</a></h3>
+    <div class="excerpt">
+        前两天刚打完的 starctf, 可真是坐牢呀，比赛期间出了三题，赛后终于又弄出来了一题.
+GoGpt 就是常规的 go 语言逆向，看题目描述，题目是 chatGPT 出的，哈哈 AI 竟然也能出题了，不过终究还是简单题呀～
+flagfile 这题有点意思，用了 linux 中的 file -m 命令可以自定义 magic file 的特点，来检测一个文件的每一个字节是否符合魔数文件中的规则的匹配，来判断是否为正确的 flag, 做完这题之后猛然发现，原来有规则的地方就有逆向！
+ez_code 用到了 powershell 特殊符号混淆，多亏看雪上的一篇文章，看到下面的一条评论...
+    </div>
+    <a href="/starctf-writeup/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/%E5%9C%A8python%E4%B8%AD%E9%9A%8F%E5%BF%83%E6%89%80%E6%AC%B2%E7%9A%84%E6%93%8D%E4%BD%9C%E5%8F%98%E9%87%8F/" itemprop="url"><img data-src="/picture/411136.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-07-23 19:50:09">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-07-23T19:50:09+08:00">2023-07-23</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>4.4k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>4 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/%E5%9C%A8python%E4%B8%AD%E9%9A%8F%E5%BF%83%E6%89%80%E6%AC%B2%E7%9A%84%E6%93%8D%E4%BD%9C%E5%8F%98%E9%87%8F/" itemprop="url">在python中随心所欲的操作变量</a></h3>
+    <div class="excerpt">
+        在日常的逆向过程中，我常常会因为各种数值形式上的转换而相当纠结，比如大端，小端，字节转字符串等等，而且也十分的浪费时间去纠结这些细枝末节上的事情，尤其是每次还得 google 去搜索相关的代码，所以我心想与其碎片化的从浏览器中得到自己想要的答案，不如将这些代码整理到这一篇博客内，供我未来遇到这方面的困扰时，可以直接在这里找到答案.
+
+# 数据基本类型
+
+一个字节 = 8 位
+qword 数据类型仅在 64 位程序中存在
+
+类型
+字节数
+位数
+ida...
+    </div>
+    <a href="/%E5%9C%A8python%E4%B8%AD%E9%9A%8F%E5%BF%83%E6%89%80%E6%AC%B2%E7%9A%84%E6%93%8D%E4%BD%9C%E5%8F%98%E9%87%8F/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/hws-2023/" itemprop="url"><img data-src="/picture/651188.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-07-17 11:26:21">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-07-17T11:26:21+08:00">2023-07-17</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>14k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>13 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/hws-2023/" itemprop="url">HWS2023夏令营CTF选拔赛writeup</a></h3>
+    <div class="excerpt">
+        hws 填完参赛问卷之后邮件被发到了垃圾箱里面，比赛开打好几个小时了才发现 (悲), 不过成绩还是不错滴，把逆向 ak 啦，第四名耶 (●’◡’●)
+
+别的方向 misc 和 crypto 也稍微看了下，算是逆向之外的闲情雅致：), 但总归是能做出超级简单的题目的，但是 pwn 是真的不会！做不了一点… 不会 pwn 的二进制手只能当逆向手了😂
+
+题目附件: 点击下载
+# reverse
+# Android
+反编译 libjniex.so , 发现这个解密函数，所使用的算法为 SM4
+
+安装 apk, 打开后发现两个特殊字符串 159762dr7vh438sa 和...
+    </div>
+    <a href="/hws-2023/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/" itemprop="url"><img data-src="/picture/298615.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-06-04 18:24:07">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-06-04T18:24:07+08:00">2023-06-04</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>6.3k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>6 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/" itemprop="url">DASCTF 2023六月挑战赛 二进制专项 RE writeup</a></h3>
+    <div class="excerpt">
+        常年不去上早八课的人，今天居然在八点前就醒了，要问为什么？这比赛从早上八点打到晚上八点 &amp;gt;…&amp;lt;(悲)
+不过，咱们队伍在下午就把逆向题 ak 了～居然没有坐牢到晚上 (●’◡’●)
+
+题目附件: 点击下载
+# careful
+动态调试，题目里有个 inline hook, 在这里打个断点
+
+那么网址就是 Just_An_APIH00k11.com
+# babyre
+die 查一下壳
+
+有 sleep 反调试，把 sleep nop 掉
+
+这里读取了名称为 cod 的资源，用 resource hacker 把资源复制下来
+
+然后向下执行，这里是一个对 cod...
+    </div>
+    <a href="/DASCTF-2023%E5%85%AD%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%93%E9%A1%B9-RE-writeup/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/" itemprop="url"><img data-src="/picture/179540.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-05-25 10:12:08">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-05-25T10:12:08+08:00">2023-05-25</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>18k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>16 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/" itemprop="url">Linux进程通信</a></h3>
+    <div class="excerpt">
+        在日常遇到的.so,.elf 格式的二进制文件，常常可以看到 Linux 进程通信的使用，接下来的部分，我将介绍 Linux...
+    </div>
+    <a href="/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/DASCTF-Apr-2023-X-SU%E6%88%98%E9%98%9F2023%E5%BC%80%E5%B1%80%E4%B9%8B%E6%88%98-reverse-blockchain-writeup/" itemprop="url"><img data-src="/picture/601053.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-04-22 19:15:52">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-04-22T19:15:52+08:00">2023-04-22</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>23k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>21 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/DASCTF-Apr-2023-X-SU%E6%88%98%E9%98%9F2023%E5%BC%80%E5%B1%80%E4%B9%8B%E6%88%98-reverse-blockchain-writeup/" itemprop="url">DASCTF Apr.2023 X SU战队2023开局之战 reverse&&blockchain writeup</a></h3>
+    <div class="excerpt">
+        今天坐牢坐满了八小时，出了三道逆向，一道区块链，帮助我们队拿到了这次比赛的第一名，也算可喜可贺！自己终于不是以前的菜鸡了，遥想去年还啥也不会呢
+现在比赛结束了，那就写一下 wp 好咯
+PS: 第一次拿到一道困难题的一血，还是很激动的，有一道题目我记得叫做 easyRE，拿了二血是因为吃饭吃到 10 点多才开始做题了，下次一定准时比赛！（下次一定 (●’◡’●)）
+
+题目附件: 点击下载
+# reverse
+# easyRE
+这题是 python 逆向，做 python 逆向的方法我感觉挺固定的，就是 pyinstxtractor 解包一下，再把里面的 pyc 转成 py...
+    </div>
+    <a href="/DASCTF-Apr-2023-X-SU%E6%88%98%E9%98%9F2023%E5%BC%80%E5%B1%80%E4%B9%8B%E6%88%98-reverse-blockchain-writeup/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/frida%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91/" itemprop="url"><img data-src="/picture/684530.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-04-05 12:36:01">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-04-05T12:36:01+08:00">2023-04-05</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>79k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>1:12</span>
+  </span>
+</div>
+
+    <h3><a href="/frida%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91/" itemprop="url">frida学习笔记-安卓逆向</a></h3>
+    <div class="excerpt">
+        近期着手准备研究安卓逆向，早就听说 frida 这个安卓逆向神器，所以想要系统的学习一下，这里就当作自己的一个学习笔记，记录本人学习 frida 的过程中所遇到的知识点，防止以后遗忘.
+
+这次的学习教程是由 r0ysue 大佬写的，膜拜！
+
+https://github.com/r0ysue/AndroidSecurityStudy
+
+# frida 的命令行基本语法
+frida -U -l .\srcipt.js -f &quot;com.oacia.frida_a02_01_demo2&quot;
+-U 指用 USB 连接手机和电脑
+-l load-file, 所以后面要跟上写好的...
+    </div>
+    <a href="/frida%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%AE%89%E5%8D%93%E9%80%86%E5%90%91/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/%E5%AF%B9SM-P200%E5%B9%B3%E6%9D%BF%E7%9A%84root%E8%AE%B0%E5%BD%95/" itemprop="url"><img data-src="/picture/648506.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-04-02 17:33:17">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-04-02T17:33:17+08:00">2023-04-02</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>1.5k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>1 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/%E5%AF%B9SM-P200%E5%B9%B3%E6%9D%BF%E7%9A%84root%E8%AE%B0%E5%BD%95/" itemprop="url">对SM-P200平板的root记录</a></h3>
+    <div class="excerpt">
+        这段时间学习安卓逆向的过程中，急需一台 root 机，一开始想把自己的手机 root 了，但是考虑到 root 的过程中会清除所有数据，所以就想着换一台备用机去 root, 正好过去高中的时候被学校强制要求买了一台三星的 SM-P200 平板，高中过后这平板也闲置了下来，正好今天有需要，就把他拿出来，花了两天时间终于将平板 root 好了，所以记录一下平板 root 的过程
+
+对于三星系列手机平板的 root 我的建议是参考此处
+
+# 0x01 下载三星官方原版刷机包
+这是最重要的一步，你需要去网上下载官方原版的刷机包，格式类似于这种 AP , BL ,...
+    </div>
+    <a href="/%E5%AF%B9SM-P200%E5%B9%B3%E6%9D%BF%E7%9A%84root%E8%AE%B0%E5%BD%95/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/%E5%AF%B9%E6%9F%90apk%E7%9A%84%E4%B8%80%E6%AC%A1%E6%8F%92%E6%A1%A9%E8%AE%B0%E5%BD%95/" itemprop="url"><img data-src="/picture/507556.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-03-27 18:32:22">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-03-27T18:32:22+08:00">2023-03-27</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>6.8k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>6 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/%E5%AF%B9%E6%9F%90apk%E7%9A%84%E4%B8%80%E6%AC%A1%E6%8F%92%E6%A1%A9%E8%AE%B0%E5%BD%95/" itemprop="url">对某apk的一次插桩记录</a></h3>
+    <div class="excerpt">
+        今天受好友 nameless 的委托，对一个名叫 nokelock 的 apk 进行插桩，希望在日志中打印出蓝牙加密包的密文，密钥与明文，由于本人是第一次对 apk 进行插桩，于是写了这一篇文章用以学习和记录.
+
+# 0x01 什么是插桩？
+依据本人的拙见，插桩就是在原有的代码中插入自己写的代码，用以打印某些想要知道的变量的值。当然了，插入的代码也可以在原有代码的基础上，为 app 增加各种各样的额外功能。
+在过去学习 fuzz 的过程中，也有过插桩这一个概念，而过去使用的 afl-fuzz 是在二进制汇编代码中插桩，这一次是需要在 apk...
+    </div>
+    <a href="/%E5%AF%B9%E6%9F%90apk%E7%9A%84%E4%B8%80%E6%AC%A1%E6%8F%92%E6%A1%A9%E8%AE%B0%E5%BD%95/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/%E6%89%B9%E9%87%8F%E7%BC%96%E8%AF%91%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E8%BF%87%E7%A8%8B%E8%AE%B0%E5%BD%95/" itemprop="url"><img data-src="/picture/651188.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-03-20 20:29:52">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-03-20T20:29:52+08:00">2023-03-20</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>9.2k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>8 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/%E6%89%B9%E9%87%8F%E7%BC%96%E8%AF%91%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E8%BF%87%E7%A8%8B%E8%AE%B0%E5%BD%95/" itemprop="url">批量编译智能合约过程记录</a></h3>
+    <div class="excerpt">
+        这两天的区块链研究我的任务是要把大约五万个智能合约的源码编译成字节码的形式，并且提取智能合约中所用到的公开库，过程中遇到了一些困难，当然也是有收获的，所以在这个任务做完之后，写了这篇文章记录一下
+
+# 0x01 初步分析
+我们需要批量编译的智能合约所在的文件夹结构如下
+├─0x01ea1afecdab69ab00212e6f9ed0209c0bf75ac9
+│ code.abi
+│ code.sol
+│ contract_creation_code
+│ info
+│
+├─0x01eacc3ae59ee7fbbc191d63e8e1ccfdac11628c
+│ code.abi
+│...
+    </div>
+    <a href="/%E6%89%B9%E9%87%8F%E7%BC%96%E8%AF%91%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E8%BF%87%E7%A8%8B%E8%AE%B0%E5%BD%95/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/hgame2023-reverse-writeup/" itemprop="url"><img data-src="/picture/785426.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-02-07 02:51:22">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-02-07T02:51:22+08:00">2023-02-07</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>38k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>35 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/hgame2023-reverse-writeup/" itemprop="url">Hgame2023 逆向 writeup</a></h3>
+    <div class="excerpt">
+        把今年 hgame 四周的逆向题 ak 啦，还拿了个逆向单方向奖呢～(●’◡’●), 顺手做了两道区块链的题：)
+
+题目附件: 点击下载
+# week1
+# a_cup_of_tea
+tea 算法
+from ctypes import *def decrypt(v, k): v0, v1 = c_uint32(v[0]), c_uint32(v[1]) delta = 0x543210DD k0, k1, k2, k3 = k[0], k[1], k[2], k[3] total = c_uint32(delta * -32) for i in range(32): v1.value -=...
+    </div>
+    <a href="/hgame2023-reverse-writeup/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/python%E9%80%86%E5%90%91/" itemprop="url"><img data-src="/picture/602214.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-01-14 10:12:08">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-01-14T10:12:08+08:00">2023-01-14</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>11k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>10 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/python%E9%80%86%E5%90%91/" itemprop="url">python逆向</a></h3>
+    <div class="excerpt">
+        <blockquote>
+<p>python 中的逆向最关键的就是要看到 python 源码，如果使用 ida 将会大大增加逆向的难度，所以使用好正确的工具和方法将会让逆向过程事半功倍。</p>
+<p>python 逆向的流程为：test.exe–&gt;test.pyc–&gt;test.py</p>
+<p>接下来我将介绍每一步所使用的工具以及到目前为止我所遇到的问题和解决的方法</p>
+</blockquote>
+      
+    </div>
+    <a href="/python%E9%80%86%E5%90%91/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/web3.py%E5%B8%B8%E7%94%A8%E4%BB%A3%E7%A0%81%E6%95%B4%E7%90%86/" itemprop="url"><img data-src="/picture/550204.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-01-14 00:00:00">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-01-14T00:00:00+08:00">2023-01-14</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>2.2k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>2 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/web3.py%E5%B8%B8%E7%94%A8%E4%BB%A3%E7%A0%81%E6%95%B4%E7%90%86/" itemprop="url">在python中与web3交互</a></h3>
+    <div class="excerpt">
+        使用 web3.py 进行合约交互
+
+# 部署合约
+import jsonfrom web3 import Web3, HTTPProviderprivate_key = [钱包私钥]wallet = Web3.toChecksumAddress([钱包地址])w3 = Web3(HTTPProvider([链的RPC]))abi = json.loads([合约的ABI])code = [合约的字节码]newContract = w3.eth.contract(bytecode=code, abi=abi)nonce =...
+    </div>
+    <a href="/web3.py%E5%B8%B8%E7%94%A8%E4%BB%A3%E7%A0%81%E6%95%B4%E7%90%86/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/%E9%80%86%E5%90%91%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95/" itemprop="url"><img data-src="/picture/418621.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2023-01-14 00:00:00">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2023-01-14T00:00:00+08:00">2023-01-14</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>32k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>29 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/%E9%80%86%E5%90%91%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95/" itemprop="url">逆向常用算法</a></h3>
+    <div class="excerpt">
+        对常用的逆向算法进行了整理
+
+# RC4
+
+def RC4(data, key): if type(data) == type(&#39;oacia&#39;): # 判断是否为字符串 data = [ord(i) for i in data] if type(key) == type(&#39;oacia&#39;): key = [ord(i) for i in key] S = list(range(256)) j = 0 out = [] # KSA Phase for i in range(256): j = (j + S[i] + key[i % len(key)]) % 256...
+    </div>
+    <a href="/%E9%80%86%E5%90%91%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/%E7%A5%9D%E5%B0%8F%E5%A4%8F%E7%94%9F%E6%97%A5%E5%BF%AB%E4%B9%90%EF%BC%81%CC%8B(%E0%B9%91%CB%83%CC%81%EA%87%B4%CB%82%CC%80%E0%B9%91)/" itemprop="url"><img data-src="/picture/967440.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2022-12-04 00:00:00">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2022-12-04T00:00:00+08:00">2022-12-04</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>168</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>1 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/%E7%A5%9D%E5%B0%8F%E5%A4%8F%E7%94%9F%E6%97%A5%E5%BF%AB%E4%B9%90%EF%BC%81%CC%8B(%E0%B9%91%CB%83%CC%81%EA%87%B4%CB%82%CC%80%E0%B9%91)/" itemprop="url">祝小夏生日快乐(๑˃́ꇴ˂̀๑)</a></h3>
+    <div class="excerpt">
+        # 12 月 4 号，小夏的生日到啦，真是一件令人开心的事～
+
+这位是放学后甜品部的麻烦制造第一名以及自称浪漫家的小夏同学！
+抱着「想和大家一起分享浪漫」的心情、经常说出爆炸性发言并把周围都牵扯进来、「浪漫」的定义也经常变化着的样子…。
+「关于奶油蛋糕有想到过些什么吗？ 」
+
+还记得今年九月份入坑蔚蓝档案的时候，就是因为看见了小夏，她实在太可爱了 (≧▽≦)
+    </div>
+    <a href="/%E7%A5%9D%E5%B0%8F%E5%A4%8F%E7%94%9F%E6%97%A5%E5%BF%AB%E4%B9%90%EF%BC%81%CC%8B(%E0%B9%91%CB%83%CC%81%EA%87%B4%CB%82%CC%80%E0%B9%91)/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/%E7%94%A8c%E8%B0%83%E7%94%A8python/" itemprop="url"><img data-src="/picture/697918.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2022-11-09 00:00:00">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2022-11-09T00:00:00+08:00">2022-11-09</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>4.6k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>4 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/%E7%94%A8c%E8%B0%83%E7%94%A8python/" itemprop="url">在C语言中调用Python</a></h3>
+    <div class="excerpt">
+        # 0x0 start
+首先导入 Python.h, 并添加 python37_d.lib 依赖
+# 0x1 遇到的问题
+刚开始跟着教程走，结果总是提示缺少 python37_d.lib 依赖，后来根据下面的找到的教程才发现库目录才是有依赖搜索的目录
+
+~~ 看教程里是从上往下数第四个改成了 C:\environment\Python37\libs 结果被骗了…~~QAQ
+
+https://blog.csdn.net/bandaoyu/article/details/105102945
+
+于是 vs 的 VC++ 目录的配置可以如图所示
+
+并且在链接器的输入子目录内添加 python...
+    </div>
+    <a href="/%E7%94%A8c%E8%B0%83%E7%94%A8python/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/2022%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9_1024%E7%A8%8B%E5%BA%8F%E5%91%98%E8%8A%82_T4_%E5%8C%BA%E5%9D%97%E9%93%BE%E8%AF%A6%E8%A7%A3/" itemprop="url"><img data-src="/picture/24402.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2022-11-01 00:00:00">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2022-11-01T00:00:00+08:00">2022-11-01</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>18k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>16 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/2022%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9_1024%E7%A8%8B%E5%BA%8F%E5%91%98%E8%8A%82_T4_%E5%8C%BA%E5%9D%97%E9%93%BE%E8%AF%A6%E8%A7%A3/" itemprop="url">2022哔哩哔哩 1024程序员节 T4 区块链详解</a></h3>
+    <div class="excerpt">
+        <blockquote>
+<p>本次题目的地址为<strong> sepolia@0x053cd080A26CB03d5E6d2956CeBB31c56E7660CA</strong></p>
+</blockquote>
+<h3 id="前言"><a class="anchor" href="#前言">#</a> 前言</h3>
+<p>这一次 1024 程序员节中有区块链相关的题目，作为今年才开始起步区块链的小萌新，这一题也是整整看了一整个周末才做出来，不过做出来之后也是相当的具有成就感滴：), 话不多说，我们现在就来看一看如何做出这一题.</p>
+<hr>
+      
+    </div>
+    <a href="/2022%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9_1024%E7%A8%8B%E5%BA%8F%E5%91%98%E8%8A%82_T4_%E5%8C%BA%E5%9D%97%E9%93%BE%E8%AF%A6%E8%A7%A3/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/solidity-learning/" itemprop="url"><img data-src="/picture/183801.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2022-10-20 08:19:57">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2022-10-20T08:19:57+08:00">2022-10-20</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>25k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>23 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/solidity-learning/" itemprop="url">solidity语言学习</a></h3>
+    <div class="excerpt">
+        # 前言
+过去曾简单接触过 solidity, 合约的内容基本上都是对于函数的调用，感觉和过去看 app 的 java 源码差不多，都是对事件的调用执行。曾经也在 Ropsten 测试网络中进行过几次智能合约的交易，对于交易的过程还是大致有一些了解的，那么我们首先从 solidity 的运行环境开始吧.
+# 环境配置
+这里提供两种配置 solidity 环境的方法
+# 通过 Remix 在网页执行 solidity (推荐，方便快捷)
+Solidity 开发环境搭建
+# 通过 visual code 安装 solidity
+solidity vscode 环境配置
+1、安装...
+    </div>
+    <a href="/solidity-learning/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+        
+<article class="item">
+  <div class="cover">
+    <a href="/%E7%AC%AC%E4%B8%80%E4%B8%AAblog%E7%BA%AA%E5%BF%B5!/" itemprop="url"><img data-src="/picture/179540.webp"></a>
+  </div>
+  <div class="info">
+    
+<div class="meta">
+  <span class="item" title="创建时间：2022-09-28 00:00:00">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <time itemprop="dateCreated datePublished" datetime="2022-09-28T00:00:00+08:00">2022-09-28</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span>31</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span>1 分钟</span>
+  </span>
+</div>
+
+    <h3><a href="/%E7%AC%AC%E4%B8%80%E4%B8%AAblog%E7%BA%AA%E5%BF%B5!/" itemprop="url">第一个blog纪念!</a></h3>
+    <div class="excerpt">
+        # 仅以此纪念 oacia 的 blog 在 2022/9/28 正式建成！
+    </div>
+    <a href="/%E7%AC%AC%E4%B8%80%E4%B8%AAblog%E7%BA%AA%E5%BF%B5!/" itemprop="url" class="btn">more...</a>
+  </div>
+</article>
+
+    </div>
+
+  </div>
+
+  
+
+
+
+        </div>
+        <div id="sidebar">
+          
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="oacia"
+      data-src="/images/avatar.jpg">
+  
+  <svg class="logo-overview" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540.19 380.99">
+    <g id="clips" fill= #00a99d; stroke="none">
+      <clipPath id="o">
+        <path d="M93.57,284c8,0,14.91-1,20.75-3,5.83-2,10.41-3.66,13.75-5,4.66-1.66,6.16-.75,4.5,2.75-1.67,3.5-4.67,6.42-9,8.75-2.34,1.34-6.09,2.84-11.25,4.5-5.17,1.67-11.09,2.5-17.75,2.5-.34,8.67-3.34,16.84-9,24.5-5.67,7.67-13.34,13.34-23,17-6,2.34-12.17,3.59-18.5,3.75-6.34,.17-12.17-.66-17.5-2.5-5.34-1.83-10.09-4.66-14.25-8.5-4.17-3.83-7.25-8.41-9.25-13.75-2-5.33-2.83-11-2.5-17s1.83-11.83,4.5-17.5c2.66-5.66,6.33-10.75,11-15.25,4.66-4.5,10.16-7.75,16.5-9.75,5.66-1.66,11.41-1.66,17.25,0,5.83,1.67,10.08,4.34,12.75,8,1.66,2.67,2.5,5.67,2.5,9,3-2,6.33-3,10-3h1c3.33,0,6.5,.84,9.5,2.5,3,1.67,5.33,4.5,7,8.5l1,3.5Zm-34,39.5c5.66-.66,10.33-3.83,14-9.5,3.66-5.66,5.33-12.16,5-19.5-4.67,.34-9.09-.41-13.25-2.25-4.17-1.83-6.42-4.58-6.75-8.25-.67-3,0-5.5,2-7.5-.67-2.66-2.75-5-6.25-7s-7.09-2.16-10.75-.5c-4.67,2-8.25,5.84-10.75,11.5-2.5,5.67-3.09,11.84-1.75,18.5,1.33,8,4.75,14.34,10.25,19,5.5,4.67,11.58,6.5,18.25,5.5Z"/>
+      </clipPath>
+      <clipPath id="a1">
+        <path d="M176.06,270c5,4,8.5,9.17,10.5,15.5,.66-1.33,1.25-2.33,1.75-3,.5-.66,1.08-1.33,1.75-2,3.66-2.66,8-3.08,13-1.25,5,1.84,8.5,4.09,10.5,6.75,1,1.34,1.41,2.75,1.25,4.25-.17,1.5-.5,3.42-1,5.75-.5,2.34-1,5.09-1.5,8.25-.5,3.17-.42,6.92,.25,11.25,.33,3.67,1.25,6.5,2.75,8.5s3.16,3.25,5,3.75c1.83,.5,3.75,.34,5.75-.5,2-.83,3.83-2.08,5.5-3.75,3-3.66,5.75-7.66,8.25-12,2.5-4.33,4.25-8.16,5.25-11.5,1.33-3.66,3.41-5.25,6.25-4.75,2.83,.5,3.58,3.09,2.25,7.75-1.34,4.67-3,8.92-5,12.75-2,3.84-5.17,8.59-9.5,14.25-4.67,5.67-11.34,9.59-20,11.75-8.67,2.17-17.67,.42-27-5.25-5-3.33-8.34-8.83-10-16.5-.67,1.34-2,3.34-4,6-3.67,4.67-7.84,8.59-12.5,11.75-4.67,3.17-9.42,5.34-14.25,6.5-4.84,1.17-9.59,1.34-14.25,.5-4.67-.83-9-2.75-13-5.75-7.67-6-11.75-14.33-12.25-25-.5-10.66,2.91-20.83,10.25-30.5,7.33-9.66,16.25-15.75,26.75-18.25s19.58-.91,27.25,4.75Zm-25,60c4.66,1.67,9.66,.17,15-4.5,5.33-4.66,9.33-10.83,12-18.5,2.33-6.66,2.58-12.5,.75-17.5-1.84-5-5.09-8.33-9.75-10-4.67-1.66-9.34-1.33-14,1-4.67,2.34-8.34,7.34-11,15-3,7.67-3.84,14.92-2.5,21.75,1.33,6.84,4.5,11.09,9.5,12.75Z"/>
+      </clipPath>
+      <clipPath id="c">
+        <path d="M250.06,280.5c4.66-7.66,12-13.16,22-16.5,10-3.33,19.83-3.66,29.5-1,7.66,2.34,13.5,5.67,17.5,10,4,4.34,5.83,8.5,5.5,12.5-.34,4.67-2.25,8.59-5.75,11.75-3.5,3.17-7.09,5.34-10.75,6.5-3.67,1.17-6.84,1.25-9.5,.25-2.67-1-3.34-3.16-2-6.5,2.66-8,2.75-14.58,.25-19.75-2.5-5.16-5.92-6.41-10.25-3.75-2.67,1.67-5,4.09-7,7.25-2,3.17-3.5,6.75-4.5,10.75s-1.42,8.09-1.25,12.25c.16,4.17,.75,7.92,1.75,11.25,1.33,4,3.66,7.42,7,10.25,3.33,2.84,7.16,4.67,11.5,5.5,4.33,.84,8.91,.67,13.75-.5,4.83-1.16,9.25-3.75,13.25-7.75,7.33-6.66,12.33-14.33,15-23,.33-1.66,1.16-2.91,2.5-3.75,1.33-.83,2.5-1.08,3.5-.75,1,.34,1.83,1.09,2.5,2.25,.66,1.17,.66,2.92,0,5.25-2.34,9.34-6.34,17-12,23-4.67,5.67-10.5,10.42-17.5,14.25-7,3.84-14.25,6.09-21.75,6.75-7.5,.67-14.84-.33-22-3-7.17-2.66-13.25-7.5-18.25-14.5-6-8.66-8.75-17.66-8.25-27,.5-9.33,2.25-16.66,5.25-22Z"/>
+      </clipPath>
+      <clipPath id="i_b">
+        <path d="M393.06,330c-2.34,2.67-5.17,5.09-8.5,7.25-3.34,2.17-7.09,3.59-11.25,4.25-4.17,.67-8.59,.67-13.25,0-4.67-.66-9.17-2.33-13.5-5-4.67-2.66-7.67-7.58-9-14.75-1.34-7.16-1.83-14.66-1.5-22.5,.33-7.83,1.33-14.91,3-21.25,1.66-6.33,3.33-10.16,5-11.5,3.66-2.66,8-3.08,13-1.25,5,1.84,8.5,4.09,10.5,6.75,1,1.34,1.41,3.59,1.25,6.75-.17,3.17-.5,6.92-1,11.25-.5,4.34-1.09,8.92-1.75,13.75-.67,4.84-.67,9.42,0,13.75,.33,3.67,1.33,6.42,3,8.25,1.66,1.84,3.5,2.84,5.5,3,2,.17,4-.25,6-1.25s3.83-2.33,5.5-4c3-3.66,5.66-7.66,8-12,2.33-4.33,4.16-8.16,5.5-11.5,1-3.66,2.91-5.25,5.75-4.75,2.83,.5,3.75,3.09,2.75,7.75-1.34,4.67-3,8.92-5,12.75-2,3.84-5.34,8.59-10,14.25Z"/>
+      </clipPath>
+      <clipPath id="a2">
+        <path d="M461.56,270c5,4,8.5,9.17,10.5,15.5,.66-1.33,1.25-2.33,1.75-3,.5-.66,1.08-1.33,1.75-2,3.66-2.66,8-3.08,13-1.25,5,1.84,8.5,4.09,10.5,6.75,1,1.34,1.41,2.75,1.25,4.25-.17,1.5-.5,3.42-1,5.75-.5,2.34-1,5.09-1.5,8.25-.5,3.17-.42,6.92,.25,11.25,.33,3.67,1.25,6.5,2.75,8.5s3.16,3.25,5,3.75c1.83,.5,3.75,.34,5.75-.5,2-.83,3.83-2.08,5.5-3.75,3-3.66,5.75-7.66,8.25-12,2.5-4.33,4.25-8.16,5.25-11.5,1.33-3.66,3.41-5.25,6.25-4.75,2.83,.5,3.58,3.09,2.25,7.75-1.34,4.67-3,8.92-5,12.75-2,3.84-5.17,8.59-9.5,14.25-4.67,5.67-11.34,9.59-20,11.75-8.67,2.17-17.67,.42-27-5.25-5-3.33-8.34-8.83-10-16.5-.67,1.34-2,3.34-4,6-3.67,4.67-7.84,8.59-12.5,11.75-4.67,3.17-9.42,5.34-14.25,6.5-4.84,1.17-9.59,1.34-14.25,.5-4.67-.83-9-2.75-13-5.75-7.67-6-11.75-14.33-12.25-25-.5-10.66,2.91-20.83,10.25-30.5,7.33-9.66,16.25-15.75,26.75-18.25s19.58-.91,27.25,4.75Zm-25,60c4.66,1.67,9.66,.17,15-4.5,5.33-4.66,9.33-10.83,12-18.5,2.33-6.66,2.58-12.5,.75-17.5-1.84-5-5.09-8.33-9.75-10-4.67-1.66-9.34-1.33-14,1-4.67,2.34-8.34,7.34-11,15-3,7.67-3.84,14.92-2.5,21.75,1.33,6.84,4.5,11.09,9.5,12.75Z"/>
+      </clipPath>
+      
+    </g>
+    <g
+      id="strokes"
+      fill="none"
+      stroke=#96d7f5
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+    <path
+    clip-path="url(#o)"
+    class="oPath path"
+    d="M65.07,278.38c-.29-1.76-1.26-6.18-5-10-3.34-3.4-7.07-4.47-9-5-6.95-1.9-12.89,.22-15,1-10.95,4.04-18.33,15.16-20,26-1.42,9.21,1.56,16.56,3,20,1.49,3.55,3.94,9.39,10,14,6.66,5.07,13.73,5.65,18,6,3,.25,9.01,.67,16-2,1.72-.66,5.78-2.38,10-6,.99-.86,4.82-4.25,8-10,2.79-5.06,3.72-9.49,4-11,.39-2.12,1.09-6.93,0-13-1.05-5.85-1.95-10.86-6-13-2.83-1.5-7.27-1.62-10,1-1.73,1.66-2.85,4.55-2,7,1.04,2.99,4.58,4.01,8,5,1.16,.33,2.91,.75,8,1,4.72,.23,8.68,.18,12,0,6.49-.36,9.74-.54,12-1,4.35-.88,7.44-2.14,12-4,4.67-1.9,6.76-3.17,8-4,2.56-1.7,3.95-3.1,5-4,5.5-4.73,12.89-6.48,18-7,6.09-.62,11.96-.21,18,3,4.89,2.6,8.27,6.84,10,9,1.86,2.32,3.15,4.46,4,6"
+    stroke-width="32.5"
+    ></path>
+    <path
+      clip-path="url(#a1)"
+      class="a1Path path"
+      d="M154.07,270.38c-3.73,1.48-11.88,5.3-18,14-4.95,7.03-6.09,13.7-7,19-1.38,8.06-2.81,16.39,2,24,3.93,6.21,9.88,8.58,11,9,7.28,2.76,13.71,.75,16,0,5.19-1.71,8.32-4.6,12-8,2.48-2.29,6.78-6.34,10-13,2.71-5.61,3.51-10.73,4-14,.86-5.79,.57-9.98,1-10,.41-.02,.79,3.69,2,11,1.71,10.28,2.44,11.93,3,13,1.44,2.76,2.62,5.84,7,10,4.73,4.49,8.09,5.74,11,7,6.75,2.92,13.16,1.45,15,1,4.94-1.21,8.2-3.64,10-5,4.09-3.11,6.34-6.48,8-9,2.23-3.4,3.47-6.35,5-10,1.22-2.9,2.18-5.67,3-8,1.52-4.35,1.41-4.5,2-6,1.75-4.46,2-6,7-12,2.31-2.77,6.32-8.54,10-11,3.79-2.54,7-3.81,10-5,5.33-2.12,9-2.17,12-2,5.4,.32,10.2,4.49,12,6,2.31,1.93,6.05,6.97,7,12,.62,3.29-.19,5.13-1,8-.86,3.04-3.06,5.4-4,7"
+      stroke-width="59"
+    ></path>
+    <path
+      clip-path="url(#c)"
+      class="cPath path"
+      d="M273.07,272.38c-3.08,2.79-9.54,9.45-12,20-2.1,9.02-.22,16.29,1,21,1.57,6.05,3.22,12.44,9,18,6.67,6.42,14.58,7.66,17,8,6.36,.9,11.22-.42,17-2,3.68-1,8.59-2.39,14-6,4.13-2.76,6.84-5.67,9-8,3.24-3.49,5.27-6.46,7-9,2.22-3.27,4.18-6.89,8-14,3.39-6.3,5.1-9.5,6-12,1.67-4.63,2.38-8.58,3-12,.72-4,.94-6.77,1-9,.03-1.23,.02-2.26,0-3"
+      stroke-width="110"
+    ></path>
+    <path
+      clip-path="url(#i_b)"
+      class="i_bPath path"
+      d="M355.07,265.38c-1.55,12.11-2.45,22.6-3,31-.66,10.17-.79,16.98,2,25,1.74,5,3.75,10.53,9,13,6.29,2.97,13.34-.3,17-2,6.11-2.83,9.64-6.89,14-12,9.03-10.59,9.67-15.19,10-17,.6-3.32,1.32-6.16,1-8"
+      stroke-width="33"
+    ></path>
+    <path
+      clip-path="url(#a2)"
+      class="a2Path path"
+      d="M470.07,302.38c.32-2.77,.45-7.09-1-12-.98-3.32-5.25-15.49-17-19-12.13-3.62-22.23,4.71-25,7-6.75,5.57-9.28,12.36-11,17-1.68,4.53-5.22,14.03-2,25,1.19,4.05,3.29,11.22,10,15,7.78,4.39,16.49,1.26,20,0,6.31-2.27,10.12-6.13,14-10,4.99-4.97,7.76-9.61,11-15,1.88-3.14,4.54-7.61,7-14,3.15-8.18,3.42-14.06,4-14,.51,.05-.23,7.53,0,19,.07,3.38,.38,6.92,1,14,.41,4.62,.69,7.05,2,10,.82,1.86,2.1,4.74,5,7,4.4,3.43,9.65,3.17,13,3,1.08-.05,5.74-.35,11-3,4.39-2.21,7.04-4.97,9-7,.85-.89,3.48-3.69,6-8,1.51-2.58,1.83-3.87,4-9,1.54-3.64,2.92-6.7,4-9"
+      stroke-width="70"
+    ></path>
+    </g>
+    <g
+      id="strokes2"
+      fill="none"
+      stroke=#ff97b8
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path
+        clip-path="url(#o)"
+        class="oPath path"
+        d="M65.07,278.38c-.29-1.76-1.26-6.18-5-10-3.34-3.4-7.07-4.47-9-5-6.95-1.9-12.89,.22-15,1-10.95,4.04-18.33,15.16-20,26-1.42,9.21,1.56,16.56,3,20,1.49,3.55,3.94,9.39,10,14,6.66,5.07,13.73,5.65,18,6,3,.25,9.01,.67,16-2,1.72-.66,5.78-2.38,10-6,.99-.86,4.82-4.25,8-10,2.79-5.06,3.72-9.49,4-11,.39-2.12,1.09-6.93,0-13-1.05-5.85-1.95-10.86-6-13-2.83-1.5-7.27-1.62-10,1-1.73,1.66-2.85,4.55-2,7,1.04,2.99,4.58,4.01,8,5,1.16,.33,2.91,.75,8,1,4.72,.23,8.68,.18,12,0,6.49-.36,9.74-.54,12-1,4.35-.88,7.44-2.14,12-4,4.67-1.9,6.76-3.17,8-4,2.56-1.7,3.95-3.1,5-4,5.5-4.73,12.89-6.48,18-7,6.09-.62,11.96-.21,18,3,4.89,2.6,8.27,6.84,10,9,1.86,2.32,3.15,4.46,4,6"
+        stroke-width="32.5"
+      ></path>
+      <path
+        clip-path="url(#a1)"
+        class="a1Path path"
+        d="M154.07,270.38c-3.73,1.48-11.88,5.3-18,14-4.95,7.03-6.09,13.7-7,19-1.38,8.06-2.81,16.39,2,24,3.93,6.21,9.88,8.58,11,9,7.28,2.76,13.71,.75,16,0,5.19-1.71,8.32-4.6,12-8,2.48-2.29,6.78-6.34,10-13,2.71-5.61,3.51-10.73,4-14,.86-5.79,.57-9.98,1-10,.41-.02,.79,3.69,2,11,1.71,10.28,2.44,11.93,3,13,1.44,2.76,2.62,5.84,7,10,4.73,4.49,8.09,5.74,11,7,6.75,2.92,13.16,1.45,15,1,4.94-1.21,8.2-3.64,10-5,4.09-3.11,6.34-6.48,8-9,2.23-3.4,3.47-6.35,5-10,1.22-2.9,2.18-5.67,3-8,1.52-4.35,1.41-4.5,2-6,1.75-4.46,2-6,7-12,2.31-2.77,6.32-8.54,10-11,3.79-2.54,7-3.81,10-5,5.33-2.12,9-2.17,12-2,5.4,.32,10.2,4.49,12,6,2.31,1.93,6.05,6.97,7,12,.62,3.29-.19,5.13-1,8-.86,3.04-3.06,5.4-4,7"
+        stroke-width="59"
+      ></path>
+      <path
+        clip-path="url(#c)"
+        class="cPath path"
+        d="M273.07,272.38c-3.08,2.79-9.54,9.45-12,20-2.1,9.02-.22,16.29,1,21,1.57,6.05,3.22,12.44,9,18,6.67,6.42,14.58,7.66,17,8,6.36,.9,11.22-.42,17-2,3.68-1,8.59-2.39,14-6,4.13-2.76,6.84-5.67,9-8,3.24-3.49,5.27-6.46,7-9,2.22-3.27,4.18-6.89,8-14,3.39-6.3,5.1-9.5,6-12,1.67-4.63,2.38-8.58,3-12,.72-4,.94-6.77,1-9,.03-1.23,.02-2.26,0-3"
+        stroke-width="110"
+      ></path>
+      <path
+        clip-path="url(#i_b)"
+        class="i_bPath path"
+        d="M355.07,265.38c-1.55,12.11-2.45,22.6-3,31-.66,10.17-.79,16.98,2,25,1.74,5,3.75,10.53,9,13,6.29,2.97,13.34-.3,17-2,6.11-2.83,9.64-6.89,14-12,9.03-10.59,9.67-15.19,10-17,.6-3.32,1.32-6.16,1-8"
+        stroke-width="33"
+      ></path>
+      <path
+        clip-path="url(#a2)"
+        class="a2Path path"
+        d="M470.07,302.38c.32-2.77,.45-7.09-1-12-.98-3.32-5.25-15.49-17-19-12.13-3.62-22.23,4.71-25,7-6.75,5.57-9.28,12.36-11,17-1.68,4.53-5.22,14.03-2,25,1.19,4.05,3.29,11.22,10,15,7.78,4.39,16.49,1.26,20,0,6.31-2.27,10.12-6.13,14-10,4.99-4.97,7.76-9.61,11-15,1.88-3.14,4.54-7.61,7-14,3.15-8.18,3.42-14.06,4-14,.51,.05-.23,7.53,0,19,.07,3.38,.38,6.92,1,14,.41,4.62,.69,7.05,2,10,.82,1.86,2.1,4.74,5,7,4.4,3.43,9.65,3.17,13,3,1.08-.05,5.74-.35,11-3,4.39-2.21,7.04-4.97,9-7,.85-.89,3.48-3.69,6-8,1.51-2.58,1.83-3.87,4-9,1.54-3.64,2.92-6.7,4-9"
+        stroke-width="70"
+      ></path>
+    </g>
+    <g class="dot-group">
+      <path
+        id="dot"
+        fill=#ff97b8
+        d="M362.58,182.21c4.66-.33,9.66,1.17,15,4.5,5.33,3.34,7.66,7.5,7,12.5-.67,2.34-1.92,4.92-3.75,7.75-1.84,2.84-4,5.5-6.5,8s-4.84,4.75-7,6.75c-2.17,2-3.75,3.17-4.75,3.5-2.67,1.67-5.34,2.25-8,1.75-2.67-.5-5-1.5-7-3s-3.59-3.33-4.75-5.5c-1.17-2.16-1.92-4.25-2.25-6.25-.34-2,.16-4.66,1.5-8,1.33-3.33,3.08-6.58,5.25-9.75,2.16-3.16,4.58-6,7.25-8.5,2.66-2.5,5.33-3.75,8-3.75Z"
+      ></path>
+    </g>
+  </svg>
+  <div class="description" itemprop="description">月遇从云 花遇和风</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">53</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">46</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL29hY2lh" title="https:&#x2F;&#x2F;github.com&#x2F;oacia"><i class="ic i-github"></i></span>
+      <a target="_blank" rel="noopener" href="https://twitter.com/oacia86" title="https:&#x2F;&#x2F;twitter.com&#x2F;oacia86" class="item twitter"><i class="ic i-twitter"></i></a>
+      <span class="exturl item paper-plane" data-url="aHR0cHM6Ly90Lm1lL29hY2lh" title="https:&#x2F;&#x2F;t.me&#x2F;oacia"><i class="ic i-paper-plane"></i></span>
+      <span class="exturl item email" data-url="bWFpbHRvOm9hY2lhODZAZ21haWwuY29t" title="mailto:oacia86@gmail.com"><i class="ic i-envelope"></i></span>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/about-oacia/" rel="section"><i class="ic i-user"></i>关于oacia</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/archives/" rel="section"><i class="ic i-feather"></i>文章</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/TODOlist/" rel="section"><i class="ic i-clock"></i>要做的事</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/website_maintenance/" rel="section"><i class="ic i-calendar"></i>更新日志</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/friends/" rel="section"><i class="ic i-heart"></i>小伙伴</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/music/" rel="section"><i class="ic i-music"></i>听会儿歌吧</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">oacia @ oacia</span>
+  </div>
+  <div class="count">
+    <span class="post-meta-item-icon">
+      <i class="ic i-chart-area"></i>
+    </span>
+    <span title="站点总字数">968k 字</span>
+
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="ic i-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14:40</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+
+
+
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '',
+    favicon: {
+      show: "柚鳥ナツ",
+      hide: "甘い幸せ"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+
+<script src="//fastly.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>

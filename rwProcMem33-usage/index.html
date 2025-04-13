@@ -1,0 +1,1091 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="google-site-verification" content="qQVmgWozVe7BXoA15J3gAZpEA5dK168admH4U3W6PAk">
+  <meta name="msvalidate.01" content="4902E39C0135E72DE537BCB0FE08B40A">
+  <meta name="baidu-site-verification" content="codeva-CSYjpuVg5v">
+
+
+<link rel="alternate" type="application/rss+xml" title="oaciaのBbBlog~" href="https://oacia.dev/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="oaciaのBbBlog~" href="https://oacia.dev/atom.xml" />
+<link rel="alternate" type="application/json" title="oaciaのBbBlog~" href="https://oacia.dev/feed.json" />
+<link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin=""
+      href="/fonts/noto-serif-sc-v22-chinese-simplified_latin-regular.woff2"
+/>
+<link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin=""
+      href="/fonts/noto-serif-sc-v22-chinese-simplified_latin-700.woff2"
+/>
+<link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin=""
+      href="/fonts/font_1832207_igi8uaupcus.woff2"
+/>
+<link rel="preload" href="/background_picture/1_gongzi.webp" as="image" />
+<link rel="preload" href="/background_picture/2_xiaoxia.webp" as="image" />
+<link rel="preload" href="/background_picture/3_xingye.webp" as="image" />
+<link rel="preload" href="/images/avatar.jpg" as="image" />
+
+
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="rwProcMem33,android kernel" />
+
+
+<link rel="canonical" href="https://oacia.dev/rwProcMem33-usage/">
+
+
+<meta name="description" content="为了做出腾讯游戏安全竞赛初赛的这道安卓题，开始学习 rwProcMem33  的使用来打硬件断点了 在 juice4fun 师傅做腾讯游戏安全竞赛初赛的安卓题的 writeup 时，使用了 rwProcMem33 来对安卓手机打下硬件断点分析反调试，我也对在安卓手机中打硬件断点的工具很感兴趣，所以就学习一下编译和使用的方法啦 要想使用 rwProcMem33, 编译环境 (即 AOSP 安卓内核">
+<meta property="og:type" content="article">
+<meta property="og:title" content="将rwProcMem33编译进安卓内核">
+<meta property="og:url" content="https://oacia.dev/rwProcMem33-usage/">
+<meta property="og:site_name" content="oaciaのBbBlog~">
+<meta property="og:description" content="为了做出腾讯游戏安全竞赛初赛的这道安卓题，开始学习 rwProcMem33  的使用来打硬件断点了 在 juice4fun 师傅做腾讯游戏安全竞赛初赛的安卓题的 writeup 时，使用了 rwProcMem33 来对安卓手机打下硬件断点分析反调试，我也对在安卓手机中打硬件断点的工具很感兴趣，所以就学习一下编译和使用的方法啦 要想使用 rwProcMem33, 编译环境 (即 AOSP 安卓内核">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230811162236189.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230811175325211.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230811175516413.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230811180538737.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230811180608202.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230816224032513.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230811172340268.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230811232551456.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230812144108245.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230811184714849.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230811192125650.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230813120617329.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230903200605263.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230903202421912.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230913174004277.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230913174430779.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230816235239736.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230812145430979.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230813121805073.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230817023155232.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230817023547904.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230816194207598.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230816221255328.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230816221420002.png">
+<meta property="og:image" content="https://oacia.dev/rwProcMem33-usage/image-20230816221529230.png">
+<meta property="article:published_time" content="2023-08-10T13:41:17.000Z">
+<meta property="article:modified_time" content="2025-04-08T18:55:11.741Z">
+<meta property="article:author" content="oacia">
+<meta property="article:tag" content="rwProcMem33">
+<meta property="article:tag" content="android kernel">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oacia.dev/rwProcMem33-usage/image-20230811162236189.png">
+<meta name="twitter:creator" content="@oacia86">
+
+
+  <title>
+将rwProcMem33编译进安卓内核 |
+oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+  var jq_151 = $.noConflict(true);
+  var RENDERER = {
+    INIT_CHERRY_BLOSSOM_COUNT : 30,
+    MAX_ADDING_INTERVAL : 10,
+    WATCH_INTERVAL : 300,
+    
+    init : function(){
+      this.setParameters();
+      this.reconstructMethods();
+      this.setup();
+      this.bindEvent();
+      this.render();
+    },
+    setParameters : function(){
+      this.$window = jq_151(window);
+      this.$container = jq_151('#loading');
+      this.$canvas = jq_151('<canvas />');
+      this.context = this.$canvas.appendTo(this.$container).get(0).getContext('2d');
+      this.cherries = [];
+      this.watchIds = [];
+    },
+    reconstructMethods : function(){
+      this.watchWindowSize = this.watchWindowSize.bind(this);
+      this.jdugeToStopResize = this.jdugeToStopResize.bind(this);
+      this.render = this.render.bind(this);
+    },
+    setup : function(){
+      this.cherries.length = 0;
+      this.watchIds.length = 0;
+      this.width = this.$container.width();
+      this.height = this.$container.height();
+      this.$canvas.attr({width : this.width, height : this.height});
+      this.maxAddingInterval = Math.round(this.MAX_ADDING_INTERVAL * 1000 / this.width);
+      this.addingInterval = this.maxAddingInterval;
+      this.createCherries();
+    },
+    createCherries : function(){
+      for(var i = 0, length = Math.round(this.INIT_CHERRY_BLOSSOM_COUNT * this.width / 1000); i < length; i++){
+        this.cherries.push(new CHERRY_BLOSSOM(this, true));
+      }
+    },
+    watchWindowSize : function(){
+      this.clearTimer();
+      this.tmpWidth = window.width;
+      this.tmpHeight = window.height;
+      this.watchIds.push(setTimeout(this.jdugeToStopResize, this.WATCH_INTERVAL));
+    },
+    clearTimer : function(){
+      while(this.watchIds.length > 0){
+        clearTimeout(this.watchIds.pop());
+      }
+    },
+    jdugeToStopResize : function(){
+      var width = window.width,
+        height = window.height,
+        stopped = (width == this.tmpWidth && height == this.tmpHeight);
+        
+      this.tmpWidth = width;
+      this.tmpHeight = height;
+      
+      if(stopped){
+        this.setup();
+      }
+    },
+    bindEvent : function(){
+      this.$window.on('resize', this.watchWindowSize);
+    },
+    render : function(){
+      //console.log("render")
+
+      if(jq_151(this.$container).css("display")!="none"){
+        requestAnimationFrame(this.render);
+      }
+      
+      this.context.clearRect(0, 0, this.width, this.height);
+      
+      this.cherries.sort(function(cherry1, cherry2){
+        return cherry1.z - cherry2.z;
+      });
+      for(var i = this.cherries.length - 1; i >= 0; i--){
+        if(!this.cherries[i].render(this.context)){
+          this.cherries.splice(i, 1);
+        }
+      }
+      if(--this.addingInterval == 0){
+        this.addingInterval = this.maxAddingInterval;
+        this.cherries.push(new CHERRY_BLOSSOM(this, false));
+      }
+    }
+  };
+  var CHERRY_BLOSSOM = function(renderer, isRandom){
+    this.renderer = renderer;
+    this.init(isRandom);
+  };
+  CHERRY_BLOSSOM.prototype = {
+    FOCUS_POSITION : 300,
+    FAR_LIMIT : 600,
+    MAX_RIPPLE_COUNT : 100,
+    RIPPLE_RADIUS : 100,
+    SURFACE_RATE : 0.5,
+    SINK_OFFSET : 20,
+    
+    init : function(isRandom){
+      this.x = this.getRandomValue(-this.renderer.width, this.renderer.width);
+      this.y = isRandom ? this.getRandomValue(0, this.renderer.height) : this.renderer.height * 1.5;
+      this.z = this.getRandomValue(0, this.FAR_LIMIT);
+      this.vx = this.getRandomValue(-2, 2);
+      this.vy = -2;
+      this.theta = this.getRandomValue(0, Math.PI * 2);
+      this.phi = this.getRandomValue(0, Math.PI * 2);
+      this.psi = 0;
+      this.dpsi = this.getRandomValue(Math.PI / 600, Math.PI / 300);
+      this.opacity = 0;
+      this.endTheta = false;
+      this.endPhi = false;
+      this.rippleCount = 0;
+      
+      var axis = this.getAxis(),
+        theta = this.theta + Math.ceil(-(this.y + this.renderer.height * this.SURFACE_RATE) / this.vy) * Math.PI / 500;
+      theta %= Math.PI * 2;
+      
+      this.offsetY = 40 * ((theta <= Math.PI / 2 || theta >= Math.PI * 3 / 2) ? -1 : 1);
+      this.thresholdY = this.renderer.height / 2 + this.renderer.height * this.SURFACE_RATE * axis.rate;
+      this.entityColor = this.renderer.context.createRadialGradient(0, 40, 0, 0, 40, 80);
+      this.entityColor.addColorStop(0, 'hsl(330, 70%, ' + 50 * (0.3 + axis.rate) + '%)');
+      this.entityColor.addColorStop(0.05, 'hsl(330, 40%,' + 55 * (0.3 + axis.rate) + '%)');
+      this.entityColor.addColorStop(1, 'hsl(330, 20%, ' + 70 * (0.3 + axis.rate) + '%)');
+      this.shadowColor = this.renderer.context.createRadialGradient(0, 40, 0, 0, 40, 80);
+      this.shadowColor.addColorStop(0, 'hsl(330, 40%, ' + 30 * (0.3 + axis.rate) + '%)');
+      this.shadowColor.addColorStop(0.05, 'hsl(330, 40%,' + 30 * (0.3 + axis.rate) + '%)');
+      this.shadowColor.addColorStop(1, 'hsl(330, 20%, ' + 40 * (0.3 + axis.rate) + '%)');
+    },
+    getRandomValue : function(min, max){
+      return min + (max - min) * Math.random();
+    },
+    getAxis : function(){
+      var rate = this.FOCUS_POSITION / (this.z + this.FOCUS_POSITION),
+        x = this.renderer.width / 2 + this.x * rate,
+        y = this.renderer.height / 2 - this.y * rate;
+      return {rate : rate, x : x, y : y};
+    },
+    renderCherry : function(context, axis){
+      context.beginPath();
+      context.moveTo(0, 40);
+      context.bezierCurveTo(-60, 20, -10, -60, 0, -20);
+      context.bezierCurveTo(10, -60, 60, 20, 0, 40);
+      context.fill();
+      
+      for(var i = -4; i < 4; i++){
+        context.beginPath();
+        context.moveTo(0, 40);
+        context.quadraticCurveTo(i * 12, 10, i * 4, -24 + Math.abs(i) * 2);
+        context.stroke();
+      }
+    },
+    render : function(context){
+      var axis = this.getAxis();
+      
+      if(axis.y == this.thresholdY && this.rippleCount < this.MAX_RIPPLE_COUNT){
+        context.save();
+        context.lineWidth = 2;
+        context.strokeStyle = 'hsla(0, 0%, 100%, ' + (this.MAX_RIPPLE_COUNT - this.rippleCount) / this.MAX_RIPPLE_COUNT + ')';
+        context.translate(axis.x + this.offsetY * axis.rate * (this.theta <= Math.PI ? -1 : 1), axis.y);
+        context.scale(1, 0.3);
+        context.beginPath();
+        context.arc(0, 0, this.rippleCount / this.MAX_RIPPLE_COUNT * this.RIPPLE_RADIUS * axis.rate, 0, Math.PI * 2, false);
+        context.stroke();
+        context.restore();
+        this.rippleCount++;
+      }
+      if(axis.y < this.thresholdY || (!this.endTheta || !this.endPhi)){
+        if(this.y <= 0){
+          this.opacity = Math.min(this.opacity + 0.01, 1);
+        }
+        context.save();
+        context.globalAlpha = this.opacity;
+        context.fillStyle = this.shadowColor;
+        context.strokeStyle = 'hsl(330, 30%,' + 40 * (0.3 + axis.rate) + '%)';
+        context.translate(axis.x, Math.max(axis.y, this.thresholdY + this.thresholdY - axis.y));
+        context.rotate(Math.PI - this.theta);
+        context.scale(axis.rate * -Math.sin(this.phi), axis.rate);
+        context.translate(0, this.offsetY);
+        this.renderCherry(context, axis);
+        context.restore();
+      }
+      context.save();
+      context.fillStyle = this.entityColor;
+      context.strokeStyle = 'hsl(330, 40%,' + 70 * (0.3 + axis.rate) + '%)';
+      context.translate(axis.x, axis.y + Math.abs(this.SINK_OFFSET * Math.sin(this.psi) * axis.rate));
+      context.rotate(this.theta);
+      context.scale(axis.rate * Math.sin(this.phi), axis.rate);
+      context.translate(0, this.offsetY);
+      this.renderCherry(context, axis);
+      context.restore();
+      
+      if(this.y <= -this.renderer.height / 4){
+        if(!this.endTheta){
+          for(var theta = Math.PI / 2, end = Math.PI * 3 / 2; theta <= end; theta += Math.PI){
+            if(this.theta < theta && this.theta + Math.PI / 200 > theta){
+              this.theta = theta;
+              this.endTheta = true;
+              break;
+            }
+          }
+        }
+        if(!this.endPhi){
+          for(var phi = Math.PI / 8, end = Math.PI * 7 / 8; phi <= end; phi += Math.PI * 3 / 4){
+            if(this.phi < phi && this.phi + Math.PI / 200 > phi){
+              this.phi = Math.PI / 8;
+              this.endPhi = true;
+              break;
+            }
+          }
+        }
+      }
+      if(!this.endTheta){
+        if(axis.y == this.thresholdY){
+          this.theta += Math.PI / 200 * ((this.theta < Math.PI / 2 || (this.theta >= Math.PI && this.theta < Math.PI * 3 / 2)) ? 1 : -1);
+        }else{
+          this.theta += Math.PI / 500;
+        }
+        this.theta %= Math.PI * 2;
+      }
+      if(this.endPhi){
+        if(this.rippleCount == this.MAX_RIPPLE_COUNT){
+          this.psi += this.dpsi;
+          this.psi %= Math.PI * 2;
+        }
+      }else{
+        this.phi += Math.PI / ((axis.y == this.thresholdY) ? 200 : 500);
+        this.phi %= Math.PI;
+      }
+      if(this.y <= -this.renderer.height * this.SURFACE_RATE){
+        this.x += 2;
+        this.y = -this.renderer.height * this.SURFACE_RATE;
+      }else{
+        this.x += this.vx;
+        this.y += this.vy;
+      }
+      return this.z > -this.FOCUS_POSITION && this.z < this.FAR_LIMIT && this.x < this.renderer.width * 1.5;
+    }
+  };
+  jq_151(function(){
+    RENDERER.init();
+  });
+</script>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <!--
+    <div class="alice">
+      <img src="/images/alice-shake.gif" alt="">
+    </div>
+
+    
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+    -->
+  </div>
+  <script
+      defer="defer"
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/gsap.min.js"
+      integrity="sha512-1dalHDkG9EtcOmCnoCjiwQ/HEB5SDNqw8d4G2MKoNwjiwMNeBAkudsBCmSlMnXdsH8Bm0mOd3tl/6nL5y0bMaQ=="
+      crossorigin="anonymous"
+    ></script>
+  <script defer="defer" src="/js/gsap/DrawSVGPlugin.min.js"></script>
+  <script defer="defer" src="/js/gsap/CustomEase.min.js"></script>
+  <script defer="defer" src="/js/gsap/CustomBounce.min.js"></script>
+  <script defer="defer" src="/js/gsap/SplitText.min.js"></script>
+  <script defer="defer" src="/js/gsap/logo-run.js"></script>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">将rwProcMem33编译进安卓内核
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2023-08-10 21:41:17">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2023-08-10T21:41:17+08:00">2023-08-10</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span class="text">本文字数</span>
+    <span>13k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span class="text">阅读时长</span>
+    <span>11 分钟</span>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">oacia</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="/background_picture/1_mary.jpg"></li>
+          <li class="item" data-background-image="/background_picture/2_xingye.webp"></li>
+          <li class="item" data-background-image="/background_picture/3_xiaoxia.webp"></li>
+          <li class="item" data-background-image="/background_picture/4_alice.webp"></li>
+          <li class="item" data-background-image="/background_picture/5_mutsuki.jpg"></li>
+          <li class="item" data-background-image="/background_picture/6_arona_plana.webp"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb">
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="https://oacia.dev/rwProcMem33-usage/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="oacia">
+    <meta itemprop="description" content="DEVIL or SWEET, 月遇从云 花遇和风">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="oaciaのBbBlog~">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <blockquote>
+<p>为了做出腾讯游戏安全竞赛初赛的这道安卓题，开始学习 <code>rwProcMem33 </code> 的使用来打硬件断点了</p>
+<p>在<span class="exturl" data-url="aHR0cHM6Ly9iYnMua2FueHVlLmNvbS91c2VyLWhvbWUtODMxNTI2Lmh0bQ=="> juice4fun</span> 师傅做腾讯游戏安全竞赛初赛的安卓题的<span class="exturl" data-url="aHR0cHM6Ly9iYnMua2FueHVlLmNvbS90aHJlYWQtMjc2ODk2Lmh0bSNtc2dfaGVhZGVyX2gyXzI="> writeup</span> 时，使用了<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FiY3ozMTYvcndQcm9jTWVtMzM="> rwProcMem33</span> 来对安卓手机打下硬件断点分析反调试，我也对在安卓手机中打硬件断点的工具很感兴趣，所以就学习一下编译和使用的方法啦</p>
+<p>要想使用 rwProcMem33, 编译环境 (即 AOSP 安卓内核源码环境) 的搭建过程是必不可少的，因为最终内核模块是运行在安卓手机的 linux 内核中，而非虚拟机的 linux 内核中，所以内核源码是有必要下载的</p>
+<p>所以这篇文章不仅是硬件断点工具的编译和使用笔记，也是安卓内核的编译笔记，用来记录我在编译内核的过程中遇到的困难，以及如何克服的</p>
+<p>为了更快的下载速度，可以选择配置代理，也可以手动切换下载源，只要不出现网络问题导致下载失败就行</p>
+<p>docker 的使用完全是因为我的虚拟机 shell 环境崩溃，从而导致无法编译，如果对自己虚拟机的 shell 环境足够自信，不使用 docker 也是可以的</p>
+</blockquote>
+<h1 id="编译环境搭建"><a class="anchor" href="#编译环境搭建">#</a> 编译环境搭建</h1>
+<h2 id="虚拟机配置"><a class="anchor" href="#虚拟机配置">#</a> 虚拟机配置</h2>
+<p>我使用的虚拟机为 <code>Ubuntu22.04</code> , 虚拟机的参考配置如下</p>
+<p><img data-src="/rwProcMem33-usage/image-20230811162236189.png" alt="image-20230811162236189" style="aspect-ratio:860 / 1002;"></p>
+<h2 id="为虚拟机配置代理"><a class="anchor" href="#为虚拟机配置代理">#</a> 为虚拟机配置代理</h2>
+<h3 id="查看虚拟机代理地址"><a class="anchor" href="#查看虚拟机代理地址">#</a> 查看虚拟机代理地址</h3>
+<p>打开 <code>clash for windows</code> , 并打开 <code>Allow LAN</code>  的开关，随后点击 <code>network interfaces</code></p>
+<p><img data-src="/rwProcMem33-usage/image-20230811175325211.png" alt="image-20230811175325211" style="aspect-ratio:1070 / 760;"></p>
+<p>请注意我的虚拟机使用的网络连接方式为 NAT 模式，所以需要关注 <code>VMnet8</code>  的地址，所以对于该虚拟机，代理地址为 <code>192.168.27.1</code> , 端口就是 <code>clash</code>  中 <code>Port</code>  选项所显示的端口</p>
+<p><img data-src="/rwProcMem33-usage/image-20230811175516413.png" alt="image-20230811175516413" style="aspect-ratio:1070 / 760;"></p>
+<h3 id="启用虚拟机代理"><a class="anchor" href="#启用虚拟机代理">#</a> 启用虚拟机代理</h3>
+<p>依次点击如下选项进入代理配置</p>
+<p><img data-src="/rwProcMem33-usage/image-20230811180538737.png" alt="image-20230811180538737" style="aspect-ratio:1278 / 772;"></p>
+<p>输入代理地址保存即可</p>
+<p><img data-src="/rwProcMem33-usage/image-20230811180608202.png" alt="image-20230811180608202" style="aspect-ratio:840 / 516;"></p>
+<h2 id="配置docker-ubuntu镜像"><a class="anchor" href="#配置docker-ubuntu镜像">#</a> 配置 docker ubuntu 镜像</h2>
+<blockquote>
+<p>本人因为不小心运行了一个命令 <code>source _setup_env.sh</code> , 导致虚拟机的 shell 环境整个崩掉了， <code>build.sh</code>  也屡屡运行失败，看了眼 <code>_setup_env.sh</code>  我真是只能苦涩的笑…</p>
+<p><img data-src="/rwProcMem33-usage/image-20230816224032513.png" alt="image-20230816224032513" style="aspect-ratio:884 / 519;"></p>
+<p>所以不得不用 docker 了，不过用下来发现竟然意外的好用</p>
+</blockquote>
+<h3 id="安装docker"><a class="anchor" href="#安装docker">#</a> 安装 docker</h3>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> docker.io</pre></td></tr></table></figure><h3 id="docker-pull代理配置"><a class="anchor" href="#docker-pull代理配置">#</a> docker pull 代理配置</h3>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">sudo</span> <span class="token function">mkdir</span> <span class="token parameter variable">-p</span> /etc/systemd/system/docker.service.d</pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token function">sudo</span> gedit /etc/systemd/system/docker.service.d/proxy.conf</pre></td></tr></table></figure><p>输入以下代理服务器内容</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token punctuation">[</span>Service<span class="token punctuation">]</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token assign-left variable">Environment</span><span class="token operator">=</span><span class="token string">"HTTP_PROXY=http://192.168.27.1:7890/"</span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token assign-left variable">Environment</span><span class="token operator">=</span><span class="token string">"HTTPS_PROXY=http://192.168.27.1:7890/"</span></pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token assign-left variable">Environment</span><span class="token operator">=</span><span class="token string">"NO_PROXY=localhost,127.0.0.1"</span></pre></td></tr></table></figure><h3 id="刷新配置并重启-docker-服务"><a class="anchor" href="#刷新配置并重启-docker-服务">#</a> 刷新配置并重启 docker 服务</h3>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">sudo</span> systemctl daemon-reload</pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token function">sudo</span> systemctl restart <span class="token function">docker</span></pre></td></tr></table></figure><h3 id="docker镜像代理配置"><a class="anchor" href="#docker镜像代理配置">#</a> docker 镜像代理配置</h3>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">sudo</span> <span class="token function">mkdir</span> <span class="token parameter variable">-p</span> ~/.docker/</pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token function">sudo</span> gedit ~/.docker/config.json</pre></td></tr></table></figure><p>输入以下内容</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="2"></td><td><pre> <span class="token string">"proxies"</span><span class="token builtin class-name">:</span></pre></td></tr><tr><td data-num="3"></td><td><pre> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="4"></td><td><pre>   <span class="token string">"default"</span><span class="token builtin class-name">:</span></pre></td></tr><tr><td data-num="5"></td><td><pre>   <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="6"></td><td><pre>     <span class="token string">"httpProxy"</span><span class="token builtin class-name">:</span> <span class="token string">"http://192.168.27.1:7890/"</span>,</pre></td></tr><tr><td data-num="7"></td><td><pre>     <span class="token string">"httpsProxy"</span><span class="token builtin class-name">:</span> <span class="token string">"http://192.168.27.1:7890/"</span>,</pre></td></tr><tr><td data-num="8"></td><td><pre>     <span class="token string">"noProxy"</span><span class="token builtin class-name">:</span> <span class="token string">"localhost,127.0.0.1"</span></pre></td></tr><tr><td data-num="9"></td><td><pre>   <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="10"></td><td><pre> <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="11"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr></table></figure><h3 id="下载ubuntu镜像"><a class="anchor" href="#下载ubuntu镜像">#</a> 下载 Ubuntu 镜像</h3>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">docker</span> pull ubuntu</pre></td></tr></table></figure><h3 id="运行ubuntu镜像"><a class="anchor" href="#运行ubuntu镜像">#</a> 运行 Ubuntu 镜像</h3>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">docker</span> run <span class="token parameter variable">-it</span> <span class="token parameter variable">--net</span> <span class="token function">host</span> <span class="token parameter variable">--name</span> Akernel ubuntu /bin/bash</pre></td></tr></table></figure><h2 id="安装sudovim"><a class="anchor" href="#安装sudovim">#</a> 安装 sudo,vim</h2>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">apt-get</span> update</pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token function">apt-get</span> <span class="token function">install</span> <span class="token function">vim</span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token function">apt-get</span> <span class="token function">install</span> <span class="token function">sudo</span></pre></td></tr></table></figure><h2 id="修改apt-get的软件源为阿里源"><a class="anchor" href="#修改apt-get的软件源为阿里源">#</a> 修改 apt-get 的软件源为阿里源</h2>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">sudo</span> <span class="token function">cp</span> /etc/apt/sources.list /etc/apt/sources.list_backup</pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token function">sudo</span> <span class="token function">vim</span> /etc/apt/sources.list</pre></td></tr></table></figure><p>替换为如下内容</p>
+<figure class="highlight text"><figcaption data-lang="text"></figcaption><table><tr><td data-num="1"></td><td><pre>deb http://mirrors.aliyun.com/ubuntu/ jammy main restricted universe multiverse</pre></td></tr><tr><td data-num="2"></td><td><pre>deb-src http://mirrors.aliyun.com/ubuntu/ jammy main restricted universe multiverse</pre></td></tr><tr><td data-num="3"></td><td><pre></pre></td></tr><tr><td data-num="4"></td><td><pre>deb http://mirrors.aliyun.com/ubuntu/ jammy-security main restricted universe multiverse</pre></td></tr><tr><td data-num="5"></td><td><pre>deb-src http://mirrors.aliyun.com/ubuntu/ jammy-security main restricted universe multiverse</pre></td></tr><tr><td data-num="6"></td><td><pre></pre></td></tr><tr><td data-num="7"></td><td><pre>deb http://mirrors.aliyun.com/ubuntu/ jammy-updates main restricted universe multiverse</pre></td></tr><tr><td data-num="8"></td><td><pre>deb-src http://mirrors.aliyun.com/ubuntu/ jammy-updates main restricted universe multiverse</pre></td></tr><tr><td data-num="9"></td><td><pre></pre></td></tr><tr><td data-num="10"></td><td><pre># deb http://mirrors.aliyun.com/ubuntu/ jammy-proposed main restricted universe multiverse</pre></td></tr><tr><td data-num="11"></td><td><pre># deb-src http://mirrors.aliyun.com/ubuntu/ jammy-proposed main restricted universe multiverse</pre></td></tr><tr><td data-num="12"></td><td><pre></pre></td></tr><tr><td data-num="13"></td><td><pre>deb http://mirrors.aliyun.com/ubuntu/ jammy-backports main restricted universe multiverse</pre></td></tr><tr><td data-num="14"></td><td><pre>deb-src http://mirrors.aliyun.com/ubuntu/ jammy-backports main restricted universe multiverse</pre></td></tr></table></figure><p>随后将 <code>apt-get</code>  更新至最新版本</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">sudo</span> <span class="token function">apt-get</span> update</pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token function">sudo</span> <span class="token function">apt-get</span> upgrade</pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> build-essential</pre></td></tr></table></figure><h2 id="安装必要的库"><a class="anchor" href="#安装必要的库">#</a> 安装必要的库</h2>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> git-core gnupg flex bison build-essential <span class="token function">zip</span> <span class="token function">curl</span> zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 libncurses5 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc <span class="token function">unzip</span> fontconfig libssl-dev <span class="token function">bc</span> kmod cpio <span class="token function">git</span> <span class="token function">curl</span></pre></td></tr></table></figure><h2 id="为git配置基本信息"><a class="anchor" href="#为git配置基本信息">#</a> 为 git 配置基本信息</h2>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">git</span> config <span class="token parameter variable">--global</span> user.email <span class="token string">"xxx@gmail.com"</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token function">git</span> config <span class="token parameter variable">--global</span> user.name <span class="token string">"xxx"</span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token function">git</span> config <span class="token parameter variable">--global</span> http.proxy <span class="token number">192.168</span>.27.1:7890</pre></td></tr></table></figure><h2 id="安装repo"><a class="anchor" href="#安装repo">#</a> 安装 repo</h2>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">mkdir</span> ~/bin</pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token function">curl</span> https://storage.googleapis.com/git-repo-downloads/repo <span class="token operator">></span> ~/bin/repo</pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token function">chmod</span> a+x ~/bin/repo</pre></td></tr></table></figure><h2 id="修改repo的下载源为清华源并添加repo至全局变量"><a class="anchor" href="#修改repo的下载源为清华源并添加repo至全局变量">#</a> 修改 repo 的下载源为清华源，并添加 repo 至全局变量</h2>
+<h3 id="打开全局变量配置文件"><a class="anchor" href="#打开全局变量配置文件">#</a> 打开全局变量配置文件</h3>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">sudo</span> <span class="token function">vim</span> ~/.bashrc</pre></td></tr></table></figure><h3 id="添加全局变量"><a class="anchor" href="#添加全局变量">#</a> 添加全局变量</h3>
+<p>在末尾添加这三行并保存</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment"># repo</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token builtin class-name">export</span> <span class="token assign-left variable">REPO_URL</span><span class="token operator">=</span><span class="token string">'https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/'</span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token builtin class-name">export</span> <span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span><span class="token string">"~/bin:<span class="token environment constant">$PATH</span>"</span></pre></td></tr></table></figure><h3 id="使配置文件生效"><a class="anchor" href="#使配置文件生效">#</a> 使配置文件生效</h3>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token builtin class-name">source</span> ~/.bashrc</pre></td></tr></table></figure><h2 id="安装python"><a class="anchor" href="#安装python">#</a> 安装 python</h2>
+<p>如果使用 <code>python --version</code>  有打印 python 版本的话，那么这一步就不需要了，如果 docker 中没有安装 <code>python</code> , 在 docker 内使用如下命令安装</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> software-properties-common</pre></td></tr><tr><td data-num="2"></td><td><pre>add-apt-repository ppa:deadsnakes/ppa</pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> python3.9</pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token function">sudo</span> <span class="token function">ln</span> <span class="token parameter variable">-s</span> /usr/bin/python3 /usr/bin/python</pre></td></tr></table></figure><h2 id="修改交换区大小"><a class="anchor" href="#修改交换区大小">#</a> 修改交换区大小</h2>
+<p>为了防止编译源码的过程中由于交换区不足而失败，所以我们需要去修改<strong>虚拟机</strong>的交换区的大小</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token comment"># 如果提示 No such file or directory，那就直接进行下面设置交换区的操作</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token function">sudo</span> swapoff /swapfile</pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token function">sudo</span> <span class="token function">rm</span> /swapfile</pre></td></tr><tr><td data-num="4"></td><td><pre></pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token comment"># 设置了 32g 交换区，防止编译失败，执行下列命令需要花费一段时间，如果执行命令后没有输出，请耐心等待命令执行完毕</span></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token function">sudo</span> <span class="token function">dd</span> <span class="token assign-left variable">if</span><span class="token operator">=</span>/dev/zero <span class="token assign-left variable">of</span><span class="token operator">=</span>/swapfile <span class="token assign-left variable">bs</span><span class="token operator">=</span>1GB <span class="token assign-left variable">count</span><span class="token operator">=</span><span class="token number">32</span></pre></td></tr><tr><td data-num="7"></td><td><pre><span class="token function">sudo</span> <span class="token function">chmod</span> <span class="token number">600</span> /swapfile</pre></td></tr><tr><td data-num="8"></td><td><pre><span class="token function">sudo</span> <span class="token function">mkswap</span> <span class="token parameter variable">-f</span> /swapfile</pre></td></tr><tr><td data-num="9"></td><td><pre><span class="token function">sudo</span> <span class="token function">swapon</span> /swapfile</pre></td></tr></table></figure><h1 id="下载内核源码"><a class="anchor" href="#下载内核源码">#</a> 下载内核源码</h1>
+<h2 id="查看内核版本号"><a class="anchor" href="#查看内核版本号">#</a> 查看内核版本号</h2>
+<p>这里我的 <code>pixel3</code>  的内核版本为 <code>Linux version 4.9.270-g862f51bac900-ab7613625</code></p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>adb shell <span class="token function">cat</span> /proc/version</pre></td></tr><tr><td data-num="2"></td><td><pre>Linux version <span class="token number">4.9</span>.270-g862f51bac900-ab7613625 <span class="token punctuation">(</span>android-build@abfarm-east4-101<span class="token punctuation">)</span> <span class="token punctuation">(</span>Android <span class="token punctuation">(</span><span class="token number">7284624</span>, based on r416183b<span class="token punctuation">)</span> clang version <span class="token number">12.0</span>.5 <span class="token punctuation">(</span>https://android.googlesource.com/toolchain/llvm-project c935d99d7cf2016289302412d708641d52d2f7ee<span class="token punctuation">))</span> <span class="token comment">#0 SMP PREEMPT Thu Aug 5 07:04:42 UTC 2021</span></pre></td></tr></table></figure><h2 id="查看内核源码分支"><a class="anchor" href="#查看内核源码分支">#</a> 查看内核源码分支</h2>
+<p>进入<span class="exturl" data-url="aHR0cHM6Ly9zb3VyY2UuYW5kcm9pZC5jb20vc2V0dXAvYnVpbGQvYnVpbGRpbmcta2VybmVscw=="> building-kernels</span> 中查看自己的源码分支，如图我的手机型号为 <code>pixel3</code> , 并且内核版本为 4.9, 于是就知道内核源码的代号是 <code>android-msm-crosshatch-4.9</code></p>
+<p><img data-src="/rwProcMem33-usage/image-20230811172340268.png" alt="image-20230811172340268" style="aspect-ratio:1919 / 1036;"></p>
+<p>之后进入<span class="exturl" data-url="aHR0cHM6Ly9hbmRyb2lkLmdvb2dsZXNvdXJjZS5jb20va2VybmVsL21hbmlmZXN0LytyZWZz">安卓内核源码列表</span>中，搜索内核源码代号 <code>android-msm-crosshatch-4.9</code></p>
+<p><img data-src="/rwProcMem33-usage/image-20230811232551456.png" alt="image-20230811232551456" style="aspect-ratio:1885 / 962;"></p>
+<p>我的手机是安卓 12, 所以我下载的内核版本为 <code>android-msm-crosshatch-4.9-android12</code></p>
+<p>这里的 <code>qpr1</code>  和 <code>qpr2</code> , 我们先看一下 <code>QPR</code>  的定义，简单来说就是 <code>QPR</code>  后面跟的数字越高，内核版本就越新</p>
+<blockquote>
+<p>QPR, of course, is short for the <strong>Quarterly Platform Release</strong>, which Google first introduced with Android 12. These are not full system updates, but they bring a few select changes to the Pixels and other great high-end phones that opt to receive them.</p>
+</blockquote>
+<p>注意一点就是例如你想要下载<span class="exturl" data-url="aHR0cHM6Ly9hbmRyb2lkLmdvb2dsZXNvdXJjZS5jb20va2VybmVsL21hbmlmZXN0LysvcmVmcy9oZWFkcy9hbmRyb2lkLW1zbS1jcm9zc2hhdGNoLTQuOS1hbmRyb2lkMTA="> android-msm-crosshatch-4.9-android10</span>, 请先进入你想要下载的 AOSP 的地址，看看仓库中的 <code>default.xml</code>  文件，重点关注 <code>&lt;project path=&quot;build&quot; name=&quot;kernel/build&quot; </code> , 如果 <code>revision</code>  的值为 <code>main</code> , 请千万不要下载，否则你就会发现下载下来之后根本无法 build!!,<strong> 这是由于 build 仓库和内核源码仓库不同步导致的</strong></p>
+<p><img data-src="/rwProcMem33-usage/image-20230812144108245.png" alt="image-20230812144108245" style="aspect-ratio:1910 / 976;"></p>
+<p>当然你也可以选择进入<span class="exturl" data-url="aHR0cHM6Ly9hbmRyb2lkLmdvb2dsZXNvdXJjZS5jb20va2VybmVsL2J1aWxkLytyZWZz"> kernel/build</span> 中找到适合你的 <code>build file</code> , 不过我还是建议能一键编译就一键编译，比如我下载的 <code>android-msm-crosshatch-4.9-android12</code> , <code>build</code>  和 <code>kernel source code</code>  就是同步的 (惨痛的教训，头铁想要用安卓 9 的内核源码编译，结果根本无法 build… 最后还是妥协把手机刷成安卓 12 了)</p>
+<h2 id="下载内核源码-2"><a class="anchor" href="#下载内核源码-2">#</a> 下载内核源码</h2>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">mkdir</span> android-kernel <span class="token operator">&amp;&amp;</span> <span class="token builtin class-name">cd</span> android-kernel</pre></td></tr><tr><td data-num="2"></td><td><pre>repo init <span class="token parameter variable">-u</span> https://android.googlesource.com/kernel/manifest <span class="token parameter variable">-b</span> android-msm-crosshatch-4.9-android12</pre></td></tr><tr><td data-num="3"></td><td><pre>repo <span class="token function">sync</span> <span class="token parameter variable">-j4</span></pre></td></tr></table></figure><h2 id="切换git分支"><a class="anchor" href="#切换git分支">#</a> 切换 git 分支</h2>
+<p>我的手机的 Linux 内核版本为 <code>Linux version 4.9.270-g862f51bac900-ab7613625</code> , <code>g</code>  后面跟的是 git 分支，所以切换的分支为 <code>862f51bac900</code></p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token builtin class-name">cd</span> private/msm-google</pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token function">git</span> checkout 862f51bac900</pre></td></tr></table></figure><h1 id="编译内核源码"><a class="anchor" href="#编译内核源码">#</a> 编译内核源码</h1>
+<h2 id="解包bootimg"><a class="anchor" href="#解包bootimg">#</a> 解包 boot.img</h2>
+<p>首先下载<span class="exturl" data-url="aHR0cHM6Ly9mb3J1bS54ZGEtZGV2ZWxvcGVycy5jb20vYXR0YWNobWVudHMvYW5kcm9pZC1pbWFnZS1raXRjaGVuLXYzLTgtd2luMzItemlwLjUzMDA5MTkv"> android-image-kitchen</span></p>
+<p>然后将 <code>boot.img</code>  放在工具的根目录下，这里的 <code>boot.img</code>  就是网上下载的刷机包解压之后其中的 <code>boot.img</code></p>
+<p><img data-src="/rwProcMem33-usage/image-20230811184714849.png" alt="image-20230811184714849" style="aspect-ratio:789 / 266;"></p>
+<p>然后运行 <code>unpackimg.bat</code> , 运行之后的窗口请不要关闭，因为输出中有需要后续使用到的参数，当然也可以将输出的内容复制下来到 txt 中</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>Android Image Kitchen - UnpackImg Script</pre></td></tr><tr><td data-num="2"></td><td><pre>by osm0sis @ xda-developers</pre></td></tr><tr><td data-num="3"></td><td><pre></pre></td></tr><tr><td data-num="4"></td><td><pre>Supplied image: boot.img</pre></td></tr><tr><td data-num="5"></td><td><pre></pre></td></tr><tr><td data-num="6"></td><td><pre>Removing old work folders and files <span class="token builtin class-name">.</span> <span class="token builtin class-name">.</span> <span class="token builtin class-name">.</span></pre></td></tr><tr><td data-num="7"></td><td><pre></pre></td></tr><tr><td data-num="8"></td><td><pre>Setting up work folders <span class="token builtin class-name">.</span> <span class="token builtin class-name">.</span> <span class="token builtin class-name">.</span></pre></td></tr><tr><td data-num="9"></td><td><pre></pre></td></tr><tr><td data-num="10"></td><td><pre>Image type: AOSP</pre></td></tr><tr><td data-num="11"></td><td><pre></pre></td></tr><tr><td data-num="12"></td><td><pre>Signature with <span class="token string">"AVBv2"</span> <span class="token builtin class-name">type</span> detected.</pre></td></tr><tr><td data-num="13"></td><td><pre></pre></td></tr><tr><td data-num="14"></td><td><pre>Splitting image to <span class="token string">"split_img/"</span> <span class="token builtin class-name">.</span> <span class="token builtin class-name">.</span> <span class="token builtin class-name">.</span></pre></td></tr><tr><td data-num="15"></td><td><pre></pre></td></tr><tr><td data-num="16"></td><td><pre>ANDROID<span class="token operator">!</span> magic found at: <span class="token number">0</span></pre></td></tr><tr><td data-num="17"></td><td><pre>BOARD_KERNEL_CMDLINE <span class="token assign-left variable">console</span><span class="token operator">=</span>ttyMSM0,115200n8 <span class="token assign-left variable">androidboot.console</span><span class="token operator">=</span>ttyMSM0 <span class="token assign-left variable">printk.devkmsg</span><span class="token operator">=</span>on <span class="token assign-left variable">msm_rtb.filter</span><span class="token operator">=</span>0x237 ehci-hcd.park<span class="token operator">=</span><span class="token number">3</span> <span class="token assign-left variable">service_locator.enable</span><span class="token operator">=</span><span class="token number">1</span> <span class="token assign-left variable">cgroup.memory</span><span class="token operator">=</span>nokmem <span class="token assign-left variable">lpm_levels.sleep_disabled</span><span class="token operator">=</span><span class="token number">1</span> <span class="token assign-left variable">usbcore.autosuspend</span><span class="token operator">=</span><span class="token number">7</span> <span class="token assign-left variable">loop.max_part</span><span class="token operator">=</span><span class="token number">7</span> <span class="token assign-left variable">androidboot.boot_devices</span><span class="token operator">=</span>soc/1d84000.ufshc <span class="token assign-left variable">androidboot.super_partition</span><span class="token operator">=</span>system <span class="token assign-left variable">buildvariant</span><span class="token operator">=</span>user</pre></td></tr><tr><td data-num="18"></td><td><pre>BOARD_KERNEL_BASE 0x00000000</pre></td></tr><tr><td data-num="19"></td><td><pre>BOARD_NAME</pre></td></tr><tr><td data-num="20"></td><td><pre>BOARD_PAGE_SIZE <span class="token number">4096</span></pre></td></tr><tr><td data-num="21"></td><td><pre>BOARD_HASH_TYPE sha1</pre></td></tr><tr><td data-num="22"></td><td><pre>BOARD_KERNEL_OFFSET 0x00008000</pre></td></tr><tr><td data-num="23"></td><td><pre>BOARD_RAMDISK_OFFSET 0x01000000</pre></td></tr><tr><td data-num="24"></td><td><pre>BOARD_SECOND_OFFSET 0x00000000</pre></td></tr><tr><td data-num="25"></td><td><pre>BOARD_TAGS_OFFSET 0x00000100</pre></td></tr><tr><td data-num="26"></td><td><pre>BOARD_OS_VERSION <span class="token number">12.0</span>.0</pre></td></tr><tr><td data-num="27"></td><td><pre>BOARD_OS_PATCH_LEVEL <span class="token number">2021</span>-10</pre></td></tr><tr><td data-num="28"></td><td><pre>BOARD_HEADER_VERSION <span class="token number">2</span></pre></td></tr><tr><td data-num="29"></td><td><pre>BOARD_HEADER_SIZE <span class="token number">1660</span></pre></td></tr><tr><td data-num="30"></td><td><pre>BOARD_DTB_SIZE <span class="token number">863100</span></pre></td></tr><tr><td data-num="31"></td><td><pre>BOARD_DTB_OFFSET 0x01f00000</pre></td></tr><tr><td data-num="32"></td><td><pre></pre></td></tr><tr><td data-num="33"></td><td><pre>Unpacking ramdisk to <span class="token string">"ramdisk/"</span> <span class="token builtin class-name">.</span> <span class="token builtin class-name">.</span> <span class="token builtin class-name">.</span></pre></td></tr><tr><td data-num="34"></td><td><pre></pre></td></tr><tr><td data-num="35"></td><td><pre>Compression used: <span class="token function">gzip</span></pre></td></tr><tr><td data-num="36"></td><td><pre><span class="token number">56773</span> blocks</pre></td></tr><tr><td data-num="37"></td><td><pre></pre></td></tr><tr><td data-num="38"></td><td><pre>Done<span class="token operator">!</span></pre></td></tr><tr><td data-num="39"></td><td><pre></pre></td></tr><tr><td data-num="40"></td><td><pre>请按任意键继续. <span class="token builtin class-name">.</span> <span class="token builtin class-name">.</span></pre></td></tr></table></figure><p>当 <code>unpackimg.bat</code>  运行完毕后，我们进入 <code>split_img/</code> , 然后解压其中的 <code>boot.img-ramdisk.cpio.gz</code> , 并将解压后的 <code>boot.img-ramdisk.cpio</code>  文件复制到内核源码根目录中</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>root@oacia-virtual-machine:/home/oacia/Desktop/<span class="token comment"># docker cp boot.img-ramdisk.cpio Akernel:/android-kernel/</span></pre></td></tr></table></figure><h2 id="下载mkbootimgpy"><a class="anchor" href="#下载mkbootimgpy">#</a> 下载 mkbootimg.py</h2>
+<p>我们还需要下载<span class="exturl" data-url="aHR0cDovL2Fvc3B4cmVmLmNvbS9hbmRyb2lkLTExLjAuMF9yMjEveHJlZi9zeXN0ZW0vdG9vbHMvbWtib290aW1nL21rYm9vdGltZy5weQ=="> mkbootimg.py</span>, 并将其复制到放到内核源码根目录</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">docker</span> <span class="token function">cp</span> mkbootimg.py Akernel:/android-kernel/</pre></td></tr></table></figure><h2 id="修改buildsh"><a class="anchor" href="#修改buildsh">#</a> 修改 build.sh</h2>
+<p>在内核源码根目录，进入 <code>build/build.sh</code> , 找到下方代码的位置</p>
+<figure class="highlight sh"><figcaption data-lang="sh"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token builtin class-name">echo</span> <span class="token string">"========================================================"</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token builtin class-name">echo</span> <span class="token string">" Files copied to <span class="token variable">$&#123;DIST_DIR&#125;</span>"</span></pre></td></tr></table></figure><p>并在这两行代码之前加上下列命令</p>
+<figure class="highlight sh"><figcaption data-lang="sh"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token parameter variable">-f</span> <span class="token string">"<span class="token variable">$&#123;VENDOR_RAMDISK_BINARY&#125;</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token function">cp</span> <span class="token variable">$&#123;VENDOR_RAMDISK_BINARY&#125;</span> <span class="token variable">$&#123;DIST_DIR&#125;</span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token keyword">fi</span></pre></td></tr></table></figure><p><img data-src="/rwProcMem33-usage/image-20230811192125650.png" alt="image-20230811192125650" style="aspect-ratio:755 / 662;"></p>
+<h2 id="下载rwprocmem33"><a class="anchor" href="#下载rwprocmem33">#</a> 下载 rwProcMem33</h2>
+<p>下载地址</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>https://github.com/abcz316/rwProcMem33</pre></td></tr></table></figure><p>然后将解压后的文件夹复制到 docker 中内核源码目录下的 <code>private/msm-google/drivers/</code>  中</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">docker</span> <span class="token function">cp</span> rwProcMem33 Akernel:/android-kernel/private/msm-google/drivers/</pre></td></tr></table></figure><h2 id="修改rwprocmem33"><a class="anchor" href="#修改rwprocmem33">#</a> 修改 rwProcMem33</h2>
+<h3 id="ver_controlh"><a class="anchor" href="#ver_controlh">#</a> ver_control.h</h3>
+<p>将 <code>MY_LINUX_VERSION_CODE</code>  切换到对应的安卓内核版本，我们在下载内核源码阶段已经通过 <code>cat /proc/version</code>  知道了内核的版本号为 <code>Linux version 4.9.270-g862f51bac900-ab7613625</code> , 所以在 <code>private/msm-google/drivers/rwProcMem33/ver_control.h</code>  和 <code>private/msm-google/drivers/rwProcMem33/hwBreakpointProcModule/hwBreakpointProc/ver_control.h</code>  中我们也将内核切换到对应的 <code>4.9</code>  版本，选择 <code>MY_LINUX_VERSION_CODE</code>  的原则选这里出现的版本号中越接近自己手机内核版本的版本号</p>
+<p><img data-src="/rwProcMem33-usage/image-20230813120617329.png" alt="image-20230813120617329" style="aspect-ratio:1004 / 676;"></p>
+<hr>
+<p>在 <code>Linux 4.11</code>  前，Linux 内核把页表分为 4 级</p>
+<ul>
+<li>页全局目录 (Page Global Directory，PGD)</li>
+<li>页上层目录 (Page Upper Directory，PUD)</li>
+<li>页中间目录 (Page Middle Directory，PMD)</li>
+<li>直接页表 (Page Table，PT)</li>
+</ul>
+<p>所以对于 <code>Linux version 4.11</code>  以下的内核版本，并不支持五级页表，选择 <code>启用读取pagemap文件来计算物理内存的地址</code> ，同时注释掉 <code>启用页表计算物理内存的地址</code> 如图所示</p>
+<p><img data-src="/rwProcMem33-usage/image-20230903200605263.png" alt="image-20230903200605263" style="aspect-ratio:878 / 178;"></p>
+<p><code>Linux version 4.11</code>  版本把页表扩展到五级，在页全局目录和页上层目录之间增加了页四级目录 (Page 4th Directory，P4D)</p>
+<p>所以对于 <code>Linux version 4.11</code>  及以上的内核版本，选择 <code>启用页表计算物理内存的地址</code> ，同时注释掉 <code>启用读取pagemap文件来计算物理内存的地址</code> 如图所示</p>
+<p><img data-src="/rwProcMem33-usage/image-20230903202421912.png" alt="image-20230903202421912" style="aspect-ratio:888 / 192;"></p>
+<h3 id="linux_kernel_api文件夹"><a class="anchor" href="#linux_kernel_api文件夹">#</a> linux_kernel_api 文件夹</h3>
+<p>在 <code>rwProcMem33/linux_kernel_api</code>  文件夹中新建一个头文件 <code>linux_kernel_api.h</code></p>
+<p><img data-src="/rwProcMem33-usage/image-20230913174004277.png" alt="image-20230913174004277" style="aspect-ratio:777 / 209;"></p>
+<p>并写入如下内容</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifndef</span> <span class="token expression">LINUX_KERNEL_API_H_</span></span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">LINUX_KERNEL_API_H_</span></span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"../ver_control.h"</span></span></pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">if</span> <span class="token expression">MY_LINUX_VERSION_CODE <span class="token operator">&lt;</span> <span class="token function">KERNEL_VERSION</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">8</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span></span></span></pre></td></tr><tr><td data-num="5"></td><td><pre></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token keyword">long</span> <span class="token function">probe_kernel_read</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span> dst<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">void</span><span class="token operator">*</span> src<span class="token punctuation">,</span> <span class="token class-name">size_t</span> size<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="7"></td><td><pre></pre></td></tr><tr><td data-num="8"></td><td><pre>MY_STATIC <span class="token keyword">long</span> <span class="token function">x_probe_kernel_read</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span> bounce<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> ptr<span class="token punctuation">,</span> <span class="token class-name">size_t</span> sz<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="9"></td><td><pre>	<span class="token keyword">return</span> <span class="token function">probe_kernel_read</span><span class="token punctuation">(</span>bounce<span class="token punctuation">,</span> ptr<span class="token punctuation">,</span> sz<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="10"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="11"></td><td><pre></pre></td></tr><tr><td data-num="12"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span></pre></td></tr><tr><td data-num="13"></td><td><pre></pre></td></tr><tr><td data-num="14"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">if</span> <span class="token expression">MY_LINUX_VERSION_CODE <span class="token operator">>=</span> <span class="token function">KERNEL_VERSION</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">8</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span></span></span></pre></td></tr><tr><td data-num="15"></td><td><pre></pre></td></tr><tr><td data-num="16"></td><td><pre><span class="token keyword">long</span> <span class="token function">copy_from_kernel_nofault</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span> dst<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">void</span><span class="token operator">*</span> src<span class="token punctuation">,</span> <span class="token class-name">size_t</span> size<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="17"></td><td><pre></pre></td></tr><tr><td data-num="18"></td><td><pre>MY_STATIC <span class="token keyword">long</span> <span class="token function">x_probe_kernel_read</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span> bounce<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> ptr<span class="token punctuation">,</span> <span class="token class-name">size_t</span> sz<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="19"></td><td><pre>	<span class="token keyword">return</span> <span class="token function">copy_from_kernel_nofault</span><span class="token punctuation">(</span>bounce<span class="token punctuation">,</span> ptr<span class="token punctuation">,</span> sz<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="20"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="21"></td><td><pre></pre></td></tr><tr><td data-num="22"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span></pre></td></tr><tr><td data-num="23"></td><td><pre><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span> <span class="token comment">/* LINUX_KERNEL_API_H_ */</span></span></pre></td></tr></table></figure><h3 id="api_proxyh"><a class="anchor" href="#api_proxyh">#</a> api_proxy.h</h3>
+<p>为了包含 <code>linux_kernel_api.h</code>  头文件，我们在 <code>api_proxy.h</code>  的前几行中加入 <code>#include &quot;linux_kernel_api/linux_kernel_api.h&quot;</code>  如图</p>
+<p><img data-src="/rwProcMem33-usage/image-20230913174430779.png" alt="image-20230913174430779" style="aspect-ratio:1042 / 440;"></p>
+<h2 id="修改drivers的makefile"><a class="anchor" href="#修改drivers的makefile">#</a> 修改 drivers 的 Makefile</h2>
+<p>在 <code>private/msm-google/drivers/Makefile</code>  的开头加入下列命令</p>
+<figure class="highlight makefile"><figcaption data-lang="makefile"></figcaption><table><tr><td data-num="1"></td><td><pre>obj-y <span class="token operator">+=</span> rwProcMem33/hwBreakpointProcModule/hwBreakpointProc/</pre></td></tr><tr><td data-num="2"></td><td><pre>obj-y <span class="token operator">+=</span> rwProcMem33/</pre></td></tr></table></figure><h2 id="修改msm-google的makefile"><a class="anchor" href="#修改msm-google的makefile">#</a> 修改 msm-google 的 Makefile</h2>
+<p>在编译 <code>rwProcMem33</code>  内核模块时，由于内核编译时会将警告视为错误导致编译内核停止，所以我们要修改 Makefile 来忽视 warning</p>
+<p>在 <code>private/msm-google/Makefile</code>  找到如下位置，在 <code>-Wno-format-security</code>  后加上一个 <code>-w</code>  参数</p>
+<p><img data-src="/rwProcMem33-usage/image-20230816235239736.png" alt="image-20230816235239736" style="aspect-ratio:885 / 596;"></p>
+<h2 id="开始编译"><a class="anchor" href="#开始编译">#</a> 开始编译</h2>
+<p>在安卓内核源码的根目录打开终端使用如下命令开始编译</p>
+<div class="note warning">
+<p>命令的参数为使用 <code>android-image-kitchen</code>  解包 <code>boot.img</code>  之后，控制台所打印的参数</p>
+<p>请务必替换为相对应的参数！！！</p>
+</div>
+<p>参数对应关系为</p>
+<table>
+<thead>
+<tr>
+<th><code>android-image-kitchen</code>  解包参数名称</th>
+<th>值</th>
+<th>编译命令参数名称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BOARD_KERNEL_CMDLINE</td>
+<td>console=ttyMSM0,115200n8 androidboot.console=ttyMSM0 printk.devkmsg=on msm_rtb.filter=0x237 ehci-hcd.park=3 service_locator.enable=1 cgroup.memory=nokmem lpm_levels.sleep_disabled=1 usbcore.autosuspend=7 loop.max_part=7 androidboot.boot_devices=soc/1d84000.ufshc androidboot.super_partition=system buildvariant=user</td>
+<td>KERNEL_CMDLINE</td>
+</tr>
+<tr>
+<td>BOARD_KERNEL_BASE</td>
+<td>0x00000000</td>
+<td>BASE_ADDRESS</td>
+</tr>
+<tr>
+<td>BOARD_PAGE_SIZE</td>
+<td>4096</td>
+<td>PAGE_SIZE</td>
+</tr>
+<tr>
+<td>BOARD_HEADER_VERSION</td>
+<td>2</td>
+<td>BOOT_IMAGE_HEADER_VERSION</td>
+</tr>
+</tbody>
+</table>
+<p>编译命令中的 <code>BUILD_CONFIG</code>  为 AOSP 源码根目录的 <code>build.config</code>  的软连接所指向的配置文件</p>
+<p><img data-src="/rwProcMem33-usage/image-20230812145430979.png" alt="image-20230812145430979" style="aspect-ratio:851 / 656;"></p>
+<p>所以最终的编译命令为</p>
+<figure class="highlight sh"><figcaption data-lang="sh"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token assign-left variable">BUILD_CONFIG</span><span class="token operator">=</span>private/msm-google/build.config.bluecross <span class="token assign-left variable">BUILD_BOOT_IMG</span><span class="token operator">=</span><span class="token number">1</span> <span class="token assign-left variable">MKBOOTIMG_PATH</span><span class="token operator">=</span>mkbootimg.py <span class="token assign-left variable">VENDOR_RAMDISK_BINARY</span><span class="token operator">=</span>boot.img-ramdisk.cpio <span class="token assign-left variable">KERNEL_BINARY</span><span class="token operator">=</span>Image.lz4 <span class="token assign-left variable">BOOT_IMAGE_HEADER_VERSION</span><span class="token operator">=</span><span class="token number">2</span> <span class="token assign-left variable">KERNEL_CMDLINE</span><span class="token operator">=</span><span class="token string">"console=ttyMSM0,115200n8 androidboot.console=ttyMSM0 printk.devkmsg=on msm_rtb.filter=0x237 ehci-hcd.park=3 service_locator.enable=1 cgroup.memory=nokmem lpm_levels.sleep_disabled=1 usbcore.autosuspend=7 loop.max_part=7 androidboot.boot_devices=soc/1d84000.ufshc androidboot.super_partition=system buildvariant=user"</span> <span class="token assign-left variable">BASE_ADDRESS</span><span class="token operator">=</span>0x00000000 <span class="token assign-left variable">PAGE_SIZE</span><span class="token operator">=</span><span class="token number">4096</span> build/build.sh</pre></td></tr></table></figure><p>经过一段时间的等待，编译成功！</p>
+<p><img data-src="/rwProcMem33-usage/image-20230813121805073.png" alt="image-20230813121805073" style="aspect-ratio:891 / 577;"></p>
+<p>生成的 <code>boot.img</code>  的路径为 <code>/android-kernel/out/android-msm-pixel-4.9/dist/boot.img</code></p>
+<h1 id="使用magisk修补bootimg实现root"><a class="anchor" href="#使用magisk修补bootimg实现root">#</a> 使用 Magisk 修补 boot.img 实现 root</h1>
+<p>安装 Magisk <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3RvcGpvaG53dS9NYWdpc2svcmVsZWFzZXM=">下载地址</span></p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>adb <span class="token function">install</span> <span class="token string">"D:\TOOLS\pixel3\Magisk-v26.1.apk"</span></pre></td></tr></table></figure><p>将由内核源码编译出来的 <code>boot.img</code>  上传到手机上</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>adb push boot.img /sdcard/</pre></td></tr></table></figure><p>然后在手机上打开 <code>Magisk</code> , 依次点击 <code>安装-&gt;选择并修补一个文件-&gt;/sdcard/boot.img-&gt;开始</code></p>
+<p>待修补完成后，将修补后的 <code>boot.img</code>  传到电脑上</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>adb pull /storage/emulated/0/Download/magisk_patched-xxxxx_xxxxx.img</pre></td></tr></table></figure><h1 id="刷入内核"><a class="anchor" href="#刷入内核">#</a> 刷入内核</h1>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>adb <span class="token function">reboot</span> bootloader</pre></td></tr><tr><td data-num="2"></td><td><pre>fastboot flash boot magisk_patched-xxxxx_xxxxx.img</pre></td></tr><tr><td data-num="3"></td><td><pre>fastboot <span class="token function">reboot</span></pre></td></tr></table></figure><h1 id="编译hwbpclient客户端"><a class="anchor" href="#编译hwbpclient客户端">#</a> 编译 HwBpClient 客户端</h1>
+<p>进入 <code>rwProcMem33\hwBreakpointProcModule\testHwBpClient</code>  文件夹，双击 <code>testHwBpClient.vcxproj</code>  在 <code>visual studio</code>  中打开</p>
+<p>编译的程序位数应为<strong> 64 位</strong></p>
+<p>对于<strong> Windows 平台</strong>编译的 <code>HwBpClient</code> , 并且需要在 <code>testHwBpClientDlg.cpp</code>  的这个位置进行修改，将这个位置的 <code>llX</code>  改为 <code>I64X</code> , <code>%zu</code>  改成 <code>I64d</code> , 否则将无法正确输入内容</p>
+<p><img data-src="/rwProcMem33-usage/image-20230817023155232.png" alt="image-20230817023155232" style="aspect-ratio:1920 / 1079;"></p>
+<p>原因在于 C/C++ 输出 64 位数在 window 下和 linux 下是不一样的</p>
+<p>linux</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%lld/n"</span><span class="token punctuation">,</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%llu/n"</span><span class="token punctuation">,</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%llx/n"</span><span class="token punctuation">,</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><p>windows</p>
+<figure class="highlight c"><figcaption data-lang="c"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%I64d/n"</span><span class="token punctuation">,</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%I64u/n"</span><span class="token punctuation">,</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%I64x/n"</span><span class="token punctuation">,</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr></table></figure><p>修改完成后如图所示</p>
+<p><img data-src="/rwProcMem33-usage/image-20230817023547904.png" alt="image-20230817023547904" style="aspect-ratio:1920 / 1079;"></p>
+<p>接下来按下 ctrl+B 生成即可</p>
+<p><img data-src="/rwProcMem33-usage/image-20230816194207598.png" alt="image-20230816194207598" style="aspect-ratio:977 / 481;"></p>
+<h1 id="编译hwbpserver服务端"><a class="anchor" href="#编译hwbpserver服务端">#</a> 编译 HwBpServer 服务端</h1>
+<p>编译 HwBpServer 服务端需要 NDK, 并将 NDK 引入环境变量中</p>
+<p>NDK 可以在 <code>android studio</code>  中进行安装，依次点击 <code>File-&gt;Project Structure-&gt;SDK Location</code> , 找到 <code>Android NDK location</code> , 点击 <code>Download</code>  即可开始安装，我这里使用的 ndk 的版本为 <code>ndk25.2.9519653</code></p>
+<p>如果没有安装 <code>Android studio</code> ,NDK 的安装方法可以在谷歌上找到</p>
+<p>NDK 安装完成后，进入到 <code>rwProcMem33\hwBreakpointProcModule\testHwBpServer\jni</code> , 打开 cmd 运行命令</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>ndk-build</pre></td></tr></table></figure><p>即可完成编译，编译后的文件在 <code>rwProcMem33\hwBreakpointProcModule\testHwBpServer\libs</code>  中，选择对应手机架构的 ELF, <code>push</code>  到手机中运行即可</p>
+<h1 id="获取手机的ipv4地址"><a class="anchor" href="#获取手机的ipv4地址">#</a> 获取手机的 IPv4 地址</h1>
+<p>将电脑和我们的测试手机连接<strong>同一个手机热点</strong>，然后在测试手机中打开 <code>设置-&gt;WLAN</code>  点击我们连接的热点的高级选项，来查看手机的 IP 地址</p>
+<h1 id="运行hwbpserver服务端"><a class="anchor" href="#运行hwbpserver服务端">#</a> 运行 HwBpServer 服务端</h1>
+<p>将编译出来的程序复制到手机中并运行</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>adb push rwProcMem33<span class="token punctuation">\</span>hwBreakpointProcModule<span class="token punctuation">\</span>testHwBpServer<span class="token punctuation">\</span>libs<span class="token punctuation">\</span>arm64-v8a<span class="token punctuation">\</span>testHwBpServer.out /data/local/tmp</pre></td></tr><tr><td data-num="2"></td><td><pre>adb shell</pre></td></tr><tr><td data-num="3"></td><td><pre><span class="token function">su</span></pre></td></tr><tr><td data-num="4"></td><td><pre><span class="token builtin class-name">cd</span> /data/local/tmp</pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token function">chmod</span> <span class="token number">777</span> testHwBpServer.out</pre></td></tr><tr><td data-num="6"></td><td><pre>./testHwBpServer.out</pre></td></tr></table></figure><p>查看打印出来的端口号 <code>3170</code></p>
+<p><img data-src="/rwProcMem33-usage/image-20230816221255328.png" alt="image-20230816221255328" style="aspect-ratio:686 / 193;"></p>
+<h1 id="运行hwbpclient客户端"><a class="anchor" href="#运行hwbpclient客户端">#</a> 运行 HwBpClient 客户端</h1>
+<p>在电脑中运行编译完成的 HwBpClient 客户端，填入手机的 IP 地址以及由 <code>testHwBpServer.out</code>  打印出来的端口号</p>
+<p><img data-src="/rwProcMem33-usage/image-20230816221420002.png" alt="image-20230816221420002" style="aspect-ratio:508 / 531;"></p>
+<p>点击连接即可开始打硬件断点</p>
+<p><img data-src="/rwProcMem33-usage/image-20230816221529230.png" alt="image-20230816221529230" style="aspect-ratio:1064 / 1013;"></p>
+<h1 id="查询进程pid"><a class="anchor" href="#查询进程pid">#</a> 查询进程 PID</h1>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">ps</span> <span class="token parameter variable">-A</span></pre></td></tr></table></figure><h1 id="查询目标so的基址"><a class="anchor" href="#查询目标so的基址">#</a> 查询目标 so 的基址</h1>
+<p>可以使用命令来查询</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token function">cat</span> /proc/<span class="token punctuation">[</span>app的PID<span class="token punctuation">]</span>/maps</pre></td></tr></table></figure><p>也可以使用下面的 frida 脚本查询 so 的基址</p>
+<figure class="highlight js"><figcaption data-lang="JavaScript"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">function</span> <span class="token function">dump_so</span><span class="token punctuation">(</span><span class="token parameter">so_name</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="2"></td><td><pre>    Java<span class="token punctuation">.</span><span class="token function">perform</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="3"></td><td><pre>        <span class="token keyword">var</span> currentApplication <span class="token operator">=</span> Java<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"android.app.ActivityThread"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">currentApplication</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="4"></td><td><pre>        <span class="token keyword">var</span> dir <span class="token operator">=</span> currentApplication<span class="token punctuation">.</span><span class="token function">getApplicationContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getFilesDir</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getPath</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="5"></td><td><pre>        <span class="token keyword">var</span> libso <span class="token operator">=</span> Process<span class="token punctuation">.</span><span class="token function">getModuleByName</span><span class="token punctuation">(</span>so_name<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="6"></td><td><pre>        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"[name]:"</span><span class="token punctuation">,</span> libso<span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="7"></td><td><pre>        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"[base]:"</span><span class="token punctuation">,</span> libso<span class="token punctuation">.</span>base<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="8"></td><td><pre>        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"[size]:"</span><span class="token punctuation">,</span> <span class="token function">ptr</span><span class="token punctuation">(</span>libso<span class="token punctuation">.</span>size<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="9"></td><td><pre>        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"[path]:"</span><span class="token punctuation">,</span> libso<span class="token punctuation">.</span>path<span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="10"></td><td><pre>        <span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="11"></td><td><pre>    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span></pre></td></tr><tr><td data-num="12"></td><td><pre><span class="token punctuation">&#125;</span></pre></td></tr><tr><td data-num="13"></td><td><pre></pre></td></tr><tr><td data-num="14"></td><td><pre>rpc<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span></pre></td></tr><tr><td data-num="15"></td><td><pre>    <span class="token literal-property property">dump_so</span><span class="token operator">:</span> dump_so</pre></td></tr><tr><td data-num="16"></td><td><pre><span class="token punctuation">&#125;</span><span class="token punctuation">;</span></pre></td></tr></table></figure><p>接下来就可以愉快的打硬件断点啦～</p>
+<h1 id="参考资料"><a class="anchor" href="#参考资料">#</a> 参考资料</h1>
+<ul>
+<li>
+<p><span class="exturl" data-url="aHR0cHM6Ly9iYnMua2FueHVlLmNvbS90aHJlYWQtMjU5MzE3Lmh0bQ==">[原创] 开源一个 Linux 内核里进程内存管理模块源码 </span></p>
+</li>
+<li>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ2ODMyNDA3L2FydGljbGUvZGV0YWlscy8xMjk5NzE1MTI=">万字长文教你使用安卓内核驱动进行内存读写</span></p>
+</li>
+<li>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYmlsaWJpbGkuY29tL3ZpZGVvL0JWMWhSNHkxazc5NQ==">安卓内核驱动编译</span></p>
+</li>
+<li>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuc3Vub2ZiZWFjaC5uZXQvYS8xNjI0Mjg3MDIwOTE1NTQ4MTYy">AOSP Android 10 内核编译刷入 Pixel3</span></p>
+</li>
+<li>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC81ODIyNTgwNzg=">kernel 编译的哪些坑</span></p>
+</li>
+<li>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLnNlZWZsb3dlci5kZXYvYXJjaGl2ZXMvMTc0Lw==">eBPF on Android 之打补丁和编译内核修正版</span></p>
+</li>
+<li>
+<p><span class="exturl" data-url="aHR0cHM6Ly9iYnMua2FueHVlLmNvbS90aHJlYWQtMjc3MjI0Lmh0bSNtc2dfaGVhZGVyX2gyXzQ=">Android10 内核编译笔记</span></p>
+</li>
+</ul>
+
+      <div class="tags">
+          <a href="/tags/rwProcMem33/" rel="tag"><i class="ic i-tag"></i> rwProcMem33</a>
+          <a href="/tags/android-kernel/" rel="tag"><i class="ic i-tag"></i> android kernel</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2025-04-09 02:55:11" itemprop="dateModified" datetime="2025-04-09T02:55:11+08:00">2025-04-09</time>
+  </span>
+  <span id="rwProcMem33-usage/" class="item leancloud_visitors" data-flag-title="将rwProcMem33编译进安卓内核" title="阅读次数">
+      <span class="icon">
+        <i class="ic i-eye"></i>
+      </span>
+      <span class="text">阅读次数</span>
+      <span class="leancloud-visitors-count"></span>
+      <span class="text">次</span>
+  </span>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>oacia <i class="ic i-at"><em>@</em></i>oaciaのBbBlog~
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="https://oacia.dev/rwProcMem33-usage/" title="将rwProcMem33编译进安卓内核">https://oacia.dev/rwProcMem33-usage/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/Pixel3-root/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;578400.webp" title="Pixel3 刷机与root记录">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> </span>
+  <h3>Pixel3 刷机与root记录</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/idapython-learning/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;220180.webp" title="IDApython学习笔记">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> </span>
+  <h3>IDApython学习笔记</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-text"> 编译环境搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E9%85%8D%E7%BD%AE"><span class="toc-text"> 虚拟机配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E8%99%9A%E6%8B%9F%E6%9C%BA%E9%85%8D%E7%BD%AE%E4%BB%A3%E7%90%86"><span class="toc-text"> 为虚拟机配置代理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%BB%A3%E7%90%86%E5%9C%B0%E5%9D%80"><span class="toc-text"> 查看虚拟机代理地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E7%94%A8%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%BB%A3%E7%90%86"><span class="toc-text"> 启用虚拟机代理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEdocker-ubuntu%E9%95%9C%E5%83%8F"><span class="toc-text"> 配置 docker ubuntu 镜像</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85docker"><span class="toc-text"> 安装 docker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-pull%E4%BB%A3%E7%90%86%E9%85%8D%E7%BD%AE"><span class="toc-text"> docker pull 代理配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%B7%E6%96%B0%E9%85%8D%E7%BD%AE%E5%B9%B6%E9%87%8D%E5%90%AF-docker-%E6%9C%8D%E5%8A%A1"><span class="toc-text"> 刷新配置并重启 docker 服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker%E9%95%9C%E5%83%8F%E4%BB%A3%E7%90%86%E9%85%8D%E7%BD%AE"><span class="toc-text"> docker 镜像代理配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BDubuntu%E9%95%9C%E5%83%8F"><span class="toc-text"> 下载 Ubuntu 镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E8%A1%8Cubuntu%E9%95%9C%E5%83%8F"><span class="toc-text"> 运行 Ubuntu 镜像</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85sudovim"><span class="toc-text"> 安装 sudo,vim</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9apt-get%E7%9A%84%E8%BD%AF%E4%BB%B6%E6%BA%90%E4%B8%BA%E9%98%BF%E9%87%8C%E6%BA%90"><span class="toc-text"> 修改 apt-get 的软件源为阿里源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%BF%85%E8%A6%81%E7%9A%84%E5%BA%93"><span class="toc-text"> 安装必要的库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BAgit%E9%85%8D%E7%BD%AE%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="toc-text"> 为 git 配置基本信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85repo"><span class="toc-text"> 安装 repo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9repo%E7%9A%84%E4%B8%8B%E8%BD%BD%E6%BA%90%E4%B8%BA%E6%B8%85%E5%8D%8E%E6%BA%90%E5%B9%B6%E6%B7%BB%E5%8A%A0repo%E8%87%B3%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F"><span class="toc-text"> 修改 repo 的下载源为清华源，并添加 repo 至全局变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%93%E5%BC%80%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text"> 打开全局变量配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F"><span class="toc-text"> 添加全局变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%94%9F%E6%95%88"><span class="toc-text"> 使配置文件生效</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85python"><span class="toc-text"> 安装 python</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E4%BA%A4%E6%8D%A2%E5%8C%BA%E5%A4%A7%E5%B0%8F"><span class="toc-text"> 修改交换区大小</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81"><span class="toc-text"> 下载内核源码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%86%85%E6%A0%B8%E7%89%88%E6%9C%AC%E5%8F%B7"><span class="toc-text"> 查看内核版本号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%88%86%E6%94%AF"><span class="toc-text"> 查看内核源码分支</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81-2"><span class="toc-text"> 下载内核源码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%87%E6%8D%A2git%E5%88%86%E6%94%AF"><span class="toc-text"> 切换 git 分支</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81"><span class="toc-text"> 编译内核源码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%8C%85bootimg"><span class="toc-text"> 解包 boot.img</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BDmkbootimgpy"><span class="toc-text"> 下载 mkbootimg.py</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9buildsh"><span class="toc-text"> 修改 build.sh</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BDrwprocmem33"><span class="toc-text"> 下载 rwProcMem33</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9rwprocmem33"><span class="toc-text"> 修改 rwProcMem33</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ver_controlh"><span class="toc-text"> ver_control.h</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#linux_kernel_api%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="toc-text"> linux_kernel_api 文件夹</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#api_proxyh"><span class="toc-text"> api_proxy.h</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9drivers%E7%9A%84makefile"><span class="toc-text"> 修改 drivers 的 Makefile</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9msm-google%E7%9A%84makefile"><span class="toc-text"> 修改 msm-google 的 Makefile</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B%E7%BC%96%E8%AF%91"><span class="toc-text"> 开始编译</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8magisk%E4%BF%AE%E8%A1%A5bootimg%E5%AE%9E%E7%8E%B0root"><span class="toc-text"> 使用 Magisk 修补 boot.img 实现 root</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%B7%E5%85%A5%E5%86%85%E6%A0%B8"><span class="toc-text"> 刷入内核</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BC%96%E8%AF%91hwbpclient%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-text"> 编译 HwBpClient 客户端</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BC%96%E8%AF%91hwbpserver%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="toc-text"> 编译 HwBpServer 服务端</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E6%89%8B%E6%9C%BA%E7%9A%84ipv4%E5%9C%B0%E5%9D%80"><span class="toc-text"> 获取手机的 IPv4 地址</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%90%E8%A1%8Chwbpserver%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="toc-text"> 运行 HwBpServer 服务端</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%90%E8%A1%8Chwbpclient%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-text"> 运行 HwBpClient 客户端</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E8%BF%9B%E7%A8%8Bpid"><span class="toc-text"> 查询进程 PID</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E7%9B%AE%E6%A0%87so%E7%9A%84%E5%9F%BA%E5%9D%80"><span class="toc-text"> 查询目标 so 的基址</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-text"> 参考资料</span></a></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="oacia"
+      data-src="/images/avatar.jpg">
+  
+  <svg class="logo-overview" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540.19 380.99">
+    <g id="clips" fill= #00a99d; stroke="none">
+      <clipPath id="o">
+        <path d="M93.57,284c8,0,14.91-1,20.75-3,5.83-2,10.41-3.66,13.75-5,4.66-1.66,6.16-.75,4.5,2.75-1.67,3.5-4.67,6.42-9,8.75-2.34,1.34-6.09,2.84-11.25,4.5-5.17,1.67-11.09,2.5-17.75,2.5-.34,8.67-3.34,16.84-9,24.5-5.67,7.67-13.34,13.34-23,17-6,2.34-12.17,3.59-18.5,3.75-6.34,.17-12.17-.66-17.5-2.5-5.34-1.83-10.09-4.66-14.25-8.5-4.17-3.83-7.25-8.41-9.25-13.75-2-5.33-2.83-11-2.5-17s1.83-11.83,4.5-17.5c2.66-5.66,6.33-10.75,11-15.25,4.66-4.5,10.16-7.75,16.5-9.75,5.66-1.66,11.41-1.66,17.25,0,5.83,1.67,10.08,4.34,12.75,8,1.66,2.67,2.5,5.67,2.5,9,3-2,6.33-3,10-3h1c3.33,0,6.5,.84,9.5,2.5,3,1.67,5.33,4.5,7,8.5l1,3.5Zm-34,39.5c5.66-.66,10.33-3.83,14-9.5,3.66-5.66,5.33-12.16,5-19.5-4.67,.34-9.09-.41-13.25-2.25-4.17-1.83-6.42-4.58-6.75-8.25-.67-3,0-5.5,2-7.5-.67-2.66-2.75-5-6.25-7s-7.09-2.16-10.75-.5c-4.67,2-8.25,5.84-10.75,11.5-2.5,5.67-3.09,11.84-1.75,18.5,1.33,8,4.75,14.34,10.25,19,5.5,4.67,11.58,6.5,18.25,5.5Z"/>
+      </clipPath>
+      <clipPath id="a1">
+        <path d="M176.06,270c5,4,8.5,9.17,10.5,15.5,.66-1.33,1.25-2.33,1.75-3,.5-.66,1.08-1.33,1.75-2,3.66-2.66,8-3.08,13-1.25,5,1.84,8.5,4.09,10.5,6.75,1,1.34,1.41,2.75,1.25,4.25-.17,1.5-.5,3.42-1,5.75-.5,2.34-1,5.09-1.5,8.25-.5,3.17-.42,6.92,.25,11.25,.33,3.67,1.25,6.5,2.75,8.5s3.16,3.25,5,3.75c1.83,.5,3.75,.34,5.75-.5,2-.83,3.83-2.08,5.5-3.75,3-3.66,5.75-7.66,8.25-12,2.5-4.33,4.25-8.16,5.25-11.5,1.33-3.66,3.41-5.25,6.25-4.75,2.83,.5,3.58,3.09,2.25,7.75-1.34,4.67-3,8.92-5,12.75-2,3.84-5.17,8.59-9.5,14.25-4.67,5.67-11.34,9.59-20,11.75-8.67,2.17-17.67,.42-27-5.25-5-3.33-8.34-8.83-10-16.5-.67,1.34-2,3.34-4,6-3.67,4.67-7.84,8.59-12.5,11.75-4.67,3.17-9.42,5.34-14.25,6.5-4.84,1.17-9.59,1.34-14.25,.5-4.67-.83-9-2.75-13-5.75-7.67-6-11.75-14.33-12.25-25-.5-10.66,2.91-20.83,10.25-30.5,7.33-9.66,16.25-15.75,26.75-18.25s19.58-.91,27.25,4.75Zm-25,60c4.66,1.67,9.66,.17,15-4.5,5.33-4.66,9.33-10.83,12-18.5,2.33-6.66,2.58-12.5,.75-17.5-1.84-5-5.09-8.33-9.75-10-4.67-1.66-9.34-1.33-14,1-4.67,2.34-8.34,7.34-11,15-3,7.67-3.84,14.92-2.5,21.75,1.33,6.84,4.5,11.09,9.5,12.75Z"/>
+      </clipPath>
+      <clipPath id="c">
+        <path d="M250.06,280.5c4.66-7.66,12-13.16,22-16.5,10-3.33,19.83-3.66,29.5-1,7.66,2.34,13.5,5.67,17.5,10,4,4.34,5.83,8.5,5.5,12.5-.34,4.67-2.25,8.59-5.75,11.75-3.5,3.17-7.09,5.34-10.75,6.5-3.67,1.17-6.84,1.25-9.5,.25-2.67-1-3.34-3.16-2-6.5,2.66-8,2.75-14.58,.25-19.75-2.5-5.16-5.92-6.41-10.25-3.75-2.67,1.67-5,4.09-7,7.25-2,3.17-3.5,6.75-4.5,10.75s-1.42,8.09-1.25,12.25c.16,4.17,.75,7.92,1.75,11.25,1.33,4,3.66,7.42,7,10.25,3.33,2.84,7.16,4.67,11.5,5.5,4.33,.84,8.91,.67,13.75-.5,4.83-1.16,9.25-3.75,13.25-7.75,7.33-6.66,12.33-14.33,15-23,.33-1.66,1.16-2.91,2.5-3.75,1.33-.83,2.5-1.08,3.5-.75,1,.34,1.83,1.09,2.5,2.25,.66,1.17,.66,2.92,0,5.25-2.34,9.34-6.34,17-12,23-4.67,5.67-10.5,10.42-17.5,14.25-7,3.84-14.25,6.09-21.75,6.75-7.5,.67-14.84-.33-22-3-7.17-2.66-13.25-7.5-18.25-14.5-6-8.66-8.75-17.66-8.25-27,.5-9.33,2.25-16.66,5.25-22Z"/>
+      </clipPath>
+      <clipPath id="i_b">
+        <path d="M393.06,330c-2.34,2.67-5.17,5.09-8.5,7.25-3.34,2.17-7.09,3.59-11.25,4.25-4.17,.67-8.59,.67-13.25,0-4.67-.66-9.17-2.33-13.5-5-4.67-2.66-7.67-7.58-9-14.75-1.34-7.16-1.83-14.66-1.5-22.5,.33-7.83,1.33-14.91,3-21.25,1.66-6.33,3.33-10.16,5-11.5,3.66-2.66,8-3.08,13-1.25,5,1.84,8.5,4.09,10.5,6.75,1,1.34,1.41,3.59,1.25,6.75-.17,3.17-.5,6.92-1,11.25-.5,4.34-1.09,8.92-1.75,13.75-.67,4.84-.67,9.42,0,13.75,.33,3.67,1.33,6.42,3,8.25,1.66,1.84,3.5,2.84,5.5,3,2,.17,4-.25,6-1.25s3.83-2.33,5.5-4c3-3.66,5.66-7.66,8-12,2.33-4.33,4.16-8.16,5.5-11.5,1-3.66,2.91-5.25,5.75-4.75,2.83,.5,3.75,3.09,2.75,7.75-1.34,4.67-3,8.92-5,12.75-2,3.84-5.34,8.59-10,14.25Z"/>
+      </clipPath>
+      <clipPath id="a2">
+        <path d="M461.56,270c5,4,8.5,9.17,10.5,15.5,.66-1.33,1.25-2.33,1.75-3,.5-.66,1.08-1.33,1.75-2,3.66-2.66,8-3.08,13-1.25,5,1.84,8.5,4.09,10.5,6.75,1,1.34,1.41,2.75,1.25,4.25-.17,1.5-.5,3.42-1,5.75-.5,2.34-1,5.09-1.5,8.25-.5,3.17-.42,6.92,.25,11.25,.33,3.67,1.25,6.5,2.75,8.5s3.16,3.25,5,3.75c1.83,.5,3.75,.34,5.75-.5,2-.83,3.83-2.08,5.5-3.75,3-3.66,5.75-7.66,8.25-12,2.5-4.33,4.25-8.16,5.25-11.5,1.33-3.66,3.41-5.25,6.25-4.75,2.83,.5,3.58,3.09,2.25,7.75-1.34,4.67-3,8.92-5,12.75-2,3.84-5.17,8.59-9.5,14.25-4.67,5.67-11.34,9.59-20,11.75-8.67,2.17-17.67,.42-27-5.25-5-3.33-8.34-8.83-10-16.5-.67,1.34-2,3.34-4,6-3.67,4.67-7.84,8.59-12.5,11.75-4.67,3.17-9.42,5.34-14.25,6.5-4.84,1.17-9.59,1.34-14.25,.5-4.67-.83-9-2.75-13-5.75-7.67-6-11.75-14.33-12.25-25-.5-10.66,2.91-20.83,10.25-30.5,7.33-9.66,16.25-15.75,26.75-18.25s19.58-.91,27.25,4.75Zm-25,60c4.66,1.67,9.66,.17,15-4.5,5.33-4.66,9.33-10.83,12-18.5,2.33-6.66,2.58-12.5,.75-17.5-1.84-5-5.09-8.33-9.75-10-4.67-1.66-9.34-1.33-14,1-4.67,2.34-8.34,7.34-11,15-3,7.67-3.84,14.92-2.5,21.75,1.33,6.84,4.5,11.09,9.5,12.75Z"/>
+      </clipPath>
+      
+    </g>
+    <g
+      id="strokes"
+      fill="none"
+      stroke=#96d7f5
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+    <path
+    clip-path="url(#o)"
+    class="oPath path"
+    d="M65.07,278.38c-.29-1.76-1.26-6.18-5-10-3.34-3.4-7.07-4.47-9-5-6.95-1.9-12.89,.22-15,1-10.95,4.04-18.33,15.16-20,26-1.42,9.21,1.56,16.56,3,20,1.49,3.55,3.94,9.39,10,14,6.66,5.07,13.73,5.65,18,6,3,.25,9.01,.67,16-2,1.72-.66,5.78-2.38,10-6,.99-.86,4.82-4.25,8-10,2.79-5.06,3.72-9.49,4-11,.39-2.12,1.09-6.93,0-13-1.05-5.85-1.95-10.86-6-13-2.83-1.5-7.27-1.62-10,1-1.73,1.66-2.85,4.55-2,7,1.04,2.99,4.58,4.01,8,5,1.16,.33,2.91,.75,8,1,4.72,.23,8.68,.18,12,0,6.49-.36,9.74-.54,12-1,4.35-.88,7.44-2.14,12-4,4.67-1.9,6.76-3.17,8-4,2.56-1.7,3.95-3.1,5-4,5.5-4.73,12.89-6.48,18-7,6.09-.62,11.96-.21,18,3,4.89,2.6,8.27,6.84,10,9,1.86,2.32,3.15,4.46,4,6"
+    stroke-width="32.5"
+    ></path>
+    <path
+      clip-path="url(#a1)"
+      class="a1Path path"
+      d="M154.07,270.38c-3.73,1.48-11.88,5.3-18,14-4.95,7.03-6.09,13.7-7,19-1.38,8.06-2.81,16.39,2,24,3.93,6.21,9.88,8.58,11,9,7.28,2.76,13.71,.75,16,0,5.19-1.71,8.32-4.6,12-8,2.48-2.29,6.78-6.34,10-13,2.71-5.61,3.51-10.73,4-14,.86-5.79,.57-9.98,1-10,.41-.02,.79,3.69,2,11,1.71,10.28,2.44,11.93,3,13,1.44,2.76,2.62,5.84,7,10,4.73,4.49,8.09,5.74,11,7,6.75,2.92,13.16,1.45,15,1,4.94-1.21,8.2-3.64,10-5,4.09-3.11,6.34-6.48,8-9,2.23-3.4,3.47-6.35,5-10,1.22-2.9,2.18-5.67,3-8,1.52-4.35,1.41-4.5,2-6,1.75-4.46,2-6,7-12,2.31-2.77,6.32-8.54,10-11,3.79-2.54,7-3.81,10-5,5.33-2.12,9-2.17,12-2,5.4,.32,10.2,4.49,12,6,2.31,1.93,6.05,6.97,7,12,.62,3.29-.19,5.13-1,8-.86,3.04-3.06,5.4-4,7"
+      stroke-width="59"
+    ></path>
+    <path
+      clip-path="url(#c)"
+      class="cPath path"
+      d="M273.07,272.38c-3.08,2.79-9.54,9.45-12,20-2.1,9.02-.22,16.29,1,21,1.57,6.05,3.22,12.44,9,18,6.67,6.42,14.58,7.66,17,8,6.36,.9,11.22-.42,17-2,3.68-1,8.59-2.39,14-6,4.13-2.76,6.84-5.67,9-8,3.24-3.49,5.27-6.46,7-9,2.22-3.27,4.18-6.89,8-14,3.39-6.3,5.1-9.5,6-12,1.67-4.63,2.38-8.58,3-12,.72-4,.94-6.77,1-9,.03-1.23,.02-2.26,0-3"
+      stroke-width="110"
+    ></path>
+    <path
+      clip-path="url(#i_b)"
+      class="i_bPath path"
+      d="M355.07,265.38c-1.55,12.11-2.45,22.6-3,31-.66,10.17-.79,16.98,2,25,1.74,5,3.75,10.53,9,13,6.29,2.97,13.34-.3,17-2,6.11-2.83,9.64-6.89,14-12,9.03-10.59,9.67-15.19,10-17,.6-3.32,1.32-6.16,1-8"
+      stroke-width="33"
+    ></path>
+    <path
+      clip-path="url(#a2)"
+      class="a2Path path"
+      d="M470.07,302.38c.32-2.77,.45-7.09-1-12-.98-3.32-5.25-15.49-17-19-12.13-3.62-22.23,4.71-25,7-6.75,5.57-9.28,12.36-11,17-1.68,4.53-5.22,14.03-2,25,1.19,4.05,3.29,11.22,10,15,7.78,4.39,16.49,1.26,20,0,6.31-2.27,10.12-6.13,14-10,4.99-4.97,7.76-9.61,11-15,1.88-3.14,4.54-7.61,7-14,3.15-8.18,3.42-14.06,4-14,.51,.05-.23,7.53,0,19,.07,3.38,.38,6.92,1,14,.41,4.62,.69,7.05,2,10,.82,1.86,2.1,4.74,5,7,4.4,3.43,9.65,3.17,13,3,1.08-.05,5.74-.35,11-3,4.39-2.21,7.04-4.97,9-7,.85-.89,3.48-3.69,6-8,1.51-2.58,1.83-3.87,4-9,1.54-3.64,2.92-6.7,4-9"
+      stroke-width="70"
+    ></path>
+    </g>
+    <g
+      id="strokes2"
+      fill="none"
+      stroke=#ff97b8
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path
+        clip-path="url(#o)"
+        class="oPath path"
+        d="M65.07,278.38c-.29-1.76-1.26-6.18-5-10-3.34-3.4-7.07-4.47-9-5-6.95-1.9-12.89,.22-15,1-10.95,4.04-18.33,15.16-20,26-1.42,9.21,1.56,16.56,3,20,1.49,3.55,3.94,9.39,10,14,6.66,5.07,13.73,5.65,18,6,3,.25,9.01,.67,16-2,1.72-.66,5.78-2.38,10-6,.99-.86,4.82-4.25,8-10,2.79-5.06,3.72-9.49,4-11,.39-2.12,1.09-6.93,0-13-1.05-5.85-1.95-10.86-6-13-2.83-1.5-7.27-1.62-10,1-1.73,1.66-2.85,4.55-2,7,1.04,2.99,4.58,4.01,8,5,1.16,.33,2.91,.75,8,1,4.72,.23,8.68,.18,12,0,6.49-.36,9.74-.54,12-1,4.35-.88,7.44-2.14,12-4,4.67-1.9,6.76-3.17,8-4,2.56-1.7,3.95-3.1,5-4,5.5-4.73,12.89-6.48,18-7,6.09-.62,11.96-.21,18,3,4.89,2.6,8.27,6.84,10,9,1.86,2.32,3.15,4.46,4,6"
+        stroke-width="32.5"
+      ></path>
+      <path
+        clip-path="url(#a1)"
+        class="a1Path path"
+        d="M154.07,270.38c-3.73,1.48-11.88,5.3-18,14-4.95,7.03-6.09,13.7-7,19-1.38,8.06-2.81,16.39,2,24,3.93,6.21,9.88,8.58,11,9,7.28,2.76,13.71,.75,16,0,5.19-1.71,8.32-4.6,12-8,2.48-2.29,6.78-6.34,10-13,2.71-5.61,3.51-10.73,4-14,.86-5.79,.57-9.98,1-10,.41-.02,.79,3.69,2,11,1.71,10.28,2.44,11.93,3,13,1.44,2.76,2.62,5.84,7,10,4.73,4.49,8.09,5.74,11,7,6.75,2.92,13.16,1.45,15,1,4.94-1.21,8.2-3.64,10-5,4.09-3.11,6.34-6.48,8-9,2.23-3.4,3.47-6.35,5-10,1.22-2.9,2.18-5.67,3-8,1.52-4.35,1.41-4.5,2-6,1.75-4.46,2-6,7-12,2.31-2.77,6.32-8.54,10-11,3.79-2.54,7-3.81,10-5,5.33-2.12,9-2.17,12-2,5.4,.32,10.2,4.49,12,6,2.31,1.93,6.05,6.97,7,12,.62,3.29-.19,5.13-1,8-.86,3.04-3.06,5.4-4,7"
+        stroke-width="59"
+      ></path>
+      <path
+        clip-path="url(#c)"
+        class="cPath path"
+        d="M273.07,272.38c-3.08,2.79-9.54,9.45-12,20-2.1,9.02-.22,16.29,1,21,1.57,6.05,3.22,12.44,9,18,6.67,6.42,14.58,7.66,17,8,6.36,.9,11.22-.42,17-2,3.68-1,8.59-2.39,14-6,4.13-2.76,6.84-5.67,9-8,3.24-3.49,5.27-6.46,7-9,2.22-3.27,4.18-6.89,8-14,3.39-6.3,5.1-9.5,6-12,1.67-4.63,2.38-8.58,3-12,.72-4,.94-6.77,1-9,.03-1.23,.02-2.26,0-3"
+        stroke-width="110"
+      ></path>
+      <path
+        clip-path="url(#i_b)"
+        class="i_bPath path"
+        d="M355.07,265.38c-1.55,12.11-2.45,22.6-3,31-.66,10.17-.79,16.98,2,25,1.74,5,3.75,10.53,9,13,6.29,2.97,13.34-.3,17-2,6.11-2.83,9.64-6.89,14-12,9.03-10.59,9.67-15.19,10-17,.6-3.32,1.32-6.16,1-8"
+        stroke-width="33"
+      ></path>
+      <path
+        clip-path="url(#a2)"
+        class="a2Path path"
+        d="M470.07,302.38c.32-2.77,.45-7.09-1-12-.98-3.32-5.25-15.49-17-19-12.13-3.62-22.23,4.71-25,7-6.75,5.57-9.28,12.36-11,17-1.68,4.53-5.22,14.03-2,25,1.19,4.05,3.29,11.22,10,15,7.78,4.39,16.49,1.26,20,0,6.31-2.27,10.12-6.13,14-10,4.99-4.97,7.76-9.61,11-15,1.88-3.14,4.54-7.61,7-14,3.15-8.18,3.42-14.06,4-14,.51,.05-.23,7.53,0,19,.07,3.38,.38,6.92,1,14,.41,4.62,.69,7.05,2,10,.82,1.86,2.1,4.74,5,7,4.4,3.43,9.65,3.17,13,3,1.08-.05,5.74-.35,11-3,4.39-2.21,7.04-4.97,9-7,.85-.89,3.48-3.69,6-8,1.51-2.58,1.83-3.87,4-9,1.54-3.64,2.92-6.7,4-9"
+        stroke-width="70"
+      ></path>
+    </g>
+    <g class="dot-group">
+      <path
+        id="dot"
+        fill=#ff97b8
+        d="M362.58,182.21c4.66-.33,9.66,1.17,15,4.5,5.33,3.34,7.66,7.5,7,12.5-.67,2.34-1.92,4.92-3.75,7.75-1.84,2.84-4,5.5-6.5,8s-4.84,4.75-7,6.75c-2.17,2-3.75,3.17-4.75,3.5-2.67,1.67-5.34,2.25-8,1.75-2.67-.5-5-1.5-7-3s-3.59-3.33-4.75-5.5c-1.17-2.16-1.92-4.25-2.25-6.25-.34-2,.16-4.66,1.5-8,1.33-3.33,3.08-6.58,5.25-9.75,2.16-3.16,4.58-6,7.25-8.5,2.66-2.5,5.33-3.75,8-3.75Z"
+      ></path>
+    </g>
+  </svg>
+  <div class="description" itemprop="description">月遇从云 花遇和风</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">53</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">46</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL29hY2lh" title="https:&#x2F;&#x2F;github.com&#x2F;oacia"><i class="ic i-github"></i></span>
+      <a target="_blank" rel="noopener" href="https://twitter.com/oacia86" title="https:&#x2F;&#x2F;twitter.com&#x2F;oacia86" class="item twitter"><i class="ic i-twitter"></i></a>
+      <span class="exturl item paper-plane" data-url="aHR0cHM6Ly90Lm1lL29hY2lh" title="https:&#x2F;&#x2F;t.me&#x2F;oacia"><i class="ic i-paper-plane"></i></span>
+      <span class="exturl item email" data-url="bWFpbHRvOm9hY2lhODZAZ21haWwuY29t" title="mailto:oacia86@gmail.com"><i class="ic i-envelope"></i></span>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/about-oacia/" rel="section"><i class="ic i-user"></i>关于oacia</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/archives/" rel="section"><i class="ic i-feather"></i>文章</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/TODOlist/" rel="section"><i class="ic i-clock"></i>要做的事</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/website_maintenance/" rel="section"><i class="ic i-calendar"></i>更新日志</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/friends/" rel="section"><i class="ic i-heart"></i>小伙伴</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/music/" rel="section"><i class="ic i-music"></i>听会儿歌吧</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/Pixel3-root/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/idapython-learning/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">oacia @ oacia</span>
+  </div>
+  <div class="count">
+    <span class="post-meta-item-icon">
+      <i class="ic i-chart-area"></i>
+    </span>
+    <span title="站点总字数">968k 字</span>
+
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="ic i-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14:40</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+
+
+
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: 'rwProcMem33-usage/',
+    favicon: {
+      show: "柚鳥ナツ",
+      hide: "甘い幸せ"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+
+<script src="//fastly.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>

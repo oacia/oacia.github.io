@@ -1,0 +1,968 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="google-site-verification" content="qQVmgWozVe7BXoA15J3gAZpEA5dK168admH4U3W6PAk">
+  <meta name="msvalidate.01" content="4902E39C0135E72DE537BCB0FE08B40A">
+  <meta name="baidu-site-verification" content="codeva-CSYjpuVg5v">
+
+
+<link rel="alternate" type="application/rss+xml" title="oaciaのBbBlog~" href="https://oacia.dev/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="oaciaのBbBlog~" href="https://oacia.dev/atom.xml" />
+<link rel="alternate" type="application/json" title="oaciaのBbBlog~" href="https://oacia.dev/feed.json" />
+<link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin=""
+      href="/fonts/noto-serif-sc-v22-chinese-simplified_latin-regular.woff2"
+/>
+<link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin=""
+      href="/fonts/noto-serif-sc-v22-chinese-simplified_latin-700.woff2"
+/>
+<link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin=""
+      href="/fonts/font_1832207_igi8uaupcus.woff2"
+/>
+<link rel="preload" href="/background_picture/1_gongzi.webp" as="image" />
+<link rel="preload" href="/background_picture/2_xiaoxia.webp" as="image" />
+<link rel="preload" href="/background_picture/3_xingye.webp" as="image" />
+<link rel="preload" href="/images/avatar.jpg" as="image" />
+
+
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+
+<link rel="canonical" href="https://oacia.dev/two-way-SSL/">
+
+
+<meta name="description" content="日常的 APP 为了不被别人通过抓包软件抓取与服务器通信的流量，所以会在流量的安全传输上做文章，最安全的做法当然是使用私有协议 (即协议格式不公开的协议), 例如抖音的 quic 协议，咸鱼的 spdy 协议等等，利用这些私有协议包装流量，从而使抓包工具无法识别出这串流量的实际内容是什么，所以就只能放行这段流量，面对私有协议倘若利用 reqable , fiddler , charles  等去抓">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(doing)https双向认证及绕过方法">
+<meta property="og:url" content="https://oacia.dev/two-way-SSL/">
+<meta property="og:site_name" content="oaciaのBbBlog~">
+<meta property="og:description" content="日常的 APP 为了不被别人通过抓包软件抓取与服务器通信的流量，所以会在流量的安全传输上做文章，最安全的做法当然是使用私有协议 (即协议格式不公开的协议), 例如抖音的 quic 协议，咸鱼的 spdy 协议等等，利用这些私有协议包装流量，从而使抓包工具无法识别出这串流量的实际内容是什么，所以就只能放行这段流量，面对私有协议倘若利用 reqable , fiddler , charles  等去抓">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oacia.dev/two-way-SSL/640.png">
+<meta property="og:image" content="https://oacia.dev/two-way-SSL/ca-2way-auth-2.png">
+<meta property="og:image" content="https://oacia.dev/two-way-SSL/p620909.png">
+<meta property="og:image" content="https://oacia.dev/two-way-SSL/p620908.png">
+<meta property="article:published_time" content="2023-12-14T10:00:32.000Z">
+<meta property="article:modified_time" content="2025-04-08T18:55:12.017Z">
+<meta property="article:author" content="oacia">
+<meta property="article:tag" content="reverse,安卓逆向,区块链,学习笔记,破解实战,前端,CTF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oacia.dev/two-way-SSL/640.png">
+<meta name="twitter:creator" content="@oacia86">
+
+
+  <title>
+(doing)https双向认证及绕过方法 |
+oacia = oaciaのBbBlog~ = DEVIL or SWEET</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+  var jq_151 = $.noConflict(true);
+  var RENDERER = {
+    INIT_CHERRY_BLOSSOM_COUNT : 30,
+    MAX_ADDING_INTERVAL : 10,
+    WATCH_INTERVAL : 300,
+    
+    init : function(){
+      this.setParameters();
+      this.reconstructMethods();
+      this.setup();
+      this.bindEvent();
+      this.render();
+    },
+    setParameters : function(){
+      this.$window = jq_151(window);
+      this.$container = jq_151('#loading');
+      this.$canvas = jq_151('<canvas />');
+      this.context = this.$canvas.appendTo(this.$container).get(0).getContext('2d');
+      this.cherries = [];
+      this.watchIds = [];
+    },
+    reconstructMethods : function(){
+      this.watchWindowSize = this.watchWindowSize.bind(this);
+      this.jdugeToStopResize = this.jdugeToStopResize.bind(this);
+      this.render = this.render.bind(this);
+    },
+    setup : function(){
+      this.cherries.length = 0;
+      this.watchIds.length = 0;
+      this.width = this.$container.width();
+      this.height = this.$container.height();
+      this.$canvas.attr({width : this.width, height : this.height});
+      this.maxAddingInterval = Math.round(this.MAX_ADDING_INTERVAL * 1000 / this.width);
+      this.addingInterval = this.maxAddingInterval;
+      this.createCherries();
+    },
+    createCherries : function(){
+      for(var i = 0, length = Math.round(this.INIT_CHERRY_BLOSSOM_COUNT * this.width / 1000); i < length; i++){
+        this.cherries.push(new CHERRY_BLOSSOM(this, true));
+      }
+    },
+    watchWindowSize : function(){
+      this.clearTimer();
+      this.tmpWidth = window.width;
+      this.tmpHeight = window.height;
+      this.watchIds.push(setTimeout(this.jdugeToStopResize, this.WATCH_INTERVAL));
+    },
+    clearTimer : function(){
+      while(this.watchIds.length > 0){
+        clearTimeout(this.watchIds.pop());
+      }
+    },
+    jdugeToStopResize : function(){
+      var width = window.width,
+        height = window.height,
+        stopped = (width == this.tmpWidth && height == this.tmpHeight);
+        
+      this.tmpWidth = width;
+      this.tmpHeight = height;
+      
+      if(stopped){
+        this.setup();
+      }
+    },
+    bindEvent : function(){
+      this.$window.on('resize', this.watchWindowSize);
+    },
+    render : function(){
+      //console.log("render")
+
+      if(jq_151(this.$container).css("display")!="none"){
+        requestAnimationFrame(this.render);
+      }
+      
+      this.context.clearRect(0, 0, this.width, this.height);
+      
+      this.cherries.sort(function(cherry1, cherry2){
+        return cherry1.z - cherry2.z;
+      });
+      for(var i = this.cherries.length - 1; i >= 0; i--){
+        if(!this.cherries[i].render(this.context)){
+          this.cherries.splice(i, 1);
+        }
+      }
+      if(--this.addingInterval == 0){
+        this.addingInterval = this.maxAddingInterval;
+        this.cherries.push(new CHERRY_BLOSSOM(this, false));
+      }
+    }
+  };
+  var CHERRY_BLOSSOM = function(renderer, isRandom){
+    this.renderer = renderer;
+    this.init(isRandom);
+  };
+  CHERRY_BLOSSOM.prototype = {
+    FOCUS_POSITION : 300,
+    FAR_LIMIT : 600,
+    MAX_RIPPLE_COUNT : 100,
+    RIPPLE_RADIUS : 100,
+    SURFACE_RATE : 0.5,
+    SINK_OFFSET : 20,
+    
+    init : function(isRandom){
+      this.x = this.getRandomValue(-this.renderer.width, this.renderer.width);
+      this.y = isRandom ? this.getRandomValue(0, this.renderer.height) : this.renderer.height * 1.5;
+      this.z = this.getRandomValue(0, this.FAR_LIMIT);
+      this.vx = this.getRandomValue(-2, 2);
+      this.vy = -2;
+      this.theta = this.getRandomValue(0, Math.PI * 2);
+      this.phi = this.getRandomValue(0, Math.PI * 2);
+      this.psi = 0;
+      this.dpsi = this.getRandomValue(Math.PI / 600, Math.PI / 300);
+      this.opacity = 0;
+      this.endTheta = false;
+      this.endPhi = false;
+      this.rippleCount = 0;
+      
+      var axis = this.getAxis(),
+        theta = this.theta + Math.ceil(-(this.y + this.renderer.height * this.SURFACE_RATE) / this.vy) * Math.PI / 500;
+      theta %= Math.PI * 2;
+      
+      this.offsetY = 40 * ((theta <= Math.PI / 2 || theta >= Math.PI * 3 / 2) ? -1 : 1);
+      this.thresholdY = this.renderer.height / 2 + this.renderer.height * this.SURFACE_RATE * axis.rate;
+      this.entityColor = this.renderer.context.createRadialGradient(0, 40, 0, 0, 40, 80);
+      this.entityColor.addColorStop(0, 'hsl(330, 70%, ' + 50 * (0.3 + axis.rate) + '%)');
+      this.entityColor.addColorStop(0.05, 'hsl(330, 40%,' + 55 * (0.3 + axis.rate) + '%)');
+      this.entityColor.addColorStop(1, 'hsl(330, 20%, ' + 70 * (0.3 + axis.rate) + '%)');
+      this.shadowColor = this.renderer.context.createRadialGradient(0, 40, 0, 0, 40, 80);
+      this.shadowColor.addColorStop(0, 'hsl(330, 40%, ' + 30 * (0.3 + axis.rate) + '%)');
+      this.shadowColor.addColorStop(0.05, 'hsl(330, 40%,' + 30 * (0.3 + axis.rate) + '%)');
+      this.shadowColor.addColorStop(1, 'hsl(330, 20%, ' + 40 * (0.3 + axis.rate) + '%)');
+    },
+    getRandomValue : function(min, max){
+      return min + (max - min) * Math.random();
+    },
+    getAxis : function(){
+      var rate = this.FOCUS_POSITION / (this.z + this.FOCUS_POSITION),
+        x = this.renderer.width / 2 + this.x * rate,
+        y = this.renderer.height / 2 - this.y * rate;
+      return {rate : rate, x : x, y : y};
+    },
+    renderCherry : function(context, axis){
+      context.beginPath();
+      context.moveTo(0, 40);
+      context.bezierCurveTo(-60, 20, -10, -60, 0, -20);
+      context.bezierCurveTo(10, -60, 60, 20, 0, 40);
+      context.fill();
+      
+      for(var i = -4; i < 4; i++){
+        context.beginPath();
+        context.moveTo(0, 40);
+        context.quadraticCurveTo(i * 12, 10, i * 4, -24 + Math.abs(i) * 2);
+        context.stroke();
+      }
+    },
+    render : function(context){
+      var axis = this.getAxis();
+      
+      if(axis.y == this.thresholdY && this.rippleCount < this.MAX_RIPPLE_COUNT){
+        context.save();
+        context.lineWidth = 2;
+        context.strokeStyle = 'hsla(0, 0%, 100%, ' + (this.MAX_RIPPLE_COUNT - this.rippleCount) / this.MAX_RIPPLE_COUNT + ')';
+        context.translate(axis.x + this.offsetY * axis.rate * (this.theta <= Math.PI ? -1 : 1), axis.y);
+        context.scale(1, 0.3);
+        context.beginPath();
+        context.arc(0, 0, this.rippleCount / this.MAX_RIPPLE_COUNT * this.RIPPLE_RADIUS * axis.rate, 0, Math.PI * 2, false);
+        context.stroke();
+        context.restore();
+        this.rippleCount++;
+      }
+      if(axis.y < this.thresholdY || (!this.endTheta || !this.endPhi)){
+        if(this.y <= 0){
+          this.opacity = Math.min(this.opacity + 0.01, 1);
+        }
+        context.save();
+        context.globalAlpha = this.opacity;
+        context.fillStyle = this.shadowColor;
+        context.strokeStyle = 'hsl(330, 30%,' + 40 * (0.3 + axis.rate) + '%)';
+        context.translate(axis.x, Math.max(axis.y, this.thresholdY + this.thresholdY - axis.y));
+        context.rotate(Math.PI - this.theta);
+        context.scale(axis.rate * -Math.sin(this.phi), axis.rate);
+        context.translate(0, this.offsetY);
+        this.renderCherry(context, axis);
+        context.restore();
+      }
+      context.save();
+      context.fillStyle = this.entityColor;
+      context.strokeStyle = 'hsl(330, 40%,' + 70 * (0.3 + axis.rate) + '%)';
+      context.translate(axis.x, axis.y + Math.abs(this.SINK_OFFSET * Math.sin(this.psi) * axis.rate));
+      context.rotate(this.theta);
+      context.scale(axis.rate * Math.sin(this.phi), axis.rate);
+      context.translate(0, this.offsetY);
+      this.renderCherry(context, axis);
+      context.restore();
+      
+      if(this.y <= -this.renderer.height / 4){
+        if(!this.endTheta){
+          for(var theta = Math.PI / 2, end = Math.PI * 3 / 2; theta <= end; theta += Math.PI){
+            if(this.theta < theta && this.theta + Math.PI / 200 > theta){
+              this.theta = theta;
+              this.endTheta = true;
+              break;
+            }
+          }
+        }
+        if(!this.endPhi){
+          for(var phi = Math.PI / 8, end = Math.PI * 7 / 8; phi <= end; phi += Math.PI * 3 / 4){
+            if(this.phi < phi && this.phi + Math.PI / 200 > phi){
+              this.phi = Math.PI / 8;
+              this.endPhi = true;
+              break;
+            }
+          }
+        }
+      }
+      if(!this.endTheta){
+        if(axis.y == this.thresholdY){
+          this.theta += Math.PI / 200 * ((this.theta < Math.PI / 2 || (this.theta >= Math.PI && this.theta < Math.PI * 3 / 2)) ? 1 : -1);
+        }else{
+          this.theta += Math.PI / 500;
+        }
+        this.theta %= Math.PI * 2;
+      }
+      if(this.endPhi){
+        if(this.rippleCount == this.MAX_RIPPLE_COUNT){
+          this.psi += this.dpsi;
+          this.psi %= Math.PI * 2;
+        }
+      }else{
+        this.phi += Math.PI / ((axis.y == this.thresholdY) ? 200 : 500);
+        this.phi %= Math.PI;
+      }
+      if(this.y <= -this.renderer.height * this.SURFACE_RATE){
+        this.x += 2;
+        this.y = -this.renderer.height * this.SURFACE_RATE;
+      }else{
+        this.x += this.vx;
+        this.y += this.vy;
+      }
+      return this.z > -this.FOCUS_POSITION && this.z < this.FAR_LIMIT && this.x < this.renderer.width * 1.5;
+    }
+  };
+  jq_151(function(){
+    RENDERER.init();
+  });
+</script>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <!--
+    <div class="alice">
+      <img src="/images/alice-shake.gif" alt="">
+    </div>
+
+    
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+    -->
+  </div>
+  <script
+      defer="defer"
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/gsap.min.js"
+      integrity="sha512-1dalHDkG9EtcOmCnoCjiwQ/HEB5SDNqw8d4G2MKoNwjiwMNeBAkudsBCmSlMnXdsH8Bm0mOd3tl/6nL5y0bMaQ=="
+      crossorigin="anonymous"
+    ></script>
+  <script defer="defer" src="/js/gsap/DrawSVGPlugin.min.js"></script>
+  <script defer="defer" src="/js/gsap/CustomEase.min.js"></script>
+  <script defer="defer" src="/js/gsap/CustomBounce.min.js"></script>
+  <script defer="defer" src="/js/gsap/SplitText.min.js"></script>
+  <script defer="defer" src="/js/gsap/logo-run.js"></script>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">(doing)https双向认证及绕过方法
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2023-12-14 18:00:32">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2023-12-14T18:00:32+08:00">2023-12-14</time>
+  </span>
+  <span class="item" title="本文字数">
+    <span class="icon">
+      <i class="ic i-pen"></i>
+    </span>
+    <span class="text">本文字数</span>
+    <span>3.6k</span>
+    <span class="text">字</span>
+  </span>
+  <span class="item" title="阅读时长">
+    <span class="icon">
+      <i class="ic i-clock"></i>
+    </span>
+    <span class="text">阅读时长</span>
+    <span>3 分钟</span>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">oacia</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="/background_picture/1_mary.jpg"></li>
+          <li class="item" data-background-image="/background_picture/2_xingye.webp"></li>
+          <li class="item" data-background-image="/background_picture/3_xiaoxia.webp"></li>
+          <li class="item" data-background-image="/background_picture/4_alice.webp"></li>
+          <li class="item" data-background-image="/background_picture/5_mutsuki.jpg"></li>
+          <li class="item" data-background-image="/background_picture/6_arona_plana.webp"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb">
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="https://oacia.dev/two-way-SSL/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="oacia">
+    <meta itemprop="description" content="DEVIL or SWEET, 月遇从云 花遇和风">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="oaciaのBbBlog~">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <p>日常的 APP 为了不被别人通过抓包软件抓取与服务器通信的流量，所以会在流量的安全传输上做文章，最安全的做法当然是使用私有协议 (即协议格式不公开的协议), 例如抖音的 quic 协议，咸鱼的 spdy 协议等等，利用这些私有协议包装流量，从而使抓包工具无法识别出这串流量的实际内容是什么，所以就只能放行这段流量，面对私有协议倘若利用 <code>reqable</code> , <code>fiddler</code> , <code>charles</code>  等去抓包是抓不到的，而唯一能够抓到这段流量的就是 <code>wireshark</code> , 并且还需要对这段流量编写特定的脚本解析才可以知道这段流量所携带的实际数据</p>
+<p>除了私有协议之外，想让流量上的安全还可以使用 <code>SSL pinning</code>  的方法来阻止中间人抓包的发生，如何进行 HTTPS 双向认证以及使用 frida 对 <code>SSL pinning</code>  进行绕过是本文所要讨论的重点</p>
+<h1 id="ssl-pinning"><a class="anchor" href="#ssl-pinning">#</a> SSL pinning</h1>
+<p>虽然 HTTPS 采用了公钥和证书的加密和验证方式，但依然存在 MIM (中间人攻击) 的可能性，因为证书颁发机构可能被黑客入侵，而 HTTPS 只验证了证书的合法性，并没有验证当前服务器是否是我们要访问的服务器，所以需要客户端去验证服务端证书的合法性，这就是 <code>SSL pinning</code> , 它还是 HTTPS 单向认证的范畴之内。</p>
+<p>我们可以看一下目前抓包工具 <code>Charles</code>  所采取的抓包方法</p>
+<p><img data-src="/two-way-SSL/640.png" alt="图片" style="aspect-ratio:700 / 483;"></p>
+<p>为了保证我们当前访问的服务器就是我们需要访问的服务器，防止中间人攻击的发生，需要通过 <code>SSL pinning</code>  的方式来实现，其包括 Certificate Pinning 和 Public Key Pinning 两种。</p>
+<h2 id="证书锁定"><a class="anchor" href="#证书锁定">#</a> 证书锁定</h2>
+<p>证书锁定需要把服务器的证书提前下载并内置到客户端中，当请求发起时，通过比对证书内容来确定连接的合法性，但由于证书存在过期时间，因此当服务器端证书更换时，需同时更换客户端证书。</p>
+<p>既然是要锁定证书，那么我们客户端上应该事先存在一个证书，我们才能锁定这个证书来验证我们真正的服务端，而不是代理工具伪造的服务端。</p>
+<p>如果是锁定证书，那通常情况下会将证书放置在 <code>app/asset</code>  目录下。</p>
+<p>具体操作：将 APP 代码内置仅接受指定域名的证书，而不接受操作系统或者浏览器内置的 CA 根证书对应的任何证书。</p>
+<p>通过这种授权方式，保障了 APP 与服务端通信的唯一性和安全性，因此移动端 APP 与服务端（例如 API 网关）之间的通信可以保证绝对的安全。</p>
+<h2 id="公钥锁定"><a class="anchor" href="#公钥锁定">#</a> 公钥锁定</h2>
+<p>公钥锁定则需提取证书中的公钥内置到客户端中，通过比对公钥值来验证连接的合法性，由于证书更换依然可以保证公钥一致，所以公钥锁定不存在客户端频繁更换证书的问题，并且之后我们所使用的 <code>SSL pinning</code>  也同样是公钥锁定。</p>
+<h1 id="https双向认证原理"><a class="anchor" href="#https双向认证原理">#</a> HTTPS 双向认证原理</h1>
+<p>双向验证，顾名思义就是客户端验证服务器端证书的正确性，服务器端也验证客户端的证书正确性，即</p>
+<ul>
+<li>服务端使用 <code>ca.crt</code>  校验客户端的 <code>client.crt</code>  和 <code>client.key</code></li>
+<li>客户端使用 <code>ca.crt</code>  校验服务端的 <code>server.crt</code>  和 <code>server.key</code></li>
+</ul>
+<p><img data-src="/two-way-SSL/ca-2way-auth-2.png" alt="img" style="aspect-ratio:301 / 271;"></p>
+<p>详细的 HTTPS 连接过程如下图所示，其中的 <code>root.crt</code>  即 <code>ca.crt</code></p>
+<p><img data-src="/two-way-SSL/p620909.png" alt="image" style="aspect-ratio:1492 / 1190;"></p>
+<ol>
+<li>客户端发起建立 HTTPS 连接请求，将 SSL 协议版本的信息发送给服务端；</li>
+<li>服务器端将本机的公钥证书（server.crt）发送给客户端；</li>
+<li>客户端读取公钥证书（server.crt），取出了服务端公钥；</li>
+<li>客户端将客户端公钥证书（client.crt）发送给服务器端；</li>
+<li>服务器端使用根证书（root.crt）解密客户端公钥证书，拿到客户端公钥；</li>
+<li>客户端发送自己支持的加密方案给服务器端；</li>
+<li>服务器端根据自己和客户端的能力，选择一个双方都能接受的加密方案，使用客户端的公钥加密后发送给客户端；</li>
+<li>客户端使用自己的私钥解密加密方案，生成一个随机数 R，使用服务器公钥加密后传给服务器端；</li>
+<li>服务端用自己的私钥去解密这个密文，得到了密钥 R</li>
+<li>服务端和客户端在后续通讯过程中就使用这个密钥 R 进行通信了。</li>
+</ol>
+<h1 id="自签名证书"><a class="anchor" href="#自签名证书">#</a> 自签名证书</h1>
+<h2 id="证书准备"><a class="anchor" href="#证书准备">#</a> 证书准备</h2>
+<p>在制作证书前，我们先来了解一下每一个证书的格式</p>
+<ul>
+<li>JKS：数字证书库。JKS 里有 KeyEntry 和 CertEntry，在库里的每个 Entry 都是靠别名（alias）来识别的。</li>
+<li>P12：是 PKCS12 的缩写。同样是一个存储私钥的证书库，由 .jks 文件导出的，用户在 PC 平台安装，用于标示用户的身份。</li>
+<li>CER：俗称数字证书，目的就是用于存储公钥证书，任何人都可以获取这个文件 。</li>
+<li>BKS：由于 Android 平台不识别 .keystore 和 .jks 格式的证书库文件，因此 Android 平台引入一种新的证书库格式，BKS。</li>
+</ul>
+<p>整个双向认证的流程需要六个证书文件：</p>
+<ul>
+<li>服务器端公钥证书：server.crt</li>
+<li>服务器端私钥文件：server.key</li>
+<li>根证书：root.crt</li>
+<li>客户端公钥证书：client.crt</li>
+<li>客户端私钥文件：client.key</li>
+<li>客户端集成证书（包括公钥和私钥，用于安卓访问场景）：client.bks</li>
+</ul>
+<h2 id="证书制作"><a class="anchor" href="#证书制作">#</a> 证书制作</h2>
+<p>因为自签名证书完全免费，所以这里我们使用自签名证书来作为我们的客户端 / 服务端证书</p>
+<p><img data-src="/two-way-SSL/p620908.png" alt="image" style="aspect-ratio:1448 / 706;"></p>
+<h3 id="生成自签名根证书"><a class="anchor" href="#生成自签名根证书">#</a> 生成自签名根证书</h3>
+<ol>
+<li>创建根证书私钥：</li>
+</ol>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>openssl genrsa <span class="token parameter variable">-out</span> root.key <span class="token number">1024</span></pre></td></tr></table></figure><ol start="2">
+<li>创建根证书请求文件：</li>
+</ol>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>openssl req <span class="token parameter variable">-new</span> <span class="token parameter variable">-out</span> root.csr <span class="token parameter variable">-key</span> root.key</pre></td></tr></table></figure><p>这一步以及下面生成服务器请求文件和客户端请求文件的过程都都要注意以下两点：</p>
+<ul>
+<li>根证书的 Common Name 填写 root 就可以，所有客户端和服务器端的证书这个字段需要填写域名，一定要注意的是，根证书的这个字段和客户端证书、服务器端证书<strong>不能一样</strong></li>
+<li>其他所有字段的填写，根证书、服务器端证书、客户端证书需保持一致最后的密码可以直接<strong>回车跳过</strong>。</li>
+</ul>
+<ol start="3">
+<li>创建根证书：</li>
+</ol>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>openssl x509 <span class="token parameter variable">-req</span> <span class="token parameter variable">-in</span> root.csr <span class="token parameter variable">-out</span> root.crt <span class="token parameter variable">-signkey</span> root.key <span class="token parameter variable">-CAcreateserial</span> <span class="token parameter variable">-days</span> <span class="token number">3650</span></pre></td></tr></table></figure><p>经过上面三个命令行，我们最终可以得到一个签名有效期为 10 年的根证书 root.crt，后面我们可以用这个根证书去颁发服务器证书和客户端证书。</p>
+<h3 id="生成自签名服务器端证书"><a class="anchor" href="#生成自签名服务器端证书">#</a> 生成自签名服务器端证书</h3>
+<ol>
+<li>生成服务器端证书私钥：</li>
+</ol>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>openssl genrsa <span class="token parameter variable">-out</span> server.key <span class="token number">1024</span></pre></td></tr></table></figure><ol start="2">
+<li>生成服务器证书请求文件，过程和注意事项参考根证书，本节不详述：</li>
+</ol>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>openssl req <span class="token parameter variable">-new</span> <span class="token parameter variable">-out</span> server.csr <span class="token parameter variable">-key</span> server.key</pre></td></tr></table></figure><ol start="3">
+<li>生成服务器端公钥证书</li>
+</ol>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>openssl x509 <span class="token parameter variable">-req</span> <span class="token parameter variable">-in</span> server.csr <span class="token parameter variable">-out</span> server.crt <span class="token parameter variable">-CA</span> root.crt <span class="token parameter variable">-CAkey</span> root.key <span class="token parameter variable">-CAcreateserial</span> <span class="token parameter variable">-days</span> <span class="token number">3650</span></pre></td></tr></table></figure><p>经过上面的三个命令，我们得到：</p>
+<ul>
+<li>
+<p>server.key：服务器端的密钥文件</p>
+</li>
+<li>
+<p>server.crt：有效期十年的服务器端公钥证书，使用根证书和服务器端私钥文件一起生成</p>
+</li>
+</ul>
+<h3 id="生成自签名客户端证书"><a class="anchor" href="#生成自签名客户端证书">#</a> 生成自签名客户端证书</h3>
+<ol>
+<li>生成客户端证书密钥：</li>
+</ol>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>openssl genrsa <span class="token parameter variable">-out</span> client.key <span class="token number">1024</span></pre></td></tr></table></figure><ol start="2">
+<li>生成客户端证书请求文件</li>
+</ol>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>openssl req <span class="token parameter variable">-new</span> <span class="token parameter variable">-out</span> client.csr <span class="token parameter variable">-key</span> client.key</pre></td></tr></table></figure><ol start="3">
+<li>生客户端证书</li>
+</ol>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>openssl x509 <span class="token parameter variable">-req</span> <span class="token parameter variable">-in</span> client.csr <span class="token parameter variable">-out</span> client.crt <span class="token parameter variable">-CA</span> root.crt <span class="token parameter variable">-CAkey</span> root.key <span class="token parameter variable">-CAcreateserial</span> <span class="token parameter variable">-days</span> <span class="token number">3650</span></pre></td></tr></table></figure><ol start="4">
+<li>生客户端 bks 格式证书</li>
+</ol>
+<p>我们首先查看自己的 java 版本，例如我现在的 java 版本是 jdk1.7</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>PS C:<span class="token punctuation">\</span>Users<span class="token punctuation">\</span>oacia<span class="token operator">></span> <span class="token function">java</span> <span class="token parameter variable">--version</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token function">java</span> <span class="token number">17.0</span>.8 <span class="token number">2023</span>-07-18 LTS</pre></td></tr></table></figure><p>然后前往 [https://www.bouncycastle.org/latest_releases.html) 下载对应版本的 <code>bcprov</code> , 我的 jdk1.7 应该下载的 jar 包是<span class="exturl" data-url="aHR0cHM6Ly93d3cuYm91bmN5Y2FzdGxlLm9yZy9kb3dubG9hZC9iY3Byb3YtamRrMTV0bzE4LTE3Ny5qYXI="> bcprov-jdk15to18-177.jar</span></p>
+<p>随后输入下列命令即可将 crt 格式的证书转换为 bks 格式的证书</p>
+<figure class="highlight shell"><figcaption data-lang="Bash"></figcaption><table><tr><td data-num="1"></td><td><pre>keytool <span class="token parameter variable">-import</span> <span class="token parameter variable">-alias</span> client <span class="token parameter variable">-file</span> .<span class="token punctuation">\</span>client.crt <span class="token parameter variable">-keystore</span> .<span class="token punctuation">\</span>client.bks <span class="token parameter variable">-storetype</span> BKS <span class="token parameter variable">-provider</span> org.bouncycastle.jce.provider.BouncyCastleProvider <span class="token parameter variable">-providerpath</span> .<span class="token punctuation">\</span>bcprov-jdk15to18-177.jar <span class="token parameter variable">-storepass</span> <span class="token number">123456</span></pre></td></tr></table></figure><p>同理，我们可以将将根证书 <code>root.crt</code>  也转换为 <code>root.bks</code> , 因为在 Android 中智能识别 bks 格式的证书</p>
+<p>##　总结</p>
+<p>通过上述过程自定义证书的制作，我们已经得到了所需要的证书</p>
+<ul>
+<li>android 客户端
+<ul>
+<li><code>client.bks</code> : 这是客户端证书，需要发送给服务端进行校验</li>
+<li><code>root.bks</code> : 这是根证书，用来校验服务端证书的合法性</li>
+</ul>
+</li>
+<li>python 服务端
+<ul>
+<li><code>server.crt</code>  和 <code>server.key</code> : 这是服务端证书，需要发送给客户端进行校验</li>
+<li><code>root.crt</code> : 这是根证书，用来校验客户端证书的合法性</li>
+</ul>
+</li>
+</ul>
+<h2 id="android客户端"><a class="anchor" href="#android客户端">#</a> Android 客户端</h2>
+<h1 id="参考资料"><a class="anchor" href="#参考资料">#</a> 参考资料</h1>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20venBjaGNiZC9wLzEzNzA5NjkwLmh0bWw=">关于单向认证与双向认证 </span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9oZWxwLmFsaXl1bi5jb20vemgvYXBpLWdhdGV3YXkvdXNlci1ndWlkZS9tdXR1YWwtdGxzLWF1dGhlbnRpY2F0aW9uI3NlY3Rpb24tajhyLWFmeC03MTk=">阿里云 HTTPS 双向认证</span></li>
+</ul>
+
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2025-04-09 02:55:12" itemprop="dateModified" datetime="2025-04-09T02:55:12+08:00">2025-04-09</time>
+  </span>
+  <span id="two-way-SSL/" class="item leancloud_visitors" data-flag-title="(doing)https双向认证及绕过方法" title="阅读次数">
+      <span class="icon">
+        <i class="ic i-eye"></i>
+      </span>
+      <span class="text">阅读次数</span>
+      <span class="leancloud-visitors-count"></span>
+      <span class="text">次</span>
+  </span>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>oacia <i class="ic i-at"><em>@</em></i>oaciaのBbBlog~
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="https://oacia.dev/two-way-SSL/" title="(doing)https双向认证及绕过方法">https://oacia.dev/two-way-SSL/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/blog-domain/" itemprop="url" rel="prev" data-background-image="&#x2F;picture&#x2F;190961.webp" title="这两个月关于域名的二三事">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> </span>
+  <h3>这两个月关于域名的二三事</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/telegram-bot-develop/" itemprop="url" rel="next" data-background-image="&#x2F;picture&#x2F;25119.webp" title="telegram bot 初体验及云端部署">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> </span>
+  <h3>telegram bot 初体验及云端部署</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ssl-pinning"><span class="toc-text"> SSL pinning</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%81%E4%B9%A6%E9%94%81%E5%AE%9A"><span class="toc-text"> 证书锁定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AC%E9%92%A5%E9%94%81%E5%AE%9A"><span class="toc-text"> 公钥锁定</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#https%E5%8F%8C%E5%90%91%E8%AE%A4%E8%AF%81%E5%8E%9F%E7%90%86"><span class="toc-text"> HTTPS 双向认证原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6"><span class="toc-text"> 自签名证书</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%81%E4%B9%A6%E5%87%86%E5%A4%87"><span class="toc-text"> 证书准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%81%E4%B9%A6%E5%88%B6%E4%BD%9C"><span class="toc-text"> 证书制作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E8%87%AA%E7%AD%BE%E5%90%8D%E6%A0%B9%E8%AF%81%E4%B9%A6"><span class="toc-text"> 生成自签名根证书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E8%87%AA%E7%AD%BE%E5%90%8D%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E8%AF%81%E4%B9%A6"><span class="toc-text"> 生成自签名服务器端证书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E8%87%AA%E7%AD%BE%E5%90%8D%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AF%81%E4%B9%A6"><span class="toc-text"> 生成自签名客户端证书</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#android%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-text"> Android 客户端</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-text"> 参考资料</span></a></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="oacia"
+      data-src="/images/avatar.jpg">
+  
+  <svg class="logo-overview" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540.19 380.99">
+    <g id="clips" fill= #00a99d; stroke="none">
+      <clipPath id="o">
+        <path d="M93.57,284c8,0,14.91-1,20.75-3,5.83-2,10.41-3.66,13.75-5,4.66-1.66,6.16-.75,4.5,2.75-1.67,3.5-4.67,6.42-9,8.75-2.34,1.34-6.09,2.84-11.25,4.5-5.17,1.67-11.09,2.5-17.75,2.5-.34,8.67-3.34,16.84-9,24.5-5.67,7.67-13.34,13.34-23,17-6,2.34-12.17,3.59-18.5,3.75-6.34,.17-12.17-.66-17.5-2.5-5.34-1.83-10.09-4.66-14.25-8.5-4.17-3.83-7.25-8.41-9.25-13.75-2-5.33-2.83-11-2.5-17s1.83-11.83,4.5-17.5c2.66-5.66,6.33-10.75,11-15.25,4.66-4.5,10.16-7.75,16.5-9.75,5.66-1.66,11.41-1.66,17.25,0,5.83,1.67,10.08,4.34,12.75,8,1.66,2.67,2.5,5.67,2.5,9,3-2,6.33-3,10-3h1c3.33,0,6.5,.84,9.5,2.5,3,1.67,5.33,4.5,7,8.5l1,3.5Zm-34,39.5c5.66-.66,10.33-3.83,14-9.5,3.66-5.66,5.33-12.16,5-19.5-4.67,.34-9.09-.41-13.25-2.25-4.17-1.83-6.42-4.58-6.75-8.25-.67-3,0-5.5,2-7.5-.67-2.66-2.75-5-6.25-7s-7.09-2.16-10.75-.5c-4.67,2-8.25,5.84-10.75,11.5-2.5,5.67-3.09,11.84-1.75,18.5,1.33,8,4.75,14.34,10.25,19,5.5,4.67,11.58,6.5,18.25,5.5Z"/>
+      </clipPath>
+      <clipPath id="a1">
+        <path d="M176.06,270c5,4,8.5,9.17,10.5,15.5,.66-1.33,1.25-2.33,1.75-3,.5-.66,1.08-1.33,1.75-2,3.66-2.66,8-3.08,13-1.25,5,1.84,8.5,4.09,10.5,6.75,1,1.34,1.41,2.75,1.25,4.25-.17,1.5-.5,3.42-1,5.75-.5,2.34-1,5.09-1.5,8.25-.5,3.17-.42,6.92,.25,11.25,.33,3.67,1.25,6.5,2.75,8.5s3.16,3.25,5,3.75c1.83,.5,3.75,.34,5.75-.5,2-.83,3.83-2.08,5.5-3.75,3-3.66,5.75-7.66,8.25-12,2.5-4.33,4.25-8.16,5.25-11.5,1.33-3.66,3.41-5.25,6.25-4.75,2.83,.5,3.58,3.09,2.25,7.75-1.34,4.67-3,8.92-5,12.75-2,3.84-5.17,8.59-9.5,14.25-4.67,5.67-11.34,9.59-20,11.75-8.67,2.17-17.67,.42-27-5.25-5-3.33-8.34-8.83-10-16.5-.67,1.34-2,3.34-4,6-3.67,4.67-7.84,8.59-12.5,11.75-4.67,3.17-9.42,5.34-14.25,6.5-4.84,1.17-9.59,1.34-14.25,.5-4.67-.83-9-2.75-13-5.75-7.67-6-11.75-14.33-12.25-25-.5-10.66,2.91-20.83,10.25-30.5,7.33-9.66,16.25-15.75,26.75-18.25s19.58-.91,27.25,4.75Zm-25,60c4.66,1.67,9.66,.17,15-4.5,5.33-4.66,9.33-10.83,12-18.5,2.33-6.66,2.58-12.5,.75-17.5-1.84-5-5.09-8.33-9.75-10-4.67-1.66-9.34-1.33-14,1-4.67,2.34-8.34,7.34-11,15-3,7.67-3.84,14.92-2.5,21.75,1.33,6.84,4.5,11.09,9.5,12.75Z"/>
+      </clipPath>
+      <clipPath id="c">
+        <path d="M250.06,280.5c4.66-7.66,12-13.16,22-16.5,10-3.33,19.83-3.66,29.5-1,7.66,2.34,13.5,5.67,17.5,10,4,4.34,5.83,8.5,5.5,12.5-.34,4.67-2.25,8.59-5.75,11.75-3.5,3.17-7.09,5.34-10.75,6.5-3.67,1.17-6.84,1.25-9.5,.25-2.67-1-3.34-3.16-2-6.5,2.66-8,2.75-14.58,.25-19.75-2.5-5.16-5.92-6.41-10.25-3.75-2.67,1.67-5,4.09-7,7.25-2,3.17-3.5,6.75-4.5,10.75s-1.42,8.09-1.25,12.25c.16,4.17,.75,7.92,1.75,11.25,1.33,4,3.66,7.42,7,10.25,3.33,2.84,7.16,4.67,11.5,5.5,4.33,.84,8.91,.67,13.75-.5,4.83-1.16,9.25-3.75,13.25-7.75,7.33-6.66,12.33-14.33,15-23,.33-1.66,1.16-2.91,2.5-3.75,1.33-.83,2.5-1.08,3.5-.75,1,.34,1.83,1.09,2.5,2.25,.66,1.17,.66,2.92,0,5.25-2.34,9.34-6.34,17-12,23-4.67,5.67-10.5,10.42-17.5,14.25-7,3.84-14.25,6.09-21.75,6.75-7.5,.67-14.84-.33-22-3-7.17-2.66-13.25-7.5-18.25-14.5-6-8.66-8.75-17.66-8.25-27,.5-9.33,2.25-16.66,5.25-22Z"/>
+      </clipPath>
+      <clipPath id="i_b">
+        <path d="M393.06,330c-2.34,2.67-5.17,5.09-8.5,7.25-3.34,2.17-7.09,3.59-11.25,4.25-4.17,.67-8.59,.67-13.25,0-4.67-.66-9.17-2.33-13.5-5-4.67-2.66-7.67-7.58-9-14.75-1.34-7.16-1.83-14.66-1.5-22.5,.33-7.83,1.33-14.91,3-21.25,1.66-6.33,3.33-10.16,5-11.5,3.66-2.66,8-3.08,13-1.25,5,1.84,8.5,4.09,10.5,6.75,1,1.34,1.41,3.59,1.25,6.75-.17,3.17-.5,6.92-1,11.25-.5,4.34-1.09,8.92-1.75,13.75-.67,4.84-.67,9.42,0,13.75,.33,3.67,1.33,6.42,3,8.25,1.66,1.84,3.5,2.84,5.5,3,2,.17,4-.25,6-1.25s3.83-2.33,5.5-4c3-3.66,5.66-7.66,8-12,2.33-4.33,4.16-8.16,5.5-11.5,1-3.66,2.91-5.25,5.75-4.75,2.83,.5,3.75,3.09,2.75,7.75-1.34,4.67-3,8.92-5,12.75-2,3.84-5.34,8.59-10,14.25Z"/>
+      </clipPath>
+      <clipPath id="a2">
+        <path d="M461.56,270c5,4,8.5,9.17,10.5,15.5,.66-1.33,1.25-2.33,1.75-3,.5-.66,1.08-1.33,1.75-2,3.66-2.66,8-3.08,13-1.25,5,1.84,8.5,4.09,10.5,6.75,1,1.34,1.41,2.75,1.25,4.25-.17,1.5-.5,3.42-1,5.75-.5,2.34-1,5.09-1.5,8.25-.5,3.17-.42,6.92,.25,11.25,.33,3.67,1.25,6.5,2.75,8.5s3.16,3.25,5,3.75c1.83,.5,3.75,.34,5.75-.5,2-.83,3.83-2.08,5.5-3.75,3-3.66,5.75-7.66,8.25-12,2.5-4.33,4.25-8.16,5.25-11.5,1.33-3.66,3.41-5.25,6.25-4.75,2.83,.5,3.58,3.09,2.25,7.75-1.34,4.67-3,8.92-5,12.75-2,3.84-5.17,8.59-9.5,14.25-4.67,5.67-11.34,9.59-20,11.75-8.67,2.17-17.67,.42-27-5.25-5-3.33-8.34-8.83-10-16.5-.67,1.34-2,3.34-4,6-3.67,4.67-7.84,8.59-12.5,11.75-4.67,3.17-9.42,5.34-14.25,6.5-4.84,1.17-9.59,1.34-14.25,.5-4.67-.83-9-2.75-13-5.75-7.67-6-11.75-14.33-12.25-25-.5-10.66,2.91-20.83,10.25-30.5,7.33-9.66,16.25-15.75,26.75-18.25s19.58-.91,27.25,4.75Zm-25,60c4.66,1.67,9.66,.17,15-4.5,5.33-4.66,9.33-10.83,12-18.5,2.33-6.66,2.58-12.5,.75-17.5-1.84-5-5.09-8.33-9.75-10-4.67-1.66-9.34-1.33-14,1-4.67,2.34-8.34,7.34-11,15-3,7.67-3.84,14.92-2.5,21.75,1.33,6.84,4.5,11.09,9.5,12.75Z"/>
+      </clipPath>
+      
+    </g>
+    <g
+      id="strokes"
+      fill="none"
+      stroke=#96d7f5
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+    <path
+    clip-path="url(#o)"
+    class="oPath path"
+    d="M65.07,278.38c-.29-1.76-1.26-6.18-5-10-3.34-3.4-7.07-4.47-9-5-6.95-1.9-12.89,.22-15,1-10.95,4.04-18.33,15.16-20,26-1.42,9.21,1.56,16.56,3,20,1.49,3.55,3.94,9.39,10,14,6.66,5.07,13.73,5.65,18,6,3,.25,9.01,.67,16-2,1.72-.66,5.78-2.38,10-6,.99-.86,4.82-4.25,8-10,2.79-5.06,3.72-9.49,4-11,.39-2.12,1.09-6.93,0-13-1.05-5.85-1.95-10.86-6-13-2.83-1.5-7.27-1.62-10,1-1.73,1.66-2.85,4.55-2,7,1.04,2.99,4.58,4.01,8,5,1.16,.33,2.91,.75,8,1,4.72,.23,8.68,.18,12,0,6.49-.36,9.74-.54,12-1,4.35-.88,7.44-2.14,12-4,4.67-1.9,6.76-3.17,8-4,2.56-1.7,3.95-3.1,5-4,5.5-4.73,12.89-6.48,18-7,6.09-.62,11.96-.21,18,3,4.89,2.6,8.27,6.84,10,9,1.86,2.32,3.15,4.46,4,6"
+    stroke-width="32.5"
+    ></path>
+    <path
+      clip-path="url(#a1)"
+      class="a1Path path"
+      d="M154.07,270.38c-3.73,1.48-11.88,5.3-18,14-4.95,7.03-6.09,13.7-7,19-1.38,8.06-2.81,16.39,2,24,3.93,6.21,9.88,8.58,11,9,7.28,2.76,13.71,.75,16,0,5.19-1.71,8.32-4.6,12-8,2.48-2.29,6.78-6.34,10-13,2.71-5.61,3.51-10.73,4-14,.86-5.79,.57-9.98,1-10,.41-.02,.79,3.69,2,11,1.71,10.28,2.44,11.93,3,13,1.44,2.76,2.62,5.84,7,10,4.73,4.49,8.09,5.74,11,7,6.75,2.92,13.16,1.45,15,1,4.94-1.21,8.2-3.64,10-5,4.09-3.11,6.34-6.48,8-9,2.23-3.4,3.47-6.35,5-10,1.22-2.9,2.18-5.67,3-8,1.52-4.35,1.41-4.5,2-6,1.75-4.46,2-6,7-12,2.31-2.77,6.32-8.54,10-11,3.79-2.54,7-3.81,10-5,5.33-2.12,9-2.17,12-2,5.4,.32,10.2,4.49,12,6,2.31,1.93,6.05,6.97,7,12,.62,3.29-.19,5.13-1,8-.86,3.04-3.06,5.4-4,7"
+      stroke-width="59"
+    ></path>
+    <path
+      clip-path="url(#c)"
+      class="cPath path"
+      d="M273.07,272.38c-3.08,2.79-9.54,9.45-12,20-2.1,9.02-.22,16.29,1,21,1.57,6.05,3.22,12.44,9,18,6.67,6.42,14.58,7.66,17,8,6.36,.9,11.22-.42,17-2,3.68-1,8.59-2.39,14-6,4.13-2.76,6.84-5.67,9-8,3.24-3.49,5.27-6.46,7-9,2.22-3.27,4.18-6.89,8-14,3.39-6.3,5.1-9.5,6-12,1.67-4.63,2.38-8.58,3-12,.72-4,.94-6.77,1-9,.03-1.23,.02-2.26,0-3"
+      stroke-width="110"
+    ></path>
+    <path
+      clip-path="url(#i_b)"
+      class="i_bPath path"
+      d="M355.07,265.38c-1.55,12.11-2.45,22.6-3,31-.66,10.17-.79,16.98,2,25,1.74,5,3.75,10.53,9,13,6.29,2.97,13.34-.3,17-2,6.11-2.83,9.64-6.89,14-12,9.03-10.59,9.67-15.19,10-17,.6-3.32,1.32-6.16,1-8"
+      stroke-width="33"
+    ></path>
+    <path
+      clip-path="url(#a2)"
+      class="a2Path path"
+      d="M470.07,302.38c.32-2.77,.45-7.09-1-12-.98-3.32-5.25-15.49-17-19-12.13-3.62-22.23,4.71-25,7-6.75,5.57-9.28,12.36-11,17-1.68,4.53-5.22,14.03-2,25,1.19,4.05,3.29,11.22,10,15,7.78,4.39,16.49,1.26,20,0,6.31-2.27,10.12-6.13,14-10,4.99-4.97,7.76-9.61,11-15,1.88-3.14,4.54-7.61,7-14,3.15-8.18,3.42-14.06,4-14,.51,.05-.23,7.53,0,19,.07,3.38,.38,6.92,1,14,.41,4.62,.69,7.05,2,10,.82,1.86,2.1,4.74,5,7,4.4,3.43,9.65,3.17,13,3,1.08-.05,5.74-.35,11-3,4.39-2.21,7.04-4.97,9-7,.85-.89,3.48-3.69,6-8,1.51-2.58,1.83-3.87,4-9,1.54-3.64,2.92-6.7,4-9"
+      stroke-width="70"
+    ></path>
+    </g>
+    <g
+      id="strokes2"
+      fill="none"
+      stroke=#ff97b8
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path
+        clip-path="url(#o)"
+        class="oPath path"
+        d="M65.07,278.38c-.29-1.76-1.26-6.18-5-10-3.34-3.4-7.07-4.47-9-5-6.95-1.9-12.89,.22-15,1-10.95,4.04-18.33,15.16-20,26-1.42,9.21,1.56,16.56,3,20,1.49,3.55,3.94,9.39,10,14,6.66,5.07,13.73,5.65,18,6,3,.25,9.01,.67,16-2,1.72-.66,5.78-2.38,10-6,.99-.86,4.82-4.25,8-10,2.79-5.06,3.72-9.49,4-11,.39-2.12,1.09-6.93,0-13-1.05-5.85-1.95-10.86-6-13-2.83-1.5-7.27-1.62-10,1-1.73,1.66-2.85,4.55-2,7,1.04,2.99,4.58,4.01,8,5,1.16,.33,2.91,.75,8,1,4.72,.23,8.68,.18,12,0,6.49-.36,9.74-.54,12-1,4.35-.88,7.44-2.14,12-4,4.67-1.9,6.76-3.17,8-4,2.56-1.7,3.95-3.1,5-4,5.5-4.73,12.89-6.48,18-7,6.09-.62,11.96-.21,18,3,4.89,2.6,8.27,6.84,10,9,1.86,2.32,3.15,4.46,4,6"
+        stroke-width="32.5"
+      ></path>
+      <path
+        clip-path="url(#a1)"
+        class="a1Path path"
+        d="M154.07,270.38c-3.73,1.48-11.88,5.3-18,14-4.95,7.03-6.09,13.7-7,19-1.38,8.06-2.81,16.39,2,24,3.93,6.21,9.88,8.58,11,9,7.28,2.76,13.71,.75,16,0,5.19-1.71,8.32-4.6,12-8,2.48-2.29,6.78-6.34,10-13,2.71-5.61,3.51-10.73,4-14,.86-5.79,.57-9.98,1-10,.41-.02,.79,3.69,2,11,1.71,10.28,2.44,11.93,3,13,1.44,2.76,2.62,5.84,7,10,4.73,4.49,8.09,5.74,11,7,6.75,2.92,13.16,1.45,15,1,4.94-1.21,8.2-3.64,10-5,4.09-3.11,6.34-6.48,8-9,2.23-3.4,3.47-6.35,5-10,1.22-2.9,2.18-5.67,3-8,1.52-4.35,1.41-4.5,2-6,1.75-4.46,2-6,7-12,2.31-2.77,6.32-8.54,10-11,3.79-2.54,7-3.81,10-5,5.33-2.12,9-2.17,12-2,5.4,.32,10.2,4.49,12,6,2.31,1.93,6.05,6.97,7,12,.62,3.29-.19,5.13-1,8-.86,3.04-3.06,5.4-4,7"
+        stroke-width="59"
+      ></path>
+      <path
+        clip-path="url(#c)"
+        class="cPath path"
+        d="M273.07,272.38c-3.08,2.79-9.54,9.45-12,20-2.1,9.02-.22,16.29,1,21,1.57,6.05,3.22,12.44,9,18,6.67,6.42,14.58,7.66,17,8,6.36,.9,11.22-.42,17-2,3.68-1,8.59-2.39,14-6,4.13-2.76,6.84-5.67,9-8,3.24-3.49,5.27-6.46,7-9,2.22-3.27,4.18-6.89,8-14,3.39-6.3,5.1-9.5,6-12,1.67-4.63,2.38-8.58,3-12,.72-4,.94-6.77,1-9,.03-1.23,.02-2.26,0-3"
+        stroke-width="110"
+      ></path>
+      <path
+        clip-path="url(#i_b)"
+        class="i_bPath path"
+        d="M355.07,265.38c-1.55,12.11-2.45,22.6-3,31-.66,10.17-.79,16.98,2,25,1.74,5,3.75,10.53,9,13,6.29,2.97,13.34-.3,17-2,6.11-2.83,9.64-6.89,14-12,9.03-10.59,9.67-15.19,10-17,.6-3.32,1.32-6.16,1-8"
+        stroke-width="33"
+      ></path>
+      <path
+        clip-path="url(#a2)"
+        class="a2Path path"
+        d="M470.07,302.38c.32-2.77,.45-7.09-1-12-.98-3.32-5.25-15.49-17-19-12.13-3.62-22.23,4.71-25,7-6.75,5.57-9.28,12.36-11,17-1.68,4.53-5.22,14.03-2,25,1.19,4.05,3.29,11.22,10,15,7.78,4.39,16.49,1.26,20,0,6.31-2.27,10.12-6.13,14-10,4.99-4.97,7.76-9.61,11-15,1.88-3.14,4.54-7.61,7-14,3.15-8.18,3.42-14.06,4-14,.51,.05-.23,7.53,0,19,.07,3.38,.38,6.92,1,14,.41,4.62,.69,7.05,2,10,.82,1.86,2.1,4.74,5,7,4.4,3.43,9.65,3.17,13,3,1.08-.05,5.74-.35,11-3,4.39-2.21,7.04-4.97,9-7,.85-.89,3.48-3.69,6-8,1.51-2.58,1.83-3.87,4-9,1.54-3.64,2.92-6.7,4-9"
+        stroke-width="70"
+      ></path>
+    </g>
+    <g class="dot-group">
+      <path
+        id="dot"
+        fill=#ff97b8
+        d="M362.58,182.21c4.66-.33,9.66,1.17,15,4.5,5.33,3.34,7.66,7.5,7,12.5-.67,2.34-1.92,4.92-3.75,7.75-1.84,2.84-4,5.5-6.5,8s-4.84,4.75-7,6.75c-2.17,2-3.75,3.17-4.75,3.5-2.67,1.67-5.34,2.25-8,1.75-2.67-.5-5-1.5-7-3s-3.59-3.33-4.75-5.5c-1.17-2.16-1.92-4.25-2.25-6.25-.34-2,.16-4.66,1.5-8,1.33-3.33,3.08-6.58,5.25-9.75,2.16-3.16,4.58-6,7.25-8.5,2.66-2.5,5.33-3.75,8-3.75Z"
+      ></path>
+    </g>
+  </svg>
+  <div class="description" itemprop="description">月遇从云 花遇和风</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">53</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">46</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL29hY2lh" title="https:&#x2F;&#x2F;github.com&#x2F;oacia"><i class="ic i-github"></i></span>
+      <a target="_blank" rel="noopener" href="https://twitter.com/oacia86" title="https:&#x2F;&#x2F;twitter.com&#x2F;oacia86" class="item twitter"><i class="ic i-twitter"></i></a>
+      <span class="exturl item paper-plane" data-url="aHR0cHM6Ly90Lm1lL29hY2lh" title="https:&#x2F;&#x2F;t.me&#x2F;oacia"><i class="ic i-paper-plane"></i></span>
+      <span class="exturl item email" data-url="bWFpbHRvOm9hY2lhODZAZ21haWwuY29t" title="mailto:oacia86@gmail.com"><i class="ic i-envelope"></i></span>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/about-oacia/" rel="section"><i class="ic i-user"></i>关于oacia</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/archives/" rel="section"><i class="ic i-feather"></i>文章</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/TODOlist/" rel="section"><i class="ic i-clock"></i>要做的事</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/website_maintenance/" rel="section"><i class="ic i-calendar"></i>更新日志</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/friends/" rel="section"><i class="ic i-heart"></i>小伙伴</a>
+  </li>
+
+    
+  <li class="item">
+    <a href="/music/" rel="section"><i class="ic i-music"></i>听会儿歌吧</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/blog-domain/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/telegram-bot-develop/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">oacia @ oacia</span>
+  </div>
+  <div class="count">
+    <span class="post-meta-item-icon">
+      <i class="ic i-chart-area"></i>
+    </span>
+    <span title="站点总字数">968k 字</span>
+
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="ic i-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14:40</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+
+
+
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: 'two-way-SSL/',
+    favicon: {
+      show: "柚鳥ナツ",
+      hide: "甘い幸せ"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+
+<script src="//fastly.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>
